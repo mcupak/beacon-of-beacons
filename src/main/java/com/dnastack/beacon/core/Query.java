@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.dnastack.beacon.query;
+package com.dnastack.beacon.core;
 
 import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -20,7 +20,7 @@ public class Query implements Serializable {
 
     String genome = null;
     String chromosome = null;
-    long position = 0;
+    Long position = 0L;
     String allele = null;
 
     public Query() {
@@ -49,7 +49,7 @@ public class Query implements Serializable {
         this.chromosome = chromosome;
     }
 
-    public long getPosition() {
+    public Long getPosition() {
         return position;
     }
 

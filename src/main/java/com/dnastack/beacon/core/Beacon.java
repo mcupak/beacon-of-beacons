@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.dnastack.beacon.query;
+package com.dnastack.beacon.core;
 
 import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
