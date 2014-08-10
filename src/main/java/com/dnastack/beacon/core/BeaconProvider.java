@@ -5,6 +5,7 @@
  */
 package com.dnastack.beacon.core;
 
+import com.dnastack.beacon.service.EbiBeaconService;
 import com.dnastack.beacon.service.UcscBeaconService;
 import java.io.Serializable;
 import java.util.Collection;
@@ -31,6 +32,9 @@ public class BeaconProvider implements Serializable {
 
     @Inject
     private UcscBeaconService ucscService;
+    
+    @Inject
+    private EbiBeaconService ebiService;
 
     @PostConstruct
     private void initMapping() {
@@ -38,6 +42,7 @@ public class BeaconProvider implements Serializable {
         beaconMappping.put(new Beacon("clinvar", "NCBI ClinVar"), ucscService);
         beaconMappping.put(new Beacon("uniprot", "UniProt"), ucscService);
         beaconMappping.put(new Beacon("lovd", "Leiden Open Variation"), ucscService);
+        beaconMappping.put(new Beacon("ebi", "EMBL-EBI"), ebiService);
     }
 
     /**

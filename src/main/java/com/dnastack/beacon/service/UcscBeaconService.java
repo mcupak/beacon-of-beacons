@@ -9,13 +9,12 @@ import com.dnastack.beacon.core.Beacon;
 import com.dnastack.beacon.core.BeaconResponse;
 import com.dnastack.beacon.core.BeaconService;
 import com.dnastack.beacon.core.Query;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import com.dnastack.beacon.util.HttpUtils;
 import java.net.MalformedURLException;
-import java.net.URL;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
+import org.apache.http.client.methods.HttpGet;
 
 /**
  * A Genomics Alliance beacon service at UCSC..
@@ -30,47 +29,51 @@ public class UcscBeaconService implements BeaconService {
     private static final String BASE_URL = "http://hgwdev-max.cse.ucsc.edu/cgi-bin/beacon/query";
     private static final String PARAM_TEMPLATE = "?track=%s&chrom=%s&pos=%d&allele=%s";
 
-    private URL getQueryUrl(String track, String chrom, long pos, String allele) throws MalformedURLException {
-        String params = String.format(PARAM_TEMPLATE, track, chrom, pos, allele);
-        URL url = new URL(BASE_URL + params);
+    @Inject
+    private HttpUtils httpUtils;
 
-        return url;
+    private String getQueryUrl(String track, String chrom, Long pos, String allele) throws MalformedURLException {
+        String params = String.format(PARAM_TEMPLATE, track, chrom, pos, allele);
+
+        return BASE_URL + params;
+    }
+
+    private String getQueryResponse(Beacon beacon, Query query) {
+        String response = null;
+
+        HttpGet httpGet;
+        try {
+            httpGet = new HttpGet(getQueryUrl(beacon.getId(), query.getChromosome(), query.getPosition(), query.getAllele()));
+        } catch (MalformedURLException ex) {
+            return response;
+        }
+
+        return httpUtils.executeRequest(httpGet);
+    }
+
+    private Boolean parseQueryResponse(String response) {
+        if (response == null) {
+            return null;
+        }
+
+        String s = response.toLowerCase();
+
+        if (s.contains("yes")) {
+            return true;
+        }
+        if (s.contains("no")) {
+            return false;
+        }
+
+        return null;
     }
 
     @Override
     public BeaconResponse executeQuery(Beacon beacon, Query query) {
         BeaconResponse res = new BeaconResponse(beacon, query, null);
 
-        URL queryUrl = null;
-        try {
-            queryUrl = getQueryUrl(beacon.getId(), query.getChromosome(), query.getPosition(), query.getAllele());
-        } catch (MalformedURLException ex) {
-            return res;
-        }
-
-        BufferedReader in = null;
-        try {
-            in = new BufferedReader(new InputStreamReader(queryUrl.openStream()));
-            String output = in.readLine();
-
-            if ("yes".equals(output.toLowerCase())) {
-                res.setResponse(true);
-            } else if ("no".equals(output.toLowerCase())) {
-                res.setResponse(false);
-            }
-        } catch (IOException ex) {
-            return res;
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException ex) {
-                    // ignore
-                }
-            }
-        }
+        res.setResponse(parseQueryResponse(getQueryResponse(beacon, query)));
 
         return res;
     }
-
 }

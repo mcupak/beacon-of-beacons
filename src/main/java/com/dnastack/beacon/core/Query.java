@@ -9,6 +9,7 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
+ * Generalized beacon query representation.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
