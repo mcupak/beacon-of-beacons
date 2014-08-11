@@ -24,8 +24,8 @@ public class BeaconResource {
     @GET
     @Produces("application/json")
     @Path("/all")
-    public BeaconResponse queryAll(@QueryParam("genome") String genome, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele) {
-        Query q = new Query(genome, chrom, pos, allele);
+    public BeaconResponse queryAll(@QueryParam("ref") String ref, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele) {
+        Query q = new Query(ref, chrom, pos, allele);
         BeaconResponse br = new BeaconResponse(new Beacon("all", "beacon of beacons"), q, null);
 
         if (!isQueryValid(q)) {
@@ -45,8 +45,8 @@ public class BeaconResource {
     @GET
     @Produces("application/json")
     @Path("/{beaconId}")
-    public BeaconResponse queryBeacon(@PathParam("beaconId") String beaconId, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele) {
-        Query q = new Query(null, chrom, pos, allele);
+    public BeaconResponse queryBeacon(@PathParam("beaconId") String beaconId, @QueryParam("ref") String ref, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele) {
+        Query q = new Query(ref, chrom, pos, allele);
 
         Beacon b = beaconProvider.getBeacon(beaconId);
         if (b == null) {

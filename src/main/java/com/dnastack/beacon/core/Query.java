@@ -19,7 +19,7 @@ public class Query implements Serializable {
 
     private static final long serialVersionUID = 3L;
 
-    String genome = null;
+    String reference = null;
     String chromosome = null;
     Long position = 0L;
     String allele = null;
@@ -27,19 +27,19 @@ public class Query implements Serializable {
     public Query() {
     }
 
-    public Query(String genome, String chromosome, long position, String allele) {
-        this.genome = genome;
+    public Query(String reference, String chromosome, long position, String allele) {
+        this.reference = reference;
         this.chromosome = chromosome;
         this.position = position;
         this.allele = allele;
     }
 
-    public String getGenome() {
-        return genome;
+    public String getReference() {
+        return reference;
     }
 
-    public void setGenome(String genome) {
-        this.genome = genome;
+    public void setReference(String reference) {
+        this.reference = reference;
     }
 
     public String getChromosome() {
@@ -69,7 +69,7 @@ public class Query implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 13 * hash + (this.genome != null ? this.genome.hashCode() : 0);
+        hash = 13 * hash + (this.reference != null ? this.reference.hashCode() : 0);
         hash = 13 * hash + (this.chromosome != null ? this.chromosome.hashCode() : 0);
         hash = 13 * hash + (int) (this.position ^ (this.position >>> 32));
         hash = 13 * hash + (this.allele != null ? this.allele.hashCode() : 0);
@@ -85,7 +85,7 @@ public class Query implements Serializable {
             return false;
         }
         final Query other = (Query) obj;
-        if ((this.genome == null) ? (other.genome != null) : !this.genome.equals(other.genome)) {
+        if ((this.reference == null) ? (other.reference != null) : !this.reference.equals(other.reference)) {
             return false;
         }
         if ((this.chromosome == null) ? (other.chromosome != null) : !this.chromosome.equals(other.chromosome)) {
@@ -102,7 +102,7 @@ public class Query implements Serializable {
 
     @Override
     public String toString() {
-        return "Query{" + "genome=" + genome + ", chromosome=" + chromosome + ", position=" + position + ", allele=" + allele + '}';
+        return "Query{" + "genome=" + reference + ", chromosome=" + chromosome + ", position=" + position + ", allele=" + allele + '}';
     }
 
 }
