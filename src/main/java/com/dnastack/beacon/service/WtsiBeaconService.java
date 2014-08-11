@@ -57,7 +57,6 @@ public class WtsiBeaconService implements BeaconService {
         }
 
         String s = response.toLowerCase();
-
         if (s.contains("yes")) {
             return true;
         }
