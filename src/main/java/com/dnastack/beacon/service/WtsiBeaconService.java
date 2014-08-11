@@ -17,33 +17,33 @@ import javax.inject.Named;
 import org.apache.http.client.methods.HttpGet;
 
 /**
- * A Genomics Alliance beacon service at UCSC.
+ * WTSI beacon service.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
 @Named
 @ApplicationScoped
-public class UcscBeaconService implements BeaconService {
+public class WtsiBeaconService implements BeaconService {
 
-    private static final String BASE_URL = "http://hgwdev-max.cse.ucsc.edu/cgi-bin/beacon/query";
-    private static final String PARAM_TEMPLATE = "?track=%s&chrom=%s&pos=%d&allele=%s";
+    private static final String BASE_URL = "http://www.sanger.ac.uk/sanger/GA4GH_Beacon";
+    private static final String PARAM_TEMPLATE = "?src=all&ass=%s&chr=%s&pos=%d&all=%s";
 
     @Inject
     private HttpUtils httpUtils;
 
-    private String getQueryUrl(String track, String chrom, Long pos, String allele) throws MalformedURLException {
-        String params = String.format(PARAM_TEMPLATE, track, chrom, pos, allele);
+    private String getQueryUrl(String ref, String chrom, Long pos, String allele) throws MalformedURLException {
+        String params = String.format(PARAM_TEMPLATE, ref, chrom, pos, allele);
 
         return BASE_URL + params;
     }
 
-    private String getQueryResponse(Beacon beacon, Query query) {
+    private String getQueryResponse(Query query) {
         String response = null;
 
         HttpGet httpGet;
         try {
-            httpGet = new HttpGet(getQueryUrl(beacon.getId(), query.getChromosome(), query.getPosition(), query.getAllele()));
+            httpGet = new HttpGet(getQueryUrl(query.getReference(), query.getChromosome(), query.getPosition(), query.getAllele()));
         } catch (MalformedURLException ex) {
             return response;
         }
@@ -72,7 +72,7 @@ public class UcscBeaconService implements BeaconService {
     public BeaconResponse executeQuery(Beacon beacon, Query query) {
         BeaconResponse res = new BeaconResponse(beacon, query, null);
 
-        res.setResponse(parseQueryResponse(getQueryResponse(beacon, query)));
+        res.setResponse(parseQueryResponse(getQueryResponse(query)));
 
         return res;
     }

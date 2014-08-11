@@ -8,6 +8,7 @@ package com.dnastack.beacon.core;
 import com.dnastack.beacon.service.EbiBeaconService;
 import com.dnastack.beacon.service.NcbiBeaconService;
 import com.dnastack.beacon.service.UcscBeaconService;
+import com.dnastack.beacon.service.WtsiBeaconService;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
@@ -40,6 +41,9 @@ public class BeaconProvider implements Serializable {
     @Inject
     private NcbiBeaconService ncbiService;
 
+    @Inject
+    private WtsiBeaconService wtsiService;
+
     @PostConstruct
     private void initMapping() {
         this.beaconMappping = new HashMap<>();
@@ -48,6 +52,7 @@ public class BeaconProvider implements Serializable {
         beaconMappping.put(new Beacon("lovd", "Leiden Open Variation"), ucscService);
         beaconMappping.put(new Beacon("ebi", "EMBL-EBI"), ebiService);
         beaconMappping.put(new Beacon("ncbi", "NCBI dbGaP"), ncbiService);
+        beaconMappping.put(new Beacon("wtsi", "Wellcome Trust Sanger Institute"), wtsiService);
     }
 
     /**
