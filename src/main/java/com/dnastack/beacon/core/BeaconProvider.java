@@ -11,11 +11,12 @@ import com.dnastack.beacon.service.NcbiBeaconService;
 import com.dnastack.beacon.service.UcscBeaconService;
 import com.dnastack.beacon.service.WtsiBeaconService;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -55,7 +56,7 @@ public class BeaconProvider implements Serializable {
         beaconMappping.put(new Beacon("uniprot", "UniProt"), ucscService);
         beaconMappping.put(new Beacon("lovd", "Leiden Open Variation"), ucscService);
         beaconMappping.put(new Beacon("ebi", "EMBL-EBI"), ebiService);
-        beaconMappping.put(new Beacon("ncbi", "NCBI dbGaP"), ncbiService);
+        beaconMappping.put(new Beacon("ncbi", "NCBI"), ncbiService);
         beaconMappping.put(new Beacon("wtsi", "Wellcome Trust Sanger Institute"), wtsiService);
         beaconMappping.put(new Beacon("amplab", "AMPLab"), ampLabService);
     }
@@ -75,7 +76,9 @@ public class BeaconProvider implements Serializable {
      *
      * @return collection of beacons
      */
-    public Collection<Beacon> getBeacons() {
+    @Produces
+    @AllBeacons
+    public Set<Beacon> getBeacons() {
         return beaconMappping.keySet();
     }
 
@@ -97,5 +100,11 @@ public class BeaconProvider implements Serializable {
         }
 
         return null;
+    }
+
+    @Produces
+    @Bob
+    public Beacon getBob() {
+        return new Beacon("bob", "beacon of beacons");
     }
 }

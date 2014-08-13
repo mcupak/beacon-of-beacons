@@ -9,6 +9,7 @@ import com.dnastack.beacon.core.Beacon;
 import com.dnastack.beacon.core.Query;
 import com.dnastack.beacon.util.HttpUtils;
 import com.dnastack.beacon.util.ParsingUtils;
+import com.dnastack.beacon.util.QueryUtils;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +34,16 @@ public class AmpLabBeaconService extends GenomeAwareBeaconService {
     private static final String BASE_URL = "http://beacon.eecs.berkeley.edu/beacon.php";
     // requeries genome specification in the query
     private static final String[] SUPPORTED_REFS = {"hg18", "hg19", "hg38"};
+    private static final String CHROM_TEMPLATE = "chr%s";
 
     @Inject
     private HttpUtils httpUtils;
 
     @Inject
     private ParsingUtils parsingUtils;
+
+    @Inject
+    private QueryUtils queryUtils;
 
     private List<NameValuePair> getQueryData(String ref, String chrom, Long pos, String allele) {
         List<NameValuePair> nvs = new ArrayList<>();
@@ -56,7 +61,7 @@ public class AmpLabBeaconService extends GenomeAwareBeaconService {
     public String getQueryResponse(Beacon beacon, Query query, String ref) {
         HttpPost httpPost = new HttpPost(BASE_URL);
         try {
-            httpPost.setEntity(new UrlEncodedFormEntity(getQueryData(ref, query.getChromosome(), query.getPosition(), query.getAllele())));
+            httpPost.setEntity(new UrlEncodedFormEntity(getQueryData(ref, queryUtils.denormalizeChrom(CHROM_TEMPLATE, query.getChromosome()), query.getPosition(), query.getAllele())));
         } catch (UnsupportedEncodingException ex) {
             return null;
         }

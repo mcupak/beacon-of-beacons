@@ -24,6 +24,7 @@ public abstract class GenomeAwareBeaconService implements BeaconService {
     public BeaconResponse executeQuery(Beacon beacon, Query query) {
         BeaconResponse res = new BeaconResponse(beacon, query, null);
 
+        // TODO: parallelize
         for (String ref : getRefs()) {
             Boolean r = parseQueryResponse(getQueryResponse(beacon, query, ref));
             if (r != null) {
