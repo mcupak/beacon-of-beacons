@@ -22,4 +22,22 @@ public interface BeaconService {
      * the valid response could not be obtained)
      */
     BeaconResponse executeQuery(Beacon beacon, Query query);
+
+    /**
+     * Extracts beacon response value from the given raw query reponse.
+     *
+     * @param response response
+     * @return true/false for valid values, null otherwise
+     */
+    Boolean parseQueryResponse(String response);
+
+    /**
+     * Obtains raw response to the query from the beacon.
+     *
+     * @param beacon beacon to query
+     * @param query query
+     * @return raw result of the query from the beacon
+     */
+    String getQueryResponse(Beacon beacon, Query query);
+
 }

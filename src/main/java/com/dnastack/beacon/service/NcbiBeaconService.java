@@ -10,13 +10,12 @@ import com.dnastack.beacon.core.BeaconResponse;
 import com.dnastack.beacon.core.BeaconService;
 import com.dnastack.beacon.core.Query;
 import com.dnastack.beacon.util.HttpUtils;
+import com.dnastack.beacon.util.ParsingUtils;
 import java.net.MalformedURLException;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.http.client.methods.HttpGet;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * NCBI beacon service.
@@ -34,13 +33,17 @@ public class NcbiBeaconService implements BeaconService {
     @Inject
     private HttpUtils httpUtils;
 
+    @Inject
+    private ParsingUtils parsingUtils;
+
     private String getQueryUrl(String ref, String chrom, Long pos, String allele) throws MalformedURLException {
         String params = String.format(PARAM_TEMPLATE, ref, chrom, pos, allele);
 
         return BASE_URL + params;
     }
 
-    private String getQueryResponse(Query query) {
+    @Override
+    public String getQueryResponse(Beacon beacon, Query query) {
         String response = null;
 
         // should be POST, but the server accepts GET as well
@@ -54,26 +57,16 @@ public class NcbiBeaconService implements BeaconService {
         return httpUtils.executeRequest(httpGet);
     }
 
-    private Boolean parseQueryResponse(String response) {
-        if (response == null) {
-            return null;
-        }
-
-        JSONObject jo = new JSONObject(response);
-        try {
-            boolean b = jo.getBoolean("exist_gt");
-            return b;
-        } catch (JSONException jex) {
-            // cannot parse the response or no record message
-            return null;
-        }
+    @Override
+    public Boolean parseQueryResponse(String response) {
+        return parsingUtils.parseBooleanFromJson(response, "exist_gt");
     }
 
     @Override
     public BeaconResponse executeQuery(Beacon beacon, Query query) {
         BeaconResponse res = new BeaconResponse(beacon, query, null);
 
-        res.setResponse(parseQueryResponse(getQueryResponse(query)));
+        res.setResponse(parseQueryResponse(getQueryResponse(beacon, query)));
 
         return res;
     }

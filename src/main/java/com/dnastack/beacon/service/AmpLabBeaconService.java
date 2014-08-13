@@ -10,6 +10,7 @@ import com.dnastack.beacon.core.BeaconResponse;
 import com.dnastack.beacon.core.BeaconService;
 import com.dnastack.beacon.core.Query;
 import com.dnastack.beacon.util.HttpUtils;
+import com.dnastack.beacon.util.ParsingUtils;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,9 @@ public class AmpLabBeaconService implements BeaconService {
     @Inject
     private HttpUtils httpUtils;
 
+    @Inject
+    private ParsingUtils parsingUtils;
+
     private List<NameValuePair> getQueryData(String ref, String chrom, Long pos, String allele) {
         List<NameValuePair> nvs = new ArrayList<>();
         // so far there is only 1 population
@@ -48,7 +52,8 @@ public class AmpLabBeaconService implements BeaconService {
         return nvs;
     }
 
-    private String getQueryResponse(Query query) {
+    @Override
+    public String getQueryResponse(Beacon beacon, Query query) {
         HttpPost httpPost = new HttpPost(BASE_URL);
         try {
             httpPost.setEntity(new UrlEncodedFormEntity(getQueryData(query.getReference(), query.getChromosome(), query.getPosition(), query.getAllele())));
@@ -59,27 +64,16 @@ public class AmpLabBeaconService implements BeaconService {
         return httpUtils.executeRequest(httpPost);
     }
 
-    private Boolean parseQueryResponse(String response) {
-        if (response == null) {
-            return null;
-        }
-
-        String s = response.toLowerCase();
-        if (s.contains("beacon found")) {
-            return true;
-        }
-        if (s.contains("beacon cannot find")) {
-            return false;
-        }
-
-        return null;
+    @Override
+    public Boolean parseQueryResponse(String response) {
+        return parsingUtils.parseContainsStringCaseInsensitive(response, "beacon found", "beacon cannot find");
     }
 
     @Override
     public BeaconResponse executeQuery(Beacon beacon, Query query) {
         BeaconResponse res = new BeaconResponse(beacon, query, null);
 
-        res.setResponse(parseQueryResponse(getQueryResponse(query)));
+        res.setResponse(parseQueryResponse(getQueryResponse(beacon, query)));
 
         return res;
     }

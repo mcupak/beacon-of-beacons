@@ -30,12 +30,12 @@ import org.apache.http.message.BasicNameValuePair;
 @Named
 @ApplicationScoped
 public class EbiBeaconService implements BeaconService {
-    
+
     private static final String BASE_URL = "http://www.ebi.ac.uk/eva/beacon";
-    
+
     @Inject
     private HttpUtils httpUtils;
-    
+
     private List<NameValuePair> getQueryData(String chrom, Long pos, String allele) {
         List<NameValuePair> nvs = new ArrayList<>();
         // project=0 implies any project
@@ -47,50 +47,52 @@ public class EbiBeaconService implements BeaconService {
         nvs.add(new BasicNameValuePair("active", "1"));
         nvs.add(new BasicNameValuePair("op", "Search"));
         nvs.add(new BasicNameValuePair("form_id", "eva_beacon_form"));
-        
+
         return nvs;
     }
-    
-    private String getQueryResponse(Query query) {
+
+    @Override
+    public String getQueryResponse(Beacon beacon, Query query) {
         HttpPost httpPost = new HttpPost(BASE_URL);
         try {
             httpPost.setEntity(new UrlEncodedFormEntity(getQueryData(query.getChromosome(), query.getPosition(), query.getAllele())));
         } catch (UnsupportedEncodingException ex) {
             return null;
         }
-        
+
         return httpUtils.executeRequest(httpPost);
     }
-    
-    private Boolean parseQueryResponse(String response) {
+
+    @Override
+    public Boolean parseQueryResponse(String response) {
         if (response == null) {
             return null;
         }
-        
+
         int start = response.indexOf("exist");
         if (start < 0) {
             return null;
         }
-        
+
         char c = response.charAt(start + 8);
-        
+
         if (c == 'T' || c == 't') {
             return true;
         }
         if (c == 'F' || c == 'f') {
             return false;
         }
-        
+
         return null;
     }
-    
+
     @Override
     public BeaconResponse executeQuery(Beacon beacon, Query query) {
         BeaconResponse res = new BeaconResponse(beacon, query, null);
-        
-        res.setResponse(parseQueryResponse(getQueryResponse(query)));
-        
+
+        res.setResponse(parseQueryResponse(getQueryResponse(beacon, query)));
+
         return res;
     }
-    
+
 }

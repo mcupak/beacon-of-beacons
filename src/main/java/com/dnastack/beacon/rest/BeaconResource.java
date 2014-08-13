@@ -34,7 +34,8 @@ public class BeaconResource {
         br.setResponse(false);
 
         for (Beacon b : beaconProvider.getBeacons()) {
-            if (beaconProvider.getService(b).executeQuery(b, q).getResponse()) {
+            Boolean res = beaconProvider.getService(b).executeQuery(b, q).getResponse();
+            if (res != null && res) {
                 br.setResponse(true);
             }
         }
