@@ -6,6 +6,7 @@
 package com.dnastack.beacon.core;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -19,27 +20,17 @@ public class Query implements Serializable {
 
     private static final long serialVersionUID = 3L;
 
-    String reference = null;
-    String chromosome = null;
-    Long position = 0L;
-    String allele = null;
+    private String chromosome = null;
+    private Long position = 0L;
+    private String allele = null;
 
     public Query() {
     }
 
-    public Query(String reference, String chromosome, long position, String allele) {
-        this.reference = reference;
+    public Query(String chromosome, long position, String allele) {
         this.chromosome = chromosome;
         this.position = position;
         this.allele = allele;
-    }
-
-    public String getReference() {
-        return reference;
-    }
-
-    public void setReference(String reference) {
-        this.reference = reference;
     }
 
     public String getChromosome() {
@@ -68,11 +59,10 @@ public class Query implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 13 * hash + (this.reference != null ? this.reference.hashCode() : 0);
-        hash = 13 * hash + (this.chromosome != null ? this.chromosome.hashCode() : 0);
-        hash = 13 * hash + (int) (this.position ^ (this.position >>> 32));
-        hash = 13 * hash + (this.allele != null ? this.allele.hashCode() : 0);
+        int hash = 5;
+        hash = 89 * hash + Objects.hashCode(this.chromosome);
+        hash = 89 * hash + Objects.hashCode(this.position);
+        hash = 89 * hash + Objects.hashCode(this.allele);
         return hash;
     }
 
@@ -85,16 +75,13 @@ public class Query implements Serializable {
             return false;
         }
         final Query other = (Query) obj;
-        if ((this.reference == null) ? (other.reference != null) : !this.reference.equals(other.reference)) {
+        if (!Objects.equals(this.chromosome, other.chromosome)) {
             return false;
         }
-        if ((this.chromosome == null) ? (other.chromosome != null) : !this.chromosome.equals(other.chromosome)) {
+        if (!Objects.equals(this.position, other.position)) {
             return false;
         }
-        if (this.position != other.position) {
-            return false;
-        }
-        if ((this.allele == null) ? (other.allele != null) : !this.allele.equals(other.allele)) {
+        if (!Objects.equals(this.allele, other.allele)) {
             return false;
         }
         return true;
@@ -102,7 +89,7 @@ public class Query implements Serializable {
 
     @Override
     public String toString() {
-        return "Query{" + "genome=" + reference + ", chromosome=" + chromosome + ", position=" + position + ", allele=" + allele + '}';
+        return "Query{" + "chromosome=" + chromosome + ", position=" + position + ", allele=" + allele + '}';
     }
 
 }

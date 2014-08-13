@@ -6,8 +6,6 @@
 package com.dnastack.beacon.service;
 
 import com.dnastack.beacon.core.Beacon;
-import com.dnastack.beacon.core.BeaconResponse;
-import com.dnastack.beacon.core.BeaconService;
 import com.dnastack.beacon.core.Query;
 import com.dnastack.beacon.util.HttpUtils;
 import com.dnastack.beacon.util.ParsingUtils;
@@ -25,10 +23,12 @@ import org.apache.http.client.methods.HttpGet;
  */
 @Named
 @ApplicationScoped
-public class NcbiBeaconService implements BeaconService {
+public class NcbiBeaconService extends GenomeAwareBeaconService {
 
     private static final String BASE_URL = "http://www.ncbi.nlm.nih.gov/projects/genome/beacon/beacon.cgi";
     private static final String PARAM_TEMPLATE = "?ref=%s&chrom=%s&pos=%d&allele=%s";
+    // requeries genome specification in the query
+    private static final String[] SUPPORTED_REFS = {"NCBI36", "GRCh37", "GRCh38"};
 
     @Inject
     private HttpUtils httpUtils;
@@ -43,13 +43,13 @@ public class NcbiBeaconService implements BeaconService {
     }
 
     @Override
-    public String getQueryResponse(Beacon beacon, Query query) {
+    public String getQueryResponse(Beacon beacon, Query query, String ref) {
         String response = null;
 
         // should be POST, but the server accepts GET as well
         HttpGet httpGet;
         try {
-            httpGet = new HttpGet(getQueryUrl(query.getReference(), query.getChromosome(), query.getPosition(), query.getAllele()));
+            httpGet = new HttpGet(getQueryUrl(ref, query.getChromosome(), query.getPosition(), query.getAllele()));
         } catch (MalformedURLException ex) {
             return response;
         }
@@ -63,11 +63,8 @@ public class NcbiBeaconService implements BeaconService {
     }
 
     @Override
-    public BeaconResponse executeQuery(Beacon beacon, Query query) {
-        BeaconResponse res = new BeaconResponse(beacon, query, null);
-
-        res.setResponse(parseQueryResponse(getQueryResponse(beacon, query)));
-
-        return res;
+    protected String[] getRefs() {
+        return SUPPORTED_REFS;
     }
+
 }

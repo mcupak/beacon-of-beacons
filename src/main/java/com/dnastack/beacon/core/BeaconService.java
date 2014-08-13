@@ -36,8 +36,9 @@ public interface BeaconService {
      *
      * @param beacon beacon to query
      * @param query query
+     * @param ref reference genome (optional)
      * @return raw result of the query from the beacon
      */
-    String getQueryResponse(Beacon beacon, Query query);
+    String getQueryResponse(Beacon beacon, Query query, String ref);
 
 }

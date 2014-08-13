@@ -6,8 +6,6 @@
 package com.dnastack.beacon.service;
 
 import com.dnastack.beacon.core.Beacon;
-import com.dnastack.beacon.core.BeaconResponse;
-import com.dnastack.beacon.core.BeaconService;
 import com.dnastack.beacon.core.Query;
 import com.dnastack.beacon.util.HttpUtils;
 import com.dnastack.beacon.util.ParsingUtils;
@@ -25,10 +23,10 @@ import org.apache.http.client.methods.HttpGet;
  */
 @Named
 @ApplicationScoped
-public class WtsiBeaconService implements BeaconService {
+public class WtsiBeaconService extends GenomeUnawareBeaconService {
 
     private static final String BASE_URL = "http://www.sanger.ac.uk/sanger/GA4GH_Beacon";
-    private static final String PARAM_TEMPLATE = "?src=all&ass=%s&chr=%s&pos=%d&all=%s";
+    private static final String PARAM_TEMPLATE = "?src=all&chr=%s&pos=%d&all=%s";
 
     @Inject
     private HttpUtils httpUtils;
@@ -36,19 +34,19 @@ public class WtsiBeaconService implements BeaconService {
     @Inject
     private ParsingUtils parsingUtils;
 
-    private String getQueryUrl(String ref, String chrom, Long pos, String allele) throws MalformedURLException {
-        String params = String.format(PARAM_TEMPLATE, ref, chrom, pos, allele);
+    private String getQueryUrl(String chrom, Long pos, String allele) throws MalformedURLException {
+        String params = String.format(PARAM_TEMPLATE, chrom, pos, allele);
 
         return BASE_URL + params;
     }
 
     @Override
-    public String getQueryResponse(Beacon beacon, Query query) {
+    public String getQueryResponse(Beacon beacon, Query query, String ref) {
         String response = null;
 
         HttpGet httpGet;
         try {
-            httpGet = new HttpGet(getQueryUrl(query.getReference(), query.getChromosome(), query.getPosition(), query.getAllele()));
+            httpGet = new HttpGet(getQueryUrl(query.getChromosome(), query.getPosition(), query.getAllele()));
         } catch (MalformedURLException ex) {
             return response;
         }
@@ -61,12 +59,4 @@ public class WtsiBeaconService implements BeaconService {
         return parsingUtils.parseYesNoCaseInsensitive(response);
     }
 
-    @Override
-    public BeaconResponse executeQuery(Beacon beacon, Query query) {
-        BeaconResponse res = new BeaconResponse(beacon, query, null);
-
-        res.setResponse(parseQueryResponse(getQueryResponse(beacon, query)));
-
-        return res;
-    }
 }

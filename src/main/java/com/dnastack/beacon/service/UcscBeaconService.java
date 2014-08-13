@@ -6,8 +6,6 @@
 package com.dnastack.beacon.service;
 
 import com.dnastack.beacon.core.Beacon;
-import com.dnastack.beacon.core.BeaconResponse;
-import com.dnastack.beacon.core.BeaconService;
 import com.dnastack.beacon.core.Query;
 import com.dnastack.beacon.util.HttpUtils;
 import com.dnastack.beacon.util.ParsingUtils;
@@ -25,7 +23,7 @@ import org.apache.http.client.methods.HttpGet;
  */
 @Named
 @ApplicationScoped
-public class UcscBeaconService implements BeaconService {
+public class UcscBeaconService extends GenomeUnawareBeaconService {
 
     private static final String BASE_URL = "http://hgwdev-max.cse.ucsc.edu/cgi-bin/beacon/query";
     private static final String PARAM_TEMPLATE = "?track=%s&chrom=%s&pos=%d&allele=%s";
@@ -43,7 +41,7 @@ public class UcscBeaconService implements BeaconService {
     }
 
     @Override
-    public String getQueryResponse(Beacon beacon, Query query) {
+    public String getQueryResponse(Beacon beacon, Query query, String ref) {
         String response = null;
 
         HttpGet httpGet;
@@ -61,12 +59,4 @@ public class UcscBeaconService implements BeaconService {
         return parsingUtils.parseYesNoCaseInsensitive(response);
     }
 
-    @Override
-    public BeaconResponse executeQuery(Beacon beacon, Query query) {
-        BeaconResponse res = new BeaconResponse(beacon, query, null);
-
-        res.setResponse(parseQueryResponse(getQueryResponse(beacon, query)));
-
-        return res;
-    }
 }

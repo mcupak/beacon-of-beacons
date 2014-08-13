@@ -11,6 +11,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
+/**
+ * Query rest resource.
+ *
+ * @author mcupak
+ */
 @Path("/query")
 public class BeaconResource {
 
@@ -23,9 +28,9 @@ public class BeaconResource {
 
     @GET
     @Produces("application/json")
-    @Path("/all")
-    public BeaconResponse queryAll(@QueryParam("ref") String ref, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele) {
-        Query q = new Query(ref, chrom, pos, allele);
+    @Path("/bob")
+    public BeaconResponse queryAll(@QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele) {
+        Query q = new Query(chrom, pos, allele);
         BeaconResponse br = new BeaconResponse(new Beacon("all", "beacon of beacons"), q, null);
 
         if (!isQueryValid(q)) {
@@ -46,8 +51,8 @@ public class BeaconResource {
     @GET
     @Produces("application/json")
     @Path("/{beaconId}")
-    public BeaconResponse queryBeacon(@PathParam("beaconId") String beaconId, @QueryParam("ref") String ref, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele) {
-        Query q = new Query(ref, chrom, pos, allele);
+    public BeaconResponse queryBeacon(@PathParam("beaconId") String beaconId, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele) {
+        Query q = new Query(chrom, pos, allele);
 
         Beacon b = beaconProvider.getBeacon(beaconId);
         if (b == null) {
