@@ -7,6 +7,39 @@
     <packaging>war</packaging>
     <description>Beacon of Beacons</description>
     
+    <scm>
+        <url>https://github.com/mcupak/beacon-aggregator</url>
+        <connection>scm:git:git://github.com/mcupak/beacon-aggregator.git</connection>
+        <developerConnection>scm:git:git@github.com:mcupak/beacon-aggregator.git</developerConnection>
+    </scm>
+    
+    <organization>
+        <name>DNAstack</name>
+        <url>http://dnastack.com</url>
+    </organization>
+    
+    <developers>
+        <developer>
+            <id>mcupak</id>
+            <name>Miro</name>
+            <email>mirocupak@gmail.com</email>
+            <url>https://github.com/mcupak</url>
+            <organization>DNAstack</organization>
+            <organizationUrl>http://dnastack.com</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+    
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
@@ -18,13 +51,6 @@
     </properties>
     <dependencyManagement>
         <dependencies>
-            <!-- Define the version of JBoss' Java EE 6 APIs we want to use -->
-            <!-- JBoss distributes a complete set of Java EE 6 APIs including
-            a Bill of Materials (BOM). A BOM specifies the versions of a "stack" (or
-            a collection) of artifacts. We use this here so that we always get the correct
-            versions of artifacts. Here we use the jboss-javaee-6.0 stack (you can
-            read this as the JBoss stack of the Java EE 6 APIs). You can actually
-            use this stack with any version of JBoss EAP that implements Java EE 6. -->
             <dependency>
                 <groupId>org.jboss.spec</groupId>
                 <artifactId>jboss-javaee-6.0</artifactId>
