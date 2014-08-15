@@ -22,8 +22,8 @@ import javax.ws.rs.QueryParam;
  *
  * @author mcupak
  */
-@Path("/query")
-public class QueryBeaconResource {
+@Path("/responses")
+public class ResponseResource {
 
     @Inject
     private BeaconProvider beaconProvider;
@@ -39,6 +39,14 @@ public class QueryBeaconResource {
     @AllBeacons
     private Set<Beacon> beacons;
 
+    /**
+     * Query the beacon of beacons.
+     *
+     * @param chrom chromosome
+     * @param pos position
+     * @param allele allele
+     * @return list of beacon responses
+     */
     @GET
     @Produces("application/json")
     @Path("/bob")
@@ -62,17 +70,15 @@ public class QueryBeaconResource {
         return br;
     }
 
-    @GET
-    @Produces("application/json")
-    @Path("/all")
-    public List<BeaconResponse> queryAll(@QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele) {
-        List<BeaconResponse> brs = new ArrayList<>();
-        for (Beacon b : beacons) {
-            brs.add(queryBeacon(b.getId(), chrom, pos, allele));
-        }
-        return brs;
-    }
-
+    /**
+     * Query a given beacon
+     *
+     * @param beaconId beacon to query
+     * @param chrom chromosome
+     * @param pos position
+     * @param allele allele
+     * @return list of beacon responses
+     */
     @GET
     @Produces("application/json")
     @Path("/{beaconId}")
@@ -90,5 +96,44 @@ public class QueryBeaconResource {
         }
 
         return beaconProvider.getService(b).executeQuery(b, q);
+    }
+
+    /**
+     * Query all the beacons.
+     *
+     * @param chrom chromosome
+     * @param pos position
+     * @param allele allele
+     * @return list of beacon responses
+     */
+    public List<BeaconResponse> queryAll(String chrom, Long pos, String allele) {
+        List<BeaconResponse> brs = new ArrayList<>();
+        for (Beacon b : beacons) {
+            brs.add(queryBeacon(b.getId(), chrom, pos, allele));
+        }
+        return brs;
+    }
+
+    /**
+     * Query all the beacons or a specific beacon as determined by a param.
+     *
+     * @param beaconId beacon to query (optional)
+     * @param chrom chromosome
+     * @param pos position
+     * @param allele allele
+     * @return list of beacon responses
+     */
+    @GET
+    @Produces("application/json")
+    public List<BeaconResponse> query(@QueryParam("beacon") String beaconId, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele) {
+        List<BeaconResponse> brs = new ArrayList<>();
+        if (beaconId == null) {
+            brs.addAll(queryAll(chrom, pos, allele));
+        } else if (beaconId.equals(bob.getId())) {
+            brs.add(queryBob(chrom, pos, allele));
+        } else {
+            brs.add(queryBeacon(beaconId, chrom, pos, allele));
+        }
+        return brs;
     }
 }
