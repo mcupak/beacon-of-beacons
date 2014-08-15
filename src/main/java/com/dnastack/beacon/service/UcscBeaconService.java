@@ -30,6 +30,7 @@ import org.apache.http.client.methods.HttpGet;
 @LocalBean
 public class UcscBeaconService extends GenomeUnawareBeaconService {
 
+    private static final long serialVersionUID = 13L;
     private static final String BASE_URL = "http://hgwdev-max.cse.ucsc.edu/cgi-bin/beacon/query";
     private static final String PARAM_TEMPLATE = "?track=%s&chrom=%s&pos=%d&allele=%s";
     private static final String CHROM_TEMPLATE = "chr%s";

@@ -9,6 +9,7 @@ import com.dnastack.beacon.core.Beacon;
 import com.dnastack.beacon.core.BeaconResponse;
 import com.dnastack.beacon.core.BeaconService;
 import com.dnastack.beacon.core.Query;
+import java.io.Serializable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
@@ -19,7 +20,9 @@ import javax.ejb.AsyncResult;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public abstract class GenomeUnawareBeaconService implements BeaconService {
+public abstract class GenomeUnawareBeaconService implements BeaconService, Serializable {
+
+    private static final long serialVersionUID = 9L;
 
     @Override
     public Future<BeaconResponse> executeQuery(Beacon beacon, Query query) {

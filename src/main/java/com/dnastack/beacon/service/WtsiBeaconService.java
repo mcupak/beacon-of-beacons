@@ -29,6 +29,7 @@ import org.apache.http.client.methods.HttpGet;
 @LocalBean
 public class WtsiBeaconService extends GenomeUnawareBeaconService {
 
+    private static final long serialVersionUID = 14L;
     private static final String BASE_URL = "http://www.sanger.ac.uk/sanger/GA4GH_Beacon";
     private static final String PARAM_TEMPLATE = "?src=all&chr=%s&pos=%d&all=%s";
 

@@ -35,6 +35,7 @@ import org.apache.http.message.BasicNameValuePair;
 @LocalBean
 public class AmpLabBeaconService extends GenomeAwareBeaconService {
 
+    private static final long serialVersionUID = 10L;
     private static final String BASE_URL = "http://beacon.eecs.berkeley.edu/beacon.php";
     // requeries genome specification in the query
     private static final String[] SUPPORTED_REFS = {"hg18", "hg19", "hg38"};

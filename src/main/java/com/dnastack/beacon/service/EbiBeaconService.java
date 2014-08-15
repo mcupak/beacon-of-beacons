@@ -33,6 +33,7 @@ import org.apache.http.message.BasicNameValuePair;
 @LocalBean
 public class EbiBeaconService extends GenomeUnawareBeaconService {
 
+    private static final long serialVersionUID = 11L;
     private static final String BASE_URL = "http://www.ebi.ac.uk/eva/beacon";
 
     @Inject

@@ -29,6 +29,7 @@ import org.apache.http.client.methods.HttpGet;
 @LocalBean
 public class NcbiBeaconService extends GenomeAwareBeaconService {
 
+    private static final long serialVersionUID = 12L;
     private static final String BASE_URL = "http://www.ncbi.nlm.nih.gov/projects/genome/beacon/beacon.cgi";
     private static final String PARAM_TEMPLATE = "?ref=%s&chrom=%s&pos=%d&allele=%s";
     // requeries genome specification in the query
