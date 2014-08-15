@@ -6,13 +6,17 @@
 package com.dnastack.beacon.service;
 
 import com.dnastack.beacon.core.Beacon;
+import com.dnastack.beacon.core.BeaconResponse;
 import com.dnastack.beacon.core.Query;
 import com.dnastack.beacon.util.HttpUtils;
 import com.dnastack.beacon.util.ParsingUtils;
 import java.net.MalformedURLException;
-import javax.enterprise.context.ApplicationScoped;
+import java.util.concurrent.Future;
+import javax.ejb.AsyncResult;
+import javax.ejb.Asynchronous;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.inject.Named;
 import org.apache.http.client.methods.HttpGet;
 
 /**
@@ -21,8 +25,8 @@ import org.apache.http.client.methods.HttpGet;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Named
-@ApplicationScoped
+@Stateless
+@LocalBean
 public class NcbiBeaconService extends GenomeAwareBeaconService {
 
     private static final String BASE_URL = "http://www.ncbi.nlm.nih.gov/projects/genome/beacon/beacon.cgi";
@@ -43,23 +47,28 @@ public class NcbiBeaconService extends GenomeAwareBeaconService {
     }
 
     @Override
-    public String getQueryResponse(Beacon beacon, Query query, String ref) {
-        String response = null;
+    @Asynchronous
+    public Future<String> getQueryResponse(Beacon beacon, Query query, String ref) {
+        String res = null;
 
         // should be POST, but the server accepts GET as well
         HttpGet httpGet;
         try {
             httpGet = new HttpGet(getQueryUrl(ref, query.getChromosome(), query.getPosition(), query.getAllele()));
+            res = httpUtils.executeRequest(httpGet);
         } catch (MalformedURLException ex) {
-            return response;
+            // ignore, already null
         }
 
-        return httpUtils.executeRequest(httpGet);
+        return new AsyncResult<>(res);
     }
 
     @Override
-    public Boolean parseQueryResponse(String response) {
-        return parsingUtils.parseBooleanFromJson(response, "exist_gt");
+    @Asynchronous
+    public Future<Boolean> parseQueryResponse(String response) {
+        Boolean res = parsingUtils.parseBooleanFromJson(response, "exist_gt");
+
+        return new AsyncResult<>(res);
     }
 
     @Override
@@ -67,4 +76,9 @@ public class NcbiBeaconService extends GenomeAwareBeaconService {
         return SUPPORTED_REFS;
     }
 
+    @Override
+    @Asynchronous
+    public Future<BeaconResponse> executeQuery(Beacon beacon, Query query) {
+        return super.executeQuery(beacon, query);
+    }
 }

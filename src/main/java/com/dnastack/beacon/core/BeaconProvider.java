@@ -15,10 +15,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
-import javax.inject.Named;
 
 /**
  * Mapper and holder of beacons and services.
@@ -26,8 +26,8 @@ import javax.inject.Named;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Named
-@ApplicationScoped
+@Stateless
+@LocalBean
 public class BeaconProvider implements Serializable {
 
     private static final long serialVersionUID = 5L;

@@ -5,6 +5,8 @@
  */
 package com.dnastack.beacon.core;
 
+import java.util.concurrent.Future;
+
 /**
  * Beacon query service.
  *
@@ -14,31 +16,31 @@ package com.dnastack.beacon.core;
 public interface BeaconService {
 
     /**
-     * Executes a query agaist a beacon.
+     * Asynchronously executes a query agaist a beacon.
      *
      * @param beacon beacon
      * @param query query representation
      * @return response containing the beacon, the query and true/false according to the beacons response (or null if
      * the valid response could not be obtained)
      */
-    BeaconResponse executeQuery(Beacon beacon, Query query);
+    Future<BeaconResponse> executeQuery(Beacon beacon, Query query);
 
     /**
-     * Extracts beacon response value from the given raw query reponse.
+     * Asynchronously xtracts beacon response value from the given raw query reponse.
      *
      * @param response response
      * @return true/false for valid values, null otherwise
      */
-    Boolean parseQueryResponse(String response);
+    Future<Boolean> parseQueryResponse(String response);
 
     /**
-     * Obtains raw response to the query from the beacon.
+     * Asynchronously obtains raw response to the query from the beacon.
      *
      * @param beacon beacon to query
      * @param query query
      * @param ref reference genome (optional)
      * @return raw result of the query from the beacon
      */
-    String getQueryResponse(Beacon beacon, Query query, String ref);
+    Future<String> getQueryResponse(Beacon beacon, Query query, String ref);
 
 }

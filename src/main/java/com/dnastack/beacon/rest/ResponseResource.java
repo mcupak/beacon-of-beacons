@@ -8,8 +8,15 @@ import com.dnastack.beacon.core.Bob;
 import com.dnastack.beacon.core.Query;
 import com.dnastack.beacon.util.QueryUtils;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -59,9 +66,20 @@ public class ResponseResource {
         }
         br.setResponse(false);
 
-        // TODO: parallelize
+        // execute queries in parallel
+        List<Future<BeaconResponse>> futures = new ArrayList<>();
         for (Beacon b : beacons) {
-            Boolean res = beaconProvider.getService(b).executeQuery(b, q).getResponse();
+            futures.add(beaconProvider.getService(b).executeQuery(b, q));
+        }
+
+        // collect results
+        for (Future<BeaconResponse> r : futures) {
+            Boolean res = null;
+            try {
+                res = r.get().getResponse();
+            } catch (InterruptedException | ExecutionException ex) {
+                // ignore, response already null
+            }
             if (res != null && res) {
                 br.setResponse(true);
             }
@@ -91,11 +109,17 @@ public class ResponseResource {
             return new BeaconResponse(new Beacon(null, "invalid beacon"), q, null);
         }
 
+        BeaconResponse br = new BeaconResponse(b, q, null);
         if (!queryUtils.isQueryValid(q)) {
-            return new BeaconResponse(b, q, null);
+            return br;
         }
 
-        return beaconProvider.getService(b).executeQuery(b, q);
+        try {
+            br = beaconProvider.getService(b).executeQuery(b, q).get();
+        } catch (InterruptedException | ExecutionException ex) {
+            Logger.getLogger(ResponseResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return br;
     }
 
     /**
@@ -104,14 +128,42 @@ public class ResponseResource {
      * @param chrom chromosome
      * @param pos position
      * @param allele allele
-     * @return list of beacon responses
+     * @return collection of beacon responses
      */
-    public List<BeaconResponse> queryAll(String chrom, Long pos, String allele) {
-        List<BeaconResponse> brs = new ArrayList<>();
+    public Collection<BeaconResponse> queryAll(String chrom, Long pos, String allele) {
+        Query q = queryUtils.normalizeQuery(new Query(chrom, pos, allele));
+
+        // init to create a response for each beacon even if the query is invalid
+        Map<Beacon, BeaconResponse> brs = new HashMap<>();
         for (Beacon b : beacons) {
-            brs.add(queryBeacon(b.getId(), chrom, pos, allele));
+            brs.put(b, new BeaconResponse(b, q, null));
         }
-        return brs;
+
+        // validate query
+        if (!queryUtils.isQueryValid(q)) {
+            return brs.values();
+        }
+
+        // execute queries in parallel
+        List<Future<BeaconResponse>> futures = new ArrayList<>();
+        for (Beacon b : beacons) {
+            futures.add(beaconProvider.getService(b).executeQuery(b, q));
+        }
+
+        // collect results
+        for (Future<BeaconResponse> f : futures) {
+            BeaconResponse br = null;
+            try {
+                br = f.get();
+            } catch (InterruptedException | ExecutionException ex) {
+                // ignore, response already null
+            }
+            if (br != null) {
+                brs.get(br.getBeacon()).setResponse(br.getResponse());
+            }
+        }
+
+        return brs.values();
     }
 
     /**

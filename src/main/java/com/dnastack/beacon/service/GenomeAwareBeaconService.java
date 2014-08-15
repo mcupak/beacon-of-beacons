@@ -9,6 +9,11 @@ import com.dnastack.beacon.core.Beacon;
 import com.dnastack.beacon.core.BeaconResponse;
 import com.dnastack.beacon.core.BeaconService;
 import com.dnastack.beacon.core.Query;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import javax.ejb.AsyncResult;
 
 /**
  * Abstract beacon service handling multiple genome specific queries.
@@ -21,12 +26,33 @@ public abstract class GenomeAwareBeaconService implements BeaconService {
     protected abstract String[] getRefs();
 
     @Override
-    public BeaconResponse executeQuery(Beacon beacon, Query query) {
+    public Future<BeaconResponse> executeQuery(Beacon beacon, Query query) {
         BeaconResponse res = new BeaconResponse(beacon, query, null);
 
-        // TODO: parallelize
+        // execute queries in parallel
+        List<Future<String>> fs = new ArrayList<>();
         for (String ref : getRefs()) {
-            Boolean r = parseQueryResponse(getQueryResponse(beacon, query, ref));
+            fs.add(getQueryResponse(beacon, query, ref));
+        }
+
+        // parse queries in parallel
+        List<Future<Boolean>> bs = new ArrayList<>();
+        for (Future<String> f : fs) {
+            try {
+                bs.add(parseQueryResponse(f.get()));
+            } catch (InterruptedException | ExecutionException ex) {
+                // ignore
+            }
+        }
+
+        // collect results
+        for (Future<Boolean> b : bs) {
+            Boolean r = null;
+            try {
+                r = b.get();
+            } catch (InterruptedException | ExecutionException ex) {
+                // ignore, already null
+            }
             if (r != null) {
                 if (r) {
                     res.setResponse(r);
@@ -39,6 +65,6 @@ public abstract class GenomeAwareBeaconService implements BeaconService {
             }
         }
 
-        return res;
+        return new AsyncResult<>(res);
     }
 }

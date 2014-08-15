@@ -6,6 +6,7 @@
 package com.dnastack.beacon.service;
 
 import com.dnastack.beacon.core.Beacon;
+import com.dnastack.beacon.core.BeaconResponse;
 import com.dnastack.beacon.core.Query;
 import com.dnastack.beacon.util.HttpUtils;
 import com.dnastack.beacon.util.ParsingUtils;
@@ -13,9 +14,12 @@ import com.dnastack.beacon.util.QueryUtils;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.enterprise.context.ApplicationScoped;
+import java.util.concurrent.Future;
+import javax.ejb.AsyncResult;
+import javax.ejb.Asynchronous;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.inject.Named;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
@@ -27,8 +31,8 @@ import org.apache.http.message.BasicNameValuePair;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Named
-@ApplicationScoped
+@Stateless
+@LocalBean
 public class AmpLabBeaconService extends GenomeAwareBeaconService {
 
     private static final String BASE_URL = "http://beacon.eecs.berkeley.edu/beacon.php";
@@ -58,20 +62,27 @@ public class AmpLabBeaconService extends GenomeAwareBeaconService {
     }
 
     @Override
-    public String getQueryResponse(Beacon beacon, Query query, String ref) {
+    @Asynchronous
+    public Future<String> getQueryResponse(Beacon beacon, Query query, String ref) {
+        String res = null;
+
         HttpPost httpPost = new HttpPost(BASE_URL);
         try {
             httpPost.setEntity(new UrlEncodedFormEntity(getQueryData(ref, queryUtils.denormalizeChrom(CHROM_TEMPLATE, query.getChromosome()), query.getPosition(), query.getAllele())));
+            res = httpUtils.executeRequest(httpPost);
         } catch (UnsupportedEncodingException ex) {
-            return null;
+            // ignore, alredy null
         }
 
-        return httpUtils.executeRequest(httpPost);
+        return new AsyncResult<>(res);
     }
 
     @Override
-    public Boolean parseQueryResponse(String response) {
-        return parsingUtils.parseContainsStringCaseInsensitive(response, "beacon found", "beacon cannot find");
+    @Asynchronous
+    public Future<Boolean> parseQueryResponse(String response) {
+        Boolean res = parsingUtils.parseContainsStringCaseInsensitive(response, "beacon found", "beacon cannot find");
+
+        return new AsyncResult<>(res);
     }
 
     @Override
@@ -79,4 +90,9 @@ public class AmpLabBeaconService extends GenomeAwareBeaconService {
         return SUPPORTED_REFS;
     }
 
+    @Override
+    @Asynchronous
+    public Future<BeaconResponse> executeQuery(Beacon beacon, Query query) {
+        return super.executeQuery(beacon, query);
+    }
 }

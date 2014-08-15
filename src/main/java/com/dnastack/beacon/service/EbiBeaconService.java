@@ -6,14 +6,18 @@
 package com.dnastack.beacon.service;
 
 import com.dnastack.beacon.core.Beacon;
+import com.dnastack.beacon.core.BeaconResponse;
 import com.dnastack.beacon.core.Query;
 import com.dnastack.beacon.util.HttpUtils;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.enterprise.context.ApplicationScoped;
+import java.util.concurrent.Future;
+import javax.ejb.AsyncResult;
+import javax.ejb.Asynchronous;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.inject.Named;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
@@ -25,8 +29,8 @@ import org.apache.http.message.BasicNameValuePair;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Named
-@ApplicationScoped
+@Stateless
+@LocalBean
 public class EbiBeaconService extends GenomeUnawareBeaconService {
 
     private static final String BASE_URL = "http://www.ebi.ac.uk/eva/beacon";
@@ -50,38 +54,44 @@ public class EbiBeaconService extends GenomeUnawareBeaconService {
     }
 
     @Override
-    public String getQueryResponse(Beacon beacon, Query query, String ref) {
+    @Asynchronous
+    public Future<String> getQueryResponse(Beacon beacon, Query query, String ref) {
+        String res = null;
+
         HttpPost httpPost = new HttpPost(BASE_URL);
         try {
             httpPost.setEntity(new UrlEncodedFormEntity(getQueryData(query.getChromosome(), query.getPosition(), query.getAllele())));
+            res = httpUtils.executeRequest(httpPost);
         } catch (UnsupportedEncodingException ex) {
-            return null;
+            // ignore, already null
         }
 
-        return httpUtils.executeRequest(httpPost);
+        return new AsyncResult<>(res);
     }
 
     @Override
-    public Boolean parseQueryResponse(String response) {
-        if (response == null) {
-            return null;
+    @Asynchronous
+    public Future<Boolean> parseQueryResponse(String response) {
+        Boolean res = null;
+
+        if (response != null) {
+            int start = response.indexOf("exist");
+            if (start >= 0) {
+                char c = response.charAt(start + 8);
+                if (c == 'T' || c == 't') {
+                    res = true;
+                } else if (c == 'F' || c == 'f') {
+                    res = false;
+                }
+            }
         }
 
-        int start = response.indexOf("exist");
-        if (start < 0) {
-            return null;
-        }
-
-        char c = response.charAt(start + 8);
-
-        if (c == 'T' || c == 't') {
-            return true;
-        }
-        if (c == 'F' || c == 'f') {
-            return false;
-        }
-
-        return null;
+        return new AsyncResult<>(res);
     }
 
+    @Override
+    @Asynchronous
+    public Future<BeaconResponse> executeQuery(Beacon beacon, Query query) {
+        return super.executeQuery(beacon, query);
+    }
 }
