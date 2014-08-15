@@ -38,14 +38,11 @@ public class Query implements Serializable {
 
     private static final long serialVersionUID = 3L;
 
-    private String chromosome = null;
-    private Long position = 0L;
-    private String allele = null;
+    private String chromosome;
+    private Long position;
+    private String allele;
 
-    public Query() {
-    }
-
-    public Query(String chromosome, long position, String allele) {
+    public Query(String chromosome, Long position, String allele) {
         this.chromosome = chromosome;
         this.position = position;
         this.allele = allele;
@@ -63,7 +60,7 @@ public class Query implements Serializable {
         return position;
     }
 
-    public void setPosition(long position) {
+    public void setPosition(Long position) {
         this.position = position;
     }
 
@@ -78,9 +75,9 @@ public class Query implements Serializable {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 89 * hash + Objects.hashCode(this.chromosome);
-        hash = 89 * hash + Objects.hashCode(this.position);
-        hash = 89 * hash + Objects.hashCode(this.allele);
+        hash = 37 * hash + Objects.hashCode(this.chromosome);
+        hash = 37 * hash + Objects.hashCode(this.position);
+        hash = 37 * hash + Objects.hashCode(this.allele);
         return hash;
     }
 
