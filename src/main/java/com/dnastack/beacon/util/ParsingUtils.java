@@ -45,13 +45,37 @@ public class ParsingUtils {
     }
 
     /**
+     * Checks whether a given response starts with the specified string, case insensitive.
+     *
+     * @param response response
+     * @param trueString string reporting a positive query result
+     * @param falseString string reporting a negative query result
+     * @return true if the response contains trueString, false if the response contains falseString, null otherwise
+     */
+    public Boolean parseStartsWithStringCaseInsensitive(String response, String trueString, String falseString) {
+        if (response == null) {
+            return null;
+        }
+
+        String s = response.toLowerCase();
+        if (s.startsWith(trueString)) {
+            return true;
+        }
+        if (s.startsWith(falseString)) {
+            return false;
+        }
+
+        return null;
+    }
+
+    /**
      * Checks whether the response is yes or no.
      *
      * @param response reponse
      * @return true if the response is yes, false if the response is no, null otherwise
      */
     public Boolean parseYesNoCaseInsensitive(String response) {
-        return parseContainsStringCaseInsensitive(response, "yes", "no");
+        return parseStartsWithStringCaseInsensitive(response, "yes", "no");
     }
 
     /**
