@@ -26,6 +26,7 @@ package com.dnastack.beacon.service;
 import com.dnastack.beacon.core.Beacon;
 import com.dnastack.beacon.core.BeaconResponse;
 import com.dnastack.beacon.core.Query;
+import com.dnastack.beacon.log.Logged;
 import com.dnastack.beacon.util.HttpUtils;
 import com.dnastack.beacon.util.ParsingUtils;
 import java.net.MalformedURLException;
@@ -96,6 +97,7 @@ public class NcbiBeaconService extends GenomeAwareBeaconService {
     }
 
     @Override
+    @Logged
     @Asynchronous
     public Future<BeaconResponse> executeQuery(Beacon beacon, Query query) {
         return super.executeQuery(beacon, query);

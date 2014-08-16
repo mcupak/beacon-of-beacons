@@ -28,6 +28,7 @@ import com.dnastack.beacon.core.Beacon;
 import com.dnastack.beacon.core.BeaconProvider;
 import com.dnastack.beacon.core.BeaconResponse;
 import com.dnastack.beacon.core.Bob;
+import com.dnastack.beacon.log.Logged;
 import com.dnastack.beacon.core.Query;
 import com.dnastack.beacon.util.QueryUtils;
 import java.util.ArrayList;
@@ -83,6 +84,7 @@ public class ResponseResource {
     @GET
     @Produces("application/json")
     @Path("/bob")
+    @Logged
     public BeaconResponse queryBob(@QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele) {
         Query q = queryUtils.normalizeQuery(new Query(chrom, pos, allele));
         BeaconResponse br = new BeaconResponse(bob, q, null);
@@ -126,6 +128,7 @@ public class ResponseResource {
     @GET
     @Produces("application/json")
     @Path("/{beaconId}")
+    @Logged
     public BeaconResponse queryBeacon(@PathParam("beaconId") String beaconId, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele) {
         Query q = queryUtils.normalizeQuery(new Query(chrom, pos, allele));
 
@@ -203,6 +206,7 @@ public class ResponseResource {
      */
     @GET
     @Produces("application/json")
+    @Logged
     public List<BeaconResponse> query(@QueryParam("beacon") String beaconId, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele) {
         List<BeaconResponse> brs = new ArrayList<>();
         if (beaconId == null) {

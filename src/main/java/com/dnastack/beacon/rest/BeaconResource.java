@@ -27,6 +27,7 @@ import com.dnastack.beacon.core.AllBeacons;
 import com.dnastack.beacon.core.Beacon;
 import com.dnastack.beacon.core.BeaconProvider;
 import com.dnastack.beacon.core.Bob;
+import com.dnastack.beacon.log.Logged;
 import java.util.Collections;
 import java.util.Set;
 import javax.inject.Inject;
@@ -60,6 +61,7 @@ public class BeaconResource {
      *
      * @return bob
      */
+    @Logged
     @GET
     @Produces("application/json")
     @Path("/bob")
@@ -73,6 +75,7 @@ public class BeaconResource {
      * @param beaconId id of the beacon
      * @return beacon
      */
+    @Logged
     @GET
     @Produces("application/json")
     @Path("/{beaconId}")
@@ -85,6 +88,7 @@ public class BeaconResource {
      *
      * @return set of beacons
      */
+    @Logged
     @GET
     @Produces("application/json")
     public Set<Beacon> showAll() {
