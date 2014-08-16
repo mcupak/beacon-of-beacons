@@ -25,6 +25,7 @@ package com.dnastack.beacon.core;
 
 import java.io.Serializable;
 import java.util.Objects;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -46,6 +47,7 @@ public class Query implements Serializable {
     private String chromosome;
     @NotNull
     @Min(0L)
+    @Max(300000000L)
     private Long position;
     @NotNull
     @Pattern(regexp = "([D,I])|([A,C,T,G]+)")

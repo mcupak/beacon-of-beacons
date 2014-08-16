@@ -88,7 +88,7 @@ public class AmpLabBeaconService extends GenomeAwareBeaconService {
 
         HttpPost httpPost = new HttpPost(BASE_URL);
         try {
-            httpPost.setEntity(new UrlEncodedFormEntity(getQueryData(ref, queryUtils.denormalizeChrom(CHROM_TEMPLATE, query.getChromosome()), query.getPosition(), query.getAllele())));
+            httpPost.setEntity(new UrlEncodedFormEntity(getQueryData(ref, queryUtils.denormalizeChrom(CHROM_TEMPLATE, query.getChromosome()), query.getPosition(), queryUtils.denormalizeAllele(query.getAllele()))));
             res = httpUtils.executeRequest(httpPost);
         } catch (UnsupportedEncodingException ex) {
             // ignore, alredy null

@@ -84,7 +84,7 @@ public class EbiBeaconService extends GenomeUnawareBeaconService {
 
         HttpPost httpPost = new HttpPost(BASE_URL);
         try {
-            httpPost.setEntity(new UrlEncodedFormEntity(getQueryData(query.getChromosome(), queryUtils.denormalizePosition(query.getPosition()), query.getAllele())));
+            httpPost.setEntity(new UrlEncodedFormEntity(getQueryData(query.getChromosome(), queryUtils.denormalizePosition(query.getPosition()), queryUtils.denormalizeAllele(query.getAllele()))));
             res = httpUtils.executeRequest(httpPost);
         } catch (UnsupportedEncodingException ex) {
             // ignore, already null

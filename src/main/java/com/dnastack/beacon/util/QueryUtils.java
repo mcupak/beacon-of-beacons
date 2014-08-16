@@ -24,6 +24,7 @@
 package com.dnastack.beacon.util;
 
 import com.dnastack.beacon.core.Query;
+import java.util.regex.Pattern;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
@@ -99,12 +100,56 @@ public class QueryUtils {
     }
 
     /**
+     * Generate a canonical allele string.
+     *
+     * @param allele denormalized allele
+     * @return normalized allele
+     */
+    public String normalizeAllele(String allele) {
+        if (allele == null || allele.isEmpty()) {
+            return null;
+        }
+
+        String res = allele.toUpperCase();
+        if (res.equals("DEL") || res.equals("INS")) {
+            return res.substring(0, 1);
+        }
+        if (Pattern.matches("([D,I])|([A,C,T,G]+)", res)) {
+            return res;
+        }
+
+        return null;
+    }
+
+    /**
+     * Generate a domain-specific allele string with long allele names like DEL and INS.
+     *
+     * @param allele normalized allele
+     * @return denormalized allele
+     */
+    public String denormalizeAllele(String allele) {
+        if (allele == null || allele.isEmpty()) {
+            return null;
+        }
+
+        String res = allele.toUpperCase();
+        if (res.equals("D")) {
+            return "DEL";
+        }
+        if (res.equals("I")) {
+            return "INS";
+        }
+
+        return res;
+    }
+
+    /**
      * Generates a canonical version of a query (field values normalized).
      *
      * @param q query
      * @return normalized query
      */
     public Query normalizeQuery(Query q) {
-        return new Query(normalizeChrom(q.getChromosome()), q.getPosition(), q.getAllele());
+        return new Query(normalizeChrom(q.getChromosome()), q.getPosition(), normalizeAllele(q.getAllele()));
     }
 }
