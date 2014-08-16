@@ -38,9 +38,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.inject.Inject;
+import javax.validation.Validator;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -70,6 +69,9 @@ public class ResponseResource {
     @AllBeacons
     private Set<Beacon> beacons;
 
+    @Inject
+    private Validator validator;
+
     /**
      * Query the beacon of beacons.
      *
@@ -85,7 +87,7 @@ public class ResponseResource {
         Query q = queryUtils.normalizeQuery(new Query(chrom, pos, allele));
         BeaconResponse br = new BeaconResponse(bob, q, null);
 
-        if (!queryUtils.isQueryValid(q)) {
+        if (!validator.validate(q).isEmpty()) {
             return br;
         }
         br.setResponse(false);
@@ -134,14 +136,14 @@ public class ResponseResource {
         }
 
         BeaconResponse br = new BeaconResponse(b, q, null);
-        if (!queryUtils.isQueryValid(q)) {
+        if (!validator.validate(q).isEmpty()) {
             return br;
         }
 
         try {
             br = beaconProvider.getService(b).executeQuery(b, q).get();
         } catch (InterruptedException | ExecutionException ex) {
-            Logger.getLogger(ResponseResource.class.getName()).log(Level.SEVERE, null, ex);
+            // ignore
         }
         return br;
     }
@@ -164,7 +166,7 @@ public class ResponseResource {
         }
 
         // validate query
-        if (!queryUtils.isQueryValid(q)) {
+        if (!validator.validate(q).isEmpty()) {
             return brs.values();
         }
 

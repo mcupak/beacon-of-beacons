@@ -24,9 +24,12 @@
 package com.dnastack.beacon.core;
 
 import java.io.Serializable;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
+ * Beacon.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
@@ -36,7 +39,11 @@ public class Beacon implements Serializable {
 
     private static final long serialVersionUID = 2L;
 
+    @NotNull
+    @Size(min = 1)
     private String id;
+    @NotNull
+    @Size(min = 1)
     private String name;
 
     public Beacon() {

@@ -41,16 +41,6 @@ public class QueryUtils {
     private static final String[] CHROM_VALS = {"22", "21", "20", "19", "18", "17", "16", "15", "14", "13", "12", "11", "10", "9", "8", "7", "6", "5", "4", "3", "2", "1", "X", "Y", "MT"};
 
     /**
-     * Validates a given query.
-     *
-     * @param q query
-     * @return true if the query is valid (none of the fields is null), false otherwise
-     */
-    public boolean isQueryValid(Query q) {
-        return q != null && q.getChromosome() != null && q.getPosition() != null && q.getAllele() != null;
-    }
-
-    /**
      * Generates a canonical chrom ID.
      *
      * @param chrom chromosome

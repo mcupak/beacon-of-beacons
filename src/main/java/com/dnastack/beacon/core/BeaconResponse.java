@@ -37,12 +37,9 @@ public class BeaconResponse implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Beacon beacon = null;
-    private Query query = null;
+    private Beacon beacon;
+    private Query query;
     private Boolean response = null;
-
-    public BeaconResponse() {
-    }
 
     public BeaconResponse(Beacon beacon, Query query, Boolean response) {
         this.beacon = beacon;

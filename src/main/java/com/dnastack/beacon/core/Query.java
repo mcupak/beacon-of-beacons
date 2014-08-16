@@ -25,6 +25,9 @@ package com.dnastack.beacon.core;
 
 import java.io.Serializable;
 import java.util.Objects;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -38,8 +41,14 @@ public class Query implements Serializable {
 
     private static final long serialVersionUID = 3L;
 
+    @NotNull
+    @Pattern(regexp = "([0-9])|(1[0-9])|(2[0-2])|([X,Y])|(MT)")
     private String chromosome;
+    @NotNull
+    @Min(0L)
     private Long position;
+    @NotNull
+    @Pattern(regexp = "([D,I])|([A,C,T,G]+)")
     private String allele;
 
     public Query(String chromosome, Long position, String allele) {
