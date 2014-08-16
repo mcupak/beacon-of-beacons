@@ -29,6 +29,7 @@ import com.dnastack.beacon.core.Query;
 import com.dnastack.beacon.log.Logged;
 import com.dnastack.beacon.util.HttpUtils;
 import com.dnastack.beacon.util.ParsingUtils;
+import com.dnastack.beacon.util.QueryUtils;
 import java.net.MalformedURLException;
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
@@ -58,6 +59,9 @@ public class WtsiBeaconService extends GenomeUnawareBeaconService {
     @Inject
     private ParsingUtils parsingUtils;
 
+    @Inject
+    private QueryUtils queryUtils;
+
     private String getQueryUrl(String chrom, Long pos, String allele) throws MalformedURLException {
         String params = String.format(PARAM_TEMPLATE, chrom, pos, allele);
 
@@ -71,7 +75,7 @@ public class WtsiBeaconService extends GenomeUnawareBeaconService {
 
         HttpGet httpGet;
         try {
-            httpGet = new HttpGet(getQueryUrl(query.getChromosome(), query.getPosition(), query.getAllele()));
+            httpGet = new HttpGet(getQueryUrl(query.getChromosome(), queryUtils.denormalizePosition(query.getPosition()), query.getAllele()));
             res = httpUtils.executeRequest(httpGet);
         } catch (MalformedURLException ex) {
             // ignore, already null

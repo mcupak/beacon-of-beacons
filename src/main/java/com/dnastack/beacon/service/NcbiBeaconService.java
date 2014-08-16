@@ -29,6 +29,7 @@ import com.dnastack.beacon.core.Query;
 import com.dnastack.beacon.log.Logged;
 import com.dnastack.beacon.util.HttpUtils;
 import com.dnastack.beacon.util.ParsingUtils;
+import com.dnastack.beacon.util.QueryUtils;
 import java.net.MalformedURLException;
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
@@ -58,6 +59,9 @@ public class NcbiBeaconService extends GenomeAwareBeaconService {
     private HttpUtils httpUtils;
 
     @Inject
+    private QueryUtils queryUtils;
+
+    @Inject
     private ParsingUtils parsingUtils;
 
     private String getQueryUrl(String ref, String chrom, Long pos, String allele) throws MalformedURLException {
@@ -74,7 +78,8 @@ public class NcbiBeaconService extends GenomeAwareBeaconService {
         // should be POST, but the server accepts GET as well
         HttpGet httpGet;
         try {
-            httpGet = new HttpGet(getQueryUrl(ref, query.getChromosome(), query.getPosition(), query.getAllele()));
+            httpGet = new HttpGet(getQueryUrl(ref, query.getChromosome(), queryUtils.denormalizePosition(query.getPosition()), query.getAllele()
+            ));
             res = httpUtils.executeRequest(httpGet);
         } catch (MalformedURLException ex) {
             // ignore, already null

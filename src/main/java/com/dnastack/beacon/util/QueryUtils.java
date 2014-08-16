@@ -73,6 +73,32 @@ public class QueryUtils {
     }
 
     /**
+     * Converts 1-based position to 0-based position.
+     *
+     * @param pos 1-based position
+     * @return 0-based position
+     */
+    public Long normalizePosition(Long pos) {
+        if (pos == null) {
+            return null;
+        }
+        return --pos;
+    }
+
+    /**
+     * Converts 0-based position to 1-based position.
+     *
+     * @param pos 0-based position
+     * @return 1-based position
+     */
+    public Long denormalizePosition(Long pos) {
+        if (pos == null) {
+            return null;
+        }
+        return ++pos;
+    }
+
+    /**
      * Generates a canonical version of a query (field values normalized).
      *
      * @param q query

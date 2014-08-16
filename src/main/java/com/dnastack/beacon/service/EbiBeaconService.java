@@ -28,6 +28,7 @@ import com.dnastack.beacon.core.BeaconResponse;
 import com.dnastack.beacon.core.Query;
 import com.dnastack.beacon.log.Logged;
 import com.dnastack.beacon.util.HttpUtils;
+import com.dnastack.beacon.util.QueryUtils;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +59,9 @@ public class EbiBeaconService extends GenomeUnawareBeaconService {
     @Inject
     private HttpUtils httpUtils;
 
+    @Inject
+    private QueryUtils queryUtils;
+
     private List<NameValuePair> getQueryData(String chrom, Long pos, String allele) {
         List<NameValuePair> nvs = new ArrayList<>();
         // project=0 implies any project
@@ -80,7 +84,7 @@ public class EbiBeaconService extends GenomeUnawareBeaconService {
 
         HttpPost httpPost = new HttpPost(BASE_URL);
         try {
-            httpPost.setEntity(new UrlEncodedFormEntity(getQueryData(query.getChromosome(), query.getPosition(), query.getAllele())));
+            httpPost.setEntity(new UrlEncodedFormEntity(getQueryData(query.getChromosome(), queryUtils.denormalizePosition(query.getPosition()), query.getAllele())));
             res = httpUtils.executeRequest(httpPost);
         } catch (UnsupportedEncodingException ex) {
             // ignore, already null
