@@ -89,11 +89,25 @@ public class ParsingUtils {
     /**
      * Checks whether the response is yes or no.
      *
-     * @param response reponse
+     * @param response response
      * @return true if the response is yes, false if the response is no, null otherwise
      */
     public Boolean parseYesNoCaseInsensitive(String response) {
         return parseStartsWithStringCaseInsensitive(response, "yes", "no");
+    }
+
+    /**
+     * Checks whether the response is "ref", i.e. this is the reference allele at the given location.
+     *
+     * @param response response
+     * @return true if the response is ref, false otherwise, null if there are problems
+     */
+    public Boolean parseRef(String response) {
+        if (response == null) {
+            return null;
+        }
+
+        return response.toLowerCase().startsWith("ref");
     }
 
     /**

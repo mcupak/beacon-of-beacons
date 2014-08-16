@@ -88,6 +88,9 @@ public class WtsiBeaconService extends GenomeUnawareBeaconService {
     @Asynchronous
     public Future<Boolean> parseQueryResponse(String response) {
         Boolean res = parsingUtils.parseYesNoCaseInsensitive(response);
+        if (res == null) {
+            res = parsingUtils.parseRef(response);
+        }
 
         return new AsyncResult<>(res);
     }
