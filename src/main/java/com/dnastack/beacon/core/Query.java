@@ -53,6 +53,10 @@ public class Query implements Serializable {
     @Pattern(regexp = "([D,I])|([A,C,T,G]+)")
     private String allele;
 
+    public Query() {
+        // needed for JAXB
+    }
+
     public Query(String chromosome, Long position, String allele) {
         this.chromosome = chromosome;
         this.position = position;

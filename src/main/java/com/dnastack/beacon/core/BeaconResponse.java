@@ -41,6 +41,10 @@ public class BeaconResponse implements Serializable {
     private Query query;
     private Boolean response = null;
 
+    public BeaconResponse() {
+        // needed for JAXB
+    }
+
     public BeaconResponse(Beacon beacon, Query query, Boolean response) {
         this.beacon = beacon;
         this.query = query;
