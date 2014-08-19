@@ -51,6 +51,7 @@ import org.apache.http.message.BasicNameValuePair;
  */
 @Stateless
 @LocalBean
+@Ebi
 public class EbiBeaconService extends GenomeUnawareBeaconService {
 
     private static final long serialVersionUID = 11L;

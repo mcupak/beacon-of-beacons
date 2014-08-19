@@ -47,6 +47,7 @@ import org.apache.http.client.methods.HttpGet;
  */
 @Stateless
 @LocalBean
+@Ncbi
 public class NcbiBeaconService extends GenomeAwareBeaconService {
 
     private static final long serialVersionUID = 12L;

@@ -47,6 +47,7 @@ import org.apache.http.client.methods.HttpGet;
  */
 @Stateless
 @LocalBean
+@Ucsc
 public class UcscBeaconService extends GenomeUnawareBeaconService {
 
     private static final long serialVersionUID = 13L;

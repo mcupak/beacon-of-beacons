@@ -52,6 +52,7 @@ import org.apache.http.message.BasicNameValuePair;
  */
 @Stateless
 @LocalBean
+@AmpLab
 public class AmpLabBeaconService extends GenomeAwareBeaconService {
 
     private static final long serialVersionUID = 10L;

@@ -47,6 +47,7 @@ import org.apache.http.client.methods.HttpGet;
  */
 @Stateless
 @LocalBean
+@Wtsi
 public class WtsiBeaconService extends GenomeUnawareBeaconService {
 
     private static final long serialVersionUID = 14L;

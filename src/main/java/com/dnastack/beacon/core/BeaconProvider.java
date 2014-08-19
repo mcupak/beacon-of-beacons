@@ -23,14 +23,14 @@
  */
 package com.dnastack.beacon.core;
 
-import com.dnastack.beacon.service.AmpLabBeaconService;
-import com.dnastack.beacon.service.EbiBeaconService;
-import com.dnastack.beacon.service.NcbiBeaconService;
-import com.dnastack.beacon.service.UcscBeaconService;
-import com.dnastack.beacon.service.WtsiBeaconService;
+import com.dnastack.beacon.service.AmpLab;
+import com.dnastack.beacon.service.Ebi;
+import com.dnastack.beacon.service.Ncbi;
+import com.dnastack.beacon.service.Ucsc;
+import com.dnastack.beacon.service.Wtsi;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.ejb.LocalBean;
@@ -50,33 +50,38 @@ public class BeaconProvider implements Serializable {
 
     private static final long serialVersionUID = 5L;
 
-    private Map<Beacon, BeaconService> beaconMappping;
+    private Set<Beacon> beacons;
 
     @Inject
-    private UcscBeaconService ucscService;
+    @Ucsc
+    private BeaconService ucscService;
 
     @Inject
-    private EbiBeaconService ebiService;
+    @Ebi
+    private BeaconService ebiService;
 
     @Inject
-    private NcbiBeaconService ncbiService;
+    @Ncbi
+    private BeaconService ncbiService;
 
     @Inject
-    private WtsiBeaconService wtsiService;
+    @Wtsi
+    private BeaconService wtsiService;
 
     @Inject
-    private AmpLabBeaconService ampLabService;
+    @AmpLab
+    private BeaconService ampLabService;
 
     @PostConstruct
     private void initMapping() {
-        this.beaconMappping = new HashMap<>();
-        beaconMappping.put(new Beacon("clinvar", "NCBI ClinVar"), ucscService);
-        beaconMappping.put(new Beacon("uniprot", "UniProt"), ucscService);
-        beaconMappping.put(new Beacon("lovd", "Leiden Open Variation"), ucscService);
-        beaconMappping.put(new Beacon("ebi", "EMBL-EBI"), ebiService);
-        beaconMappping.put(new Beacon("ncbi", "NCBI"), ncbiService);
-        beaconMappping.put(new Beacon("wtsi", "Wellcome Trust Sanger Institute"), wtsiService);
-        beaconMappping.put(new Beacon("amplab", "AMPLab"), ampLabService);
+        this.beacons = new HashSet<>();
+        beacons.add(new Beacon("clinvar", "NCBI ClinVar"));
+        beacons.add(new Beacon("uniprot", "UniProt"));
+        beacons.add(new Beacon("lovd", "Leiden Open Variation"));
+        beacons.add(new Beacon("ebi", "EMBL-EBI"));
+        beacons.add(new Beacon("ncbi", "NCBI"));
+        beacons.add(new Beacon("wtsi", "Wellcome Trust Sanger Institute"));
+        beacons.add(new Beacon("amplab", "AMPLab"));
     }
 
     /**
@@ -86,7 +91,24 @@ public class BeaconProvider implements Serializable {
      * @return service
      */
     public BeaconService getService(Beacon beacon) {
-        return beaconMappping.get(beacon);
+        switch (beacon.getId()) {
+            case "clinvar":
+                return ucscService;
+            case "uniprot":
+                return ucscService;
+            case "lovd":
+                return ucscService;
+            case "ebi":
+                return ebiService;
+            case "ncbi":
+                return ncbiService;
+            case "wtsi":
+                return wtsiService;
+            case "amplab":
+                return ampLabService;
+            default:
+                return null;
+        }
     }
 
     /**
@@ -97,7 +119,7 @@ public class BeaconProvider implements Serializable {
     @Produces
     @AllBeacons
     public Set<Beacon> getBeacons() {
-        return beaconMappping.keySet();
+        return Collections.unmodifiableSet(beacons);
     }
 
     /**
@@ -111,7 +133,7 @@ public class BeaconProvider implements Serializable {
             throw new NullPointerException("beaconId");
         }
 
-        for (Beacon b : beaconMappping.keySet()) {
+        for (Beacon b : beacons) {
             if (b.getId().equals(beaconId)) {
                 return b;
             }

@@ -46,9 +46,6 @@ public class Beacon implements Serializable {
     @Size(min = 1)
     private String name;
 
-    public Beacon() {
-    }
-
     public Beacon(String id, String name) {
         this.id = id;
         this.name = name;

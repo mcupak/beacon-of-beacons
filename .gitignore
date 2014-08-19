@@ -7,3 +7,6 @@ release.properties
 
 # IDEs
 nb-configuration.xml
+
+# auxiliary scripts
+*.sh
