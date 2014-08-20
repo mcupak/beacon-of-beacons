@@ -65,7 +65,7 @@ public class BeaconResource {
      */
     @Logged
     @GET
-    @Produces("application/json")
+    @Produces({"application/json", "application/xml"})
     @Path("/bob")
     public Beacon showBob() {
         return bob;
@@ -79,7 +79,7 @@ public class BeaconResource {
      */
     @Logged
     @GET
-    @Produces("application/json")
+    @Produces({"application/json", "application/xml"})
     @Path("/{beaconId}")
     public Beacon showBeacon(@PathParam("beaconId") String beaconId) {
         return beaconProvider.getBeacon(beaconId);
@@ -103,7 +103,7 @@ public class BeaconResource {
      */
     @Logged
     @GET
-    @Produces("application/json")
+    @Produces({"application/json", "application/xml"})
     public Set<Beacon> show(@QueryParam("beacon") String beaconId) {
         Set<Beacon> bs = new HashSet<>();
         if (beaconId == null) {
