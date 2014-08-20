@@ -74,6 +74,19 @@ public class QueryUtils {
     }
 
     /**
+     * Converts X/Y chromosomes to lowercase.
+     *
+     * @param c chromosome
+     * @return denormalized chromosome
+     */
+    public String makeChromXYLowercase(String c) {
+        if ("X".equals(c) || "Y".equals(c)) {
+            return c.toLowerCase();
+        }
+        return c;
+    }
+
+    /**
      * Converts 1-based position to 0-based position.
      *
      * @param pos 1-based position
