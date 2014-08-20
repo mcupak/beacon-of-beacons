@@ -21,8 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon;
+package com.dnastack.beacon.rest;
 
+import com.dnastack.beacon.core.Beacon;
+import com.dnastack.beacon.core.BeaconResponse;
+import com.dnastack.beacon.core.Query;
 import java.net.MalformedURLException;
 import java.net.URL;
 import javax.xml.bind.JAXBException;
@@ -34,6 +37,16 @@ import javax.xml.bind.JAXBException;
  * @version 1.0
  */
 public abstract class AbstractResponseTest extends BasicTest {
+
+    public static final String QUERY_BEACON_TEMPLATE = "rest/responses/%s?chrom=%s&pos=%s&allele=%s";
+
+    public static String getUrl(Beacon b, Query q) {
+        return String.format(QUERY_BEACON_TEMPLATE, b.getId(), q.getChromosome(), q.getPosition(), q.getAllele());
+    }
+
+    public static BeaconResponse readResponse(String url) throws JAXBException, MalformedURLException {
+        return (BeaconResponse) readObject(BeaconResponse.class, url);
+    }
 
     public abstract void testFound(URL url) throws JAXBException, MalformedURLException;
 

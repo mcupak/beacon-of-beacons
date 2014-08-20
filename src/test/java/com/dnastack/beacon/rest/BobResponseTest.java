@@ -21,16 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon;
+package com.dnastack.beacon.rest;
 
 import com.dnastack.beacon.core.Beacon;
 import com.dnastack.beacon.core.BeaconResponse;
-import com.dnastack.beacon.core.BeaconService;
 import com.dnastack.beacon.core.Query;
-import com.dnastack.beacon.service.Ncbi;
 import java.net.MalformedURLException;
 import java.net.URL;
-import javax.inject.Inject;
 import javax.xml.bind.JAXBException;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
@@ -46,29 +43,26 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Test of NCBI service.
+ * Test of Bob service.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
 @RunWith(Arquillian.class)
-public class NcbiResponseTest extends AbstractResponseTest {
+public class BobResponseTest extends AbstractResponseTest {
 
-    @Inject
-    @Ncbi
-    private BeaconService s;
     private Beacon b;
 
     @Before
     public void setUp() {
-        b = new Beacon("ncbi", "NCBI");
+        b = new Beacon("bob", "beacon of beacons");
     }
 
     @Test
     @RunAsClient
     @Override
     public void testFound(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Query q = new Query("2", 41403L, "A");
+        Query q = new Query("13", 32888798L, "G");
         BeaconResponse br = readResponse(url.toExternalForm() + getUrl(b, q));
 
         assertNotNull(br);
@@ -81,7 +75,7 @@ public class NcbiResponseTest extends AbstractResponseTest {
     @RunAsClient
     @Override
     public void testStringAllele(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Query q = new Query("22", 17213589L, "TGTTA");
+        Query q = new Query("1", 46402L, "TGT");
         BeaconResponse br = readResponse(url.toExternalForm() + getUrl(b, q));
 
         assertNotNull(br);
@@ -94,26 +88,26 @@ public class NcbiResponseTest extends AbstractResponseTest {
     @RunAsClient
     @Override
     public void testDel(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Query q = new Query("14", 106833420L, "D");
+        Query q = new Query("1", 1002920L, "D");
         BeaconResponse br = readResponse(url.toExternalForm() + getUrl(b, q));
 
         assertNotNull(br);
         assertEquals(b, br.getBeacon());
         assertEquals(q, br.getQuery());
-        assertFalse(br.getResponse());
+        assertTrue(br.getResponse());
     }
 
     @Test
     @RunAsClient
     @Override
     public void testIns(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Query q = new Query("14", 106833420L, "I");
+        Query q = new Query("1", 46402L, "I");
         BeaconResponse br = readResponse(url.toExternalForm() + getUrl(b, q));
 
         assertNotNull(br);
         assertEquals(b, br.getBeacon());
         assertEquals(q, br.getQuery());
-        assertFalse(br.getResponse());
+        assertTrue(br.getResponse());
     }
 
     @Test
@@ -147,7 +141,7 @@ public class NcbiResponseTest extends AbstractResponseTest {
     @RunAsClient
     @Override
     public void testAlleleConversion(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Query q = new Query("14", 106833420L, "DEL");
+        Query q = new Query("1", 1002921L, "DEL");
         BeaconResponse br = readResponse(url.toExternalForm() + getUrl(b, q));
 
         assertNotNull(br);
@@ -192,10 +186,11 @@ public class NcbiResponseTest extends AbstractResponseTest {
         Query q = new Query("X", 41087869L, "A");
         BeaconResponse br = readResponse(url.toExternalForm() + getUrl(b, q));
 
+        System.out.println(br);
         assertNotNull(br);
         assertEquals(b, br.getBeacon());
         assertEquals(q, br.getQuery());
-        assertFalse(br.getResponse());
+        assertTrue(br.getResponse());
     }
 
     @Test

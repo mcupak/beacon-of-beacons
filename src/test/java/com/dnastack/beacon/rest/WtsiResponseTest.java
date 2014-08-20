@@ -21,16 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon;
+package com.dnastack.beacon.rest;
 
 import com.dnastack.beacon.core.Beacon;
 import com.dnastack.beacon.core.BeaconResponse;
-import com.dnastack.beacon.core.BeaconService;
 import com.dnastack.beacon.core.Query;
-import com.dnastack.beacon.service.Wtsi;
 import java.net.MalformedURLException;
 import java.net.URL;
-import javax.inject.Inject;
 import javax.xml.bind.JAXBException;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
@@ -54,9 +51,6 @@ import org.junit.runner.RunWith;
 @RunWith(Arquillian.class)
 public class WtsiResponseTest extends AbstractResponseTest {
 
-    @Inject
-    @Wtsi
-    private BeaconService s;
     private Beacon b;
 
     @Before

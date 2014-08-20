@@ -28,8 +28,8 @@ import com.dnastack.beacon.core.Beacon;
 import com.dnastack.beacon.core.BeaconProvider;
 import com.dnastack.beacon.core.BeaconResponse;
 import com.dnastack.beacon.core.Bob;
-import com.dnastack.beacon.log.Logged;
 import com.dnastack.beacon.core.Query;
+import com.dnastack.beacon.log.Logged;
 import com.dnastack.beacon.util.QueryUtils;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -159,6 +159,7 @@ public class ResponseResource {
      * @param allele allele
      * @return collection of beacon responses
      */
+    @Logged
     public Collection<BeaconResponse> queryAll(String chrom, Long pos, String allele) {
         Query q = queryUtils.normalizeQuery(new Query(chrom, pos, allele));
 

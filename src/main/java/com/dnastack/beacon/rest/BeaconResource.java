@@ -29,12 +29,14 @@ import com.dnastack.beacon.core.BeaconProvider;
 import com.dnastack.beacon.core.Bob;
 import com.dnastack.beacon.log.Logged;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 
 /**
  * Query rest resource.
@@ -89,10 +91,30 @@ public class BeaconResource {
      * @return set of beacons
      */
     @Logged
-    @GET
-    @Produces("application/json")
     public Set<Beacon> showAll() {
         return Collections.unmodifiableSet(beacons);
+    }
+
+    /**
+     * Shows all the beacons or a specific beacon as determined by a param.
+     *
+     * @param beaconId beacon ID
+     * @return set of beacons
+     */
+    @Logged
+    @GET
+    @Produces("application/json")
+    public Set<Beacon> show(@QueryParam("beacon") String beaconId) {
+        Set<Beacon> bs = new HashSet<>();
+        if (beaconId == null) {
+            bs.addAll(showAll());
+        } else if (beaconId.equals(bob.getId())) {
+            bs.add(showBob());
+        } else {
+            bs.add(showBeacon(beaconId));
+        }
+
+        return bs;
     }
 
 }

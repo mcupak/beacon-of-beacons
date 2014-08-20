@@ -21,11 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon;
+package com.dnastack.beacon.rest;
 
-import com.dnastack.beacon.core.Beacon;
-import com.dnastack.beacon.core.BeaconResponse;
-import com.dnastack.beacon.core.Query;
 import java.io.File;
 import java.net.MalformedURLException;
 import javax.xml.bind.JAXBContext;
@@ -33,6 +30,7 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
+import org.eclipse.persistence.jaxb.JAXBContextProperties;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
@@ -48,9 +46,7 @@ import org.junit.runner.Description;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public class BasicTest {
-
-    public static final String QUERY_BEACON_TEMPLATE = "rest/responses/%s?chrom=%s&pos=%s&allele=%s";
+public abstract class BasicTest {
 
     @Rule
     public TestRule watcher = new TestWatcher() {
@@ -71,18 +67,14 @@ public class BasicTest {
         return war;
     }
 
-    public static String getUrl(Beacon b, Query q) {
-        return String.format(QUERY_BEACON_TEMPLATE, b.getId(), q.getChromosome(), q.getPosition(), q.getAllele());
-    }
-
-    public static BeaconResponse readResponse(String url) throws JAXBException, MalformedURLException {
-        JAXBContext jc = JAXBContext.newInstance(BeaconResponse.class);
+    public static Object readObject(Class c, String url) throws JAXBException, MalformedURLException {
+        JAXBContext jc = JAXBContext.newInstance(c);
 
         Unmarshaller unmarshaller = jc.createUnmarshaller();
-        unmarshaller.setProperty("eclipselink.media-type", "application/json");
-        unmarshaller.setProperty("eclipselink.json.include-root", false);
+        unmarshaller.setProperty(JAXBContextProperties.MEDIA_TYPE, "application/json");
+        unmarshaller.setProperty(JAXBContextProperties.JSON_INCLUDE_ROOT, false);
         StreamSource source = new StreamSource(url);
-        JAXBElement<BeaconResponse> jaxbElement = unmarshaller.unmarshal(source, BeaconResponse.class);
+        JAXBElement jaxbElement = unmarshaller.unmarshal(source, c);
 
         return jaxbElement.getValue();
     }
