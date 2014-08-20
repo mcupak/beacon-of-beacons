@@ -67,6 +67,7 @@ public class BasicTest {
         war.addClasses(BasicTest.class, AbstractResponseTest.class);
         war.addAsResource(new File("src/main/resources/com/dnastack/beacon/core/jaxb.properties"));
         System.out.println(war.getName());
+
         return war;
     }
 

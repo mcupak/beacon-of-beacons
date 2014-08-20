@@ -27,7 +27,7 @@ import com.dnastack.beacon.core.Beacon;
 import com.dnastack.beacon.core.BeaconResponse;
 import com.dnastack.beacon.core.BeaconService;
 import com.dnastack.beacon.core.Query;
-import com.dnastack.beacon.service.AmpLab;
+import com.dnastack.beacon.service.Ncbi;
 import java.net.MalformedURLException;
 import java.net.URL;
 import javax.inject.Inject;
@@ -46,42 +46,29 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Test of AMPLab service.
+ * Test of NCBI service.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
 @RunWith(Arquillian.class)
-public class AmpLabResponseTest extends AbstractResponseTest {
+public class NcbiResponseTest extends AbstractResponseTest {
 
     @Inject
-    @AmpLab
+    @Ncbi
     private BeaconService s;
     private Beacon b;
 
     @Before
     public void setUp() {
-        b = new Beacon("amplab", "AMPLab");
+        b = new Beacon("ncbi", "NCBI");
     }
 
     @Test
     @RunAsClient
     @Override
     public void testFound(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Query q = new Query("15", 41087869L, "A");
-        BeaconResponse br = readResponse(url.toExternalForm() + getUrl(b, q));
-
-        assertNotNull(br);
-        assertEquals(b, br.getBeacon());
-        assertEquals(q, br.getQuery());
-        assertTrue(br.getResponse());
-    }
-
-    @Test
-    @RunAsClient
-    @Override
-    public void testDifferentGenome(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Query q = new Query("15", 47481776L, "G");
+        Query q = new Query("2", 41403L, "A");
         BeaconResponse br = readResponse(url.toExternalForm() + getUrl(b, q));
 
         assertNotNull(br);
@@ -113,7 +100,20 @@ public class AmpLabResponseTest extends AbstractResponseTest {
         assertNotNull(br);
         assertEquals(b, br.getBeacon());
         assertEquals(q, br.getQuery());
-        assertTrue(br.getResponse());
+        assertFalse(br.getResponse());
+    }
+
+    @Test
+    @RunAsClient
+    @Override
+    public void testIns(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
+        Query q = new Query("14", 106833420L, "I");
+        BeaconResponse br = readResponse(url.toExternalForm() + getUrl(b, q));
+
+        assertNotNull(br);
+        assertEquals(b, br.getBeacon());
+        assertEquals(q, br.getQuery());
+        assertFalse(br.getResponse());
     }
 
     @Test
@@ -154,7 +154,7 @@ public class AmpLabResponseTest extends AbstractResponseTest {
         assertEquals(b, br.getBeacon());
         assertNotEquals(q, br.getQuery());
         assertEquals(q.getAllele().substring(0, 1), br.getQuery().getAllele());
-        assertTrue(br.getResponse());
+        assertNotNull(br.getResponse());
     }
 
     @Test
@@ -168,7 +168,7 @@ public class AmpLabResponseTest extends AbstractResponseTest {
         assertEquals(b, br.getBeacon());
         assertNotEquals(q, br.getQuery());
         assertEquals(q.getChromosome().substring(q.getChromosome().length() - 2, q.getChromosome().length()), br.getQuery().getChromosome());
-        assertTrue(br.getResponse());
+        assertNotNull(br.getResponse());
     }
 
     @Test
@@ -195,7 +195,7 @@ public class AmpLabResponseTest extends AbstractResponseTest {
         assertNotNull(br);
         assertEquals(b, br.getBeacon());
         assertEquals(q, br.getQuery());
-        assertNotNull(br.getResponse());
+        assertFalse(br.getResponse());
     }
 
     @Test
@@ -208,11 +208,11 @@ public class AmpLabResponseTest extends AbstractResponseTest {
         assertNotNull(br);
         assertEquals(b, br.getBeacon());
         assertEquals(q, br.getQuery());
-        assertNotNull(br.getResponse());
+        assertFalse(br.getResponse());
     }
 
     @Override
-    public void testIns(URL url) throws JAXBException, MalformedURLException {
+    public void testDifferentGenome(URL url) throws JAXBException, MalformedURLException {
         // intentionally empty
     }
 }

@@ -124,8 +124,7 @@ public class ParsingUtils {
 
         JSONObject jo = new JSONObject(response);
         try {
-            boolean b = jo.getBoolean(field);
-            return b;
+            return jo.getBoolean(field);
         } catch (JSONException jex) {
             // cannot parse the response or no record message
             return null;

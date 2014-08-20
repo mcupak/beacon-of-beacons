@@ -26,7 +26,6 @@ package com.dnastack.beacon;
 import java.net.MalformedURLException;
 import java.net.URL;
 import javax.xml.bind.JAXBException;
-import org.jboss.arquillian.test.api.ArquillianResource;
 
 /**
  * Test of a beacon service.
@@ -36,25 +35,27 @@ import org.jboss.arquillian.test.api.ArquillianResource;
  */
 public abstract class AbstractResponseTest extends BasicTest {
 
-    public abstract void testFound(@ArquillianResource URL url) throws JAXBException, MalformedURLException;
+    public abstract void testFound(URL url) throws JAXBException, MalformedURLException;
 
-    public abstract void testDifferentGenome(@ArquillianResource URL url) throws JAXBException, MalformedURLException;
+    public abstract void testDifferentGenome(URL url) throws JAXBException, MalformedURLException;
 
-    public abstract void testStringAllele(@ArquillianResource URL url) throws JAXBException, MalformedURLException;
+    public abstract void testStringAllele(URL url) throws JAXBException, MalformedURLException;
 
-    public abstract void testDel(@ArquillianResource URL url) throws JAXBException, MalformedURLException;
+    public abstract void testDel(URL url) throws JAXBException, MalformedURLException;
 
-    public abstract void testNotFound(@ArquillianResource URL url) throws JAXBException, MalformedURLException;
+    public abstract void testIns(URL url) throws JAXBException, MalformedURLException;
 
-    public abstract void testInvalidAllele(@ArquillianResource URL url) throws JAXBException, MalformedURLException;
+    public abstract void testNotFound(URL url) throws JAXBException, MalformedURLException;
 
-    public abstract void testAlleleConversion(@ArquillianResource URL url) throws JAXBException, MalformedURLException;
+    public abstract void testInvalidAllele(URL url) throws JAXBException, MalformedURLException;
 
-    public abstract void testChromConversion(@ArquillianResource URL url) throws JAXBException, MalformedURLException;
+    public abstract void testAlleleConversion(URL url) throws JAXBException, MalformedURLException;
 
-    public abstract void testInvalidChrom(@ArquillianResource URL url) throws JAXBException, MalformedURLException;
+    public abstract void testChromConversion(URL url) throws JAXBException, MalformedURLException;
 
-    public abstract void testChromX(@ArquillianResource URL url) throws JAXBException, MalformedURLException;
+    public abstract void testInvalidChrom(URL url) throws JAXBException, MalformedURLException;
 
-    public abstract void testChromMT(@ArquillianResource URL url) throws JAXBException, MalformedURLException;
+    public abstract void testChromX(URL url) throws JAXBException, MalformedURLException;
+
+    public abstract void testChromMT(URL url) throws JAXBException, MalformedURLException;
 }
