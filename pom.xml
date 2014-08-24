@@ -1,16 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.dnastack</groupId>
-    <artifactId>beacon-aggregator</artifactId>
-    <name>beacon-aggregator</name>
+    <artifactId>beacon-of-beacons</artifactId>
+    <name>beacon-of-beacons</name>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
     <description>Beacon of Beacons</description>
     
     <scm>
         <url>https://github.com/mcupak/beacon-aggregator</url>
-        <connection>scm:git:git://github.com/mcupak/beacon-aggregator.git</connection>
-        <developerConnection>scm:git:git@github.com:mcupak/beacon-aggregator.git</developerConnection>
+        <connection>scm:git:git://github.com/mcupak/beacon-of-beacons.git</connection>
+        <developerConnection>scm:git:git@github.com:mcupak/beacon-of-beacons.git</developerConnection>
     </scm>
     
     <organization>
