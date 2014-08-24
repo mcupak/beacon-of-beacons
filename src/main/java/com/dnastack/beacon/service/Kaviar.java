@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
+ * Copyright 2014 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,39 +23,23 @@
  */
 package com.dnastack.beacon.service;
 
-import com.dnastack.beacon.core.Beacon;
-import com.dnastack.beacon.core.BeaconResponse;
-import com.dnastack.beacon.core.BeaconService;
-import com.dnastack.beacon.core.Query;
-import com.dnastack.beacon.log.Logged;
-import java.io.Serializable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import javax.ejb.AsyncResult;
-import javax.ejb.Asynchronous;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.ElementType.TYPE;
+import java.lang.annotation.Retention;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.Target;
+import javax.inject.Qualifier;
 
 /**
- * Abstract beacon service not requiring genome specification.
+ * Kaviar qualifier.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public abstract class GenomeUnawareBeaconService implements BeaconService, Serializable {
-
-    private static final long serialVersionUID = 9L;
-
-    @Override
-    @Logged
-    @Asynchronous
-    public Future<BeaconResponse> executeQuery(Beacon beacon, Query query) {
-        BeaconResponse res = new BeaconResponse(beacon, query, null);
-
-        try {
-            res.setResponse(parseQueryResponse(getQueryResponse(beacon, query, null).get()).get());
-        } catch (InterruptedException | ExecutionException ex) {
-            // ignore, response already null
-        }
-
-        return new AsyncResult<>(res);
-    }
+@Qualifier
+@Retention(RUNTIME)
+@Target({METHOD, FIELD, PARAMETER, TYPE})
+public @interface Kaviar {
 }

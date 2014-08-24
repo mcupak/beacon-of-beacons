@@ -38,21 +38,21 @@ import javax.inject.Inject;
 import org.apache.http.client.methods.HttpGet;
 
 /**
- * NCBI beacon service.
+ * Kaviar beacon service.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
 @Stateless
 @LocalBean
-@Ncbi
-public class NcbiBeaconService extends GenomeAwareBeaconService {
+@Kaviar
+public class KaviarBeaconService extends GenomeAwareBeaconService {
 
-    private static final long serialVersionUID = 12L;
-    private static final String BASE_URL = "http://www.ncbi.nlm.nih.gov/projects/genome/beacon/beacon.cgi";
-    private static final String PARAM_TEMPLATE = "?ref=%s&chrom=%s&pos=%d&allele=%s";
+    private static final long serialVersionUID = 30L;
+    private static final String BASE_URL = "http://db.systemsbiology.net/kaviar/cgi-pub/beacon";
+    private static final String PARAM_TEMPLATE = "?onebased=0&frz=%s&chr=%s&pos=%d&allele=%s";
     // requeries genome specification in the query
-    private static final String[] SUPPORTED_REFS = {"NCBI36", "GRCh37", "GRCh38"};
+    private static final String[] SUPPORTED_REFS = {"hg19", "hg18"};
 
     @Inject
     private HttpUtils httpUtils;
@@ -77,7 +77,7 @@ public class NcbiBeaconService extends GenomeAwareBeaconService {
         // should be POST, but the server accepts GET as well
         HttpGet httpGet;
         try {
-            httpGet = new HttpGet(getQueryUrl(ref, query.getChromosome(), queryUtils.denormalizePosition(query.getPosition()), query.getAllele()
+            httpGet = new HttpGet(getQueryUrl(ref, query.getChromosome(), query.getPosition(), query.getAllele()
             ));
             res = httpUtils.executeRequest(httpGet);
         } catch (MalformedURLException ex) {
@@ -90,7 +90,7 @@ public class NcbiBeaconService extends GenomeAwareBeaconService {
     @Override
     @Asynchronous
     public Future<Boolean> parseQueryResponse(String response) {
-        Boolean res = parsingUtils.parseBooleanFromJson(response, "exist_gt");
+        Boolean res = parsingUtils.parseYesNoCaseInsensitive(response);
 
         return new AsyncResult<>(res);
     }

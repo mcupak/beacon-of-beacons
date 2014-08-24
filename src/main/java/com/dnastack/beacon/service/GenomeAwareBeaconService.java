@@ -27,12 +27,14 @@ import com.dnastack.beacon.core.Beacon;
 import com.dnastack.beacon.core.BeaconResponse;
 import com.dnastack.beacon.core.BeaconService;
 import com.dnastack.beacon.core.Query;
+import com.dnastack.beacon.log.Logged;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
+import javax.ejb.Asynchronous;
 
 /**
  * Abstract beacon service handling multiple genome specific queries.
@@ -47,6 +49,8 @@ public abstract class GenomeAwareBeaconService implements BeaconService, Seriali
     protected abstract String[] getRefs();
 
     @Override
+    @Logged
+    @Asynchronous
     public Future<BeaconResponse> executeQuery(Beacon beacon, Query query) {
         BeaconResponse res = new BeaconResponse(beacon, query, null);
 

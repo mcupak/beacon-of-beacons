@@ -40,7 +40,7 @@ where the (chrom, pos, allele) parameters tuple describes the query you want to 
 - {allele}: Any string of nucleotides A,C,T,G or D, I for deletion and insertion. For compatibility with conventions set by some of the existing beacons, DEL and INS identifiers are also accepted.
 - {beacon}: Beacon ID. Optional parameter. Filters the responses to specific beacons. Unless it is specified, the responses from all the supported beacons are obtained.
 
-Bob currently supports all the 5 publicly available beacons and converts the input information into the queries they can understand. This may include a change of chromosome identifier, using a 1-based position instead of a 0-based one as well as using a different allele representation. Some beacons support multiple projects or tracks, in which case BoB queries all of them and look for a positive response from almost one of them. Beacon IDs can be obtained by querying the following URL:
+Bob currently supports all the 6 publicly available beacons and converts the input information into the queries they can understand. This may include a change of chromosome identifier, using a 1-based position instead of a 0-based one as well as using a different allele representation. Some beacons support multiple projects or tracks, in which case BoB queries all of them and look for a positive response from almost one of them. Beacon IDs can be obtained by querying the following URL:
 
     http://localhost:8080/beacon-of-beacons/rest/beacons
 
@@ -74,6 +74,10 @@ Response:
         {
             "id": "amplab",
             "name": "AMPLab"
+        },
+        {
+            "id": "kaviar",
+            "name": "Kaviar2"
         }
     ]
 

@@ -25,6 +25,7 @@ package com.dnastack.beacon.core;
 
 import com.dnastack.beacon.service.AmpLab;
 import com.dnastack.beacon.service.Ebi;
+import com.dnastack.beacon.service.Kaviar;
 import com.dnastack.beacon.service.Ncbi;
 import com.dnastack.beacon.service.Ucsc;
 import com.dnastack.beacon.service.Wtsi;
@@ -72,6 +73,10 @@ public class BeaconProvider implements Serializable {
     @AmpLab
     private BeaconService ampLabService;
 
+    @Inject
+    @Kaviar
+    private BeaconService kaviarService;
+
     @PostConstruct
     private void initMapping() {
         this.beacons = new HashSet<>();
@@ -82,6 +87,7 @@ public class BeaconProvider implements Serializable {
         beacons.add(new Beacon("ncbi", "NCBI"));
         beacons.add(new Beacon("wtsi", "Wellcome Trust Sanger Institute"));
         beacons.add(new Beacon("amplab", "AMPLab"));
+        beacons.add(new Beacon("kaviar", "Kaviar2"));
     }
 
     /**
@@ -106,6 +112,8 @@ public class BeaconProvider implements Serializable {
                 return wtsiService;
             case "amplab":
                 return ampLabService;
+            case "kaviar":
+                return kaviarService;
             default:
                 return null;
         }

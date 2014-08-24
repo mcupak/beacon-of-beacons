@@ -24,9 +24,7 @@
 package com.dnastack.beacon.service;
 
 import com.dnastack.beacon.core.Beacon;
-import com.dnastack.beacon.core.BeaconResponse;
 import com.dnastack.beacon.core.Query;
-import com.dnastack.beacon.log.Logged;
 import com.dnastack.beacon.util.HttpUtils;
 import com.dnastack.beacon.util.ParsingUtils;
 import com.dnastack.beacon.util.QueryUtils;
@@ -109,12 +107,5 @@ public class AmpLabBeaconService extends GenomeAwareBeaconService {
     @Override
     protected String[] getRefs() {
         return SUPPORTED_REFS;
-    }
-
-    @Override
-    @Logged
-    @Asynchronous
-    public Future<BeaconResponse> executeQuery(Beacon beacon, Query query) {
-        return super.executeQuery(beacon, query);
     }
 }
