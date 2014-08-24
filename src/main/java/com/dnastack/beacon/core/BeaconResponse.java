@@ -107,7 +107,7 @@ public class BeaconResponse implements Serializable {
 
     @Override
     public String toString() {
-        return "BeaconResponse{" + "beacon=" + beacon + ", query=" + query + ", response=" + response + '}';
+        return "Response of '" + beacon + "' to '" + query + "': '" + response + "'";
     }
 
 }

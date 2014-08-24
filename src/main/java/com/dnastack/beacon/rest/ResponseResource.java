@@ -83,7 +83,7 @@ public class ResponseResource {
      */
     @Logged
     @GET
-    @Produces({"application/json", "application/xml"})
+    @Produces({"application/json", "application/xml", "text/plain"})
     @Path("/bob")
     public BeaconResponse queryBob(@QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele) {
         Query q = queryUtils.normalizeQuery(new Query(chrom, pos, allele));
@@ -127,7 +127,7 @@ public class ResponseResource {
      */
     @Logged
     @GET
-    @Produces({"application/json", "application/xml"})
+    @Produces({"application/json", "application/xml", "text/plain"})
     @Path("/{beaconId}")
     public BeaconResponse queryBeacon(@PathParam("beaconId") String beaconId, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele) {
         Query q = queryUtils.normalizeQuery(new Query(chrom, pos, allele));
@@ -207,7 +207,7 @@ public class ResponseResource {
      */
     @Logged
     @GET
-    @Produces({"application/json", "application/xml"})
+    @Produces({"application/json", "application/xml", "text/plain"})
     public List<BeaconResponse> query(@QueryParam("beacon") String beaconId, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele) {
         List<BeaconResponse> brs = new ArrayList<>();
         if (beaconId == null) {

@@ -25,7 +25,7 @@ The application should now be running on <http://localhost:8080/beacon-of-beacon
 
 API
 ---
-BoB was designed with ease of programmatic access in mind. It provides both XML and JSON API to accommodate needs of all the clients across all the programming languages. The API to use is determined using the header supplied by the client in its GET request, e.g.:
+BoB was designed with ease of programmatic access in mind. It provides XML, JSON and plaintext responses to accommodate needs of all the clients across all the programming languages. The API to use is determined using the header supplied by the client in its GET request, e.g.:
 
     Accept: application/json
 
