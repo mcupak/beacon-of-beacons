@@ -62,6 +62,7 @@ public abstract class BasicTest {
                 .loadPomFromFile("pom.xml").importBuildOutput().as(WebArchive.class);
         war.addClasses(BasicTest.class, AbstractResponseTest.class);
         war.addAsResource(new File("src/main/resources/com/dnastack/beacon/core/jaxb.properties"));
+        war.addAsResource(new File("src/main/resources/com/dnastack/beacon/rest/jaxb.properties"));
         System.out.println(war.getName());
 
         return war;

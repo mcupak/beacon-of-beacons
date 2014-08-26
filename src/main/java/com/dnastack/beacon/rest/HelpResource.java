@@ -23,96 +23,51 @@
  */
 package com.dnastack.beacon.rest;
 
-import com.dnastack.beacon.core.AllBeacons;
-import com.dnastack.beacon.core.Beacon;
-import com.dnastack.beacon.core.BeaconProvider;
-import com.dnastack.beacon.core.Bob;
 import com.dnastack.beacon.log.Logged;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import javax.inject.Inject;
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
 /**
- * Query rest resource.
+ * Information/help rest resource.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Path("/beacons")
+@Path("/")
+@ApplicationScoped
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN})
-public class BeaconResource {
+public class HelpResource {
 
-    @Inject
-    private BeaconProvider beaconProvider;
+    @Context
+    private UriInfo uriInfo;
 
-    @Inject
-    @Bob
-    private Beacon bob;
+    private Set<RestEndPoint> endpoints;
 
-    @Inject
-    @AllBeacons
-    private Set<Beacon> beacons;
+    @PostConstruct
+    public void init() {
+        endpoints = new HashSet<>();
+        endpoints.add(new RestEndPoint("beacons", uriInfo.getBaseUri().toString() + "beacons", uriInfo.getBaseUri().toString() + "beacons"));
+        endpoints.add(new RestEndPoint("responses", uriInfo.getBaseUri().toString() + "responses", uriInfo.getBaseUri().toString() + "responses?chrom=14&pos=106833420&allele=A"));
+    }
 
     /**
-     * Shows beacon of beacons details.
+     * Shows REST welcome page.
      *
-     * @return bob
+     * @return response
      */
     @Logged
     @GET
-    @Path("/bob")
-    public Beacon showBob() {
-        return bob;
+    public Set<RestEndPoint> showEndPoints() {
+        return Collections.unmodifiableSet(endpoints);
     }
 
-    /**
-     * Shows beacon details.
-     *
-     * @param beaconId id of the beacon
-     * @return beacon
-     */
-    @Logged
-    @GET
-    @Path("/{beaconId}")
-    public Beacon showBeacon(@PathParam("beaconId") String beaconId) {
-        return beaconProvider.getBeacon(beaconId);
-    }
-
-    /**
-     * Shows all the beacons.
-     *
-     * @return set of beacons
-     */
-    @Logged
-    public Set<Beacon> showAll() {
-        return Collections.unmodifiableSet(beacons);
-    }
-
-    /**
-     * Shows all the beacons or a specific beacon as determined by a param.
-     *
-     * @param beaconId beacon ID
-     * @return set of beacons
-     */
-    @Logged
-    @GET
-    public Set<Beacon> show(@QueryParam("beacon") String beaconId) {
-        Set<Beacon> bs = new HashSet<>();
-        if (beaconId == null) {
-            bs.addAll(showAll());
-        } else if (beaconId.equals(bob.getId())) {
-            bs.add(showBob());
-        } else {
-            bs.add(showBeacon(beaconId));
-        }
-
-        return bs;
-    }
 }

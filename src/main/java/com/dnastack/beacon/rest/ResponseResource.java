@@ -46,6 +46,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 
 /**
  * Query rest resource.
@@ -54,6 +55,7 @@ import javax.ws.rs.QueryParam;
  * @version 1.0
  */
 @Path("/responses")
+@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN})
 public class ResponseResource {
 
     @Inject
@@ -83,7 +85,6 @@ public class ResponseResource {
      */
     @Logged
     @GET
-    @Produces({"application/json", "application/xml", "text/plain"})
     @Path("/bob")
     public BeaconResponse queryBob(@QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele) {
         Query q = queryUtils.normalizeQuery(new Query(chrom, pos, allele));
@@ -127,7 +128,6 @@ public class ResponseResource {
      */
     @Logged
     @GET
-    @Produces({"application/json", "application/xml", "text/plain"})
     @Path("/{beaconId}")
     public BeaconResponse queryBeacon(@PathParam("beaconId") String beaconId, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele) {
         Query q = queryUtils.normalizeQuery(new Query(chrom, pos, allele));
@@ -207,7 +207,6 @@ public class ResponseResource {
      */
     @Logged
     @GET
-    @Produces({"application/json", "application/xml", "text/plain"})
     public List<BeaconResponse> query(@QueryParam("beacon") String beaconId, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele) {
         List<BeaconResponse> brs = new ArrayList<>();
         if (beaconId == null) {
