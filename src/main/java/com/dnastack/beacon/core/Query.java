@@ -52,15 +52,17 @@ public class Query implements Serializable {
     @NotNull
     @Pattern(regexp = "([D,I])|([A,C,T,G]+)")
     private String allele;
+    private String reference;
 
     public Query() {
         // needed for JAXB
     }
 
-    public Query(String chromosome, Long position, String allele) {
+    public Query(String chromosome, Long position, String allele, String reference) {
         this.chromosome = chromosome;
         this.position = position;
         this.allele = allele;
+        this.reference = reference;
     }
 
     public String getChromosome() {
@@ -87,12 +89,21 @@ public class Query implements Serializable {
         this.allele = allele;
     }
 
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 37 * hash + Objects.hashCode(this.chromosome);
-        hash = 37 * hash + Objects.hashCode(this.position);
-        hash = 37 * hash + Objects.hashCode(this.allele);
+        hash = 79 * hash + Objects.hashCode(this.chromosome);
+        hash = 79 * hash + Objects.hashCode(this.position);
+        hash = 79 * hash + Objects.hashCode(this.allele);
+        hash = 79 * hash + Objects.hashCode(this.reference);
         return hash;
     }
 
@@ -114,12 +125,15 @@ public class Query implements Serializable {
         if (!Objects.equals(this.allele, other.allele)) {
             return false;
         }
+        if (!Objects.equals(this.reference, other.reference)) {
+            return false;
+        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "Query{" + "chromosome=" + chromosome + ", position=" + position + ", allele=" + allele + '}';
+        return "Query{" + "chromosome=" + chromosome + ", position=" + position + ", allele=" + allele + ", reference=" + reference + '}';
     }
 
 }

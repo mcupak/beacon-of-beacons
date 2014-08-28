@@ -28,7 +28,9 @@ import com.dnastack.beacon.core.Query;
 import com.dnastack.beacon.util.HttpUtils;
 import com.dnastack.beacon.util.ParsingUtils;
 import com.dnastack.beacon.util.QueryUtils;
+import com.google.common.collect.ImmutableSet;
 import java.net.MalformedURLException;
+import java.util.Set;
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
@@ -46,13 +48,12 @@ import org.apache.http.client.methods.HttpGet;
 @Stateless
 @LocalBean
 @Ncbi
-public class NcbiBeaconService extends GenomeAwareBeaconService {
+public class NcbiBeaconService extends AbstractBeaconService {
 
     private static final long serialVersionUID = 12L;
     private static final String BASE_URL = "http://www.ncbi.nlm.nih.gov/projects/genome/beacon/beacon.cgi";
     private static final String PARAM_TEMPLATE = "?ref=%s&chrom=%s&pos=%d&allele=%s";
-    // requeries genome specification in the query
-    private static final String[] SUPPORTED_REFS = {"NCBI36", "GRCh37", "GRCh38"};
+    private static final Set<String> SUPPORTED_REFS = ImmutableSet.of("hg18", "hg19", "hg38");
 
     @Inject
     private HttpUtils httpUtils;
@@ -71,13 +72,13 @@ public class NcbiBeaconService extends GenomeAwareBeaconService {
 
     @Override
     @Asynchronous
-    public Future<String> getQueryResponse(Beacon beacon, Query query, String ref) {
+    public Future<String> getQueryResponse(Beacon beacon, Query query) {
         String res = null;
 
         // should be POST, but the server accepts GET as well
         HttpGet httpGet;
         try {
-            httpGet = new HttpGet(getQueryUrl(ref, query.getChromosome(), queryUtils.denormalizePosition(query.getPosition()), query.getAllele()
+            httpGet = new HttpGet(getQueryUrl(queryUtils.denormalizeReference(query.getReference()), query.getChromosome(), queryUtils.denormalizePosition(query.getPosition()), query.getAllele()
             ));
             res = httpUtils.executeRequest(httpGet);
         } catch (MalformedURLException ex) {
@@ -96,7 +97,7 @@ public class NcbiBeaconService extends GenomeAwareBeaconService {
     }
 
     @Override
-    protected String[] getRefs() {
+    public Set<String> getSupportedReferences() {
         return SUPPORTED_REFS;
     }
 }

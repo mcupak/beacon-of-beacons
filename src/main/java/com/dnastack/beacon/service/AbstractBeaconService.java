@@ -42,25 +42,26 @@ import javax.ejb.Asynchronous;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public abstract class GenomeAwareBeaconService implements BeaconService, Serializable {
+public abstract class AbstractBeaconService implements BeaconService, Serializable {
 
     private static final long serialVersionUID = 10L;
 
-    protected abstract String[] getRefs();
-
-    @Override
-    @Logged
-    @Asynchronous
-    public Future<BeaconResponse> executeQuery(Beacon beacon, Query query) {
-        BeaconResponse res = new BeaconResponse(beacon, query, null);
-
-        // execute queries in parallel
+    private List<Future<String>> executeQueriesInParallel(Beacon beacon, Query query) {
         List<Future<String>> fs = new ArrayList<>();
-        for (String ref : getRefs()) {
-            fs.add(getQueryResponse(beacon, query, ref));
+        if (query.getReference() == null) {
+            // query all refs
+            for (String ref : getSupportedReferences()) {
+                fs.add(getQueryResponse(beacon, new Query(query.getChromosome(), query.getPosition(), query.getAllele(), ref)));
+            }
+        } else if (getSupportedReferences().contains(query.getReference())) {
+            // query only the specified ref
+            fs.add(getQueryResponse(beacon, query));
         }
 
-        // parse queries in parallel
+        return fs;
+    }
+
+    private List<Future<Boolean>> parseResultsInParallel(List<Future<String>> fs) {
         List<Future<Boolean>> bs = new ArrayList<>();
         for (Future<String> f : fs) {
             try {
@@ -70,7 +71,12 @@ public abstract class GenomeAwareBeaconService implements BeaconService, Seriali
             }
         }
 
-        // collect results
+        return bs;
+    }
+
+    private Boolean collectResults(List<Future<Boolean>> bs) {
+        Boolean res = null;
+
         for (Future<Boolean> b : bs) {
             Boolean r = null;
             try {
@@ -80,14 +86,27 @@ public abstract class GenomeAwareBeaconService implements BeaconService, Seriali
             }
             if (r != null) {
                 if (r) {
-                    res.setResponse(r);
+                    res = r;
                     break;
                 } else {
-                    if (res.getResponse() == null) {
-                        res.setResponse(r);
+                    if (res == null) {
+                        res = r;
                     }
                 }
             }
+        }
+
+        return res;
+    }
+
+    @Override
+    @Logged
+    @Asynchronous
+    public Future<BeaconResponse> executeQuery(Beacon beacon, Query query) {
+        BeaconResponse res = new BeaconResponse(beacon, query, null);
+
+        if (query != null) {
+            res.setResponse(collectResults(parseResultsInParallel(executeQueriesInParallel(beacon, query))));
         }
 
         return new AsyncResult<>(res);

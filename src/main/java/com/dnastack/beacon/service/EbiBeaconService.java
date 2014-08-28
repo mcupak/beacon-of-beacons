@@ -27,9 +27,11 @@ import com.dnastack.beacon.core.Beacon;
 import com.dnastack.beacon.core.Query;
 import com.dnastack.beacon.util.HttpUtils;
 import com.dnastack.beacon.util.QueryUtils;
+import com.google.common.collect.ImmutableSet;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
@@ -50,10 +52,11 @@ import org.apache.http.message.BasicNameValuePair;
 @Stateless
 @LocalBean
 @Ebi
-public class EbiBeaconService extends GenomeUnawareBeaconService {
+public class EbiBeaconService extends AbstractBeaconService {
 
     private static final long serialVersionUID = 11L;
     private static final String BASE_URL = "http://www.ebi.ac.uk/eva/beacon";
+    private static final Set<String> SUPPORTED_REFS = ImmutableSet.of("hg19");
 
     @Inject
     private HttpUtils httpUtils;
@@ -78,7 +81,7 @@ public class EbiBeaconService extends GenomeUnawareBeaconService {
 
     @Override
     @Asynchronous
-    public Future<String> getQueryResponse(Beacon beacon, Query query, String ref) {
+    public Future<String> getQueryResponse(Beacon beacon, Query query) {
         String res = null;
 
         HttpPost httpPost = new HttpPost(BASE_URL);
@@ -110,5 +113,10 @@ public class EbiBeaconService extends GenomeUnawareBeaconService {
         }
 
         return new AsyncResult<>(res);
+    }
+
+    @Override
+    public Set<String> getSupportedReferences() {
+        return SUPPORTED_REFS;
     }
 }

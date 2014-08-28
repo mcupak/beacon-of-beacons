@@ -28,7 +28,9 @@ import com.dnastack.beacon.core.Query;
 import com.dnastack.beacon.util.HttpUtils;
 import com.dnastack.beacon.util.ParsingUtils;
 import com.dnastack.beacon.util.QueryUtils;
+import com.google.common.collect.ImmutableSet;
 import java.net.MalformedURLException;
+import java.util.Set;
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
@@ -46,11 +48,13 @@ import org.apache.http.client.methods.HttpGet;
 @Stateless
 @LocalBean
 @Wtsi
-public class WtsiBeaconService extends GenomeUnawareBeaconService {
+public class WtsiBeaconService extends AbstractBeaconService {
 
     private static final long serialVersionUID = 14L;
     private static final String BASE_URL = "http://www.sanger.ac.uk/sanger/GA4GH_Beacon";
+    private static final String PARAM_TEMPLATE_ASSEMBLY = "?src=all&ass=%s&chr=%s&pos=%d&all=%s";
     private static final String PARAM_TEMPLATE = "?src=all&chr=%s&pos=%d&all=%s";
+    private static final Set<String> SUPPORTED_REFS = ImmutableSet.of("hg19");
 
     @Inject
     private HttpUtils httpUtils;
@@ -61,20 +65,25 @@ public class WtsiBeaconService extends GenomeUnawareBeaconService {
     @Inject
     private QueryUtils queryUtils;
 
-    private String getQueryUrl(String chrom, Long pos, String allele) throws MalformedURLException {
-        String params = String.format(PARAM_TEMPLATE, chrom, pos, allele);
+    private String getQueryUrl(String ref, String chrom, Long pos, String allele) throws MalformedURLException {
+        String params;
+        if (ref == null) {
+            params = String.format(PARAM_TEMPLATE, chrom, pos, allele);
+        } else {
+            params = String.format(PARAM_TEMPLATE_ASSEMBLY, ref, chrom, pos, allele);
+        }
 
         return BASE_URL + params;
     }
 
     @Override
     @Asynchronous
-    public Future<String> getQueryResponse(Beacon beacon, Query query, String ref) {
+    public Future<String> getQueryResponse(Beacon beacon, Query query) {
         String res = null;
 
         HttpGet httpGet;
         try {
-            httpGet = new HttpGet(getQueryUrl(query.getChromosome(), queryUtils.denormalizePosition(query.getPosition()), query.getAllele()));
+            httpGet = new HttpGet(getQueryUrl(queryUtils.denormalizeReference(query.getReference()), query.getChromosome(), queryUtils.denormalizePosition(query.getPosition()), query.getAllele()));
             res = httpUtils.executeRequest(httpGet);
         } catch (MalformedURLException ex) {
             // ignore, already null
@@ -96,5 +105,10 @@ public class WtsiBeaconService extends GenomeUnawareBeaconService {
         }
 
         return new AsyncResult<>(res);
+    }
+
+    @Override
+    public Set<String> getSupportedReferences() {
+        return SUPPORTED_REFS;
     }
 }

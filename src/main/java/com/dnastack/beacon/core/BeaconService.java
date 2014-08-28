@@ -23,6 +23,7 @@
  */
 package com.dnastack.beacon.core;
 
+import java.util.Set;
 import java.util.concurrent.Future;
 
 /**
@@ -32,6 +33,13 @@ import java.util.concurrent.Future;
  * @version 1.0
  */
 public interface BeaconService {
+
+    /**
+     * Obtains genomes supported by the service.
+     *
+     * @return set of supported genomes
+     */
+    Set<String> getSupportedReferences();
 
     /**
      * Asynchronously executes a query agaist a beacon.
@@ -56,9 +64,8 @@ public interface BeaconService {
      *
      * @param beacon beacon to query
      * @param query query
-     * @param ref reference genome (optional)
      * @return raw result of the query from the beacon
      */
-    Future<String> getQueryResponse(Beacon beacon, Query query, String ref);
+    Future<String> getQueryResponse(Beacon beacon, Query query);
 
 }

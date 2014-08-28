@@ -24,6 +24,9 @@
 package com.dnastack.beacon.util;
 
 import com.dnastack.beacon.core.Query;
+import com.google.common.collect.ImmutableMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Pattern;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
@@ -40,6 +43,7 @@ public class QueryUtils {
 
     // order is important!
     private static final String[] CHROM_VALS = {"22", "21", "20", "19", "18", "17", "16", "15", "14", "13", "12", "11", "10", "9", "8", "7", "6", "5", "4", "3", "2", "1", "X", "Y", "MT"};
+    private static final Map<String, String> chromMapping = ImmutableMap.of("hg38", "GRCh38", "hg19", "GRCh37", "hg18", "NCBI36", "hg17", "NCBI35", "hg16", "NCBI34");
 
     /**
      * Generates a canonical chrom ID.
@@ -47,7 +51,7 @@ public class QueryUtils {
      * @param chrom chromosome
      * @return normalized chromosome value
      */
-    public String normalizeChrom(String chrom) {
+    public String normalizeChromosome(String chrom) {
         // parse chrom value
         String res = null;
         if (chrom != null) {
@@ -69,7 +73,7 @@ public class QueryUtils {
      * @param chrom canonical chromosome
      * @return denormalized chromosome value
      */
-    public String denormalizeChrom(String template, String chrom) {
+    public String denormalizeChromosome(String template, String chrom) {
         return String.format(template, chrom);
     }
 
@@ -157,12 +161,64 @@ public class QueryUtils {
     }
 
     /**
+     * Generate a canonical genome representation (hg*).
+     *
+     * @param ref denormalized genome
+     * @return normalized genome
+     */
+    public String normalizeReference(String ref) {
+        if (ref == null || ref.isEmpty()) {
+            return null;
+        }
+
+        String res = ref.toLowerCase();
+        for (String s : chromMapping.keySet()) {
+            if (s.toLowerCase().equals(ref)) {
+                return s;
+            }
+        }
+        for (Entry<String, String> e : chromMapping.entrySet()) {
+            if (e.getValue().toLowerCase().equals(ref)) {
+                return e.getKey();
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Generate a domain-specific genome representation (GRCh*, NCBI*).
+     *
+     * @param ref normalized genome
+     * @return denormalized genome
+     */
+    public String denormalizeReference(String ref) {
+        if (ref == null || ref.isEmpty()) {
+            return null;
+        }
+
+        String res = ref.toLowerCase();
+        for (String s : chromMapping.values()) {
+            if (s.toLowerCase().equals(ref)) {
+                return s;
+            }
+        }
+        for (Entry<String, String> e : chromMapping.entrySet()) {
+            if (e.getKey().toLowerCase().equals(ref)) {
+                return e.getValue();
+            }
+        }
+
+        return res;
+    }
+
+    /**
      * Generates a canonical version of a query (field values normalized).
      *
      * @param q query
      * @return normalized query
      */
     public Query normalizeQuery(Query q) {
-        return new Query(normalizeChrom(q.getChromosome()), q.getPosition(), normalizeAllele(q.getAllele()));
+        return new Query(normalizeChromosome(q.getChromosome()), q.getPosition(), normalizeAllele(q.getAllele()), normalizeReference(q.getReference()));
     }
 }

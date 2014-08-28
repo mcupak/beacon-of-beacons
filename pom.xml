@@ -49,6 +49,7 @@
         <version.org.apache.httpcomponents.httpclient>4.3.5</version.org.apache.httpcomponents.httpclient>
         <version.org.json.json>20140107</version.org.json.json>
         <version.eclipselink>2.5.2</version.eclipselink>
+        <version.guava>17.0</version.guava>
         <version.war.plugin>2.1.1</version.war.plugin>
         <version.surefire.plugin>2.17</version.surefire.plugin>
         <version.compiler.plugin>3.0</version.compiler.plugin>
@@ -99,6 +100,11 @@
                 <groupId>org.eclipse.persistence</groupId>
                 <artifactId>eclipselink</artifactId>
                 <version>${version.eclipselink}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${version.guava}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -151,6 +157,10 @@
         <dependency>
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>eclipselink</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

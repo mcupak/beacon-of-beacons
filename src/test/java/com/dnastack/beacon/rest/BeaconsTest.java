@@ -80,6 +80,7 @@ public class BeaconsTest extends BasicTest {
         beacons.add(new Beacon("ncbi", "NCBI"));
         beacons.add(new Beacon("wtsi", "Wellcome Trust Sanger Institute"));
         beacons.add(new Beacon("amplab", "AMPLab"));
+        beacons.add(new Beacon("kaviar", "Kaviar2"));
     }
 
     @Test

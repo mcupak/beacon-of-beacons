@@ -28,9 +28,11 @@ import com.dnastack.beacon.core.Query;
 import com.dnastack.beacon.util.HttpUtils;
 import com.dnastack.beacon.util.ParsingUtils;
 import com.dnastack.beacon.util.QueryUtils;
+import com.google.common.collect.ImmutableSet;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
@@ -51,13 +53,12 @@ import org.apache.http.message.BasicNameValuePair;
 @Stateless
 @LocalBean
 @AmpLab
-public class AmpLabBeaconService extends GenomeAwareBeaconService {
+public class AmpLabBeaconService extends AbstractBeaconService {
 
     private static final long serialVersionUID = 10L;
     private static final String BASE_URL = "http://beacon.eecs.berkeley.edu/beacon.php";
-    // requeries genome specification in the query
-    private static final String[] SUPPORTED_REFS = {"hg18", "hg19", "hg38"};
     private static final String CHROM_TEMPLATE = "chr%s";
+    private static final Set<String> SUPPORTED_REFS = ImmutableSet.of("hg18", "hg19", "hg38");
 
     @Inject
     private HttpUtils httpUtils;
@@ -82,12 +83,12 @@ public class AmpLabBeaconService extends GenomeAwareBeaconService {
 
     @Override
     @Asynchronous
-    public Future<String> getQueryResponse(Beacon beacon, Query query, String ref) {
+    public Future<String> getQueryResponse(Beacon beacon, Query query) {
         String res = null;
 
         HttpPost httpPost = new HttpPost(BASE_URL);
         try {
-            httpPost.setEntity(new UrlEncodedFormEntity(getQueryData(ref, queryUtils.denormalizeChrom(CHROM_TEMPLATE, query.getChromosome()), query.getPosition(), queryUtils.denormalizeAllele(query.getAllele()))));
+            httpPost.setEntity(new UrlEncodedFormEntity(getQueryData(query.getReference(), queryUtils.denormalizeChromosome(CHROM_TEMPLATE, query.getChromosome()), query.getPosition(), queryUtils.denormalizeAllele(query.getAllele()))));
             res = httpUtils.executeRequest(httpPost);
         } catch (UnsupportedEncodingException ex) {
             // ignore, alredy null
@@ -105,7 +106,7 @@ public class AmpLabBeaconService extends GenomeAwareBeaconService {
     }
 
     @Override
-    protected String[] getRefs() {
+    public Set<String> getSupportedReferences() {
         return SUPPORTED_REFS;
     }
 }

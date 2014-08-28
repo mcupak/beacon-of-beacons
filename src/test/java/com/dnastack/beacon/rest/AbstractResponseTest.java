@@ -39,16 +39,34 @@ import javax.xml.bind.JAXBException;
 public abstract class AbstractResponseTest extends BasicTest {
 
     public static final String QUERY_BEACON_TEMPLATE = "rest/responses/%s?chrom=%s&pos=%s&allele=%s";
+    public static final String QUERY_BEACON_WITH_REF_TEMPLATE = "rest/responses/%s?chrom=%s&pos=%s&allele=%s&ref=%s";
 
     public static String getUrl(Beacon b, Query q) {
-        return String.format(QUERY_BEACON_TEMPLATE, b.getId(), q.getChromosome(), q.getPosition(), q.getAllele());
+        String res;
+        if (q.getReference() == null) {
+            res = String.format(QUERY_BEACON_TEMPLATE, b.getId(), q.getChromosome(), q.getPosition(), q.getAllele());
+        } else {
+            res = String.format(QUERY_BEACON_WITH_REF_TEMPLATE, b.getId(), q.getChromosome(), q.getPosition(), q.getAllele(), q.getReference());
+        }
+
+        return res;
     }
 
     public static BeaconResponse readResponse(String url) throws JAXBException, MalformedURLException {
         return (BeaconResponse) readObject(BeaconResponse.class, url);
     }
 
-    public abstract void testFound(URL url) throws JAXBException, MalformedURLException;
+    public abstract void testAllRefsFound(URL url) throws JAXBException, MalformedURLException;
+
+    public abstract void testAllRefsNotFound(URL url) throws JAXBException, MalformedURLException;
+
+    public abstract void testSpecificRefFound(URL url) throws JAXBException, MalformedURLException;
+
+    public abstract void testSpecificRefNotFound(URL url) throws JAXBException, MalformedURLException;
+
+    public abstract void testInvalidRef(URL url) throws JAXBException, MalformedURLException;
+
+    public abstract void testRefConversion(URL url) throws JAXBException, MalformedURLException;
 
     public abstract void testDifferentGenome(URL url) throws JAXBException, MalformedURLException;
 
@@ -57,8 +75,6 @@ public abstract class AbstractResponseTest extends BasicTest {
     public abstract void testDel(URL url) throws JAXBException, MalformedURLException;
 
     public abstract void testIns(URL url) throws JAXBException, MalformedURLException;
-
-    public abstract void testNotFound(URL url) throws JAXBException, MalformedURLException;
 
     public abstract void testInvalidAllele(URL url) throws JAXBException, MalformedURLException;
 

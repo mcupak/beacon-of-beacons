@@ -61,36 +61,90 @@ public class WtsiResponseTest extends AbstractResponseTest {
     @Test
     @RunAsClient
     @Override
-    public void testFound(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Query q = new Query("X", 41087869L, "A");
+    public void testAllRefsFound(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
+        Query q = new Query("1", 808921L, "A", null);
         BeaconResponse br = readResponse(url.toExternalForm() + getUrl(b, q));
 
         assertNotNull(br);
         assertEquals(b, br.getBeacon());
         assertEquals(q, br.getQuery());
 
-        assertTrue(br.getResponse());
-    }
-
-    @Test
-    @RunAsClient
-    public void testFoundRef(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Query q = new Query("13", 32888797L, "A");
-        BeaconResponse br = readResponse(url.toExternalForm() + getUrl(b, q));
-
-        assertNotNull(br);
-        assertEquals(b, br.getBeacon());
-        assertEquals(q, br.getQuery());
-
-        // ref response is true
         assertTrue(br.getResponse());
     }
 
     @Test
     @RunAsClient
     @Override
+    public void testSpecificRefFound(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
+        Query q = new Query("1", 808921L, "A", "hg19");
+        BeaconResponse br = readResponse(url.toExternalForm() + getUrl(b, q));
+
+        assertNotNull(br);
+        assertEquals(b, br.getBeacon());
+        assertEquals(q, br.getQuery());
+        assertTrue(br.getResponse());
+    }
+
+    @Test
+    @RunAsClient
+    @Override
+    public void testSpecificRefNotFound(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
+        Query q = new Query("1", 808921L, "A", "hg38");
+        BeaconResponse br = readResponse(url.toExternalForm() + getUrl(b, q));
+
+        assertNotNull(br);
+        assertEquals(b, br.getBeacon());
+        assertEquals(q, br.getQuery());
+        assertTrue(br.getResponse() == null || !br.getResponse());
+    }
+
+    @Test
+    @RunAsClient
+    @Override
+    public void testInvalidRef(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
+        Query q = new Query("1", 808921L, "A", "hg100");
+        BeaconResponse br = readResponse(url.toExternalForm() + getUrl(b, q));
+
+        assertNotNull(br);
+        assertEquals(b, br.getBeacon());
+        assertNotEquals(q, br.getQuery());
+        assertEquals(br.getQuery().getReference(), null);
+        assertNull(br.getResponse());
+    }
+
+    @Test
+    @RunAsClient
+    @Override
+    public void testRefConversion(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
+        Query q = new Query("1", 808921L, "A", "grch37");
+        BeaconResponse br = readResponse(url.toExternalForm() + getUrl(b, q));
+
+        assertNotNull(br);
+        assertEquals(b, br.getBeacon());
+        assertNotEquals(q, br.getQuery());
+        assertEquals(br.getQuery().getReference(), "hg19");
+        assertNotNull(br.getResponse());
+    }
+
+    @Test
+    @RunAsClient
+    public void testFoundRef(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
+        Query q = new Query("13", 32888797L, "A", null);
+        BeaconResponse br = readResponse(url.toExternalForm() + getUrl(b, q));
+
+        assertNotNull(br);
+        assertEquals(b, br.getBeacon());
+        assertEquals(q, br.getQuery());
+
+        // ref response is false
+        assertFalse(br.getResponse());
+    }
+
+    @Test
+    @RunAsClient
+    @Override
     public void testStringAllele(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Query q = new Query("1", 46402L, "TGT");
+        Query q = new Query("1", 46402L, "TGT", null);
         BeaconResponse br = readResponse(url.toExternalForm() + getUrl(b, q));
 
         assertNotNull(br);
@@ -105,7 +159,7 @@ public class WtsiResponseTest extends AbstractResponseTest {
     @RunAsClient
     @Override
     public void testDel(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Query q = new Query("1", 1002920L, "D");
+        Query q = new Query("1", 1002920L, "D", null);
         BeaconResponse br = readResponse(url.toExternalForm() + getUrl(b, q));
 
         assertNotNull(br);
@@ -120,7 +174,7 @@ public class WtsiResponseTest extends AbstractResponseTest {
     @RunAsClient
     @Override
     public void testIns(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Query q = new Query("1", 46402L, "I");
+        Query q = new Query("1", 46402L, "I", null);
         BeaconResponse br = readResponse(url.toExternalForm() + getUrl(b, q));
 
         assertNotNull(br);
@@ -134,8 +188,8 @@ public class WtsiResponseTest extends AbstractResponseTest {
     @Test
     @RunAsClient
     @Override
-    public void testNotFound(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Query q = new Query("13", 32888798L, "A");
+    public void testAllRefsNotFound(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
+        Query q = new Query("13", 32888798L, "A", null);
         BeaconResponse br = readResponse(url.toExternalForm() + getUrl(b, q));
 
         assertNotNull(br);
@@ -148,7 +202,7 @@ public class WtsiResponseTest extends AbstractResponseTest {
     @RunAsClient
     @Override
     public void testInvalidAllele(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Query q = new Query("15", 41087869L, "DC");
+        Query q = new Query("15", 41087869L, "DC", null);
         BeaconResponse br = readResponse(url.toExternalForm() + getUrl(b, q));
 
         assertNotNull(br);
@@ -162,7 +216,7 @@ public class WtsiResponseTest extends AbstractResponseTest {
     @RunAsClient
     @Override
     public void testAlleleConversion(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Query q = new Query("1", 1002921L, "DEL");
+        Query q = new Query("1", 1002921L, "DEL", null);
         BeaconResponse br = readResponse(url.toExternalForm() + getUrl(b, q));
 
         assertNotNull(br);
@@ -178,7 +232,7 @@ public class WtsiResponseTest extends AbstractResponseTest {
     @RunAsClient
     @Override
     public void testChromConversion(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Query q = new Query("chrom14", 106833420L, "A");
+        Query q = new Query("chrom14", 106833420L, "A", null);
         BeaconResponse br = readResponse(url.toExternalForm() + getUrl(b, q));
 
         assertNotNull(br);
@@ -192,7 +246,7 @@ public class WtsiResponseTest extends AbstractResponseTest {
     @RunAsClient
     @Override
     public void testInvalidChrom(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Query q = new Query("30", 41087869L, "A");
+        Query q = new Query("30", 41087869L, "A", null);
         BeaconResponse br = readResponse(url.toExternalForm() + getUrl(b, q));
 
         assertNotNull(br);
@@ -206,7 +260,7 @@ public class WtsiResponseTest extends AbstractResponseTest {
     @RunAsClient
     @Override
     public void testChromX(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Query q = new Query("X", 41087869L, "C");
+        Query q = new Query("X", 41087869L, "C", null);
         BeaconResponse br = readResponse(url.toExternalForm() + getUrl(b, q));
 
         System.out.println(br);
@@ -220,7 +274,7 @@ public class WtsiResponseTest extends AbstractResponseTest {
     @RunAsClient
     @Override
     public void testChromMT(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Query q = new Query("MT", 41087869L, "A");
+        Query q = new Query("MT", 41087869L, "A", null);
         BeaconResponse br = readResponse(url.toExternalForm() + getUrl(b, q));
 
         assertNotNull(br);

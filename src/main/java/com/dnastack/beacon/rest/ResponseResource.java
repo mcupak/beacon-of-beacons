@@ -75,22 +75,27 @@ public class ResponseResource {
     @Inject
     private Validator validator;
 
+    private boolean querySuccessfullyNormalizedAndValid(Query q, String ref) {
+        return (!(ref == null || ref.isEmpty()) && q.getReference() == null) || !validator.validate(q).isEmpty();
+    }
+
     /**
      * Query the beacon of beacons.
      *
      * @param chrom chromosome
      * @param pos position
      * @param allele allele
+     * @param ref reference genome (optional)
      * @return list of beacon responses
      */
     @Logged
     @GET
     @Path("/bob")
-    public BeaconResponse queryBob(@QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele) {
-        Query q = queryUtils.normalizeQuery(new Query(chrom, pos, allele));
+    public BeaconResponse queryBob(@QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele, @QueryParam("ref") String ref) {
+        Query q = queryUtils.normalizeQuery(new Query(chrom, pos, allele, ref));
         BeaconResponse br = new BeaconResponse(bob, q, null);
 
-        if (!validator.validate(q).isEmpty()) {
+        if (querySuccessfullyNormalizedAndValid(q, ref)) {
             return br;
         }
         br.setResponse(false);
@@ -124,13 +129,14 @@ public class ResponseResource {
      * @param chrom chromosome
      * @param pos position
      * @param allele allele
+     * @param ref reference genome (optional)
      * @return list of beacon responses
      */
     @Logged
     @GET
     @Path("/{beaconId}")
-    public BeaconResponse queryBeacon(@PathParam("beaconId") String beaconId, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele) {
-        Query q = queryUtils.normalizeQuery(new Query(chrom, pos, allele));
+    public BeaconResponse queryBeacon(@PathParam("beaconId") String beaconId, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele, @QueryParam("ref") String ref) {
+        Query q = queryUtils.normalizeQuery(new Query(chrom, pos, allele, ref));
 
         Beacon b = beaconProvider.getBeacon(beaconId);
         if (b == null) {
@@ -139,7 +145,7 @@ public class ResponseResource {
         }
 
         BeaconResponse br = new BeaconResponse(b, q, null);
-        if (!validator.validate(q).isEmpty()) {
+        if (querySuccessfullyNormalizedAndValid(q, ref)) {
             return br;
         }
 
@@ -157,11 +163,12 @@ public class ResponseResource {
      * @param chrom chromosome
      * @param pos position
      * @param allele allele
+     * @param ref reference genome (optional)
      * @return collection of beacon responses
      */
     @Logged
-    public Collection<BeaconResponse> queryAll(String chrom, Long pos, String allele) {
-        Query q = queryUtils.normalizeQuery(new Query(chrom, pos, allele));
+    public Collection<BeaconResponse> queryAll(String chrom, Long pos, String allele, String ref) {
+        Query q = queryUtils.normalizeQuery(new Query(chrom, pos, allele, ref));
 
         // init to create a response for each beacon even if the query is invalid
         Map<Beacon, BeaconResponse> brs = new HashMap<>();
@@ -170,7 +177,7 @@ public class ResponseResource {
         }
 
         // validate query
-        if (!validator.validate(q).isEmpty()) {
+        if (querySuccessfullyNormalizedAndValid(q, ref)) {
             return brs.values();
         }
 
@@ -203,18 +210,19 @@ public class ResponseResource {
      * @param chrom chromosome
      * @param pos position
      * @param allele allele
+     * @param ref reference genome (optional)
      * @return list of beacon responses
      */
     @Logged
     @GET
-    public List<BeaconResponse> query(@QueryParam("beacon") String beaconId, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele) {
+    public List<BeaconResponse> query(@QueryParam("beacon") String beaconId, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele, @QueryParam("ref") String ref) {
         List<BeaconResponse> brs = new ArrayList<>();
         if (beaconId == null) {
-            brs.addAll(queryAll(chrom, pos, allele));
+            brs.addAll(queryAll(chrom, pos, allele, ref));
         } else if (beaconId.equals(bob.getId())) {
-            brs.add(queryBob(chrom, pos, allele));
+            brs.add(queryBob(chrom, pos, allele, ref));
         } else {
-            brs.add(queryBeacon(beaconId, chrom, pos, allele));
+            brs.add(queryBeacon(beaconId, chrom, pos, allele, ref));
         }
         return brs;
     }

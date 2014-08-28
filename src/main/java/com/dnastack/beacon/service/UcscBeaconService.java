@@ -28,7 +28,9 @@ import com.dnastack.beacon.core.Query;
 import com.dnastack.beacon.util.HttpUtils;
 import com.dnastack.beacon.util.ParsingUtils;
 import com.dnastack.beacon.util.QueryUtils;
+import com.google.common.collect.ImmutableSet;
 import java.net.MalformedURLException;
+import java.util.Set;
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
@@ -46,12 +48,13 @@ import org.apache.http.client.methods.HttpGet;
 @Stateless
 @LocalBean
 @Ucsc
-public class UcscBeaconService extends GenomeUnawareBeaconService {
+public class UcscBeaconService extends AbstractBeaconService {
 
     private static final long serialVersionUID = 13L;
     private static final String BASE_URL = "http://hgwdev-max.cse.ucsc.edu/cgi-bin/beacon/query";
     private static final String PARAM_TEMPLATE = "?track=%s&chrom=%s&pos=%d&allele=%s";
     private static final String CHROM_TEMPLATE = "chr%s";
+    private static final Set<String> SUPPORTED_REFS = ImmutableSet.of("hg19");
 
     @Inject
     private HttpUtils httpUtils;
@@ -70,12 +73,12 @@ public class UcscBeaconService extends GenomeUnawareBeaconService {
 
     @Override
     @Asynchronous
-    public Future<String> getQueryResponse(Beacon beacon, Query query, String ref) {
+    public Future<String> getQueryResponse(Beacon beacon, Query query) {
         String res = null;
 
         HttpGet httpGet;
         try {
-            httpGet = new HttpGet(getQueryUrl(beacon.getId(), queryUtils.denormalizeChrom(CHROM_TEMPLATE, query.getChromosome()), query.getPosition(), query.getAllele()));
+            httpGet = new HttpGet(getQueryUrl(beacon.getId(), queryUtils.denormalizeChromosome(CHROM_TEMPLATE, query.getChromosome()), query.getPosition(), query.getAllele()));
             res = httpUtils.executeRequest(httpGet);
         } catch (MalformedURLException ex) {
             // ignore, already null
@@ -90,5 +93,10 @@ public class UcscBeaconService extends GenomeUnawareBeaconService {
         Boolean res = parsingUtils.parseYesNoCaseInsensitive(response);
 
         return new AsyncResult<>(res);
+    }
+
+    @Override
+    public Set<String> getSupportedReferences() {
+        return SUPPORTED_REFS;
     }
 }
