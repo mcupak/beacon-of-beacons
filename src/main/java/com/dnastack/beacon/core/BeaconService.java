@@ -39,7 +39,7 @@ public interface BeaconService {
      *
      * @return set of supported genomes
      */
-    Set<String> getSupportedReferences();
+    Set<Reference> getSupportedReferences();
 
     /**
      * Asynchronously executes a query agaist a beacon.

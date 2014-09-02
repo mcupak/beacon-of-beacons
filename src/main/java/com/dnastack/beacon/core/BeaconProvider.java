@@ -87,7 +87,7 @@ public class BeaconProvider implements Serializable {
         beacons.add(new Beacon("ncbi", "NCBI"));
         beacons.add(new Beacon("wtsi", "Wellcome Trust Sanger Institute"));
         beacons.add(new Beacon("amplab", "AMPLab"));
-        beacons.add(new Beacon("kaviar", "Kaviar2"));
+        beacons.add(new Beacon("kaviar", "Known VARiants"));
     }
 
     /**

@@ -25,10 +25,12 @@ package com.dnastack.beacon.service;
 
 import com.dnastack.beacon.core.Beacon;
 import com.dnastack.beacon.core.Query;
+import com.dnastack.beacon.core.Reference;
 import com.dnastack.beacon.util.HttpUtils;
 import com.dnastack.beacon.util.ParsingUtils;
 import com.dnastack.beacon.util.QueryUtils;
 import com.google.common.collect.ImmutableSet;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.util.Set;
 import java.util.concurrent.Future;
@@ -36,8 +38,6 @@ import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
-import org.apache.http.client.methods.HttpGet;
 
 /**
  * NCBI beacon service.
@@ -53,16 +53,7 @@ public class NcbiBeaconService extends AbstractBeaconService {
     private static final long serialVersionUID = 12L;
     private static final String BASE_URL = "http://www.ncbi.nlm.nih.gov/projects/genome/beacon/beacon.cgi";
     private static final String PARAM_TEMPLATE = "?ref=%s&chrom=%s&pos=%d&allele=%s";
-    private static final Set<String> SUPPORTED_REFS = ImmutableSet.of("hg18", "hg19", "hg38");
-
-    @Inject
-    private HttpUtils httpUtils;
-
-    @Inject
-    private QueryUtils queryUtils;
-
-    @Inject
-    private ParsingUtils parsingUtils;
+    private static final Set<Reference> SUPPORTED_REFS = ImmutableSet.of(Reference.HG18, Reference.HG19, Reference.HG38);
 
     private String getQueryUrl(String ref, String chrom, Long pos, String allele) throws MalformedURLException {
         String params = String.format(PARAM_TEMPLATE, ref, chrom, pos, allele);
@@ -76,12 +67,9 @@ public class NcbiBeaconService extends AbstractBeaconService {
         String res = null;
 
         // should be POST, but the server accepts GET as well
-        HttpGet httpGet;
         try {
-            httpGet = new HttpGet(getQueryUrl(queryUtils.denormalizeReference(query.getReference()), query.getChromosome(), queryUtils.denormalizePosition(query.getPosition()), query.getAllele()
-            ));
-            res = httpUtils.executeRequest(httpGet);
-        } catch (MalformedURLException ex) {
+            res = HttpUtils.executeRequest(HttpUtils.createRequest(getQueryUrl(QueryUtils.denormalizeReference(query.getReference()), query.getChromosome().toString(), QueryUtils.denormalizePosition(query.getPosition()), query.getAllele()), false, null));
+        } catch (MalformedURLException | UnsupportedEncodingException ex) {
             // ignore, already null
         }
 
@@ -91,13 +79,13 @@ public class NcbiBeaconService extends AbstractBeaconService {
     @Override
     @Asynchronous
     public Future<Boolean> parseQueryResponse(String response) {
-        Boolean res = parsingUtils.parseBooleanFromJson(response, "exist_gt");
+        Boolean res = ParsingUtils.parseBooleanFromJson(response, "exist_gt");
 
         return new AsyncResult<>(res);
     }
 
     @Override
-    public Set<String> getSupportedReferences() {
+    public Set<Reference> getSupportedReferences() {
         return SUPPORTED_REFS;
     }
 }

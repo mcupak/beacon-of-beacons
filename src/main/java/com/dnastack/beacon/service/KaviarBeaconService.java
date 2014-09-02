@@ -25,10 +25,11 @@ package com.dnastack.beacon.service;
 
 import com.dnastack.beacon.core.Beacon;
 import com.dnastack.beacon.core.Query;
+import com.dnastack.beacon.core.Reference;
 import com.dnastack.beacon.util.HttpUtils;
 import com.dnastack.beacon.util.ParsingUtils;
-import com.dnastack.beacon.util.QueryUtils;
 import com.google.common.collect.ImmutableSet;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.util.Set;
 import java.util.concurrent.Future;
@@ -36,8 +37,6 @@ import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
-import org.apache.http.client.methods.HttpGet;
 
 /**
  * Kaviar beacon service.
@@ -53,16 +52,7 @@ public class KaviarBeaconService extends AbstractBeaconService {
     private static final long serialVersionUID = 30L;
     private static final String BASE_URL = "http://db.systemsbiology.net/kaviar/cgi-pub/beacon";
     private static final String PARAM_TEMPLATE = "?onebased=0&frz=%s&chr=%s&pos=%d&allele=%s";
-    private static final Set<String> SUPPORTED_REFS = ImmutableSet.of("hg19", "hg18");
-
-    @Inject
-    private HttpUtils httpUtils;
-
-    @Inject
-    private QueryUtils queryUtils;
-
-    @Inject
-    private ParsingUtils parsingUtils;
+    private static final Set<Reference> SUPPORTED_REFS = ImmutableSet.of(Reference.HG19, Reference.HG18);
 
     private String getQueryUrl(String ref, String chrom, Long pos, String allele) throws MalformedURLException {
         String params = String.format(PARAM_TEMPLATE, ref, chrom, pos, allele);
@@ -76,12 +66,9 @@ public class KaviarBeaconService extends AbstractBeaconService {
         String res = null;
 
         // should be POST, but the server accepts GET as well
-        HttpGet httpGet;
         try {
-            httpGet = new HttpGet(getQueryUrl(query.getReference(), query.getChromosome(), query.getPosition(), query.getAllele()
-            ));
-            res = httpUtils.executeRequest(httpGet);
-        } catch (MalformedURLException ex) {
+            res = HttpUtils.executeRequest(HttpUtils.createRequest(getQueryUrl(query.getReference().toString(), query.getChromosome().toString(), query.getPosition(), query.getAllele()), false, null));
+        } catch (MalformedURLException | UnsupportedEncodingException ex) {
             // ignore, already null
         }
 
@@ -91,13 +78,13 @@ public class KaviarBeaconService extends AbstractBeaconService {
     @Override
     @Asynchronous
     public Future<Boolean> parseQueryResponse(String response) {
-        Boolean res = parsingUtils.parseYesNoCaseInsensitive(response);
+        Boolean res = ParsingUtils.parseYesNoCaseInsensitive(response);
 
         return new AsyncResult<>(res);
     }
 
     @Override
-    public Set<String> getSupportedReferences() {
+    public Set<Reference> getSupportedReferences() {
         return SUPPORTED_REFS;
     }
 }

@@ -24,12 +24,16 @@
 package com.dnastack.beacon.util;
 
 import java.io.IOException;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -41,11 +45,42 @@ import org.apache.http.util.EntityUtils;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Named
-@RequestScoped
 public class HttpUtils {
 
-    public String executeRequest(HttpRequestBase request) {
+    private static HttpGet createGet(String url) {
+        HttpGet httpGet;
+        httpGet = new HttpGet(url);
+
+        return httpGet;
+    }
+
+    private static HttpPost createPost(String url, List<NameValuePair> data) throws UnsupportedEncodingException {
+        HttpPost httpPost = new HttpPost(url);
+        httpPost.setEntity(new UrlEncodedFormEntity(data));
+
+        return httpPost;
+    }
+
+    /**
+     * Creates a GET/POST request object.
+     *
+     * @param url url
+     * @param post true if we want to create a POST, false for GET
+     * @param data payload (only needed for POST)
+     * @return request
+     * @throws UnsupportedEncodingException
+     */
+    public static HttpRequestBase createRequest(String url, boolean post, List<NameValuePair> data) throws UnsupportedEncodingException {
+        return (post) ? createPost(url, data) : createGet(url);
+    }
+
+    /**
+     * Executes GET/POST and obtain the response.
+     *
+     * @param request request
+     * @return response
+     */
+    public static String executeRequest(HttpRequestBase request) {
         String response = null;
 
         CloseableHttpClient httpclient = HttpClients.createDefault();

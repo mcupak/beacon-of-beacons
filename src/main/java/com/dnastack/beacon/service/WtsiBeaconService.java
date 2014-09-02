@@ -25,10 +25,12 @@ package com.dnastack.beacon.service;
 
 import com.dnastack.beacon.core.Beacon;
 import com.dnastack.beacon.core.Query;
+import com.dnastack.beacon.core.Reference;
 import com.dnastack.beacon.util.HttpUtils;
 import com.dnastack.beacon.util.ParsingUtils;
 import com.dnastack.beacon.util.QueryUtils;
 import com.google.common.collect.ImmutableSet;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.util.Set;
 import java.util.concurrent.Future;
@@ -36,8 +38,6 @@ import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
-import org.apache.http.client.methods.HttpGet;
 
 /**
  * WTSI beacon service.
@@ -54,16 +54,7 @@ public class WtsiBeaconService extends AbstractBeaconService {
     private static final String BASE_URL = "http://www.sanger.ac.uk/sanger/GA4GH_Beacon";
     private static final String PARAM_TEMPLATE_ASSEMBLY = "?src=all&ass=%s&chr=%s&pos=%d&all=%s";
     private static final String PARAM_TEMPLATE = "?src=all&chr=%s&pos=%d&all=%s";
-    private static final Set<String> SUPPORTED_REFS = ImmutableSet.of("hg19");
-
-    @Inject
-    private HttpUtils httpUtils;
-
-    @Inject
-    private ParsingUtils parsingUtils;
-
-    @Inject
-    private QueryUtils queryUtils;
+    private static final Set<Reference> SUPPORTED_REFS = ImmutableSet.of(Reference.HG19);
 
     private String getQueryUrl(String ref, String chrom, Long pos, String allele) throws MalformedURLException {
         String params;
@@ -80,12 +71,9 @@ public class WtsiBeaconService extends AbstractBeaconService {
     @Asynchronous
     public Future<String> getQueryResponse(Beacon beacon, Query query) {
         String res = null;
-
-        HttpGet httpGet;
         try {
-            httpGet = new HttpGet(getQueryUrl(queryUtils.denormalizeReference(query.getReference()), query.getChromosome(), queryUtils.denormalizePosition(query.getPosition()), query.getAllele()));
-            res = httpUtils.executeRequest(httpGet);
-        } catch (MalformedURLException ex) {
+            res = HttpUtils.executeRequest(HttpUtils.createRequest(getQueryUrl(QueryUtils.denormalizeReference(query.getReference()), query.getChromosome().toString(), QueryUtils.denormalizePosition(query.getPosition()), query.getAllele()), false, null));
+        } catch (MalformedURLException | UnsupportedEncodingException ex) {
             // ignore, already null
         }
 
@@ -95,10 +83,10 @@ public class WtsiBeaconService extends AbstractBeaconService {
     @Override
     @Asynchronous
     public Future<Boolean> parseQueryResponse(String response) {
-        Boolean res = parsingUtils.parseYesNoCaseInsensitive(response);
+        Boolean res = ParsingUtils.parseYesNoCaseInsensitive(response);
         if (res == null) {
             // ref response is treated as false
-            Boolean isRef = parsingUtils.parseRef(response);
+            Boolean isRef = ParsingUtils.parseRef(response);
             if (isRef != null && isRef) {
                 res = false;
             }
@@ -108,7 +96,7 @@ public class WtsiBeaconService extends AbstractBeaconService {
     }
 
     @Override
-    public Set<String> getSupportedReferences() {
+    public Set<Reference> getSupportedReferences() {
         return SUPPORTED_REFS;
     }
 }

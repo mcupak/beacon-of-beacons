@@ -25,6 +25,7 @@ package com.dnastack.beacon.service;
 
 import com.dnastack.beacon.core.Beacon;
 import com.dnastack.beacon.core.Query;
+import com.dnastack.beacon.core.Reference;
 import com.dnastack.beacon.util.HttpUtils;
 import com.dnastack.beacon.util.QueryUtils;
 import com.google.common.collect.ImmutableSet;
@@ -37,10 +38,7 @@ import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 
 /**
@@ -56,13 +54,7 @@ public class EbiBeaconService extends AbstractBeaconService {
 
     private static final long serialVersionUID = 11L;
     private static final String BASE_URL = "http://www.ebi.ac.uk/eva/beacon";
-    private static final Set<String> SUPPORTED_REFS = ImmutableSet.of("hg19");
-
-    @Inject
-    private HttpUtils httpUtils;
-
-    @Inject
-    private QueryUtils queryUtils;
+    private static final Set<Reference> SUPPORTED_REFS = ImmutableSet.of(Reference.HG19);
 
     private List<NameValuePair> getQueryData(String chrom, Long pos, String allele) {
         List<NameValuePair> nvs = new ArrayList<>();
@@ -83,11 +75,8 @@ public class EbiBeaconService extends AbstractBeaconService {
     @Asynchronous
     public Future<String> getQueryResponse(Beacon beacon, Query query) {
         String res = null;
-
-        HttpPost httpPost = new HttpPost(BASE_URL);
         try {
-            httpPost.setEntity(new UrlEncodedFormEntity(getQueryData(queryUtils.makeChromXYLowercase(query.getChromosome()), queryUtils.denormalizePosition(query.getPosition()), queryUtils.denormalizeAllele(query.getAllele()))));
-            res = httpUtils.executeRequest(httpPost);
+            res = HttpUtils.executeRequest(HttpUtils.createRequest(BASE_URL, true, getQueryData(QueryUtils.makeChromXYLowercase(query.getChromosome()), QueryUtils.denormalizePosition(query.getPosition()), QueryUtils.denormalizeAllele(query.getAllele()))));
         } catch (UnsupportedEncodingException ex) {
             // ignore, already null
         }
@@ -116,7 +105,7 @@ public class EbiBeaconService extends AbstractBeaconService {
     }
 
     @Override
-    public Set<String> getSupportedReferences() {
+    public Set<Reference> getSupportedReferences() {
         return SUPPORTED_REFS;
     }
 }

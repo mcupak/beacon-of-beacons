@@ -43,6 +43,7 @@ import org.junit.runner.RunWith;
  * @version 1.0
  */
 @RunWith(Arquillian.class)
+@RunAsClient
 public class HelpTest extends BasicTest {
 
     public static final String HELP_TEMPLATE = "rest";
@@ -68,7 +69,6 @@ public class HelpTest extends BasicTest {
     }
 
     @Test
-    @RunAsClient
     public void testHelp(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         List<RestEndPoint> rs = readRestEndPoints(url.toExternalForm() + getUrl());
 

@@ -47,6 +47,7 @@ import org.junit.runner.RunWith;
  * @version 1.0
  */
 @RunWith(Arquillian.class)
+@RunAsClient
 public class BeaconsTest extends BasicTest {
 
     public static final String BEACONS_TEMPLATE = "rest/beacons";
@@ -84,7 +85,6 @@ public class BeaconsTest extends BasicTest {
     }
 
     @Test
-    @RunAsClient
     public void testAllBeacons(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         List<Beacon> bs = readBeacons(url.toExternalForm() + getUrl());
 
@@ -95,7 +95,6 @@ public class BeaconsTest extends BasicTest {
     }
 
     @Test
-    @RunAsClient
     public void testBeaconsFilteredForClinvar(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         Beacon b = new Beacon("clinvar", "NCBI ClinVar");
         Beacon c = readBeacons(url.toExternalForm() + getUrl(b, true)).get(0);
@@ -105,7 +104,6 @@ public class BeaconsTest extends BasicTest {
     }
 
     @Test
-    @RunAsClient
     public void testBeaconsFilteredForUniprot(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         Beacon b = new Beacon("uniprot", "UniProt");
         Beacon c = readBeacons(url.toExternalForm() + getUrl(b, true)).get(0);
@@ -115,7 +113,6 @@ public class BeaconsTest extends BasicTest {
     }
 
     @Test
-    @RunAsClient
     public void testBeaconsFilteredForLovd(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         Beacon b = new Beacon("lovd", "Leiden Open Variation");
         Beacon c = readBeacons(url.toExternalForm() + getUrl(b, true)).get(0);
@@ -125,7 +122,6 @@ public class BeaconsTest extends BasicTest {
     }
 
     @Test
-    @RunAsClient
     public void testBeaconsFilteredForAmplab(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         Beacon b = new Beacon("amplab", "AMPLab");
         Beacon c = readBeacons(url.toExternalForm() + getUrl(b, true)).get(0);
@@ -135,7 +131,6 @@ public class BeaconsTest extends BasicTest {
     }
 
     @Test
-    @RunAsClient
     public void testBeaconsFilteredForNcbi(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         Beacon b = new Beacon("ncbi", "NCBI");
         Beacon c = readBeacons(url.toExternalForm() + getUrl(b, true)).get(0);
@@ -145,7 +140,6 @@ public class BeaconsTest extends BasicTest {
     }
 
     @Test
-    @RunAsClient
     public void testBeaconsFilteredForEbi(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         Beacon b = new Beacon("ebi", "EMBL-EBI");
         Beacon c = readBeacons(url.toExternalForm() + getUrl(b, true)).get(0);
@@ -155,7 +149,6 @@ public class BeaconsTest extends BasicTest {
     }
 
     @Test
-    @RunAsClient
     public void testBeaconsFilteredForWtsi(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         Beacon b = new Beacon("wtsi", "Wellcome Trust Sanger Institute");
         Beacon c = readBeacons(url.toExternalForm() + getUrl(b, true)).get(0);
@@ -165,7 +158,6 @@ public class BeaconsTest extends BasicTest {
     }
 
     @Test
-    @RunAsClient
     public void testBeaconsFilteredForBob(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         Beacon b = new Beacon("bob", "beacon of beacons");
         Beacon c = readBeacons(url.toExternalForm() + getUrl(b, true)).get(0);
@@ -175,7 +167,6 @@ public class BeaconsTest extends BasicTest {
     }
 
     @Test
-    @RunAsClient
     public void testBeaconClinvar(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         Beacon b = new Beacon("clinvar", "NCBI ClinVar");
         Beacon c = readBeacon(url.toExternalForm() + getUrl(b, false));
@@ -185,7 +176,6 @@ public class BeaconsTest extends BasicTest {
     }
 
     @Test
-    @RunAsClient
     public void testBeaconUniprot(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         Beacon b = new Beacon("uniprot", "UniProt");
         Beacon c = readBeacon(url.toExternalForm() + getUrl(b, false));
@@ -195,7 +185,6 @@ public class BeaconsTest extends BasicTest {
     }
 
     @Test
-    @RunAsClient
     public void testBeaconLovd(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         Beacon b = new Beacon("lovd", "Leiden Open Variation");
         Beacon c = readBeacon(url.toExternalForm() + getUrl(b, false));
@@ -205,7 +194,6 @@ public class BeaconsTest extends BasicTest {
     }
 
     @Test
-    @RunAsClient
     public void testBeaconAmplab(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         Beacon b = new Beacon("amplab", "AMPLab");
         Beacon c = readBeacon(url.toExternalForm() + getUrl(b, false));
@@ -215,7 +203,6 @@ public class BeaconsTest extends BasicTest {
     }
 
     @Test
-    @RunAsClient
     public void testBeaconNcbi(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         Beacon b = new Beacon("ncbi", "NCBI");
         Beacon c = readBeacon(url.toExternalForm() + getUrl(b, false));
@@ -225,7 +212,6 @@ public class BeaconsTest extends BasicTest {
     }
 
     @Test
-    @RunAsClient
     public void testBeaconEbi(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         Beacon b = new Beacon("ebi", "EMBL-EBI");
         Beacon c = readBeacon(url.toExternalForm() + getUrl(b, false));
@@ -235,7 +221,6 @@ public class BeaconsTest extends BasicTest {
     }
 
     @Test
-    @RunAsClient
     public void testBeaconWtsi(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         Beacon b = new Beacon("wtsi", "Wellcome Trust Sanger Institute");
         Beacon c = readBeacon(url.toExternalForm() + getUrl(b, false));
@@ -245,7 +230,6 @@ public class BeaconsTest extends BasicTest {
     }
 
     @Test
-    @RunAsClient
     public void testBeaconBob(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         Beacon b = new Beacon("bob", "beacon of beacons");
         Beacon c = readBeacon(url.toExternalForm() + getUrl(b, false));
@@ -253,5 +237,4 @@ public class BeaconsTest extends BasicTest {
         assertNotNull(c);
         assertEquals(b, c);
     }
-
 }

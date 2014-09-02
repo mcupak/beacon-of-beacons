@@ -23,8 +23,6 @@
  */
 package com.dnastack.beacon.util;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,8 +32,6 @@ import org.json.JSONObject;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Named
-@RequestScoped
 public class ParsingUtils {
 
     /**
@@ -46,7 +42,7 @@ public class ParsingUtils {
      * @param falseString string reporting a negative query result
      * @return true if the response contains trueString, false if the response contains falseString, null otherwise
      */
-    public Boolean parseContainsStringCaseInsensitive(String response, String trueString, String falseString) {
+    public static Boolean parseContainsStringCaseInsensitive(String response, String trueString, String falseString) {
         if (response == null) {
             return null;
         }
@@ -70,7 +66,7 @@ public class ParsingUtils {
      * @param falseString string reporting a negative query result
      * @return true if the response contains trueString, false if the response contains falseString, null otherwise
      */
-    public Boolean parseStartsWithStringCaseInsensitive(String response, String trueString, String falseString) {
+    public static Boolean parseStartsWithStringCaseInsensitive(String response, String trueString, String falseString) {
         if (response == null) {
             return null;
         }
@@ -92,7 +88,7 @@ public class ParsingUtils {
      * @param response response
      * @return true if the response is yes, false if the response is no, null otherwise
      */
-    public Boolean parseYesNoCaseInsensitive(String response) {
+    public static Boolean parseYesNoCaseInsensitive(String response) {
         return parseStartsWithStringCaseInsensitive(response, "yes", "no");
     }
 
@@ -102,7 +98,7 @@ public class ParsingUtils {
      * @param response response
      * @return true if the response is ref, false otherwise, null if there are problems
      */
-    public Boolean parseRef(String response) {
+    public static Boolean parseRef(String response) {
         if (response == null) {
             return null;
         }
@@ -117,7 +113,7 @@ public class ParsingUtils {
      * @param field field name
      * @return field value if it is true/false, null otherwise
      */
-    public Boolean parseBooleanFromJson(String response, String field) {
+    public static Boolean parseBooleanFromJson(String response, String field) {
         if (response == null) {
             return null;
         }

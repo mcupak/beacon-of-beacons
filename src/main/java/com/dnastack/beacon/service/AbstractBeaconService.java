@@ -27,6 +27,7 @@ import com.dnastack.beacon.core.Beacon;
 import com.dnastack.beacon.core.BeaconResponse;
 import com.dnastack.beacon.core.BeaconService;
 import com.dnastack.beacon.core.Query;
+import com.dnastack.beacon.core.Reference;
 import com.dnastack.beacon.log.Logged;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public abstract class AbstractBeaconService implements BeaconService, Serializab
         List<Future<String>> fs = new ArrayList<>();
         if (query.getReference() == null) {
             // query all refs
-            for (String ref : getSupportedReferences()) {
+            for (Reference ref : getSupportedReferences()) {
                 fs.add(getQueryResponse(beacon, new Query(query.getChromosome(), query.getPosition(), query.getAllele(), ref)));
             }
         } else if (getSupportedReferences().contains(query.getReference())) {

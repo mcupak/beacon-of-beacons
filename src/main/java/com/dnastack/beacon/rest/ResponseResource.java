@@ -62,9 +62,6 @@ public class ResponseResource {
     private BeaconProvider beaconProvider;
 
     @Inject
-    private QueryUtils queryUtils;
-
-    @Inject
     @Bob
     private Beacon bob;
 
@@ -92,7 +89,7 @@ public class ResponseResource {
     @GET
     @Path("/bob")
     public BeaconResponse queryBob(@QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele, @QueryParam("ref") String ref) {
-        Query q = queryUtils.normalizeQuery(new Query(chrom, pos, allele, ref));
+        Query q = QueryUtils.constructQuery(chrom, pos, allele, ref);
         BeaconResponse br = new BeaconResponse(bob, q, null);
 
         if (querySuccessfullyNormalizedAndValid(q, ref)) {
@@ -136,7 +133,7 @@ public class ResponseResource {
     @GET
     @Path("/{beaconId}")
     public BeaconResponse queryBeacon(@PathParam("beaconId") String beaconId, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele, @QueryParam("ref") String ref) {
-        Query q = queryUtils.normalizeQuery(new Query(chrom, pos, allele, ref));
+        Query q = QueryUtils.constructQuery(chrom, pos, allele, ref);
 
         Beacon b = beaconProvider.getBeacon(beaconId);
         if (b == null) {
@@ -168,7 +165,7 @@ public class ResponseResource {
      */
     @Logged
     public Collection<BeaconResponse> queryAll(String chrom, Long pos, String allele, String ref) {
-        Query q = queryUtils.normalizeQuery(new Query(chrom, pos, allele, ref));
+        Query q = QueryUtils.constructQuery(chrom, pos, allele, ref);
 
         // init to create a response for each beacon even if the query is invalid
         Map<Beacon, BeaconResponse> brs = new HashMap<>();

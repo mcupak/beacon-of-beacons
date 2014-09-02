@@ -33,7 +33,6 @@ import javax.xml.transform.stream.StreamSource;
 import org.eclipse.persistence.jaxb.JAXBContextProperties;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.archive.importer.MavenImporter;
 import org.junit.Rule;
@@ -63,9 +62,8 @@ public abstract class BasicTest {
                 .loadPomFromFile("pom.xml").importBuildOutput().as(WebArchive.class)
                 .addClasses(BasicTest.class, AbstractResponseTest.class)
                 .addAsResource(new File("src/main/resources/com/dnastack/beacon/core/jaxb.properties"))
-                .addAsResource(new File("src/main/resources/com/dnastack/beacon/rest/jaxb.properties"))
-                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");;
-        System.out.println(war.getName());
+                .addAsResource(new File("src/main/resources/com/dnastack/beacon/rest/jaxb.properties"));
+        System.out.println("WAR name: " + war.getName());
 
         return war;
     }

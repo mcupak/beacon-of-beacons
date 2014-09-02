@@ -43,8 +43,7 @@ public class Query implements Serializable {
     private static final long serialVersionUID = 3L;
 
     @NotNull
-    @Pattern(regexp = "([0-9])|(1[0-9])|(2[0-2])|([X,Y])|(MT)")
-    private String chromosome;
+    private Chromosome chromosome;
     @NotNull
     @Min(0L)
     @Max(300000000L)
@@ -52,24 +51,24 @@ public class Query implements Serializable {
     @NotNull
     @Pattern(regexp = "([D,I])|([A,C,T,G]+)")
     private String allele;
-    private String reference;
+    private Reference reference;
 
     public Query() {
         // needed for JAXB
     }
 
-    public Query(String chromosome, Long position, String allele, String reference) {
+    public Query(Chromosome chromosome, Long position, String allele, Reference reference) {
         this.chromosome = chromosome;
         this.position = position;
         this.allele = allele;
         this.reference = reference;
     }
 
-    public String getChromosome() {
+    public Chromosome getChromosome() {
         return chromosome;
     }
 
-    public void setChromosome(String chromosome) {
+    public void setChromosome(Chromosome chromosome) {
         this.chromosome = chromosome;
     }
 
@@ -89,21 +88,21 @@ public class Query implements Serializable {
         this.allele = allele;
     }
 
-    public String getReference() {
+    public Reference getReference() {
         return reference;
     }
 
-    public void setReference(String reference) {
+    public void setReference(Reference reference) {
         this.reference = reference;
     }
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 79 * hash + Objects.hashCode(this.chromosome);
-        hash = 79 * hash + Objects.hashCode(this.position);
-        hash = 79 * hash + Objects.hashCode(this.allele);
-        hash = 79 * hash + Objects.hashCode(this.reference);
+        int hash = 3;
+        hash = 89 * hash + Objects.hashCode(this.chromosome);
+        hash = 89 * hash + Objects.hashCode(this.position);
+        hash = 89 * hash + Objects.hashCode(this.allele);
+        hash = 89 * hash + Objects.hashCode(this.reference);
         return hash;
     }
 
@@ -116,7 +115,7 @@ public class Query implements Serializable {
             return false;
         }
         final Query other = (Query) obj;
-        if (!Objects.equals(this.chromosome, other.chromosome)) {
+        if (this.chromosome != other.chromosome) {
             return false;
         }
         if (!Objects.equals(this.position, other.position)) {
@@ -125,7 +124,7 @@ public class Query implements Serializable {
         if (!Objects.equals(this.allele, other.allele)) {
             return false;
         }
-        if (!Objects.equals(this.reference, other.reference)) {
+        if (this.reference != other.reference) {
             return false;
         }
         return true;

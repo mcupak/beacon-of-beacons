@@ -23,13 +23,13 @@
  */
 package com.dnastack.beacon.util;
 
+import com.dnastack.beacon.core.Chromosome;
 import com.dnastack.beacon.core.Query;
+import com.dnastack.beacon.core.Reference;
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
 
 /**
  * Utils for query manipulation.
@@ -37,13 +37,9 @@ import javax.inject.Named;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Named
-@RequestScoped
 public class QueryUtils {
 
-    // order is important!
-    private static final String[] CHROM_VALS = {"22", "21", "20", "19", "18", "17", "16", "15", "14", "13", "12", "11", "10", "9", "8", "7", "6", "5", "4", "3", "2", "1", "X", "Y", "MT"};
-    private static final Map<String, String> chromMapping = ImmutableMap.of("hg38", "GRCh38", "hg19", "GRCh37", "hg18", "NCBI36", "hg17", "NCBI35", "hg16", "NCBI34");
+    private static final Map<Reference, String> chromMapping = ImmutableMap.of(Reference.HG38, "GRCh38", Reference.HG19, "GRCh37", Reference.HG18, "NCBI36", Reference.HG17, "NCBI35", Reference.HG16, "NCBI34");
 
     /**
      * Generates a canonical chrom ID.
@@ -51,19 +47,18 @@ public class QueryUtils {
      * @param chrom chromosome
      * @return normalized chromosome value
      */
-    public String normalizeChromosome(String chrom) {
+    public static Chromosome normalizeChromosome(String chrom) {
         // parse chrom value
-        String res = null;
         if (chrom != null) {
             String orig = chrom.toUpperCase();
-            for (String s : CHROM_VALS) {
-                if (orig.endsWith(s)) {
-                    return s;
+            for (Chromosome c : Chromosome.values()) {
+                if (orig.endsWith(c.toString())) {
+                    return c;
                 }
             }
         }
 
-        return res;
+        return null;
     }
 
     /**
@@ -73,7 +68,7 @@ public class QueryUtils {
      * @param chrom canonical chromosome
      * @return denormalized chromosome value
      */
-    public String denormalizeChromosome(String template, String chrom) {
+    public static String denormalizeChromosome(String template, Chromosome chrom) {
         return String.format(template, chrom);
     }
 
@@ -83,11 +78,11 @@ public class QueryUtils {
      * @param c chromosome
      * @return denormalized chromosome
      */
-    public String makeChromXYLowercase(String c) {
-        if ("X".equals(c) || "Y".equals(c)) {
-            return c.toLowerCase();
+    public static String makeChromXYLowercase(Chromosome c) {
+        if ("X".equals(c.toString()) || "Y".equals(c.toString())) {
+            return c.toString().toLowerCase();
         }
-        return c;
+        return c.toString();
     }
 
     /**
@@ -96,7 +91,7 @@ public class QueryUtils {
      * @param pos 1-based position
      * @return 0-based position
      */
-    public Long normalizePosition(Long pos) {
+    public static Long normalizePosition(Long pos) {
         if (pos == null) {
             return null;
         }
@@ -109,7 +104,7 @@ public class QueryUtils {
      * @param pos 0-based position
      * @return 1-based position
      */
-    public Long denormalizePosition(Long pos) {
+    public static Long denormalizePosition(Long pos) {
         if (pos == null) {
             return null;
         }
@@ -122,7 +117,7 @@ public class QueryUtils {
      * @param allele denormalized allele
      * @return normalized allele
      */
-    public String normalizeAllele(String allele) {
+    public static String normalizeAllele(String allele) {
         if (allele == null || allele.isEmpty()) {
             return null;
         }
@@ -144,7 +139,7 @@ public class QueryUtils {
      * @param allele normalized allele
      * @return denormalized allele
      */
-    public String denormalizeAllele(String allele) {
+    public static String denormalizeAllele(String allele) {
         if (allele == null || allele.isEmpty()) {
             return null;
         }
@@ -166,19 +161,18 @@ public class QueryUtils {
      * @param ref denormalized genome
      * @return normalized genome
      */
-    public String normalizeReference(String ref) {
+    public static Reference normalizeReference(String ref) {
         if (ref == null || ref.isEmpty()) {
             return null;
         }
 
-        String res = ref.toLowerCase();
-        for (String s : chromMapping.keySet()) {
-            if (s.toLowerCase().equals(ref)) {
+        for (Reference s : chromMapping.keySet()) {
+            if (s.toString().equalsIgnoreCase(ref)) {
                 return s;
             }
         }
-        for (Entry<String, String> e : chromMapping.entrySet()) {
-            if (e.getValue().toLowerCase().equals(ref)) {
+        for (Entry<Reference, String> e : chromMapping.entrySet()) {
+            if (e.getValue().equalsIgnoreCase(ref)) {
                 return e.getKey();
             }
         }
@@ -192,33 +186,38 @@ public class QueryUtils {
      * @param ref normalized genome
      * @return denormalized genome
      */
-    public String denormalizeReference(String ref) {
-        if (ref == null || ref.isEmpty()) {
+    public static String denormalizeReference(Reference ref) {
+        if (ref == null) {
             return null;
         }
 
-        String res = ref.toLowerCase();
         for (String s : chromMapping.values()) {
-            if (s.toLowerCase().equals(ref)) {
+            if (s.equalsIgnoreCase(ref.toString())) {
                 return s;
             }
         }
-        for (Entry<String, String> e : chromMapping.entrySet()) {
-            if (e.getKey().toLowerCase().equals(ref)) {
+        for (Entry<Reference, String> e : chromMapping.entrySet()) {
+            if (e.getKey().equals(ref)) {
                 return e.getValue();
             }
         }
 
-        return res;
+        return ref.toString();
     }
 
     /**
      * Generates a canonical version of a query (field values normalized).
      *
-     * @param q query
+     * @param chrom chromosome
+     * @param pos position
+     * @param allele allele
+     * @param ref genome
      * @return normalized query
      */
-    public Query normalizeQuery(Query q) {
-        return new Query(normalizeChromosome(q.getChromosome()), q.getPosition(), normalizeAllele(q.getAllele()), normalizeReference(q.getReference()));
+    public static Query constructQuery(String chrom, Long pos, String allele, String ref) {
+        Chromosome c = normalizeChromosome(chrom);
+        Reference r = normalizeReference(ref);
+
+        return new Query(c == null ? null : c, pos, normalizeAllele(allele), r == null ? null : r);
     }
 }

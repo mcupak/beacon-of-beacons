@@ -25,6 +25,7 @@ package com.dnastack.beacon.service;
 
 import com.dnastack.beacon.core.Beacon;
 import com.dnastack.beacon.core.Query;
+import com.dnastack.beacon.core.Reference;
 import com.dnastack.beacon.util.HttpUtils;
 import com.dnastack.beacon.util.ParsingUtils;
 import com.dnastack.beacon.util.QueryUtils;
@@ -38,10 +39,7 @@ import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 
 /**
@@ -58,16 +56,7 @@ public class AmpLabBeaconService extends AbstractBeaconService {
     private static final long serialVersionUID = 10L;
     private static final String BASE_URL = "http://beacon.eecs.berkeley.edu/beacon.php";
     private static final String CHROM_TEMPLATE = "chr%s";
-    private static final Set<String> SUPPORTED_REFS = ImmutableSet.of("hg18", "hg19", "hg38");
-
-    @Inject
-    private HttpUtils httpUtils;
-
-    @Inject
-    private ParsingUtils parsingUtils;
-
-    @Inject
-    private QueryUtils queryUtils;
+    private static final Set<Reference> SUPPORTED_REFS = ImmutableSet.of(Reference.HG18, Reference.HG19, Reference.HG38);
 
     private List<NameValuePair> getQueryData(String ref, String chrom, Long pos, String allele) {
         List<NameValuePair> nvs = new ArrayList<>();
@@ -85,13 +74,10 @@ public class AmpLabBeaconService extends AbstractBeaconService {
     @Asynchronous
     public Future<String> getQueryResponse(Beacon beacon, Query query) {
         String res = null;
-
-        HttpPost httpPost = new HttpPost(BASE_URL);
         try {
-            httpPost.setEntity(new UrlEncodedFormEntity(getQueryData(query.getReference(), queryUtils.denormalizeChromosome(CHROM_TEMPLATE, query.getChromosome()), query.getPosition(), queryUtils.denormalizeAllele(query.getAllele()))));
-            res = httpUtils.executeRequest(httpPost);
+            res = HttpUtils.executeRequest(HttpUtils.createRequest(BASE_URL, true, getQueryData(query.getReference().toString(), QueryUtils.denormalizeChromosome(CHROM_TEMPLATE, query.getChromosome()), query.getPosition(), QueryUtils.denormalizeAllele(query.getAllele()))));
         } catch (UnsupportedEncodingException ex) {
-            // ignore, alredy null
+            // ignore, already null
         }
 
         return new AsyncResult<>(res);
@@ -100,13 +86,13 @@ public class AmpLabBeaconService extends AbstractBeaconService {
     @Override
     @Asynchronous
     public Future<Boolean> parseQueryResponse(String response) {
-        Boolean res = parsingUtils.parseContainsStringCaseInsensitive(response, "beacon found", "beacon cannot find");
+        Boolean res = ParsingUtils.parseContainsStringCaseInsensitive(response, "beacon found", "beacon cannot find");
 
         return new AsyncResult<>(res);
     }
 
     @Override
-    public Set<String> getSupportedReferences() {
+    public Set<Reference> getSupportedReferences() {
         return SUPPORTED_REFS;
     }
 }
