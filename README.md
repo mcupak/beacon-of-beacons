@@ -77,7 +77,7 @@ Response:
         },
         {
             "id": "kaviar",
-            "name": "Kaviar2"
+            "name": "Known VARiants"
         }
     ]
 
@@ -118,13 +118,33 @@ Response:
         },
         "query": {
             "allele": "T",
-            "chromosome": "1",
-            "position": 808921
+            "chromosome": "CHR1",
+            "position": 808921,
+            "reference": null
         },
         "response": true
     }
 
 As you can see, the beacon responded with its own info, the query details and a response field denoting whether a match was found (true) or not (false). Null value is used to describe a problem, e.g. an invalid query. Some beacons, for example, do not support allele strings of length>1 or X/Y chromosomes.
+By default, BoB queries all the genomes supported by the individual beacons. To query for a specific genome, use the (optional) ref parameter. Example:
+
+    http://localhost:8080/beacon-of-beacons/rest/responses/amplab?chrom=15&pos=41087869&allele=A&ref=hg19
+
+Response:
+
+    {
+        "beacon": {
+            "id": "amplab",
+            "name": "AMPLab"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR15",
+            "position": 41087869,
+            "reference": "HG19"
+        },
+        "response": true
+    }
 
 You can also query all the beacons at once. Example:
 
@@ -140,8 +160,9 @@ Response:
             },
             "query": {
                 "allele": "A",
-                "chromosome": "14",
-                "position": 106833420
+                "chromosome": "CHR14",
+                "position": 106833420,
+                "reference": null
             },
             "response": true
         },
@@ -152,10 +173,11 @@ Response:
             },
             "query": {
                 "allele": "A",
-                "chromosome": "14",
-                "position": 106833420
+                "chromosome": "CHR14",
+                "position": 106833420,
+                "reference": null
             },
-            "response": true
+            "response": false
         },
         {
             "beacon": {
@@ -164,8 +186,9 @@ Response:
             },
             "query": {
                 "allele": "A",
-                "chromosome": "14",
-                "position": 106833420
+                "chromosome": "CHR14",
+                "position": 106833420,
+                "reference": null
             },
             "response": false
         },
@@ -176,10 +199,11 @@ Response:
             },
             "query": {
                 "allele": "A",
-                "chromosome": "14",
-                "position": 106833420
+                "chromosome": "CHR14",
+                "position": 106833420,
+                "reference": null
             },
-            "response": false
+            "response": null
         },
         {
             "beacon": {
@@ -188,10 +212,11 @@ Response:
             },
             "query": {
                 "allele": "A",
-                "chromosome": "14",
-                "position": 106833420
+                "chromosome": "CHR14",
+                "position": 106833420,
+                "reference": null
             },
-            "response": false
+            "response": null
         },
         {
             "beacon": {
@@ -200,10 +225,24 @@ Response:
             },
             "query": {
                 "allele": "A",
-                "chromosome": "14",
-                "position": 106833420
+                "chromosome": "CHR14",
+                "position": 106833420,
+                "reference": null
             },
             "response": true
+        },
+        {
+            "beacon": {
+                "id": "kaviar",
+                "name": "Known VARiants"
+            },
+            "query": {
+                "allele": "A",
+                "chromosome": "CHR14",
+                "position": 106833420,
+                "reference": null
+            },
+            "response": false
         },
         {
             "beacon": {
@@ -212,8 +251,9 @@ Response:
             },
             "query": {
                 "allele": "A",
-                "chromosome": "14",
-                "position": 106833420
+                "chromosome": "CHR14",
+                "position": 106833420,
+                "reference": null
             },
             "response": true
         }
@@ -233,8 +273,9 @@ Response:
             },
             "query": {
                 "allele": "A",
-                "chromosome": "14",
-                "position": 106833420
+                "chromosome": "CHR14",
+                "position": 106833420,
+                "reference": null
             },
             "response": true
         }
@@ -264,8 +305,9 @@ Response:
         },
         "query": {
             "allele": "D",
-            "chromosome": "14",
-            "position": 106833420
+            "chromosome": "CHR14",
+            "position": 106833420,
+            "reference": null
         },
         "response": true
     }
