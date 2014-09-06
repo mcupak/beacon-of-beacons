@@ -28,6 +28,7 @@ import com.dnastack.beacon.core.Query;
 import com.dnastack.beacon.core.Reference;
 import com.dnastack.beacon.util.HttpUtils;
 import com.dnastack.beacon.util.ParsingUtils;
+import com.dnastack.beacon.util.QueryUtils;
 import com.google.common.collect.ImmutableSet;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -67,7 +68,7 @@ public class KaviarBeaconService extends AbstractBeaconService {
 
         // should be POST, but the server accepts GET as well
         try {
-            res = HttpUtils.executeRequest(HttpUtils.createRequest(getQueryUrl(query.getReference().toString(), query.getChromosome().toString(), query.getPosition(), query.getAllele()), false, null));
+            res = HttpUtils.executeRequest(HttpUtils.createRequest(getQueryUrl(query.getReference().toString(), query.getChromosome().toString(), QueryUtils.denormalizePosition(query.getPosition()), query.getAllele()), false, null));
         } catch (MalformedURLException | UnsupportedEncodingException ex) {
             // ignore, already null
         }

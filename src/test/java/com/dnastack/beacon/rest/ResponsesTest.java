@@ -101,7 +101,7 @@ public class ResponsesTest extends BasicTest {
 
     @Test
     public void testAllResponses(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Query q = QueryUtils.constructQuery("13", 32888798L, "G", null);
+        Query q = QueryUtils.constructQuery("13", 32888799L, "G", null);
         List<BeaconResponse> brs = readResponses(url.toExternalForm() + getUrl(q));
 
         assertEquals(brs.size(), beacons.size());
@@ -113,7 +113,7 @@ public class ResponsesTest extends BasicTest {
 
     @Test
     public void testAllResponsesWithSpecificRef(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Query q = QueryUtils.constructQuery("13", 32888798L, "G", "hg19");
+        Query q = QueryUtils.constructQuery("13", 32888799L, "G", "hg19");
         List<BeaconResponse> brs = readResponses(url.toExternalForm() + getUrl(q));
 
         assertEquals(brs.size(), beacons.size());
@@ -127,7 +127,7 @@ public class ResponsesTest extends BasicTest {
     @Test
     public void testSpecificResponseWithSpecificRef(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         Beacon b = new Beacon("clinvar", "NCBI ClinVar");
-        Query q = QueryUtils.constructQuery("1", 10042537L, "T", "hg19");
+        Query q = QueryUtils.constructQuery("1", 10042538L, "T", "hg19");
         BeaconResponse br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
@@ -139,7 +139,7 @@ public class ResponsesTest extends BasicTest {
     @Test
     public void testResponsesFilteredForClinvar(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         Beacon b = new Beacon("clinvar", "NCBI ClinVar");
-        Query q = QueryUtils.constructQuery("1", 10042537L, "T", null);
+        Query q = QueryUtils.constructQuery("1", 10042538L, "T", null);
         BeaconResponse br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
@@ -151,7 +151,7 @@ public class ResponsesTest extends BasicTest {
     @Test
     public void testResponsesFilteredForUniprot(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         Beacon b = new Beacon("uniprot", "UniProt");
-        Query q = QueryUtils.constructQuery("1", 977027L, "T", null);
+        Query q = QueryUtils.constructQuery("1", 977028L, "T", null);
         BeaconResponse br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
@@ -163,7 +163,7 @@ public class ResponsesTest extends BasicTest {
     @Test
     public void testResponsesFilteredForLovd(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         Beacon b = new Beacon("lovd", "Leiden Open Variation");
-        Query q = QueryUtils.constructQuery("1", 808921L, "T", null);
+        Query q = QueryUtils.constructQuery("1", 808922L, "T", null);
         BeaconResponse br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
@@ -175,7 +175,7 @@ public class ResponsesTest extends BasicTest {
     @Test
     public void testResponsesFilteredForAmplab(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         Beacon b = new Beacon("amplab", "AMPLab");
-        Query q = QueryUtils.constructQuery("15", 41087869L, "A", null);
+        Query q = QueryUtils.constructQuery("15", 41087870L, "A", null);
         BeaconResponse br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
@@ -187,7 +187,7 @@ public class ResponsesTest extends BasicTest {
     @Test
     public void testResponsesFilteredForKaviar(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         Beacon b = new Beacon("kaviar", "Known VARiants");
-        Query q = QueryUtils.constructQuery("1", 808921L, "A", null);
+        Query q = QueryUtils.constructQuery("1", 808922L, "A", null);
         BeaconResponse br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
@@ -199,7 +199,7 @@ public class ResponsesTest extends BasicTest {
     @Test
     public void testResponsesFilteredForNcbi(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         Beacon b = new Beacon("ncbi", "NCBI");
-        Query q = QueryUtils.constructQuery("22", 17213589L, "TGTTA", null);
+        Query q = QueryUtils.constructQuery("22", 17213590L, "TGTTA", null);
         BeaconResponse br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
@@ -211,7 +211,7 @@ public class ResponsesTest extends BasicTest {
     @Test
     public void testResponsesFilteredForEbi(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         Beacon b = new Beacon("ebi", "EMBL-EBI");
-        Query q = QueryUtils.constructQuery("13", 32888798L, "G", null);
+        Query q = QueryUtils.constructQuery("13", 32888799L, "G", null);
         BeaconResponse br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
@@ -223,7 +223,7 @@ public class ResponsesTest extends BasicTest {
     @Test
     public void testResponsesFilteredForWtsi(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         Beacon b = new Beacon("wtsi", "Wellcome Trust Sanger Institute");
-        Query q = QueryUtils.constructQuery("X", 41087869L, "A", null);
+        Query q = QueryUtils.constructQuery("X", 41087870L, "A", null);
         BeaconResponse br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
@@ -235,7 +235,7 @@ public class ResponsesTest extends BasicTest {
     @Test
     public void testResponsesFilteredForBob(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         Beacon b = new Beacon("bob", "beacon of beacons");
-        Query q = QueryUtils.constructQuery("13", 32888798L, "G", null);
+        Query q = QueryUtils.constructQuery("13", 32888799L, "G", null);
         BeaconResponse br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);

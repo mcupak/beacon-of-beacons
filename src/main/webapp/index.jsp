@@ -28,10 +28,10 @@
             <li><a href="<%= request.getRequestURL()%>rest/beacons"><%= request.getRequestURL()%>rest/beacons</a></li>
             <li><a href="<%= request.getRequestURL()%>rest/beacons/bob"><%= request.getRequestURL()%>rest/beacons/bob</a></li>
             <li><a href="<%= request.getRequestURL()%>rest/beacons?beacon=wtsi"><%= request.getRequestURL()%>rest/beacons?beacon=wtsi</a></li>
-            <li><a href="<%= request.getRequestURL()%>rest/responses?chrom=14&pos=106833420&allele=A"><%= request.getRequestURL()%>rest/responses?chrom=14&pos=106833420&allele=A</a></li>
-            <li><a href="<%= request.getRequestURL()%>rest/responses/amplab?chrom=15&pos=41087869&allele=A&ref=hg19"><%= request.getRequestURL()%>rest/responses/amplab?chrom=15&pos=41087869&allele=A&ref=hg19</a></li>
-            <li><a href="<%= request.getRequestURL()%>rest/responses/bob?chrom=14&pos=106833420&allele=D"><%= request.getRequestURL()%>rest/responses/bob?chrom=14&pos=106833420&allele=D</a></li>
-            <li><a href="<%= request.getRequestURL()%>rest/responses?chrom=14&pos=106833420&allele=A&beacon=amplab"><%= request.getRequestURL()%>rest/responses?chrom=14&pos=106833420&allele=A&beacon=amplab</a></li>
+            <li><a href="<%= request.getRequestURL()%>rest/responses?chrom=14&pos=106833421&allele=A"><%= request.getRequestURL()%>rest/responses?chrom=14&pos=106833421&allele=A</a></li>
+            <li><a href="<%= request.getRequestURL()%>rest/responses/amplab?chrom=15&pos=41087870&allele=A&ref=hg19"><%= request.getRequestURL()%>rest/responses/amplab?chrom=15&pos=41087870&allele=A&ref=hg19</a></li>
+            <li><a href="<%= request.getRequestURL()%>rest/responses/bob?chrom=14&pos=106833421&allele=D"><%= request.getRequestURL()%>rest/responses/bob?chrom=14&pos=106833421&allele=D</a></li>
+            <li><a href="<%= request.getRequestURL()%>rest/responses?chrom=14&pos=106833421&allele=A&beacon=amplab"><%= request.getRequestURL()%>rest/responses?chrom=14&pos=106833421&allele=A&beacon=amplab</a></li>
         </ul>
     </body>
 </html>

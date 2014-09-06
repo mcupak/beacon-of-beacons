@@ -72,7 +72,7 @@ public class WtsiBeaconService extends AbstractBeaconService {
     public Future<String> getQueryResponse(Beacon beacon, Query query) {
         String res = null;
         try {
-            res = HttpUtils.executeRequest(HttpUtils.createRequest(getQueryUrl(QueryUtils.denormalizeReference(query.getReference()), query.getChromosome().toString(), QueryUtils.denormalizePosition(query.getPosition()), query.getAllele()), false, null));
+            res = HttpUtils.executeRequest(HttpUtils.createRequest(getQueryUrl(QueryUtils.denormalizeReference(query.getReference()), query.getChromosome().toString(), query.getPosition(), query.getAllele()), false, null));
         } catch (MalformedURLException | UnsupportedEncodingException ex) {
             // ignore, already null
         }

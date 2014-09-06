@@ -75,7 +75,7 @@ public class AmpLabBeaconService extends AbstractBeaconService {
     public Future<String> getQueryResponse(Beacon beacon, Query query) {
         String res = null;
         try {
-            res = HttpUtils.executeRequest(HttpUtils.createRequest(BASE_URL, true, getQueryData(query.getReference().toString(), QueryUtils.denormalizeChromosome(CHROM_TEMPLATE, query.getChromosome()), query.getPosition(), QueryUtils.denormalizeAllele(query.getAllele()))));
+            res = HttpUtils.executeRequest(HttpUtils.createRequest(BASE_URL, true, getQueryData(query.getReference().toString(), QueryUtils.denormalizeChromosome(CHROM_TEMPLATE, query.getChromosome()), QueryUtils.denormalizePosition(query.getPosition()), QueryUtils.denormalizeAllele(query.getAllele()))));
         } catch (UnsupportedEncodingException ex) {
             // ignore, already null
         }

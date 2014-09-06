@@ -76,7 +76,7 @@ public class EbiBeaconService extends AbstractBeaconService {
     public Future<String> getQueryResponse(Beacon beacon, Query query) {
         String res = null;
         try {
-            res = HttpUtils.executeRequest(HttpUtils.createRequest(BASE_URL, true, getQueryData(QueryUtils.makeChromXYLowercase(query.getChromosome()), QueryUtils.denormalizePosition(query.getPosition()), QueryUtils.denormalizeAllele(query.getAllele()))));
+            res = HttpUtils.executeRequest(HttpUtils.createRequest(BASE_URL, true, getQueryData(QueryUtils.makeChromXYLowercase(query.getChromosome()), query.getPosition(), QueryUtils.denormalizeAllele(query.getAllele()))));
         } catch (UnsupportedEncodingException ex) {
             // ignore, already null
         }

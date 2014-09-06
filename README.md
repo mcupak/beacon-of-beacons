@@ -31,14 +31,15 @@ BoB was designed with ease of programmatic access in mind. It provides XML, JSON
 
 A beacon "Accepts a query of the form Do you have any genomes with an 'A' at position 100,735 on chromosome 3?" and responds with one of 'Yes' or 'No' (<http://ga4gh.org/#/beacon>). This is provided by the following API endpoint:
 
-    http://localhost:8080/beacon-of-beacons/rest/responses?chrom={chromosome}&pos={position}&allele={allele}&beacon={beacon}
+    http://localhost:8080/beacon-of-beacons/rest/responses?chrom={chromosome}&pos={position}&allele={allele}&beacon={beacon}&ref={reference}
 
 where the (chrom, pos, allele) parameters tuple describes the query you want to ask with the following syntax/semantics:
 
 - {chromosome}: Chromosome ID, one of the 1-22, X, Y, MT. For compatibility with conventions set by some of the existing beacons, an arbitrary prefix is accepted as well (e.g. chr1 is equivalent to chrom1 and 1).
-- {position}: Coordinate within a chromosome. Position is a number and is 0-based.
+- {position}: Coordinate within a chromosome. Position is a number and is 1-based.
 - {allele}: Any string of nucleotides A,C,T,G or D, I for deletion and insertion. For compatibility with conventions set by some of the existing beacons, DEL and INS identifiers are also accepted.
 - {beacon}: Beacon ID. Optional parameter. Filters the responses to specific beacons. Unless it is specified, the responses from all the supported beacons are obtained.
+- {reference}: Genome ID. Optional parameter. Unless it is specified, all the genomes supported by the specific beacons are queried.
 
 Bob currently supports all the 6 publicly available beacons and converts the input information into the queries they can understand. This may include a change of chromosome identifier, using a 1-based position instead of a 0-based one as well as using a different allele representation. Some beacons support multiple projects or tracks, in which case BoB queries all of them and look for a positive response from almost one of them. Beacon IDs can be obtained by querying the following URL:
 
@@ -107,7 +108,7 @@ Response:
 
 Using the beacon information obtained this way, you can execute a query against a specific beacon. Example:
 
-    http://localhost:8080/beacon-of-beacons/rest/responses/lovd?chrom=1&pos=808921&allele=T
+    http://localhost:8080/beacon-of-beacons/rest/responses/lovd?chrom=1&pos=808922&allele=T
 
 Response:
 
@@ -119,7 +120,7 @@ Response:
         "query": {
             "allele": "T",
             "chromosome": "CHR1",
-            "position": 808921,
+            "position": 808922,
             "reference": null
         },
         "response": true
@@ -128,7 +129,7 @@ Response:
 As you can see, the beacon responded with its own info, the query details and a response field denoting whether a match was found (true) or not (false). Null value is used to describe a problem, e.g. an invalid query. Some beacons, for example, do not support allele strings of length>1 or X/Y chromosomes.
 By default, BoB queries all the genomes supported by the individual beacons. To query for a specific genome, use the (optional) ref parameter. Example:
 
-    http://localhost:8080/beacon-of-beacons/rest/responses/amplab?chrom=15&pos=41087869&allele=A&ref=hg19
+    http://localhost:8080/beacon-of-beacons/rest/responses/amplab?chrom=15&pos=41087870&allele=A&ref=hg19
 
 Response:
 
@@ -140,7 +141,7 @@ Response:
         "query": {
             "allele": "A",
             "chromosome": "CHR15",
-            "position": 41087869,
+            "position": 41087870,
             "reference": "HG19"
         },
         "response": true
@@ -148,7 +149,7 @@ Response:
 
 You can also query all the beacons at once. Example:
 
-    http://localhost:8080/beacon-of-beacons/rest/responses?chrom=14&pos=106833420&allele=A
+    http://localhost:8080/beacon-of-beacons/rest/responses?chrom=14&pos=106833421&allele=A
 
 Response:
 
@@ -161,7 +162,7 @@ Response:
             "query": {
                 "allele": "A",
                 "chromosome": "CHR14",
-                "position": 106833420,
+                "position": 106833421,
                 "reference": null
             },
             "response": true
@@ -174,7 +175,7 @@ Response:
             "query": {
                 "allele": "A",
                 "chromosome": "CHR14",
-                "position": 106833420,
+                "position": 106833421,
                 "reference": null
             },
             "response": false
@@ -187,7 +188,7 @@ Response:
             "query": {
                 "allele": "A",
                 "chromosome": "CHR14",
-                "position": 106833420,
+                "position": 106833421,
                 "reference": null
             },
             "response": false
@@ -200,7 +201,7 @@ Response:
             "query": {
                 "allele": "A",
                 "chromosome": "CHR14",
-                "position": 106833420,
+                "position": 106833421,
                 "reference": null
             },
             "response": null
@@ -213,7 +214,7 @@ Response:
             "query": {
                 "allele": "A",
                 "chromosome": "CHR14",
-                "position": 106833420,
+                "position": 106833421,
                 "reference": null
             },
             "response": null
@@ -226,7 +227,7 @@ Response:
             "query": {
                 "allele": "A",
                 "chromosome": "CHR14",
-                "position": 106833420,
+                "position": 106833421,
                 "reference": null
             },
             "response": true
@@ -239,7 +240,7 @@ Response:
             "query": {
                 "allele": "A",
                 "chromosome": "CHR14",
-                "position": 106833420,
+                "position": 106833421,
                 "reference": null
             },
             "response": false
@@ -252,7 +253,7 @@ Response:
             "query": {
                 "allele": "A",
                 "chromosome": "CHR14",
-                "position": 106833420,
+                "position": 106833421,
                 "reference": null
             },
             "response": true
@@ -261,7 +262,7 @@ Response:
 
 Or just filter for one of them. Example:
 
-    http://localhost:8080/beacon-of-beacons/rest/responses?chrom=14&pos=106833420&allele=A&beacon=amplab
+    http://localhost:8080/beacon-of-beacons/rest/responses?chrom=14&pos=106833421&allele=A&beacon=amplab
 
 Response:
 
@@ -274,7 +275,7 @@ Response:
             "query": {
                 "allele": "A",
                 "chromosome": "CHR14",
-                "position": 106833420,
+                "position": 106833421,
                 "reference": null
             },
             "response": true
@@ -294,7 +295,7 @@ Response:
 
 Query example:
 
-    http://localhost:8080/beacon-of-beacons/rest/responses/bob?chrom=14&pos=106833420&allele=D
+    http://localhost:8080/beacon-of-beacons/rest/responses/bob?chrom=14&pos=106833421&allele=D
 
 Response:
 
@@ -306,7 +307,7 @@ Response:
         "query": {
             "allele": "D",
             "chromosome": "CHR14",
-            "position": 106833420,
+            "position": 106833421,
             "reference": null
         },
         "response": true

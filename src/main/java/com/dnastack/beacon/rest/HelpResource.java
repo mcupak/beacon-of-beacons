@@ -56,7 +56,7 @@ public class HelpResource {
     public void init() {
         endpoints = new HashSet<>();
         endpoints.add(new RestEndPoint("beacons", uriInfo.getBaseUri().toString() + "beacons", uriInfo.getBaseUri().toString() + "beacons"));
-        endpoints.add(new RestEndPoint("responses", uriInfo.getBaseUri().toString() + "responses", uriInfo.getBaseUri().toString() + "responses?chrom=14&pos=106833420&allele=A"));
+        endpoints.add(new RestEndPoint("responses", uriInfo.getBaseUri().toString() + "responses", uriInfo.getBaseUri().toString() + "responses?chrom=14&pos=106833421&allele=A"));
     }
 
     /**
