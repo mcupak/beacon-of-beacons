@@ -1,17 +1,20 @@
-Beacon of Beacons
-=================
+#Beacon of Beacons
 
+##Contents
 
-What is it?
------------
+* [What it is](#what-it-is)
+* [System requirements](#system-requirements)
+* [How to run it](#how-to-run-it)
+* [API](#api)
+* [Technologies](#technologies)
+
+##What it is
 Beacon of Beacons Project (BoB) provides a unified REST API to publicly available GA4GH Beacons (see <http://ga4gh.org/#/beacon> for more details about the Beacon project itself). BoB standardizes the way beacons are accessed and aggregates their results, thus addressing one of the missing parts of the Beacon project itself.
 
-System Requirements
--------------------
+##System requirements
 All you need to build this project is Java 7.0 (Java SDK 1.7) or later, Maven 3.0 or later. Since the project is Java EE based and utilizes some of the advanced features of Java EE 6, an application server with support for Java EE 6 Full profile is needed to deploy the application (e.g. JBoss EAP or WildFly).
 
-How to run it?
---------------
+##How to run it
 Start the JBoss server:
 
     For Linux:   JBOSS_HOME/bin/standalone.sh
@@ -23,15 +26,14 @@ Build and deploy the archive:
 
 The application should now be running on <http://localhost:8080/beacon-of-beacons>.
 
-API
----
+##API
 BoB was designed with ease of programmatic access in mind. It provides XML, JSON and plaintext responses to accommodate needs of all the clients across all the programming languages. The API to use is determined using the header supplied by the client in its GET request, e.g.:
 
     Accept: application/json
 
 A beacon "Accepts a query of the form Do you have any genomes with an 'A' at position 100,735 on chromosome 3?" and responds with one of 'Yes' or 'No' (<http://ga4gh.org/#/beacon>). This is provided by the following API endpoint:
 
-    http://localhost:8080/beacon-of-beacons/rest/responses?chrom={chromosome}&pos={position}&allele={allele}&beacon={beacon}&ref={reference}
+    GET http://localhost:8080/beacon-of-beacons/rest/responses?chrom={chromosome}&pos={position}&allele={allele}&beacon={beacon}&ref={reference}
 
 where the (chrom, pos, allele) parameters tuple describes the query you want to ask with the following syntax/semantics:
 
@@ -41,9 +43,9 @@ where the (chrom, pos, allele) parameters tuple describes the query you want to 
 - {beacon}: Beacon ID. Optional parameter. Filters the responses to specific beacons. Unless it is specified, the responses from all the supported beacons are obtained.
 - {reference}: Genome ID. Optional parameter. Unless it is specified, all the genomes supported by the specific beacons are queried.
 
-Bob currently supports all the 6 publicly available beacons and converts the input information into the queries they can understand. This may include a change of chromosome identifier, using a 1-based position instead of a 0-based one as well as using a different allele representation. Some beacons support multiple projects or tracks, in which case BoB queries all of them and look for a positive response from almost one of them. Beacon IDs can be obtained by querying the following URL:
+Bob currently supports all the 7 publicly available beacons and converts the input information into the queries they can understand. This may include a change of chromosome identifier, using a 0-based position instead of a 1-based one as well as using a different allele representation. Some beacons support multiple projects or tracks, in which case BoB queries all of them and look for a positive response from almost one of them. Beacon IDs can be obtained by querying the following:
 
-    http://localhost:8080/beacon-of-beacons/rest/beacons
+    GET http://localhost:8080/beacon-of-beacons/rest/beacons
 
 Response:
 
@@ -84,7 +86,7 @@ Response:
 
 To display the information about a particular beacon, query its ID:. Example:
 
-    http://localhost:8080/beacon-of-beacons/rest/beacons/wtsi
+    GET http://localhost:8080/beacon-of-beacons/rest/beacons/wtsi
 
 Response:
 
@@ -95,7 +97,7 @@ Response:
 
 Alternatively, just filter the list using the option "beacon" parameter. Example:
 
-    http://localhost:8080/beacon-of-beacons/rest/beacons?beacon=wtsi
+    GET http://localhost:8080/beacon-of-beacons/rest/beacons?beacon=wtsi
 
 Response:
 
@@ -108,7 +110,7 @@ Response:
 
 Using the beacon information obtained this way, you can execute a query against a specific beacon. Example:
 
-    http://localhost:8080/beacon-of-beacons/rest/responses/lovd?chrom=1&pos=808922&allele=T
+    GET http://localhost:8080/beacon-of-beacons/rest/responses/lovd?chrom=1&pos=808922&allele=T
 
 Response:
 
@@ -127,9 +129,10 @@ Response:
     }
 
 As you can see, the beacon responded with its own info, the query details and a response field denoting whether a match was found (true) or not (false). Null value is used to describe a problem, e.g. an invalid query. Some beacons, for example, do not support allele strings of length>1 or X/Y chromosomes.
+
 By default, BoB queries all the genomes supported by the individual beacons. To query for a specific genome, use the (optional) ref parameter. Example:
 
-    http://localhost:8080/beacon-of-beacons/rest/responses/amplab?chrom=15&pos=41087870&allele=A&ref=hg19
+    GET http://localhost:8080/beacon-of-beacons/rest/responses/amplab?chrom=15&pos=41087870&allele=A&ref=hg19
 
 Response:
 
@@ -149,7 +152,7 @@ Response:
 
 You can also query all the beacons at once. Example:
 
-    http://localhost:8080/beacon-of-beacons/rest/responses?chrom=14&pos=106833421&allele=A
+    GET http://localhost:8080/beacon-of-beacons/rest/responses?chrom=14&pos=106833421&allele=A
 
 Response:
 
@@ -262,7 +265,7 @@ Response:
 
 Or just filter for one of them. Example:
 
-    http://localhost:8080/beacon-of-beacons/rest/responses?chrom=14&pos=106833421&allele=A&beacon=amplab
+    GET http://localhost:8080/beacon-of-beacons/rest/responses?chrom=14&pos=106833421&allele=A&beacon=amplab
 
 Response:
 
@@ -284,7 +287,7 @@ Response:
 
 If you want to utilize the "beacon of beacons" feature and are only interested in whether any of the existing beacons have a particular variant, treat BoB as a beacon itself and let it perform the aggregation. Example:
 
-    http://localhost:8080/beacon-of-beacons/rest/beacons/bob
+    GET http://localhost:8080/beacon-of-beacons/rest/beacons/bob
 
 Response:
 
@@ -295,7 +298,7 @@ Response:
 
 Query example:
 
-    http://localhost:8080/beacon-of-beacons/rest/responses/bob?chrom=14&pos=106833421&allele=D
+    GET http://localhost:8080/beacon-of-beacons/rest/responses/bob?chrom=14&pos=106833421&allele=D
 
 Response:
 
@@ -314,6 +317,5 @@ Response:
     }
 
 
-Technologies
-------------
+##Technologies
 Java EE. CDI, EJB, JAX-RS, JAXB, Bean Validation. Tested with Arquillian/ShrinkWrap.
