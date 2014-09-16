@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 DNAstack.
+ * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,37 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.core;
+package com.dnastack.beacon.service;
+
+import com.dnastack.beacon.dao.BeaconDao;
+import com.dnastack.beacon.dto.BeaconTo;
+import com.dnastack.beacon.log.Logged;
+import java.util.Collections;
+import java.util.Set;
+import javax.inject.Inject;
 
 /**
- * Canonical genome representation.
+ * Implementation of a service managing beacons.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public enum Reference {
+public class BeaconServiceImpl implements BeaconService {
 
-    HG38("hg38"), HG19("hg19"), HG18("hg18"), HG17("hg17"), HG16("hg16");
+    @Inject
+    private BeaconDao beaconDao;
 
-    private final String ref;
-
-    private Reference(String ref) {
-        this.ref = ref;
-    }
-
-    public static Reference fromString(String text) {
-        if (text != null) {
-            for (Reference b : Reference.values()) {
-                if (text.equalsIgnoreCase(b.toString())) {
-                    return b;
-                }
-            }
-        }
-        return null;
-    }
-
+    @Logged
     @Override
-    public String toString() {
-        return ref;
+    public BeaconTo getBob() {
+        return beaconDao.getBob();
     }
+
+    @Logged
+    @Override
+    public BeaconTo getBeacon(String beaconId) {
+        return beaconDao.getBeacon(beaconId);
+    }
+
+    @Logged
+    @Override
+    public Set<BeaconTo> getAll() {
+        return Collections.unmodifiableSet(beaconDao.getAllBeacons());
+    }
+
 }

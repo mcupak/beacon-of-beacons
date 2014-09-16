@@ -21,13 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.service;
+package com.dnastack.beacon.processor;
 
-import com.dnastack.beacon.core.Beacon;
-import com.dnastack.beacon.core.BeaconResponse;
-import com.dnastack.beacon.core.BeaconService;
-import com.dnastack.beacon.core.Query;
-import com.dnastack.beacon.core.Reference;
+import com.dnastack.beacon.dto.BeaconTo;
+import com.dnastack.beacon.dto.QueryTo;
+import com.dnastack.beacon.entity.Reference;
 import com.dnastack.beacon.log.Logged;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -43,16 +41,16 @@ import javax.ejb.Asynchronous;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public abstract class AbstractBeaconService implements BeaconService, Serializable {
+public abstract class AbstractBeaconProcessor implements BeaconProcessor, Serializable {
 
     private static final long serialVersionUID = 10L;
 
-    private List<Future<String>> executeQueriesInParallel(Beacon beacon, Query query) {
+    private List<Future<String>> executeQueriesInParallel(BeaconTo beacon, QueryTo query) {
         List<Future<String>> fs = new ArrayList<>();
         if (query.getReference() == null) {
             // query all refs
             for (Reference ref : getSupportedReferences()) {
-                fs.add(getQueryResponse(beacon, new Query(query.getChromosome(), query.getPosition(), query.getAllele(), ref)));
+                fs.add(getQueryResponse(beacon, new QueryTo(query.getChromosome(), query.getPosition(), query.getAllele(), ref)));
             }
         } else if (getSupportedReferences().contains(query.getReference())) {
             // query only the specified ref
@@ -103,11 +101,11 @@ public abstract class AbstractBeaconService implements BeaconService, Serializab
     @Override
     @Logged
     @Asynchronous
-    public Future<BeaconResponse> executeQuery(Beacon beacon, Query query) {
-        BeaconResponse res = new BeaconResponse(beacon, query, null);
+    public Future<Boolean> executeQuery(BeaconTo beacon, QueryTo query) {
+        Boolean res = null;
 
         if (query != null) {
-            res.setResponse(collectResults(parseResultsInParallel(executeQueriesInParallel(beacon, query))));
+            res = collectResults(parseResultsInParallel(executeQueriesInParallel(beacon, query)));
         }
 
         return new AsyncResult<>(res);

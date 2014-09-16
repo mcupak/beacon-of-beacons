@@ -21,25 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.service;
-
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.ElementType.TYPE;
-import java.lang.annotation.Retention;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import java.lang.annotation.Target;
-import javax.inject.Qualifier;
+package com.dnastack.beacon.entity;
 
 /**
- * Kaviar qualifier.
+ * Canonical genome representation.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Qualifier
-@Retention(RUNTIME)
-@Target({METHOD, FIELD, PARAMETER, TYPE})
-public @interface Kaviar {
+public enum Reference {
+
+    HG38("hg38"), HG19("hg19"), HG18("hg18"), HG17("hg17"), HG16("hg16");
+
+    private final String ref;
+
+    private Reference(String ref) {
+        this.ref = ref;
+    }
+
+    public static Reference fromString(String text) {
+        if (text != null) {
+            for (Reference b : Reference.values()) {
+                if (text.equalsIgnoreCase(b.toString())) {
+                    return b;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return ref;
+    }
 }

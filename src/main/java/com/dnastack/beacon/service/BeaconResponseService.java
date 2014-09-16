@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 DNAstack.
+ * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,23 +23,51 @@
  */
 package com.dnastack.beacon.service;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.ElementType.TYPE;
-import java.lang.annotation.Retention;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import java.lang.annotation.Target;
-import javax.inject.Qualifier;
+import java.util.Collection;
 
 /**
- * AMPLab qualifier.
+ * Service for managing beacon responses.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Qualifier
-@Retention(RUNTIME)
-@Target({METHOD, FIELD, PARAMETER, TYPE})
-public @interface AmpLab {
+public interface BeaconResponseService {
+
+    /**
+     * Query the beacon of beacons.
+     *
+     * @param chrom  chromosome
+     * @param pos    position
+     * @param allele allele
+     * @param ref    reference genome (optional)
+     *
+     * @return list of beacon responses
+     */
+    BeaconResponse queryBob(String chrom, Long pos, String allele, String ref);
+
+    /**
+     * Query a given beacon
+     *
+     * @param beaconId beacon to query
+     * @param chrom    chromosome
+     * @param pos      position
+     * @param allele   allele
+     * @param ref      reference genome (optional)
+     *
+     * @return list of beacon responses
+     */
+    BeaconResponse queryBeacon(String beaconId, String chrom, Long pos, String allele, String ref);
+
+    /**
+     * Query all the beacons.
+     *
+     * @param chrom  chromosome
+     * @param pos    position
+     * @param allele allele
+     * @param ref    reference genome (optional)
+     *
+     * @return collection of beacon responses
+     */
+    Collection<BeaconResponse> queryAll(String chrom, Long pos, String allele, String ref);
+
 }

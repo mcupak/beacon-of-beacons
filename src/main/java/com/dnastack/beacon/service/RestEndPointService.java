@@ -21,43 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.rest;
+package com.dnastack.beacon.service;
 
-import com.dnastack.beacon.service.RestEndPoint;
-import com.dnastack.beacon.service.RestEndPointService;
 import java.util.Set;
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriInfo;
 
 /**
- * Information/help rest resource.
+ * Service for managing REST end points.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Path("/")
-@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN})
-public class HelpResource {
-
-    @Context
-    private UriInfo uriInfo;
-
-    @Inject
-    private RestEndPointService restEndPointService;
+public interface RestEndPointService {
 
     /**
-     * Shows REST welcome page.
+     * Shows REST end points.
      *
-     * @return response
+     * @return set of rest endpoints
      */
-    @GET
-    public Set<RestEndPoint> showEndPoints() {
-        return restEndPointService.showEndPoints(uriInfo.getBaseUri().toString());
-    }
+    Set<RestEndPoint> showEndPoints(String url);
 
 }

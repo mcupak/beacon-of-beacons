@@ -21,62 +21,54 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.service;
+package com.dnastack.beacon.processor;
 
-import com.dnastack.beacon.core.Beacon;
-import com.dnastack.beacon.core.Query;
-import com.dnastack.beacon.core.Reference;
+import com.dnastack.beacon.dto.BeaconTo;
+import com.dnastack.beacon.dto.QueryTo;
+import com.dnastack.beacon.entity.Reference;
 import com.dnastack.beacon.util.HttpUtils;
 import com.dnastack.beacon.util.ParsingUtils;
 import com.dnastack.beacon.util.QueryUtils;
 import com.google.common.collect.ImmutableSet;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
+import java.net.MalformedURLException;
 import java.util.Set;
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
 
 /**
- * AMPLab beacon service.
+ * A Genomics Alliance beacon service at UCSC.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
 @Stateless
 @LocalBean
-@AmpLab
-public class AmpLabBeaconService extends AbstractBeaconService {
+@Ucsc
+public class UcscBeaconProcessor extends AbstractBeaconProcessor {
 
-    private static final long serialVersionUID = 10L;
-    private static final String BASE_URL = "http://beacon.eecs.berkeley.edu/beacon.php";
+    private static final long serialVersionUID = 13L;
+    private static final String BASE_URL = "http://hgwdev-max.cse.ucsc.edu/cgi-bin/beacon/query";
+    private static final String PARAM_TEMPLATE = "?track=%s&chrom=%s&pos=%d&allele=%s";
     private static final String CHROM_TEMPLATE = "chr%s";
-    private static final Set<Reference> SUPPORTED_REFS = ImmutableSet.of(Reference.HG18, Reference.HG19, Reference.HG38);
+    private static final Set<Reference> SUPPORTED_REFS = ImmutableSet.of(Reference.HG19);
 
-    private List<NameValuePair> getQueryData(String ref, String chrom, Long pos, String allele) {
-        List<NameValuePair> nvs = new ArrayList<>();
-        // so far there is only 1 population
-        nvs.add(new BasicNameValuePair("population", "1000genomes"));
-        nvs.add(new BasicNameValuePair("genome", ref));
-        nvs.add(new BasicNameValuePair("chr", chrom));
-        nvs.add(new BasicNameValuePair("coord", pos.toString()));
-        nvs.add(new BasicNameValuePair("allele", allele));
+    private String getQueryUrl(String track, String chrom, Long pos, String allele) throws MalformedURLException {
+        String params = String.format(PARAM_TEMPLATE, track, chrom, pos, allele);
 
-        return nvs;
+        return BASE_URL + params;
     }
 
     @Override
     @Asynchronous
-    public Future<String> getQueryResponse(Beacon beacon, Query query) {
+    public Future<String> getQueryResponse(BeaconTo beacon, QueryTo query) {
         String res = null;
         try {
-            res = HttpUtils.executeRequest(HttpUtils.createRequest(BASE_URL, true, getQueryData(query.getReference().toString(), QueryUtils.denormalizeChromosome(CHROM_TEMPLATE, query.getChromosome()), QueryUtils.denormalizePosition(query.getPosition()), QueryUtils.denormalizeAllele(query.getAllele()))));
-        } catch (UnsupportedEncodingException ex) {
+            res = HttpUtils.executeRequest(HttpUtils.createRequest(getQueryUrl(beacon.getId(), QueryUtils.denormalizeChromosome(CHROM_TEMPLATE, query.getChromosome()), QueryUtils.denormalizePosition(query.getPosition()), query.getAllele()), false, null));
+        } catch (MalformedURLException | UnsupportedEncodingException ex) {
             // ignore, already null
         }
 
@@ -86,7 +78,7 @@ public class AmpLabBeaconService extends AbstractBeaconService {
     @Override
     @Asynchronous
     public Future<Boolean> parseQueryResponse(String response) {
-        Boolean res = ParsingUtils.parseContainsStringCaseInsensitive(response, "beacon found", "beacon cannot find");
+        Boolean res = ParsingUtils.parseYesNoCaseInsensitive(response);
 
         return new AsyncResult<>(res);
     }

@@ -23,12 +23,9 @@
  */
 package com.dnastack.beacon.rest;
 
-import com.dnastack.beacon.core.AllBeacons;
-import com.dnastack.beacon.core.Beacon;
-import com.dnastack.beacon.core.BeaconProvider;
-import com.dnastack.beacon.core.Bob;
+import com.dnastack.beacon.dto.BeaconTo;
 import com.dnastack.beacon.log.Logged;
-import java.util.Collections;
+import com.dnastack.beacon.service.BeaconService;
 import java.util.HashSet;
 import java.util.Set;
 import javax.inject.Inject;
@@ -50,67 +47,49 @@ import javax.ws.rs.core.MediaType;
 public class BeaconResource {
 
     @Inject
-    private BeaconProvider beaconProvider;
-
-    @Inject
-    @Bob
-    private Beacon bob;
-
-    @Inject
-    @AllBeacons
-    private Set<Beacon> beacons;
+    private BeaconService beaconService;
 
     /**
      * Shows beacon of beacons details.
      *
      * @return bob
      */
-    @Logged
     @GET
     @Path("/bob")
-    public Beacon showBob() {
-        return bob;
+    public BeaconTo showBob() {
+        return beaconService.getBob();
     }
 
     /**
      * Shows beacon details.
      *
      * @param beaconId id of the beacon
+     *
      * @return beacon
      */
-    @Logged
     @GET
     @Path("/{beaconId}")
-    public Beacon showBeacon(@PathParam("beaconId") String beaconId) {
-        return beaconProvider.getBeacon(beaconId);
-    }
-
-    /**
-     * Shows all the beacons.
-     *
-     * @return set of beacons
-     */
-    @Logged
-    public Set<Beacon> showAll() {
-        return Collections.unmodifiableSet(beacons);
+    public BeaconTo showBeacon(@PathParam("beaconId") String beaconId) {
+        return beaconService.getBeacon(beaconId);
     }
 
     /**
      * Shows all the beacons or a specific beacon as determined by a param.
      *
      * @param beaconId beacon ID
+     *
      * @return set of beacons
      */
     @Logged
     @GET
-    public Set<Beacon> show(@QueryParam("beacon") String beaconId) {
-        Set<Beacon> bs = new HashSet<>();
+    public Set<BeaconTo> show(@QueryParam("beacon") String beaconId) {
+        Set<BeaconTo> bs = new HashSet<>();
         if (beaconId == null) {
-            bs.addAll(showAll());
-        } else if (beaconId.equals(bob.getId())) {
-            bs.add(showBob());
+            bs.addAll(beaconService.getAll());
+        } else if (beaconId.equals(beaconService.getBob().getId())) {
+            bs.add(beaconService.getBob());
         } else {
-            bs.add(showBeacon(beaconId));
+            bs.add(beaconService.getBeacon(beaconId));
         }
 
         return bs;

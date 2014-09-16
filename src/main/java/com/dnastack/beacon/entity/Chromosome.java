@@ -21,25 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.service;
-
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.ElementType.TYPE;
-import java.lang.annotation.Retention;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import java.lang.annotation.Target;
-import javax.inject.Qualifier;
+package com.dnastack.beacon.entity;
 
 /**
- * WTSI qualifier.
+ * Canonical chromosome representation.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Qualifier
-@Retention(RUNTIME)
-@Target({METHOD, FIELD, PARAMETER, TYPE})
-public @interface Wtsi {
+public enum Chromosome {
+
+    // order is important!
+    CHR22("22"), CHR21("21"), CHR20("20"), CHR19("19"), CHR18("18"), CHR17("17"), CHR16("16"), CHR15("15"), CHR14("14"), CHR13("13"), CHR12("12"), CHR11("11"), CHR10("10"), CHR9("9"), CHR8("8"), CHR7("7"), CHR6("6"), CHR5("5"), CHR4("4"), CHR3("3"), CHR2("2"), CHR1("1"), CHRX("X"), CHRY("Y"), CHRMT("MT");
+
+    private final String chrom;
+
+    private Chromosome(String chrom) {
+        this.chrom = chrom;
+    }
+
+    public static Chromosome fromString(String text) {
+        if (text != null) {
+            for (Chromosome b : Chromosome.values()) {
+                if (text.equalsIgnoreCase(b.toString())) {
+                    return b;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return chrom;
+    }
 }

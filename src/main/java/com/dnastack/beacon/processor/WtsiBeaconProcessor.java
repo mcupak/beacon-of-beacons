@@ -21,11 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.service;
+package com.dnastack.beacon.processor;
 
-import com.dnastack.beacon.core.Beacon;
-import com.dnastack.beacon.core.Query;
-import com.dnastack.beacon.core.Reference;
+import com.dnastack.beacon.dto.BeaconTo;
+import com.dnastack.beacon.dto.QueryTo;
+import com.dnastack.beacon.entity.Reference;
 import com.dnastack.beacon.util.HttpUtils;
 import com.dnastack.beacon.util.ParsingUtils;
 import com.dnastack.beacon.util.QueryUtils;
@@ -40,33 +40,37 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
 /**
- * NCBI beacon service.
+ * WTSI beacon service.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
 @Stateless
 @LocalBean
-@Ncbi
-public class NcbiBeaconService extends AbstractBeaconService {
+@Wtsi
+public class WtsiBeaconProcessor extends AbstractBeaconProcessor {
 
-    private static final long serialVersionUID = 12L;
-    private static final String BASE_URL = "http://www.ncbi.nlm.nih.gov/projects/genome/beacon/beacon.cgi";
-    private static final String PARAM_TEMPLATE = "?ref=%s&chrom=%s&pos=%d&allele=%s";
-    private static final Set<Reference> SUPPORTED_REFS = ImmutableSet.of(Reference.HG18, Reference.HG19, Reference.HG38);
+    private static final long serialVersionUID = 14L;
+    private static final String BASE_URL = "http://www.sanger.ac.uk/sanger/GA4GH_Beacon";
+    private static final String PARAM_TEMPLATE_ASSEMBLY = "?src=all&ass=%s&chr=%s&pos=%d&all=%s";
+    private static final String PARAM_TEMPLATE = "?src=all&chr=%s&pos=%d&all=%s";
+    private static final Set<Reference> SUPPORTED_REFS = ImmutableSet.of(Reference.HG19);
 
     private String getQueryUrl(String ref, String chrom, Long pos, String allele) throws MalformedURLException {
-        String params = String.format(PARAM_TEMPLATE, ref, chrom, pos, allele);
+        String params;
+        if (ref == null) {
+            params = String.format(PARAM_TEMPLATE, chrom, pos, allele);
+        } else {
+            params = String.format(PARAM_TEMPLATE_ASSEMBLY, ref, chrom, pos, allele);
+        }
 
         return BASE_URL + params;
     }
 
     @Override
     @Asynchronous
-    public Future<String> getQueryResponse(Beacon beacon, Query query) {
+    public Future<String> getQueryResponse(BeaconTo beacon, QueryTo query) {
         String res = null;
-
-        // should be POST, but the server accepts GET as well
         try {
             res = HttpUtils.executeRequest(HttpUtils.createRequest(getQueryUrl(QueryUtils.denormalizeReference(query.getReference()), query.getChromosome().toString(), query.getPosition(), query.getAllele()), false, null));
         } catch (MalformedURLException | UnsupportedEncodingException ex) {
@@ -79,7 +83,14 @@ public class NcbiBeaconService extends AbstractBeaconService {
     @Override
     @Asynchronous
     public Future<Boolean> parseQueryResponse(String response) {
-        Boolean res = ParsingUtils.parseBooleanFromJson(response, "exist_gt");
+        Boolean res = ParsingUtils.parseYesNoCaseInsensitive(response);
+        if (res == null) {
+            // ref response is treated as false
+            Boolean isRef = ParsingUtils.parseRef(response);
+            if (isRef != null && isRef) {
+                res = false;
+            }
+        }
 
         return new AsyncResult<>(res);
     }

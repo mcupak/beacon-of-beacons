@@ -23,6 +23,7 @@
  */
 package com.dnastack.beacon.rest;
 
+import com.dnastack.beacon.service.RestEndPoint;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -30,11 +31,11 @@ import javax.xml.bind.JAXBException;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test of help resource.
@@ -47,8 +48,8 @@ import org.junit.runner.RunWith;
 public class HelpTest extends BasicTest {
 
     public static final String HELP_TEMPLATE = "rest";
-    private static RestEndPoint beacons;
-    private static RestEndPoint responses;
+    public static final String BEACONS = "beacons";
+    public static final String RESPONSES = "responses";
 
     public static String getUrl() {
         return HELP_TEMPLATE;
@@ -62,19 +63,13 @@ public class HelpTest extends BasicTest {
         return (RestEndPoint) readObject(RestEndPoint.class, url);
     }
 
-    @BeforeClass
-    public static void setUp() {
-        beacons = new RestEndPoint("beacons", null, null);
-        responses = new RestEndPoint("responses", null, null);
-    }
-
     @Test
     public void testHelp(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         List<RestEndPoint> rs = readRestEndPoints(url.toExternalForm() + getUrl());
 
         assertEquals(rs.size(), 2);
         for (RestEndPoint r : rs) {
-            assertTrue(r.equals(beacons) || r.equals(responses));
+            assertTrue(r.getId().equals(BEACONS) || r.getId().equals(RESPONSES));
         }
     }
 

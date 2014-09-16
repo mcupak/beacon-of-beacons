@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
+ * Copyright 2014 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,43 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.rest;
+package com.dnastack.beacon.processor;
 
-import com.dnastack.beacon.service.RestEndPoint;
-import com.dnastack.beacon.service.RestEndPointService;
-import java.util.Set;
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriInfo;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.ElementType.TYPE;
+import java.lang.annotation.Retention;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.Target;
+import javax.inject.Qualifier;
 
 /**
- * Information/help rest resource.
+ * AMPLab qualifier.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Path("/")
-@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN})
-public class HelpResource {
-
-    @Context
-    private UriInfo uriInfo;
-
-    @Inject
-    private RestEndPointService restEndPointService;
-
-    /**
-     * Shows REST welcome page.
-     *
-     * @return response
-     */
-    @GET
-    public Set<RestEndPoint> showEndPoints() {
-        return restEndPointService.showEndPoints(uriInfo.getBaseUri().toString());
-    }
-
+@Qualifier
+@Retention(RUNTIME)
+@Target({METHOD, FIELD, PARAMETER, TYPE})
+public @interface AmpLab {
 }

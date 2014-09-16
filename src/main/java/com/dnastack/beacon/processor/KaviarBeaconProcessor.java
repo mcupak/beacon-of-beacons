@@ -21,11 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.service;
+package com.dnastack.beacon.processor;
 
-import com.dnastack.beacon.core.Beacon;
-import com.dnastack.beacon.core.Query;
-import com.dnastack.beacon.core.Reference;
+import com.dnastack.beacon.dto.BeaconTo;
+import com.dnastack.beacon.dto.QueryTo;
+import com.dnastack.beacon.entity.Reference;
 import com.dnastack.beacon.util.HttpUtils;
 import com.dnastack.beacon.util.ParsingUtils;
 import com.dnastack.beacon.util.QueryUtils;
@@ -48,7 +48,7 @@ import javax.ejb.Stateless;
 @Stateless
 @LocalBean
 @Kaviar
-public class KaviarBeaconService extends AbstractBeaconService {
+public class KaviarBeaconProcessor extends AbstractBeaconProcessor {
 
     private static final long serialVersionUID = 30L;
     private static final String BASE_URL = "http://db.systemsbiology.net/kaviar/cgi-pub/beacon";
@@ -63,7 +63,7 @@ public class KaviarBeaconService extends AbstractBeaconService {
 
     @Override
     @Asynchronous
-    public Future<String> getQueryResponse(Beacon beacon, Query query) {
+    public Future<String> getQueryResponse(BeaconTo beacon, QueryTo query) {
         String res = null;
 
         // should be POST, but the server accepts GET as well

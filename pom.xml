@@ -48,8 +48,8 @@
         <version.arquillian.bom>1.1.5.Final</version.arquillian.bom>
         <version.org.apache.httpcomponents.httpclient>4.3.5</version.org.apache.httpcomponents.httpclient>
         <version.org.json.json>20140107</version.org.json.json>
-        <version.eclipselink>2.5.2</version.eclipselink>
-        <version.guava>17.0</version.guava>
+        <version.eclipselink>2.6.0-M3</version.eclipselink>
+        <version.guava>18.0</version.guava>
         <version.war.plugin>2.1.1</version.war.plugin>
         <version.surefire.plugin>2.17</version.surefire.plugin>
         <version.compiler.plugin>3.0</version.compiler.plugin>
@@ -139,12 +139,6 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>

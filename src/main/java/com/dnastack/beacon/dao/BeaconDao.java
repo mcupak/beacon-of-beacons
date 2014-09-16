@@ -21,43 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.rest;
+package com.dnastack.beacon.dao;
 
-import com.dnastack.beacon.service.RestEndPoint;
-import com.dnastack.beacon.service.RestEndPointService;
+import com.dnastack.beacon.dto.BeaconTo;
+import com.dnastack.beacon.processor.BeaconProcessor;
 import java.util.Set;
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriInfo;
 
 /**
- * Information/help rest resource.
+ * Mapper and holder of beacons and services.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Path("/")
-@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN})
-public class HelpResource {
-
-    @Context
-    private UriInfo uriInfo;
-
-    @Inject
-    private RestEndPointService restEndPointService;
+public interface BeaconDao {
 
     /**
-     * Shows REST welcome page.
+     * Retrieves all the beacons.
      *
-     * @return response
+     * @return collection of beacons
      */
-    @GET
-    public Set<RestEndPoint> showEndPoints() {
-        return restEndPointService.showEndPoints(uriInfo.getBaseUri().toString());
-    }
+    Set<BeaconTo> getAllBeacons();
 
+    /**
+     * Finds beacon by its ID.
+     *
+     * @param beaconId beacon ID
+     *
+     * @return beacon with the given ID
+     */
+    BeaconTo getBeacon(String beaconId);
+
+    BeaconTo getBob();
+
+    /**
+     * Retrieves the processor for a given beacon.
+     *
+     * @param b beacon
+     *
+     * @return beacon processor
+     */
+    BeaconProcessor getProcessor(BeaconTo b);
 }

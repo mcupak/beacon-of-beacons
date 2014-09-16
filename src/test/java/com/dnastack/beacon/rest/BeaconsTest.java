@@ -23,22 +23,22 @@
  */
 package com.dnastack.beacon.rest;
 
-import com.dnastack.beacon.core.Beacon;
+import com.dnastack.beacon.dto.BeaconTo;
+import com.google.common.collect.ImmutableSet;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.xml.bind.JAXBException;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 /**
  * Test of beacons info.
@@ -53,188 +53,69 @@ public class BeaconsTest extends BasicTest {
     public static final String BEACONS_TEMPLATE = "rest/beacons";
     public static final String BEACONS_FILTERED_TEMPLATE = "rest/beacons?beacon=%s";
     public static final String BEACON_TEMPLATE = "rest/beacons/%s";
-    private static Set<Beacon> beacons;
+    public static Set<String> BEACON_IDS = ImmutableSet.of("clinvar", "uniprot", "lovd", "ebi", "ncbi", "wtsi", "amplab", "kaviar");
 
     public static String getUrl() {
         return BEACONS_TEMPLATE;
     }
 
-    public static String getUrl(Beacon b, boolean param) {
-        return String.format(param ? BEACONS_FILTERED_TEMPLATE : BEACON_TEMPLATE, b.getId());
+    public static String getUrl(String beaconId, boolean param) {
+        return String.format(param ? BEACONS_FILTERED_TEMPLATE : BEACON_TEMPLATE, beaconId);
     }
 
-    public static List<Beacon> readBeacons(String url) throws JAXBException, MalformedURLException {
-        return (List<Beacon>) readObject(Beacon.class, url);
+    public static List<BeaconTo> readBeacons(String url) throws JAXBException, MalformedURLException {
+        return (List<BeaconTo>) readObject(BeaconTo.class, url);
     }
 
-    public static Beacon readBeacon(String url) throws JAXBException, MalformedURLException {
-        return (Beacon) readObject(Beacon.class, url);
-    }
-
-    @BeforeClass
-    public static void setUp() {
-        beacons = new HashSet<>();
-        beacons.add(new Beacon("clinvar", "NCBI ClinVar"));
-        beacons.add(new Beacon("uniprot", "UniProt"));
-        beacons.add(new Beacon("lovd", "Leiden Open Variation"));
-        beacons.add(new Beacon("ebi", "EMBL-EBI"));
-        beacons.add(new Beacon("ncbi", "NCBI"));
-        beacons.add(new Beacon("wtsi", "Wellcome Trust Sanger Institute"));
-        beacons.add(new Beacon("amplab", "AMPLab"));
-        beacons.add(new Beacon("kaviar", "Kaviar2"));
+    public static BeaconTo readBeacon(String url) throws JAXBException, MalformedURLException {
+        return (BeaconTo) readObject(BeaconTo.class, url);
     }
 
     @Test
     public void testAllBeacons(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        List<Beacon> bs = readBeacons(url.toExternalForm() + getUrl());
+        List<BeaconTo> bs = readBeacons(url.toExternalForm() + getUrl());
 
-        assertEquals(bs.size(), beacons.size());
-        for (Beacon b : bs) {
-            assertTrue(beacons.contains(b));
+        assertEquals(bs.size(), BEACON_IDS.size());
+        for (BeaconTo b : bs) {
+            assertTrue(BEACON_IDS.contains(b.getId()));
         }
     }
 
     @Test
-    public void testBeaconsFilteredForClinvar(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Beacon b = new Beacon("clinvar", "NCBI ClinVar");
-        Beacon c = readBeacons(url.toExternalForm() + getUrl(b, true)).get(0);
+    public void testBeaconsFiltered(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
+        for (String id : BEACON_IDS) {
+            List<BeaconTo> beacons = readBeacons(url.toExternalForm() + getUrl(id, true));
 
-        assertNotNull(c);
-        assertEquals(b, c);
-    }
-
-    @Test
-    public void testBeaconsFilteredForUniprot(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Beacon b = new Beacon("uniprot", "UniProt");
-        Beacon c = readBeacons(url.toExternalForm() + getUrl(b, true)).get(0);
-
-        assertNotNull(c);
-        assertEquals(b, c);
-    }
-
-    @Test
-    public void testBeaconsFilteredForLovd(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Beacon b = new Beacon("lovd", "Leiden Open Variation");
-        Beacon c = readBeacons(url.toExternalForm() + getUrl(b, true)).get(0);
-
-        assertNotNull(c);
-        assertEquals(b, c);
-    }
-
-    @Test
-    public void testBeaconsFilteredForAmplab(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Beacon b = new Beacon("amplab", "AMPLab");
-        Beacon c = readBeacons(url.toExternalForm() + getUrl(b, true)).get(0);
-
-        assertNotNull(c);
-        assertEquals(b, c);
-    }
-
-    @Test
-    public void testBeaconsFilteredForNcbi(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Beacon b = new Beacon("ncbi", "NCBI");
-        Beacon c = readBeacons(url.toExternalForm() + getUrl(b, true)).get(0);
-
-        assertNotNull(c);
-        assertEquals(b, c);
-    }
-
-    @Test
-    public void testBeaconsFilteredForEbi(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Beacon b = new Beacon("ebi", "EMBL-EBI");
-        Beacon c = readBeacons(url.toExternalForm() + getUrl(b, true)).get(0);
-
-        assertNotNull(c);
-        assertEquals(b, c);
-    }
-
-    @Test
-    public void testBeaconsFilteredForWtsi(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Beacon b = new Beacon("wtsi", "Wellcome Trust Sanger Institute");
-        Beacon c = readBeacons(url.toExternalForm() + getUrl(b, true)).get(0);
-
-        assertNotNull(c);
-        assertEquals(b, c);
+            assertNotNull(beacons);
+            assertEquals(beacons.get(0).getId(), id);
+        }
     }
 
     @Test
     public void testBeaconsFilteredForBob(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Beacon b = new Beacon("bob", "beacon of beacons");
-        Beacon c = readBeacons(url.toExternalForm() + getUrl(b, true)).get(0);
+        final String id = "bob";
+        List<BeaconTo> beacons = readBeacons(url.toExternalForm() + getUrl(id, true));
 
-        assertNotNull(c);
-        assertEquals(b, c);
+        assertNotNull(beacons);
+        assertEquals(beacons.get(0).getId(), id);
     }
 
     @Test
-    public void testBeaconClinvar(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Beacon b = new Beacon("clinvar", "NCBI ClinVar");
-        Beacon c = readBeacon(url.toExternalForm() + getUrl(b, false));
+    public void testBeacon(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
+        for (String id : BEACON_IDS) {
+            BeaconTo b = readBeacon(url.toExternalForm() + getUrl(id, false));
 
-        assertNotNull(c);
-        assertEquals(b, c);
-    }
-
-    @Test
-    public void testBeaconUniprot(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Beacon b = new Beacon("uniprot", "UniProt");
-        Beacon c = readBeacon(url.toExternalForm() + getUrl(b, false));
-
-        assertNotNull(c);
-        assertEquals(b, c);
-    }
-
-    @Test
-    public void testBeaconLovd(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Beacon b = new Beacon("lovd", "Leiden Open Variation");
-        Beacon c = readBeacon(url.toExternalForm() + getUrl(b, false));
-
-        assertNotNull(c);
-        assertEquals(b, c);
-    }
-
-    @Test
-    public void testBeaconAmplab(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Beacon b = new Beacon("amplab", "AMPLab");
-        Beacon c = readBeacon(url.toExternalForm() + getUrl(b, false));
-
-        assertNotNull(c);
-        assertEquals(b, c);
-    }
-
-    @Test
-    public void testBeaconNcbi(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Beacon b = new Beacon("ncbi", "NCBI");
-        Beacon c = readBeacon(url.toExternalForm() + getUrl(b, false));
-
-        assertNotNull(c);
-        assertEquals(b, c);
-    }
-
-    @Test
-    public void testBeaconEbi(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Beacon b = new Beacon("ebi", "EMBL-EBI");
-        Beacon c = readBeacon(url.toExternalForm() + getUrl(b, false));
-
-        assertNotNull(c);
-        assertEquals(b, c);
-    }
-
-    @Test
-    public void testBeaconWtsi(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Beacon b = new Beacon("wtsi", "Wellcome Trust Sanger Institute");
-        Beacon c = readBeacon(url.toExternalForm() + getUrl(b, false));
-
-        assertNotNull(c);
-        assertEquals(b, c);
+            assertNotNull(b);
+            assertEquals(id, b.getId());
+        }
     }
 
     @Test
     public void testBeaconBob(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Beacon b = new Beacon("bob", "beacon of beacons");
-        Beacon c = readBeacon(url.toExternalForm() + getUrl(b, false));
+        final String id = "bob";
+        BeaconTo b = readBeacon(url.toExternalForm() + getUrl(id, false));
 
-        assertNotNull(c);
-        assertEquals(b, c);
+        assertNotNull(b);
+        assertEquals(id, b.getId());
     }
 }

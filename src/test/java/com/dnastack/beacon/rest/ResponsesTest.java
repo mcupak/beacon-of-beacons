@@ -23,25 +23,24 @@
  */
 package com.dnastack.beacon.rest;
 
-import com.dnastack.beacon.core.Beacon;
-import com.dnastack.beacon.core.BeaconResponse;
-import com.dnastack.beacon.core.Query;
-import com.dnastack.beacon.util.QueryUtils;
+import com.dnastack.beacon.service.BeaconResponse;
+import com.google.common.collect.ImmutableSet;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.xml.bind.JAXBException;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import static com.dnastack.beacon.rest.util.ResponseTestUtils.beaconsMatch;
+import static com.dnastack.beacon.rest.util.ResponseTestUtils.queriesMatch;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 /**
  * Test of responses.
@@ -57,25 +56,31 @@ public class ResponsesTest extends BasicTest {
     public static final String QUERY_BEACON_WITH_REF_TEMPLATE = "rest/responses?beacon=%s&chrom=%s&pos=%s&allele=%s&ref=%s";
     public static final String QUERY_TEMPLATE = "rest/responses?chrom=%s&pos=%s&allele=%s";
     public static final String QUERY_WITH_REF_TEMPLATE = "rest/responses?chrom=%s&pos=%s&allele=%s&ref=%s";
-    private static Set<Beacon> beacons;
+    private static final Set<String> BEACON_IDS = ImmutableSet.of("clinvar", "uniprot", "lovd", "ebi", "ncbi", "wtsi", "amplab", "kaviar");
 
-    public static String getUrl(Beacon b, Query q) {
-        String res;
-        if (q.getReference() == null) {
-            res = String.format(QUERY_BEACON_TEMPLATE, b.getId(), q.getChromosome(), q.getPosition(), q.getAllele());
-        } else {
-            res = String.format(QUERY_BEACON_WITH_REF_TEMPLATE, b.getId(), q.getChromosome(), q.getPosition(), q.getAllele(), q.getReference());
+    protected static String getUrl(String b, String[] params) {
+        String res = null;
+
+        if (params.length == 4) {
+            if (params[3] == null) {
+                res = String.format(QUERY_BEACON_TEMPLATE, b, params[0], params[1], params[2]);
+            } else {
+                res = String.format(QUERY_BEACON_WITH_REF_TEMPLATE, b, params[0], params[1], params[2], params[3]);
+            }
         }
 
         return res;
     }
 
-    public static String getUrl(Query q) {
-        String res;
-        if (q.getReference() == null) {
-            res = String.format(QUERY_TEMPLATE, q.getChromosome(), q.getPosition(), q.getAllele());
-        } else {
-            res = String.format(QUERY_WITH_REF_TEMPLATE, q.getChromosome(), q.getPosition(), q.getAllele(), q.getReference());
+    protected static String getUrl(String[] params) {
+        String res = null;
+
+        if (params.length == 4) {
+            if (params[3] == null) {
+                res = String.format(QUERY_TEMPLATE, params[0], params[1], params[2]);
+            } else {
+                res = String.format(QUERY_WITH_REF_TEMPLATE, params[0], params[1], params[2], params[3]);
+            }
         }
 
         return res;
@@ -86,161 +91,148 @@ public class ResponsesTest extends BasicTest {
         return (List<BeaconResponse>) readObject(BeaconResponse.class, url);
     }
 
-    @BeforeClass
-    public static void setUp() {
-        beacons = new HashSet<>();
-        beacons.add(new Beacon("clinvar", "NCBI ClinVar"));
-        beacons.add(new Beacon("uniprot", "UniProt"));
-        beacons.add(new Beacon("lovd", "Leiden Open Variation"));
-        beacons.add(new Beacon("ebi", "EMBL-EBI"));
-        beacons.add(new Beacon("ncbi", "NCBI"));
-        beacons.add(new Beacon("wtsi", "Wellcome Trust Sanger Institute"));
-        beacons.add(new Beacon("amplab", "AMPLab"));
-        beacons.add(new Beacon("kaviar", "Known VARiants"));
-    }
-
     @Test
     public void testAllResponses(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Query q = QueryUtils.constructQuery("13", 32888799L, "G", null);
+        String[] q = {"13", "32888799", "G", null};
         List<BeaconResponse> brs = readResponses(url.toExternalForm() + getUrl(q));
 
-        assertEquals(brs.size(), beacons.size());
+        assertEquals(brs.size(), BEACON_IDS.size());
         for (BeaconResponse br : brs) {
-            assertTrue(beacons.contains(br.getBeacon()));
-            assertEquals(q, br.getQuery());
+            assertTrue(BEACON_IDS.contains(br.getBeacon().getId()));
+            assertTrue(queriesMatch(br.getQuery(), q));
         }
     }
 
     @Test
     public void testAllResponsesWithSpecificRef(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Query q = QueryUtils.constructQuery("13", 32888799L, "G", "hg19");
+        String[] q = {"13", "32888799", "G", "hg19"};
         List<BeaconResponse> brs = readResponses(url.toExternalForm() + getUrl(q));
 
-        assertEquals(brs.size(), beacons.size());
+        assertEquals(brs.size(), BEACON_IDS.size());
         for (BeaconResponse br : brs) {
             System.out.println(br.toString());
-            assertTrue(beacons.contains(br.getBeacon()));
-            assertEquals(q, br.getQuery());
+            assertTrue(BEACON_IDS.contains(br.getBeacon().getId()));
+            assertTrue(queriesMatch(br.getQuery(), q));
         }
     }
 
     @Test
     public void testSpecificResponseWithSpecificRef(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Beacon b = new Beacon("clinvar", "NCBI ClinVar");
-        Query q = QueryUtils.constructQuery("1", 10042538L, "T", "hg19");
+        String b = "clinvar";
+        String[] q = {"1", "10042538", "T", "hg19"};
         BeaconResponse br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
-        assertEquals(b, br.getBeacon());
-        assertEquals(q, br.getQuery());
+        assertTrue(beaconsMatch(br.getBeacon(), b));
+        assertTrue(queriesMatch(br.getQuery(), q));
         assertTrue(br.getResponse());
     }
 
     @Test
     public void testResponsesFilteredForClinvar(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Beacon b = new Beacon("clinvar", "NCBI ClinVar");
-        Query q = QueryUtils.constructQuery("1", 10042538L, "T", null);
+        String b = "clinvar";
+        String[] q = {"1", "10042538", "T", null};
         BeaconResponse br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
-        assertEquals(b, br.getBeacon());
-        assertEquals(q, br.getQuery());
+        assertTrue(beaconsMatch(br.getBeacon(), b));
+        assertTrue(queriesMatch(br.getQuery(), q));
         assertTrue(br.getResponse());
     }
 
     @Test
     public void testResponsesFilteredForUniprot(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Beacon b = new Beacon("uniprot", "UniProt");
-        Query q = QueryUtils.constructQuery("1", 977028L, "T", null);
+        String b = "uniprot";
+        String[] q = {"1", "977028", "T", null};
         BeaconResponse br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
-        assertEquals(b, br.getBeacon());
-        assertEquals(q, br.getQuery());
+        assertTrue(beaconsMatch(br.getBeacon(), b));
+        assertTrue(queriesMatch(br.getQuery(), q));
         assertTrue(br.getResponse());
     }
 
     @Test
     public void testResponsesFilteredForLovd(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Beacon b = new Beacon("lovd", "Leiden Open Variation");
-        Query q = QueryUtils.constructQuery("1", 808922L, "T", null);
+        String b = "lovd";
+        String[] q = {"1", "808922", "T", null};
         BeaconResponse br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
-        assertEquals(b, br.getBeacon());
-        assertEquals(q, br.getQuery());
+        assertTrue(beaconsMatch(br.getBeacon(), b));
+        assertTrue(queriesMatch(br.getQuery(), q));
         assertTrue(br.getResponse());
     }
 
     @Test
     public void testResponsesFilteredForAmplab(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Beacon b = new Beacon("amplab", "AMPLab");
-        Query q = QueryUtils.constructQuery("15", 41087870L, "A", null);
+        String b = "amplab";
+        String[] q = {"15", "41087870", "A", null};
         BeaconResponse br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
-        assertEquals(b, br.getBeacon());
-        assertEquals(q, br.getQuery());
+        assertTrue(beaconsMatch(br.getBeacon(), b));
+        assertTrue(queriesMatch(br.getQuery(), q));
         assertTrue(br.getResponse());
     }
 
     @Test
     public void testResponsesFilteredForKaviar(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Beacon b = new Beacon("kaviar", "Known VARiants");
-        Query q = QueryUtils.constructQuery("1", 808922L, "A", null);
+        String b = "kaviar";
+        String[] q = {"1", "808922", "A", null};
         BeaconResponse br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
-        assertEquals(b, br.getBeacon());
-        assertEquals(q, br.getQuery());
+        assertTrue(beaconsMatch(br.getBeacon(), b));
+        assertTrue(queriesMatch(br.getQuery(), q));
         assertTrue(br.getResponse());
     }
 
     @Test
     public void testResponsesFilteredForNcbi(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Beacon b = new Beacon("ncbi", "NCBI");
-        Query q = QueryUtils.constructQuery("22", 17213590L, "TGTTA", null);
+        String b = "ncbi";
+        String[] q = {"22", "17213590", "TGTTA", null};
         BeaconResponse br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
-        assertEquals(b, br.getBeacon());
-        assertEquals(q, br.getQuery());
+        assertTrue(beaconsMatch(br.getBeacon(), b));
+        assertTrue(queriesMatch(br.getQuery(), q));
         assertTrue(br.getResponse());
     }
 
     @Test
     public void testResponsesFilteredForEbi(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Beacon b = new Beacon("ebi", "EMBL-EBI");
-        Query q = QueryUtils.constructQuery("13", 32888799L, "G", null);
+        String b = "ebi";
+        String[] q = {"13", "32888799", "G", null};
         BeaconResponse br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
-        assertEquals(b, br.getBeacon());
-        assertEquals(q, br.getQuery());
+        assertTrue(beaconsMatch(br.getBeacon(), b));
+        assertTrue(queriesMatch(br.getQuery(), q));
         assertTrue(br.getResponse());
     }
 
     @Test
     public void testResponsesFilteredForWtsi(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Beacon b = new Beacon("wtsi", "Wellcome Trust Sanger Institute");
-        Query q = QueryUtils.constructQuery("X", 41087870L, "A", null);
+        String b = "wtsi";
+        String[] q = {"1", "808922", "A", null};
         BeaconResponse br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
-        assertEquals(b, br.getBeacon());
-        assertEquals(q, br.getQuery());
+        assertTrue(beaconsMatch(br.getBeacon(), b));
+        assertTrue(queriesMatch(br.getQuery(), q));
         assertTrue(br.getResponse());
     }
 
     @Test
     public void testResponsesFilteredForBob(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Beacon b = new Beacon("bob", "beacon of beacons");
-        Query q = QueryUtils.constructQuery("13", 32888799L, "G", null);
+        String b = "bob";
+        String[] q = {"13", "32888799", "G", null};
         BeaconResponse br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
-        assertEquals(b, br.getBeacon());
-        assertEquals(q, br.getQuery());
+        assertTrue(beaconsMatch(br.getBeacon(), b));
+        assertTrue(queriesMatch(br.getQuery(), q));
         assertTrue(br.getResponse());
     }
 

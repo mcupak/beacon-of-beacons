@@ -23,9 +23,8 @@
  */
 package com.dnastack.beacon.util;
 
-import com.dnastack.beacon.core.Chromosome;
-import com.dnastack.beacon.core.Query;
-import com.dnastack.beacon.core.Reference;
+import com.dnastack.beacon.entity.Chromosome;
+import com.dnastack.beacon.entity.Reference;
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -45,6 +44,7 @@ public class QueryUtils {
      * Generates a canonical chrom ID.
      *
      * @param chrom chromosome
+     *
      * @return normalized chromosome value
      */
     public static Chromosome normalizeChromosome(String chrom) {
@@ -65,7 +65,8 @@ public class QueryUtils {
      * Generate a domain-specific chromosome identifier.
      *
      * @param template template used for String.format()
-     * @param chrom canonical chromosome
+     * @param chrom    canonical chromosome
+     *
      * @return denormalized chromosome value
      */
     public static String denormalizeChromosome(String template, Chromosome chrom) {
@@ -76,6 +77,7 @@ public class QueryUtils {
      * Converts X/Y chromosomes to lowercase.
      *
      * @param c chromosome
+     *
      * @return denormalized chromosome
      */
     public static String makeChromXYLowercase(Chromosome c) {
@@ -89,6 +91,7 @@ public class QueryUtils {
      * Converts 0-based position to 1-based position.
      *
      * @param pos 0-based position
+     *
      * @return 1-based position
      */
     public static Long normalizePosition(Long pos) {
@@ -102,6 +105,7 @@ public class QueryUtils {
      * Converts 1-based position to 0-based position.
      *
      * @param pos 1-based position
+     *
      * @return 0-based position
      */
     public static Long denormalizePosition(Long pos) {
@@ -115,6 +119,7 @@ public class QueryUtils {
      * Generate a canonical allele string.
      *
      * @param allele denormalized allele
+     *
      * @return normalized allele
      */
     public static String normalizeAllele(String allele) {
@@ -137,6 +142,7 @@ public class QueryUtils {
      * Generate a domain-specific allele string with long allele names like DEL and INS.
      *
      * @param allele normalized allele
+     *
      * @return denormalized allele
      */
     public static String denormalizeAllele(String allele) {
@@ -159,6 +165,7 @@ public class QueryUtils {
      * Generate a canonical genome representation (hg*).
      *
      * @param ref denormalized genome
+     *
      * @return normalized genome
      */
     public static Reference normalizeReference(String ref) {
@@ -184,6 +191,7 @@ public class QueryUtils {
      * Generate a domain-specific genome representation (GRCh*, NCBI*).
      *
      * @param ref normalized genome
+     *
      * @return denormalized genome
      */
     public static String denormalizeReference(Reference ref) {
@@ -205,19 +213,4 @@ public class QueryUtils {
         return ref.toString();
     }
 
-    /**
-     * Generates a canonical version of a query (field values normalized).
-     *
-     * @param chrom chromosome
-     * @param pos position
-     * @param allele allele
-     * @param ref genome
-     * @return normalized query
-     */
-    public static Query constructQuery(String chrom, Long pos, String allele, String ref) {
-        Chromosome c = normalizeChromosome(chrom);
-        Reference r = normalizeReference(ref);
-
-        return new Query(c == null ? null : c, pos, normalizeAllele(allele), r == null ? null : r);
-    }
 }

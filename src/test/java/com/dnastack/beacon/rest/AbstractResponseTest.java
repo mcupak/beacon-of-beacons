@@ -23,11 +23,14 @@
  */
 package com.dnastack.beacon.rest;
 
-import com.dnastack.beacon.core.Beacon;
-import com.dnastack.beacon.core.BeaconResponse;
-import com.dnastack.beacon.core.Query;
+import com.dnastack.beacon.entity.Chromosome;
+import com.dnastack.beacon.entity.Query;
+import com.dnastack.beacon.entity.Reference;
+import com.dnastack.beacon.service.BeaconResponse;
+import com.google.common.collect.ImmutableList;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import javax.xml.bind.JAXBException;
 
 /**
@@ -40,20 +43,68 @@ public abstract class AbstractResponseTest extends BasicTest {
 
     public static final String QUERY_BEACON_TEMPLATE = "rest/responses/%s?chrom=%s&pos=%s&allele=%s";
     public static final String QUERY_BEACON_WITH_REF_TEMPLATE = "rest/responses/%s?chrom=%s&pos=%s&allele=%s&ref=%s";
+    // paths for jettisson (not jackson)
+    public static final String BEACON_RESPONSE = "beaconResponse";
+    public static final List<String> BEACON_PATH = ImmutableList.of(BEACON_RESPONSE, "beacon", "id");
+    public static final List<String> RESPONSE_PATH = ImmutableList.of(BEACON_RESPONSE, "response");
+    public static final String QUERY = "query";
+    public static final List<String> POS_PATH = ImmutableList.of(BEACON_RESPONSE, QUERY, "position");
+    public static final List<String> CHROM_PATH = ImmutableList.of(BEACON_RESPONSE, QUERY, "chromosome");
+    public static final List<String> ALLELE_PATH = ImmutableList.of(BEACON_RESPONSE, QUERY, "allele");
+    public static final List<String> REF_PATH = ImmutableList.of(BEACON_RESPONSE, QUERY, "reference");
 
-    public static String getUrl(Beacon b, Query q) {
-        String res;
-        if (q.getReference() == null) {
-            res = String.format(QUERY_BEACON_TEMPLATE, b.getId(), q.getChromosome(), q.getPosition(), q.getAllele());
-        } else {
-            res = String.format(QUERY_BEACON_WITH_REF_TEMPLATE, b.getId(), q.getChromosome(), q.getPosition(), q.getAllele(), q.getReference());
+    /**
+     * Construct URL for the given BeaconResponse.
+     *
+     * @param beacon beacon id
+     * @param params parameter array containing the following elements as strings: chrom, pos, allele, ref
+     *               (respectively)
+     *
+     * @return url
+     */
+    protected static String getUrl(String beacon, String[] params) {
+        String res = null;
+        if (params.length == 4) {
+            if (params[3] == null) {
+                res = String.format(QUERY_BEACON_TEMPLATE, beacon, params[0], params[1], params[2]);
+            } else {
+                res = String.format(QUERY_BEACON_WITH_REF_TEMPLATE, beacon, params[0], params[1], params[2], params[3]);
+            }
         }
 
         return res;
     }
 
-    public static BeaconResponse readResponse(String url) throws JAXBException, MalformedURLException {
+    protected static BeaconResponse readBeaconResponse(String url) throws JAXBException, MalformedURLException {
         return (BeaconResponse) readObject(BeaconResponse.class, url);
+    }
+
+    protected static String readBeaconId(String response) {
+        return readField(response, BEACON_PATH);
+    }
+
+    protected static Long readPos(String response) {
+        return Long.valueOf(readField(response, POS_PATH));
+    }
+
+    protected static Chromosome readChrom(String response) {
+        return Chromosome.fromString(readField(response, CHROM_PATH).substring(3));
+    }
+
+    protected static String readAllele(String response) {
+        return readField(response, ALLELE_PATH);
+    }
+
+    protected static Reference readRef(String response) {
+        return Reference.fromString(readField(response, REF_PATH));
+    }
+
+    protected static Query readQuery(String response) {
+        return new Query(readChrom(response), readPos(response), readAllele(response), readRef(response));
+    }
+
+    protected static Boolean readResponsePredicate(String response) {
+        return Boolean.valueOf(readField(response, RESPONSE_PATH));
     }
 
     public abstract void testAllRefsFound(URL url) throws JAXBException, MalformedURLException;
@@ -87,4 +138,5 @@ public abstract class AbstractResponseTest extends BasicTest {
     public abstract void testChromX(URL url) throws JAXBException, MalformedURLException;
 
     public abstract void testChromMT(URL url) throws JAXBException, MalformedURLException;
+
 }

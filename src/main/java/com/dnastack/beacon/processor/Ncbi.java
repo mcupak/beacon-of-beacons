@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
+ * Copyright 2014 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.core;
+package com.dnastack.beacon.processor;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
@@ -33,7 +33,7 @@ import java.lang.annotation.Target;
 import javax.inject.Qualifier;
 
 /**
- * Beacon of beacons qualifier.
+ * NCBI qualifier.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
@@ -41,5 +41,5 @@ import javax.inject.Qualifier;
 @Qualifier
 @Retention(RUNTIME)
 @Target({METHOD, FIELD, PARAMETER, TYPE})
-public @interface Bob {
+public @interface Ncbi {
 }

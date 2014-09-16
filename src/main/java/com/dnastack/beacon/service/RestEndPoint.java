@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
+ * Copyright 2014 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,38 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.core;
+package com.dnastack.beacon.service;
 
 import java.io.Serializable;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import java.util.Objects;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Beacon.
+ * Rest endpoint representation.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@XmlRootElement
-public class Beacon implements Serializable {
+@XmlRootElement(name = "rest-end-point")
+public class RestEndPoint implements Serializable {
 
-    private static final long serialVersionUID = 2L;
-
-    @NotNull
-    @Size(min = 1)
+    private static final long serialVersionUID = 35L;
     private String id;
-    @NotNull
-    @Size(min = 1)
-    private String name;
+    private String baseUrl;
+    private String example;
 
-    public Beacon() {
-        // needed for JAXB
+    public RestEndPoint() {
     }
 
-    public Beacon(String id, String name) {
+    public RestEndPoint(String id, String baseUrl, String example) {
         this.id = id;
-        this.name = name;
+        this.baseUrl = baseUrl;
+        this.example = example;
     }
 
     public String getId() {
@@ -63,18 +58,26 @@ public class Beacon implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getBaseUrl() {
+        return baseUrl;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
+    }
+
+    public String getExample() {
+        return example;
+    }
+
+    public void setExample(String example) {
+        this.example = example;
     }
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 79 * hash + (this.id != null ? this.id.hashCode() : 0);
+        int hash = 7;
+        hash = 67 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -86,8 +89,8 @@ public class Beacon implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Beacon other = (Beacon) obj;
-        if ((this.id == null) ? (other.id != null) : !this.id.equals(other.id)) {
+        final RestEndPoint other = (RestEndPoint) obj;
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return true;
@@ -95,7 +98,7 @@ public class Beacon implements Serializable {
 
     @Override
     public String toString() {
-        return "Beacon{" + "id=" + id + ", name=" + name + '}';
+        return "RestEndPoint{" + "id=" + id + ", baseUrl=" + baseUrl + ", example=" + example + '}';
     }
 
 }

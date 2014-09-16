@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
+ * Copyright 2014 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,25 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.core;
+package com.dnastack.beacon.dao;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.ElementType.TYPE;
-import java.lang.annotation.Retention;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import java.lang.annotation.Target;
-import javax.inject.Qualifier;
+import com.dnastack.beacon.dto.QueryTo;
 
 /**
- * All beacons qualifier.
+ * Provider of queries.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Qualifier
-@Retention(RUNTIME)
-@Target({METHOD, FIELD, PARAMETER, TYPE})
-public @interface AllBeacons {
+public interface QueryDao {
+
+    /**
+     * Obtains a canonical query object.
+     *
+     * @param chrom  chromosome
+     * @param pos    position
+     * @param allele allele
+     * @param ref    genome
+     *
+     * @return normalized query
+     */
+    QueryTo getQuery(String chrom, Long pos, String allele, String ref);
+
+    /**
+     * Validates query.
+     *
+     * @param q   query
+     * @param ref reference
+     *
+     * @return true if the query is valid, false otherwise
+     */
+    public boolean checkIfQuerySuccessfullyNormalizedAndValid(QueryTo q, String ref);
 }

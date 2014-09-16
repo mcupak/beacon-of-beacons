@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 DNAstack.
+ * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,23 +23,38 @@
  */
 package com.dnastack.beacon.service;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.ElementType.TYPE;
-import java.lang.annotation.Retention;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import java.lang.annotation.Target;
-import javax.inject.Qualifier;
+import com.dnastack.beacon.dto.BeaconTo;
+import java.util.Set;
 
 /**
- * UCSC qualifier.
+ * Service managing beacons.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Qualifier
-@Retention(RUNTIME)
-@Target({METHOD, FIELD, PARAMETER, TYPE})
-public @interface Ucsc {
+public interface BeaconService {
+
+    /**
+     * Retrieves beacon of beacons details.
+     *
+     * @return bob
+     */
+    BeaconTo getBob();
+
+    /**
+     * Retrieves beacon details.
+     *
+     * @param beaconId id of the beacon
+     *
+     * @return beacon
+     */
+    BeaconTo getBeacon(String beaconId);
+
+    /**
+     * Retrieves all the beacons.
+     *
+     * @return set of beacons
+     */
+    Set<BeaconTo> getAll();
+
 }

@@ -21,47 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.core;
+package com.dnastack.beacon.dto;
 
+import com.dnastack.beacon.entity.Chromosome;
+import com.dnastack.beacon.entity.Query;
+import com.dnastack.beacon.entity.Reference;
 import java.io.Serializable;
 import java.util.Objects;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Generalized beacon query representation.
+ * Query DTO.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@XmlRootElement
-public class Query implements Serializable {
+@XmlRootElement(name = "query")
+public class QueryTo implements Serializable {
 
     private static final long serialVersionUID = 3L;
 
-    @NotNull
     private Chromosome chromosome;
-    @NotNull
-    @Min(0L)
-    @Max(300000000L)
     private Long position;
-    @NotNull
-    @Pattern(regexp = "([D,I])|([A,C,T,G]+)")
     private String allele;
     private Reference reference;
 
-    public Query() {
+    public QueryTo() {
         // needed for JAXB
     }
 
-    public Query(Chromosome chromosome, Long position, String allele, Reference reference) {
+    public QueryTo(Chromosome chromosome, Long position, String allele, Reference reference) {
         this.chromosome = chromosome;
         this.position = position;
         this.allele = allele;
         this.reference = reference;
+    }
+
+    public QueryTo(Query q) {
+        this.chromosome = q.getChromosome();
+        this.position = q.getPosition();
+        this.allele = q.getAllele();
+        this.reference = q.getReference();
     }
 
     public Chromosome getChromosome() {
@@ -114,7 +114,7 @@ public class Query implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Query other = (Query) obj;
+        final QueryTo other = (QueryTo) obj;
         if (this.chromosome != other.chromosome) {
             return false;
         }

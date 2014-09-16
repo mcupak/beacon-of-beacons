@@ -21,38 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.core;
+package com.dnastack.beacon.dao;
+
+import com.dnastack.beacon.dto.QueryTo;
+import com.dnastack.beacon.entity.Chromosome;
+import com.dnastack.beacon.entity.Query;
+import com.dnastack.beacon.entity.Reference;
+import com.dnastack.beacon.util.QueryUtils;
+import java.io.Serializable;
+import javax.inject.Inject;
+import javax.validation.Validator;
 
 /**
- * Canonical chromosome representation.
+ * Basic provider of queries.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public enum Chromosome {
+public class QueryDaoImpl implements QueryDao, Serializable {
 
-    // order is important!
-    CHR22("22"), CHR21("21"), CHR20("20"), CHR19("19"), CHR18("18"), CHR17("17"), CHR16("16"), CHR15("15"), CHR14("14"), CHR13("13"), CHR12("12"), CHR11("11"), CHR10("10"), CHR9("9"), CHR8("8"), CHR7("7"), CHR6("6"), CHR5("5"), CHR4("4"), CHR3("3"), CHR2("2"), CHR1("1"), CHRX("X"), CHRY("Y"), CHRMT("MT");
+    private static final long serialVersionUID = 35L;
 
-    private final String chrom;
+    @Inject
+    private Validator validator;
 
-    private Chromosome(String chrom) {
-        this.chrom = chrom;
-    }
+    @Override
+    public QueryTo getQuery(String chrom, Long pos, String allele, String ref) {
+        Chromosome c = QueryUtils.normalizeChromosome(chrom);
+        Reference r = QueryUtils.normalizeReference(ref);
 
-    public static Chromosome fromString(String text) {
-        if (text != null) {
-            for (Chromosome b : Chromosome.values()) {
-                if (text.equalsIgnoreCase(b.toString())) {
-                    return b;
-                }
-            }
-        }
-        return null;
+        return new QueryTo(new Query(c == null ? null : c, pos, QueryUtils.normalizeAllele(allele), r == null ? null : r));
     }
 
     @Override
-    public String toString() {
-        return chrom;
+    public boolean checkIfQuerySuccessfullyNormalizedAndValid(QueryTo q, String ref) {
+        Query query = new Query(q.getChromosome(), q.getPosition(), q.getAllele(), q.getReference());
+
+        return (!(ref == null || ref.isEmpty()) && q.getReference() == null) || !validator.validate(query).isEmpty();
     }
 }

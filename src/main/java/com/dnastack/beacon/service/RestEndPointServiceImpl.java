@@ -21,43 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.rest;
+package com.dnastack.beacon.service;
 
-import com.dnastack.beacon.service.RestEndPoint;
-import com.dnastack.beacon.service.RestEndPointService;
+import com.dnastack.beacon.log.Logged;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriInfo;
 
 /**
- * Information/help rest resource.
+ * Implementation of a service managing REST end points.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Path("/")
-@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN})
-public class HelpResource {
+public class RestEndPointServiceImpl implements RestEndPointService {
 
-    @Context
-    private UriInfo uriInfo;
+    private static final RestEndPoint beacons = new RestEndPoint("beacons", "beacons", "beacons");
+    private static final RestEndPoint responses = new RestEndPoint("responses", "responses", "responses?chrom=14&pos=106833421&allele=A");
 
-    @Inject
-    private RestEndPointService restEndPointService;
+    @Logged
+    @Override
+    public Set<RestEndPoint> showEndPoints(String url) {
+        Set<RestEndPoint> reps = new HashSet<>();
+        reps.add(new RestEndPoint(beacons.getId(), url + beacons.getBaseUrl(), url + beacons.getExample()));
+        reps.add(new RestEndPoint(responses.getId(), url + responses.getBaseUrl(), url + responses.getExample()));
 
-    /**
-     * Shows REST welcome page.
-     *
-     * @return response
-     */
-    @GET
-    public Set<RestEndPoint> showEndPoints() {
-        return restEndPointService.showEndPoints(uriInfo.getBaseUri().toString());
+        return Collections.unmodifiableSet(reps);
     }
 
 }

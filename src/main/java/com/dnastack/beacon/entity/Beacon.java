@@ -21,66 +21,65 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.core;
+package com.dnastack.beacon.entity;
 
+import com.dnastack.beacon.processor.BeaconProcessor;
 import java.io.Serializable;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Objects;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
- * Representation of a query result provided by a beacon.
+ * Beacon.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@XmlRootElement
-public class BeaconResponse implements Serializable {
+public class Beacon implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
-    private Beacon beacon;
-    private Query query;
-    private Boolean response = null;
+    @NotNull
+    @Size(min = 1)
+    private String id;
+    @NotNull
+    @Size(min = 1)
+    private String name;
+    private BeaconProcessor processor;
 
-    public BeaconResponse() {
-        // needed for JAXB
+    public Beacon(String id, String name, BeaconProcessor processor) {
+        this.id = id;
+        this.name = name;
+        this.processor = processor;
     }
 
-    public BeaconResponse(Beacon beacon, Query query, Boolean response) {
-        this.beacon = beacon;
-        this.query = query;
-        this.response = response;
+    public String getId() {
+        return id;
     }
 
-    public Beacon getBeacon() {
-        return beacon;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setBeacon(Beacon beacon) {
-        this.beacon = beacon;
+    public String getName() {
+        return name;
     }
 
-    public Query getQuery() {
-        return query;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setQuery(Query query) {
-        this.query = query;
+    public BeaconProcessor getProcessor() {
+        return processor;
     }
 
-    public Boolean getResponse() {
-        return response;
-    }
-
-    public void setResponse(Boolean response) {
-        this.response = response;
+    public void setProcessor(BeaconProcessor processor) {
+        this.processor = processor;
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 41 * hash + (this.beacon != null ? this.beacon.hashCode() : 0);
-        hash = 41 * hash + (this.query != null ? this.query.hashCode() : 0);
-        hash = 41 * hash + (this.response != null ? this.response.hashCode() : 0);
+        int hash = 5;
         return hash;
     }
 
@@ -92,14 +91,14 @@ public class BeaconResponse implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final BeaconResponse other = (BeaconResponse) obj;
-        if (this.beacon != other.beacon && (this.beacon == null || !this.beacon.equals(other.beacon))) {
+        final Beacon other = (Beacon) obj;
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
-        if (this.query != other.query && (this.query == null || !this.query.equals(other.query))) {
+        if (!Objects.equals(this.name, other.name)) {
             return false;
         }
-        if (this.response != other.response && (this.response == null || !this.response.equals(other.response))) {
+        if (!Objects.equals(this.processor, other.processor)) {
             return false;
         }
         return true;
@@ -107,7 +106,6 @@ public class BeaconResponse implements Serializable {
 
     @Override
     public String toString() {
-        return "Response of '" + beacon + "' to '" + query + "': '" + response + "'";
+        return "Beacon{" + "id=" + id + ", name=" + name + '}';
     }
-
 }
