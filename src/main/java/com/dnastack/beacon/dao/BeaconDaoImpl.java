@@ -32,12 +32,15 @@ import com.dnastack.beacon.processor.Kaviar;
 import com.dnastack.beacon.processor.Ncbi;
 import com.dnastack.beacon.processor.Ucsc;
 import com.dnastack.beacon.processor.Wtsi;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.PostConstruct;
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 /**
@@ -46,13 +49,13 @@ import javax.inject.Inject;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Stateless
-@LocalBean
+@ApplicationScoped
 public class BeaconDaoImpl implements BeaconDao, Serializable {
 
     private static final long serialVersionUID = 5L;
 
     private Set<Beacon> beacons;
+    private Multimap<BeaconTo, BeaconTo> aggregations;
 
     @Inject
     @Ucsc
@@ -78,27 +81,66 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
     @Kaviar
     private BeaconProcessor kaviarService;
 
-    @PostConstruct
-    private void init() {
+    private void setUpBeacons() {
         this.beacons = new HashSet<>();
-        beacons.add(new Beacon("clinvar", "NCBI ClinVar", ucscService));
-        beacons.add(new Beacon("uniprot", "UniProt", ucscService));
-        beacons.add(new Beacon("lovd", "Leiden Open Variation", ucscService));
-        beacons.add(new Beacon("ebi", "EMBL-EBI", ebiService));
-        beacons.add(new Beacon("ncbi", "NCBI", ncbiService));
-        beacons.add(new Beacon("wtsi", "Wellcome Trust Sanger Institute", wtsiService));
-        beacons.add(new Beacon("amplab", "AMPLab", ampLabService));
-        beacons.add(new Beacon("kaviar", "Known VARiants", kaviarService));
+
+        // set up bob
+        Beacon bob = new Beacon("bob", "Beacon of Beacons", null, true);
+
+        // set up regular beacons
+        Beacon clinvar = new Beacon("clinvar", "NCBI ClinVar", ucscService, true);
+        Beacon uniprot = new Beacon("uniprot", "UniProt", ucscService, true);
+        Beacon lovd = new Beacon("lovd", "Leiden Open Variation", ucscService, true);
+        Beacon ebi = new Beacon("ebi", "EMBL-EBI", ebiService, true);
+        Beacon ncbi = new Beacon("ncbi", "NCBI", ncbiService, true);
+        Beacon wtsi = new Beacon("wtsi", "Wellcome Trust Sanger Institute", wtsiService, true);
+        Beacon amplab = new Beacon("amplab", "AMPLab", ampLabService, true);
+        Beacon kaviar = new Beacon("kaviar", "Known VARiants", kaviarService, true);
+
+        // set up aggregators
+        Beacon pathogenic = new Beacon("pathogenic", "Pathogenic", null, true);
+        lovd.addAggregator(pathogenic);
+        clinvar.addAggregator(pathogenic);
+
+        // add beacons ot collection
+        beacons.add(bob);
+        beacons.add(pathogenic);
+
+        beacons.add(clinvar);
+        beacons.add(uniprot);
+        beacons.add(lovd);
+        beacons.add(ebi);
+        beacons.add(ncbi);
+        beacons.add(wtsi);
+        beacons.add(amplab);
+        beacons.add(kaviar);
+
+        // point all regular beacons to bob
+        for (Beacon b : beacons) {
+            if (b.getProcessor() != null) {
+                b.addAggregator(bob);
+            }
+        }
     }
 
-    @Override
-    public Set<BeaconTo> getAllBeacons() {
-        Set<BeaconTo> res = new HashSet<>();
-        for (Beacon b : beacons) {
-            res.add(new BeaconTo(b));
-        }
+    private void computeAggregations() {
+        aggregations = HashMultimap.create();
 
-        return res;
+        for (Beacon b : beacons) {
+            if (b.getProcessor() != null) {
+                for (Beacon parent : b.getAggregators()) {
+                    if (parent.getProcessor() == null) {
+                        aggregations.put(new BeaconTo(parent), new BeaconTo(b));
+                    }
+                }
+            }
+        }
+    }
+
+    @PostConstruct
+    private void init() {
+        setUpBeacons();
+        computeAggregations();
     }
 
     private Beacon findBeacon(String beaconId) {
@@ -112,6 +154,58 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
     }
 
     @Override
+    public Collection<BeaconTo> getAllBeacons() {
+        Set<BeaconTo> res = new HashSet<>();
+
+        return res;
+    }
+
+    @Override
+    public Collection<BeaconTo> getAggregatingBeacons() {
+        Set<BeaconTo> res = new HashSet<>();
+        for (Beacon b : beacons) {
+            if (b.getProcessor() == null) {
+                res.add(new BeaconTo(b));
+            }
+        }
+
+        return res;
+    }
+
+    @Override
+    public Collection<BeaconTo> getRegularBeacons() {
+        Set<BeaconTo> res = new HashSet<>();
+        for (Beacon b : beacons) {
+            if (b.getProcessor() != null) {
+                res.add(new BeaconTo(b));
+            }
+        }
+        return res;
+    }
+
+    @Override
+    public Collection<BeaconTo> getVisibleBeacons() {
+        Set<BeaconTo> res = new HashSet<>();
+        for (Beacon b : beacons) {
+            if (b.isVisible()) {
+                res.add(new BeaconTo(b));
+            }
+        }
+        return res;
+    }
+
+    @Override
+    public Collection<BeaconTo> getHiddenBeacons() {
+        Set<BeaconTo> res = new HashSet<>();
+        for (Beacon b : beacons) {
+            if (!b.isVisible()) {
+                res.add(new BeaconTo(b));
+            }
+        }
+        return res;
+    }
+
+    @Override
     public BeaconTo getBeacon(String beaconId) {
         if (beaconId == null) {
             throw new NullPointerException("beaconId");
@@ -121,13 +215,44 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
     }
 
     @Override
-    public BeaconTo getBob() {
-        return new BeaconTo("bob", "beacon of beacons");
+    public BeaconTo getVisibleBeacon(String beaconId) {
+        if (beaconId == null) {
+            throw new NullPointerException("beaconId");
+        }
+
+        Beacon b = findBeacon(beaconId);
+        if (b == null) {
+            return null;
+        }
+
+        return b.isVisible() ? new BeaconTo(b) : null;
     }
 
     @Override
     public BeaconProcessor getProcessor(BeaconTo b) {
         return findBeacon(b.getId()).getProcessor();
+    }
+
+    @Override
+    public boolean isAgregator(BeaconTo b) {
+        return findBeacon(b.getId()).getProcessor() == null;
+    }
+
+    @Override
+    public Collection<BeaconTo> getAggregators(BeaconTo b) {
+        Set<Beacon> bs = findBeacon(b.getId()).getAggregators();
+
+        Set<BeaconTo> res = new HashSet<>();
+        for (Beacon a : bs) {
+            res.add(new BeaconTo(a));
+        }
+
+        return res;
+    }
+
+    @Override
+    public Collection<BeaconTo> getAggregatees(BeaconTo b) {
+        return Collections.unmodifiableCollection(aggregations.get(b));
     }
 
 }

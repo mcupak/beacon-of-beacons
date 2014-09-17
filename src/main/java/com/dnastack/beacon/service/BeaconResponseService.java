@@ -34,18 +34,6 @@ import java.util.Collection;
 public interface BeaconResponseService {
 
     /**
-     * Query the beacon of beacons.
-     *
-     * @param chrom  chromosome
-     * @param pos    position
-     * @param allele allele
-     * @param ref    reference genome (optional)
-     *
-     * @return list of beacon responses
-     */
-    BeaconResponse queryBob(String chrom, Long pos, String allele, String ref);
-
-    /**
      * Query a given beacon
      *
      * @param beaconId beacon to query

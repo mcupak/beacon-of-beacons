@@ -25,7 +25,10 @@ package com.dnastack.beacon.entity;
 
 import com.dnastack.beacon.processor.BeaconProcessor;
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -46,11 +49,32 @@ public class Beacon implements Serializable {
     @Size(min = 1)
     private String name;
     private BeaconProcessor processor;
+    private boolean visible;
+    @NotNull
+    private Set<Beacon> aggregators;
+
+    public Beacon(String id, String name) {
+        this.id = id;
+        this.name = name;
+        this.processor = null;
+        this.visible = true;
+        this.aggregators = new HashSet<>();
+    }
 
     public Beacon(String id, String name, BeaconProcessor processor) {
         this.id = id;
         this.name = name;
         this.processor = processor;
+        this.visible = true;
+        this.aggregators = new HashSet<>();
+    }
+
+    public Beacon(String id, String name, BeaconProcessor processor, boolean visible) {
+        this.id = id;
+        this.name = name;
+        this.processor = processor;
+        this.visible = visible;
+        this.aggregators = new HashSet<>();
     }
 
     public String getId() {
@@ -77,9 +101,45 @@ public class Beacon implements Serializable {
         this.processor = processor;
     }
 
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
+    public Set<Beacon> getAggregators() {
+        return Collections.unmodifiableSet(aggregators);
+    }
+
+    public void addAggregator(Beacon beacon) {
+        if (beacon == null) {
+            throw new NullPointerException("beacon");
+        }
+        if (aggregators == null) {
+            aggregators = new HashSet<>();
+        }
+        aggregators.add(beacon);
+    }
+
+    public void removeAggregator(Beacon beacon) {
+        if (beacon == null) {
+            throw new NullPointerException("beacon");
+        }
+        if (aggregators != null) {
+            aggregators.remove(beacon);
+        }
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
+        hash = 13 * hash + Objects.hashCode(this.id);
+        hash = 13 * hash + Objects.hashCode(this.name);
+        hash = 13 * hash + Objects.hashCode(this.processor);
+        hash = 13 * hash + (this.visible ? 1 : 0);
+        hash = 13 * hash + Objects.hashCode(this.aggregators);
         return hash;
     }
 
@@ -99,6 +159,12 @@ public class Beacon implements Serializable {
             return false;
         }
         if (!Objects.equals(this.processor, other.processor)) {
+            return false;
+        }
+        if (this.visible != other.visible) {
+            return false;
+        }
+        if (!Objects.equals(this.aggregators, other.aggregators)) {
             return false;
         }
         return true;

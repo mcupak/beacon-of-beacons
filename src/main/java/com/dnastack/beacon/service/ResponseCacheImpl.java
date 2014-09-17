@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
+ * Copyright 2014 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,43 +21,48 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.rest;
+package com.dnastack.beacon.service;
 
-import com.dnastack.beacon.service.RestEndPoint;
-import com.dnastack.beacon.service.RestEndPointService;
-import java.util.Collection;
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriInfo;
+import com.dnastack.beacon.dto.BeaconTo;
+import java.io.Serializable;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Named;
 
 /**
- * Information/help rest resource.
+ * Simple cache for beacon responses.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Path("/")
-@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN})
-public class HelpResource {
+@RequestScoped
+@Named
+public class ResponseCacheImpl implements ResponseCache, Serializable {
 
-    @Context
-    private UriInfo uriInfo;
+    private static final long serialVersionUID = 101L;
 
-    @Inject
-    private RestEndPointService restEndPointService;
+    private Map<BeaconTo, Boolean> responses;
 
-    /**
-     * Shows REST welcome page.
-     *
-     * @return response
-     */
-    @GET
-    public Collection<RestEndPoint> showEndPoints() {
-        return restEndPointService.showEndPoints(uriInfo.getBaseUri().toString());
+    @PostConstruct
+    private void init() {
+        responses = new ConcurrentHashMap<>();
+    }
+
+    @Override
+    public synchronized void addResponse(BeaconTo b, Boolean r) {
+        responses.put(b, r);
+    }
+
+    @Override
+    public boolean containsResponse(BeaconTo b) {
+        return responses.containsKey(b);
+    }
+
+    @Override
+    public Boolean getResponse(BeaconTo b) {
+        return responses.get(b);
     }
 
 }

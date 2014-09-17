@@ -53,7 +53,7 @@ public class BeaconsTest extends BasicTest {
     public static final String BEACONS_TEMPLATE = "rest/beacons";
     public static final String BEACONS_FILTERED_TEMPLATE = "rest/beacons?beacon=%s";
     public static final String BEACON_TEMPLATE = "rest/beacons/%s";
-    public static Set<String> BEACON_IDS = ImmutableSet.of("clinvar", "uniprot", "lovd", "ebi", "ncbi", "wtsi", "amplab", "kaviar");
+    public static final Set<String> BEACON_IDS = ImmutableSet.of("clinvar", "uniprot", "lovd", "ebi", "ncbi", "wtsi", "amplab", "kaviar", "pathogenic", "bob");
 
     public static String getUrl() {
         return BEACONS_TEMPLATE;

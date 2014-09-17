@@ -23,7 +23,7 @@
  */
 package com.dnastack.beacon.service;
 
-import java.util.Set;
+import java.util.Collection;
 
 /**
  * Service for managing REST end points.
@@ -36,8 +36,8 @@ public interface RestEndPointService {
     /**
      * Shows REST end points.
      *
-     * @return set of rest endpoints
+     * @return collection of rest endpoints
      */
-    Set<RestEndPoint> showEndPoints(String url);
+    Collection<RestEndPoint> showEndPoints(String url);
 
 }

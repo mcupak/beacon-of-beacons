@@ -25,7 +25,6 @@ package com.dnastack.beacon.rest;
 
 import com.dnastack.beacon.service.BeaconResponse;
 import com.dnastack.beacon.service.BeaconResponseService;
-import com.dnastack.beacon.service.BeaconService;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -48,24 +47,6 @@ public class ResponseResource {
 
     @Inject
     private BeaconResponseService responseService;
-    @Inject
-    private BeaconService beaconService;
-
-    /**
-     * Query the beacon of beacons.
-     *
-     * @param chrom  chromosome
-     * @param pos    position
-     * @param allele allele
-     * @param ref    reference genome (optional)
-     *
-     * @return bob response
-     */
-    @GET
-    @Path("/bob")
-    public BeaconResponse queryBob(@QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele, @QueryParam("ref") String ref) {
-        return responseService.queryBob(chrom, pos, allele, ref);
-    }
 
     /**
      * Query a given beacon
@@ -100,8 +81,6 @@ public class ResponseResource {
         List<BeaconResponse> brs = new ArrayList<>();
         if (beaconId == null) {
             brs.addAll(responseService.queryAll(chrom, pos, allele, ref));
-        } else if (beaconId.equals(beaconService.getBob().getId())) {
-            brs.add(responseService.queryBob(chrom, pos, allele, ref));
         } else {
             brs.add(responseService.queryBeacon(beaconId, chrom, pos, allele, ref));
         }

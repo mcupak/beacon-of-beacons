@@ -24,7 +24,7 @@
 package com.dnastack.beacon.service;
 
 import com.dnastack.beacon.dto.BeaconTo;
-import java.util.Set;
+import java.util.Collection;
 
 /**
  * Service managing beacons.
@@ -33,13 +33,6 @@ import java.util.Set;
  * @version 1.0
  */
 public interface BeaconService {
-
-    /**
-     * Retrieves beacon of beacons details.
-     *
-     * @return bob
-     */
-    BeaconTo getBob();
 
     /**
      * Retrieves beacon details.
@@ -53,8 +46,8 @@ public interface BeaconService {
     /**
      * Retrieves all the beacons.
      *
-     * @return set of beacons
+     * @return collection of beacons
      */
-    Set<BeaconTo> getAll();
+    Collection<BeaconTo> getAll();
 
 }

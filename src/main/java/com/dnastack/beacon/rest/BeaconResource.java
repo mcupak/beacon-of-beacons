@@ -26,6 +26,8 @@ package com.dnastack.beacon.rest;
 import com.dnastack.beacon.dto.BeaconTo;
 import com.dnastack.beacon.log.Logged;
 import com.dnastack.beacon.service.BeaconService;
+import java.net.HttpURLConnection;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import javax.inject.Inject;
@@ -34,6 +36,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -50,17 +53,6 @@ public class BeaconResource {
     private BeaconService beaconService;
 
     /**
-     * Shows beacon of beacons details.
-     *
-     * @return bob
-     */
-    @GET
-    @Path("/bob")
-    public BeaconTo showBob() {
-        return beaconService.getBob();
-    }
-
-    /**
      * Shows beacon details.
      *
      * @param beaconId id of the beacon
@@ -70,7 +62,11 @@ public class BeaconResource {
     @GET
     @Path("/{beaconId}")
     public BeaconTo showBeacon(@PathParam("beaconId") String beaconId) {
-        return beaconService.getBeacon(beaconId);
+        BeaconTo b = beaconService.getBeacon(beaconId);
+        if (b == null) {
+            throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
+        }
+        return b;
     }
 
     /**
@@ -82,12 +78,10 @@ public class BeaconResource {
      */
     @Logged
     @GET
-    public Set<BeaconTo> show(@QueryParam("beacon") String beaconId) {
+    public Collection<BeaconTo> show(@QueryParam("beacon") String beaconId) {
         Set<BeaconTo> bs = new HashSet<>();
         if (beaconId == null) {
             bs.addAll(beaconService.getAll());
-        } else if (beaconId.equals(beaconService.getBob().getId())) {
-            bs.add(beaconService.getBob());
         } else {
             bs.add(beaconService.getBeacon(beaconId));
         }

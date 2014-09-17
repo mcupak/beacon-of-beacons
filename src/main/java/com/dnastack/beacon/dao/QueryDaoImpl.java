@@ -29,6 +29,7 @@ import com.dnastack.beacon.entity.Query;
 import com.dnastack.beacon.entity.Reference;
 import com.dnastack.beacon.util.QueryUtils;
 import java.io.Serializable;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.validation.Validator;
 
@@ -38,6 +39,7 @@ import javax.validation.Validator;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
+@ApplicationScoped
 public class QueryDaoImpl implements QueryDao, Serializable {
 
     private static final long serialVersionUID = 35L;

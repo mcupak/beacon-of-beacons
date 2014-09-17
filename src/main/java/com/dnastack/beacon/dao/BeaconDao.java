@@ -25,7 +25,7 @@ package com.dnastack.beacon.dao;
 
 import com.dnastack.beacon.dto.BeaconTo;
 import com.dnastack.beacon.processor.BeaconProcessor;
-import java.util.Set;
+import java.util.Collection;
 
 /**
  * Mapper and holder of beacons and services.
@@ -40,7 +40,35 @@ public interface BeaconDao {
      *
      * @return collection of beacons
      */
-    Set<BeaconTo> getAllBeacons();
+    Collection<BeaconTo> getAllBeacons();
+
+    /**
+     * Retrieves all aggregating beacons.
+     *
+     * @return collection of beacons
+     */
+    Collection<BeaconTo> getAggregatingBeacons();
+
+    /**
+     * Retrieves all non-aggregating beacons.
+     *
+     * @return collection of beacons
+     */
+    Collection<BeaconTo> getRegularBeacons();
+
+    /**
+     * Retrieves all visible beacons.
+     *
+     * @return collection of beacons
+     */
+    Collection<BeaconTo> getVisibleBeacons();
+
+    /**
+     * Retrieves all invisible (anonymous) beacons.
+     *
+     * @return collection of beacons
+     */
+    Collection<BeaconTo> getHiddenBeacons();
 
     /**
      * Finds beacon by its ID.
@@ -51,7 +79,14 @@ public interface BeaconDao {
      */
     BeaconTo getBeacon(String beaconId);
 
-    BeaconTo getBob();
+    /**
+     * Finds a visible beacon by its ID.
+     *
+     * @param beaconId beacon ID
+     *
+     * @return beacon with the given ID or null if the beacon is invisible/does not exist
+     */
+    BeaconTo getVisibleBeacon(String beaconId);
 
     /**
      * Retrieves the processor for a given beacon.
@@ -61,4 +96,31 @@ public interface BeaconDao {
      * @return beacon processor
      */
     BeaconProcessor getProcessor(BeaconTo b);
+
+    /**
+     * Checks if a given beacon is aggregator.
+     *
+     * @param b beacon
+     *
+     * @return true if b is aggregator, false if it is a regular beacon
+     */
+    boolean isAgregator(BeaconTo b);
+
+    /**
+     * Retrieves the aggregators of a given beacon.
+     *
+     * @param b beacon
+     *
+     * @return collection of aggregators processor
+     */
+    Collection<BeaconTo> getAggregators(BeaconTo b);
+
+    /**
+     * Retrieves the aggregatees of a given beacon.
+     *
+     * @param b beacon
+     *
+     * @return collection of agregatees
+     */
+    Collection<BeaconTo> getAggregatees(BeaconTo b);
 }

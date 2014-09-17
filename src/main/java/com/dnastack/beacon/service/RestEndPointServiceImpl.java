@@ -24,9 +24,11 @@
 package com.dnastack.beacon.service;
 
 import com.dnastack.beacon.log.Logged;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import javax.enterprise.context.RequestScoped;
 
 /**
  * Implementation of a service managing REST end points.
@@ -34,6 +36,7 @@ import java.util.Set;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
+@RequestScoped
 public class RestEndPointServiceImpl implements RestEndPointService {
 
     private static final RestEndPoint beacons = new RestEndPoint("beacons", "beacons", "beacons");
@@ -41,7 +44,7 @@ public class RestEndPointServiceImpl implements RestEndPointService {
 
     @Logged
     @Override
-    public Set<RestEndPoint> showEndPoints(String url) {
+    public Collection<RestEndPoint> showEndPoints(String url) {
         Set<RestEndPoint> reps = new HashSet<>();
         reps.add(new RestEndPoint(beacons.getId(), url + beacons.getBaseUrl(), url + beacons.getExample()));
         reps.add(new RestEndPoint(responses.getId(), url + responses.getBaseUrl(), url + responses.getExample()));

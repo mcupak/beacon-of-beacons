@@ -26,7 +26,6 @@ package com.dnastack.beacon.processor;
 import com.dnastack.beacon.dto.BeaconTo;
 import com.dnastack.beacon.dto.QueryTo;
 import com.dnastack.beacon.entity.Reference;
-import com.dnastack.beacon.log.Logged;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -99,7 +98,6 @@ public abstract class AbstractBeaconProcessor implements BeaconProcessor, Serial
     }
 
     @Override
-    @Logged
     @Asynchronous
     public Future<Boolean> executeQuery(BeaconTo beacon, QueryTo query) {
         Boolean res = null;
