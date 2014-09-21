@@ -88,7 +88,7 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
         Beacon bob = new Beacon("bob", "Beacon of Beacons", null, true);
 
         // set up regular beacons
-        Beacon clinvar = new Beacon("clinvar", "NCBI ClinVar", ucscService, true);
+        Beacon clinvar = new Beacon("clinvar", "ClinVar", ucscService, true);
         Beacon uniprot = new Beacon("uniprot", "UniProt", ucscService, true);
         Beacon lovd = new Beacon("lovd", "Leiden Open Variation", ucscService, true);
         Beacon ebi = new Beacon("ebi", "EMBL-EBI", ebiService, true);

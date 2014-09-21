@@ -28,8 +28,8 @@ import com.dnastack.beacon.log.Logged;
 import com.dnastack.beacon.service.BeaconService;
 import java.net.HttpURLConnection;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -51,6 +51,9 @@ public class BeaconResource {
 
     @Inject
     private BeaconService beaconService;
+
+    @Inject
+    private BeaconToComparator beaconComparator;
 
     /**
      * Shows beacon details.
@@ -79,7 +82,7 @@ public class BeaconResource {
     @Logged
     @GET
     public Collection<BeaconTo> show(@QueryParam("beacon") String beaconId) {
-        Set<BeaconTo> bs = new HashSet<>();
+        Set<BeaconTo> bs = new TreeSet<>(beaconComparator);
         if (beaconId == null) {
             bs.addAll(beaconService.getAll());
         } else {

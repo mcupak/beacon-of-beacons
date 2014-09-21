@@ -25,8 +25,9 @@ package com.dnastack.beacon.rest;
 
 import com.dnastack.beacon.service.BeaconResponse;
 import com.dnastack.beacon.service.BeaconResponseService;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.Set;
+import java.util.TreeSet;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -47,6 +48,9 @@ public class ResponseResource {
 
     @Inject
     private BeaconResponseService responseService;
+
+    @Inject
+    private BeaconResponseComparator beaconResponseComparator;
 
     /**
      * Query a given beacon
@@ -77,8 +81,8 @@ public class ResponseResource {
      * @return list of beacon responses
      */
     @GET
-    public List<BeaconResponse> query(@QueryParam("beacon") String beaconId, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele, @QueryParam("ref") String ref) {
-        List<BeaconResponse> brs = new ArrayList<>();
+    public Collection<BeaconResponse> query(@QueryParam("beacon") String beaconId, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele, @QueryParam("ref") String ref) {
+        Set<BeaconResponse> brs = new TreeSet<>(beaconResponseComparator);
         if (beaconId == null) {
             brs.addAll(responseService.queryAll(chrom, pos, allele, ref));
         } else {
