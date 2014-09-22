@@ -23,15 +23,12 @@
  */
 package com.dnastack.beacon.dao;
 
-import com.dnastack.beacon.dto.QueryTo;
 import com.dnastack.beacon.entity.Chromosome;
 import com.dnastack.beacon.entity.Query;
 import com.dnastack.beacon.entity.Reference;
 import com.dnastack.beacon.util.QueryUtils;
 import java.io.Serializable;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.validation.Validator;
 
 /**
  * Basic provider of queries.
@@ -44,21 +41,11 @@ public class QueryDaoImpl implements QueryDao, Serializable {
 
     private static final long serialVersionUID = 35L;
 
-    @Inject
-    private Validator validator;
-
     @Override
-    public QueryTo getQuery(String chrom, Long pos, String allele, String ref) {
+    public Query getQuery(String chrom, Long pos, String allele, String ref) {
         Chromosome c = QueryUtils.normalizeChromosome(chrom);
         Reference r = QueryUtils.normalizeReference(ref);
 
-        return new QueryTo(new Query(c == null ? null : c, pos, QueryUtils.normalizeAllele(allele), r == null ? null : r));
-    }
-
-    @Override
-    public boolean checkIfQuerySuccessfullyNormalizedAndValid(QueryTo q, String ref) {
-        Query query = new Query(q.getChromosome(), q.getPosition(), q.getAllele(), q.getReference());
-
-        return (!(ref == null || ref.isEmpty()) && q.getReference() == null) || !validator.validate(query).isEmpty();
+        return new Query(c == null ? null : c, pos, QueryUtils.normalizeAllele(allele), r == null ? null : r);
     }
 }

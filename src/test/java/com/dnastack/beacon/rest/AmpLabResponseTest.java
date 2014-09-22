@@ -24,7 +24,7 @@
 package com.dnastack.beacon.rest;
 
 import com.dnastack.beacon.entity.Reference;
-import com.dnastack.beacon.service.BeaconResponse;
+import com.dnastack.beacon.dto.BeaconResponseTo;
 import java.net.MalformedURLException;
 import java.net.URL;
 import javax.xml.bind.JAXBException;
@@ -34,9 +34,9 @@ import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static com.dnastack.beacon.rest.util.ResponseTestUtils.beaconsMatch;
-import static com.dnastack.beacon.rest.util.ResponseTestUtils.getNonMachingFields;
-import static com.dnastack.beacon.rest.util.ResponseTestUtils.queriesMatch;
+import static com.dnastack.beacon.rest.util.BeaconResponseTestUtils.beaconsMatch;
+import static com.dnastack.beacon.rest.util.BeaconResponseTestUtils.getNonMachingFields;
+import static com.dnastack.beacon.rest.util.BeaconResponseTestUtils.queriesMatch;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -59,7 +59,7 @@ public class AmpLabResponseTest extends AbstractResponseTest {
     @Override
     public void testAllRefsFound(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String[] query = {"15", "41087870", "A", null};
-        BeaconResponse br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
+        BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
         assertTrue(beaconsMatch(br.getBeacon(), BEACON));
@@ -71,7 +71,7 @@ public class AmpLabResponseTest extends AbstractResponseTest {
     @Override
     public void testSpecificRefFound(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String[] query = {"15", "41087870", "A", "hg19"};
-        BeaconResponse br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
+        BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
         assertTrue(beaconsMatch(br.getBeacon(), BEACON));
@@ -83,7 +83,7 @@ public class AmpLabResponseTest extends AbstractResponseTest {
     @Override
     public void testSpecificRefNotFound(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String[] query = {"15", "41087870", "A", "hg38"};
-        BeaconResponse br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
+        BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
         assertTrue(beaconsMatch(br.getBeacon(), BEACON));
@@ -95,7 +95,7 @@ public class AmpLabResponseTest extends AbstractResponseTest {
     @Override
     public void testInvalidRef(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String[] query = {"15", "41087870", "A", "hg100"};
-        BeaconResponse br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
+        BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
         assertTrue(beaconsMatch(br.getBeacon(), BEACON));
@@ -108,7 +108,7 @@ public class AmpLabResponseTest extends AbstractResponseTest {
     @Override
     public void testRefConversion(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String[] query = {"15", "41087870", "A", "grch38"};
-        BeaconResponse br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
+        BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
         assertTrue(beaconsMatch(br.getBeacon(), BEACON));
@@ -121,7 +121,7 @@ public class AmpLabResponseTest extends AbstractResponseTest {
     @Override
     public void testDifferentGenome(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String[] query = {"15", "47481777", "G", null};
-        BeaconResponse br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
+        BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
         assertTrue(beaconsMatch(br.getBeacon(), BEACON));
@@ -133,7 +133,7 @@ public class AmpLabResponseTest extends AbstractResponseTest {
     @Override
     public void testStringAllele(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String[] query = {"22", "17213590", "TGTTA", null};
-        BeaconResponse br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
+        BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
         assertTrue(beaconsMatch(br.getBeacon(), BEACON));
@@ -145,7 +145,7 @@ public class AmpLabResponseTest extends AbstractResponseTest {
     @Override
     public void testDel(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String[] query = {"14", "106833421", "D", null};
-        BeaconResponse br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
+        BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
         assertTrue(beaconsMatch(br.getBeacon(), BEACON));
@@ -162,7 +162,7 @@ public class AmpLabResponseTest extends AbstractResponseTest {
     @Override
     public void testAllRefsNotFound(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String[] query = {"15", "41087870", "C", null};
-        BeaconResponse br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
+        BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
         assertTrue(beaconsMatch(br.getBeacon(), BEACON));
@@ -174,7 +174,7 @@ public class AmpLabResponseTest extends AbstractResponseTest {
     @Override
     public void testInvalidAllele(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String[] query = {"15", "41087870", "DC", null};
-        BeaconResponse br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
+        BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
         assertTrue(beaconsMatch(br.getBeacon(), BEACON));
@@ -187,7 +187,7 @@ public class AmpLabResponseTest extends AbstractResponseTest {
     @Override
     public void testAlleleConversion(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String[] query = {"14", "106833421", "DEL", null};
-        BeaconResponse br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
+        BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
         assertTrue(beaconsMatch(br.getBeacon(), BEACON));
@@ -200,7 +200,7 @@ public class AmpLabResponseTest extends AbstractResponseTest {
     @Override
     public void testChromConversion(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String[] query = {"chrom14", "106833421", "D", null};
-        BeaconResponse br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
+        BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
         assertTrue(beaconsMatch(br.getBeacon(), BEACON));
@@ -212,7 +212,7 @@ public class AmpLabResponseTest extends AbstractResponseTest {
     @Override
     public void testInvalidChrom(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String[] query = {"30", "41087870", "A", null};
-        BeaconResponse br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
+        BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
         assertTrue(beaconsMatch(br.getBeacon(), BEACON));
@@ -225,7 +225,7 @@ public class AmpLabResponseTest extends AbstractResponseTest {
     @Override
     public void testChromX(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String[] query = {"X", "41087870", "A", null};
-        BeaconResponse br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
+        BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
         assertTrue(beaconsMatch(br.getBeacon(), BEACON));
@@ -237,7 +237,7 @@ public class AmpLabResponseTest extends AbstractResponseTest {
     @Override
     public void testChromMT(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String[] query = {"MT", "41087870", "A", null};
-        BeaconResponse br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
+        BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
         assertTrue(beaconsMatch(br.getBeacon(), BEACON));

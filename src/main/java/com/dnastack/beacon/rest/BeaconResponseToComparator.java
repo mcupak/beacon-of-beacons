@@ -23,25 +23,25 @@
  */
 package com.dnastack.beacon.rest;
 
-import com.dnastack.beacon.service.BeaconResponse;
+import com.dnastack.beacon.dto.BeaconResponseTo;
 import java.util.Comparator;
 import javax.inject.Inject;
 
 /**
- * Comparator of BeaconResponse objects. Performs comparison of BeaconTo objects in the responses.
+ * Comparator of BeaconResponseTo objects. Performs comparison of BeaconTo objects in the responses.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public class BeaconResponseComparator implements Comparator<BeaconResponse> {
+public class BeaconResponseToComparator implements Comparator<BeaconResponseTo> {
 
     @Inject
     private BeaconToComparator beaconComparator;
 
     @Override
-    public int compare(BeaconResponse o1, BeaconResponse o2) {
+    public int compare(BeaconResponseTo o1, BeaconResponseTo o2) {
         if (o1 == null || o2 == null) {
-            throw new NullPointerException("BeaconResponse is null.");
+            throw new NullPointerException("Beacon response is null.");
         }
         if (o1.getBeacon() == null || o2.getBeacon() == null) {
             throw new NullPointerException("Beacon is null.");

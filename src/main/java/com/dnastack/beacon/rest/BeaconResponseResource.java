@@ -23,7 +23,7 @@
  */
 package com.dnastack.beacon.rest;
 
-import com.dnastack.beacon.service.BeaconResponse;
+import com.dnastack.beacon.dto.BeaconResponseTo;
 import com.dnastack.beacon.service.BeaconResponseService;
 import com.dnastack.beacon.util.ParsingUtils;
 import java.util.Collection;
@@ -51,7 +51,7 @@ public class BeaconResponseResource {
     private BeaconResponseService responseService;
 
     @Inject
-    private BeaconResponseComparator beaconResponseComparator;
+    private BeaconResponseToComparator beaconResponseComparator;
 
     /**
      * Query a given beacon
@@ -66,7 +66,7 @@ public class BeaconResponseResource {
      */
     @GET
     @Path("/{beaconId}")
-    public BeaconResponse queryBeacon(@PathParam("beaconId") String beaconId, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele, @QueryParam("ref") String ref) {
+    public BeaconResponseTo queryBeacon(@PathParam("beaconId") String beaconId, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele, @QueryParam("ref") String ref) {
         return responseService.queryBeacon(beaconId, chrom, pos, allele, ref);
     }
 
@@ -82,8 +82,8 @@ public class BeaconResponseResource {
      * @return list of beacon responses
      */
     @GET
-    public Collection<BeaconResponse> query(@QueryParam("beacon") String beaconIds, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele, @QueryParam("ref") String ref) {
-        Set<BeaconResponse> brs = new TreeSet<>(beaconResponseComparator);
+    public Collection<BeaconResponseTo> query(@QueryParam("beacon") String beaconIds, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele, @QueryParam("ref") String ref) {
+        Set<BeaconResponseTo> brs = new TreeSet<>(beaconResponseComparator);
         if (beaconIds == null) {
             brs.addAll(responseService.queryAll(chrom, pos, allele, ref));
         } else {

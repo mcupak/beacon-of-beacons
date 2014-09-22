@@ -23,6 +23,7 @@
  */
 package com.dnastack.beacon.service;
 
+import com.dnastack.beacon.dto.BeaconResponseTo;
 import java.util.Collection;
 
 /**
@@ -44,7 +45,7 @@ public interface BeaconResponseService {
      *
      * @return list of beacon responses
      */
-    BeaconResponse queryBeacon(String beaconId, String chrom, Long pos, String allele, String ref);
+    BeaconResponseTo queryBeacon(String beaconId, String chrom, Long pos, String allele, String ref);
 
     /**
      * Query specified beacons.
@@ -57,7 +58,7 @@ public interface BeaconResponseService {
      *
      * @return collection of beacon responses
      */
-    Collection<BeaconResponse> queryBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref);
+    Collection<BeaconResponseTo> queryBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref);
 
     /**
      * Query all the beacons.
@@ -69,6 +70,6 @@ public interface BeaconResponseService {
      *
      * @return collection of beacon responses
      */
-    Collection<BeaconResponse> queryAll(String chrom, Long pos, String allele, String ref);
+    Collection<BeaconResponseTo> queryAll(String chrom, Long pos, String allele, String ref);
 
 }

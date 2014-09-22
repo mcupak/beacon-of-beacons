@@ -25,11 +25,13 @@ package com.dnastack.beacon.service;
 
 import com.dnastack.beacon.dao.BeaconDao;
 import com.dnastack.beacon.dto.BeaconTo;
+import com.dnastack.beacon.entity.Beacon;
 import com.dnastack.beacon.log.Logged;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
@@ -48,7 +50,7 @@ public class BeaconServiceImpl implements BeaconService {
     @Logged
     @Override
     public BeaconTo getBeacon(String beaconId) {
-        return beaconDao.getVisibleBeacon(beaconId);
+        return new BeaconTo(beaconDao.getVisibleBeacon(beaconId));
     }
 
     @Logged
@@ -68,7 +70,13 @@ public class BeaconServiceImpl implements BeaconService {
     @Logged
     @Override
     public Collection<BeaconTo> getAll() {
-        return Collections.unmodifiableCollection(beaconDao.getVisibleBeacons());
+        Collection<Beacon> bs = beaconDao.getVisibleBeacons();
+        Set<BeaconTo> res = new HashSet<>();
+        for (Beacon b : bs) {
+            res.add(new BeaconTo(b));
+        }
+
+        return res;
     }
 
 }

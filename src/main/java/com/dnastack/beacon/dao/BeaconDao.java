@@ -23,8 +23,7 @@
  */
 package com.dnastack.beacon.dao;
 
-import com.dnastack.beacon.dto.BeaconTo;
-import com.dnastack.beacon.processor.BeaconProcessor;
+import com.dnastack.beacon.entity.Beacon;
 import java.util.Collection;
 
 /**
@@ -40,35 +39,35 @@ public interface BeaconDao {
      *
      * @return collection of beacons
      */
-    Collection<BeaconTo> getAllBeacons();
+    Collection<Beacon> getAllBeacons();
 
     /**
      * Retrieves all aggregating beacons.
      *
      * @return collection of beacons
      */
-    Collection<BeaconTo> getAggregatingBeacons();
+    Collection<Beacon> getAggregatingBeacons();
 
     /**
      * Retrieves all non-aggregating beacons.
      *
      * @return collection of beacons
      */
-    Collection<BeaconTo> getRegularBeacons();
+    Collection<Beacon> getRegularBeacons();
 
     /**
      * Retrieves all visible beacons.
      *
      * @return collection of beacons
      */
-    Collection<BeaconTo> getVisibleBeacons();
+    Collection<Beacon> getVisibleBeacons();
 
     /**
      * Retrieves all invisible (anonymous) beacons.
      *
      * @return collection of beacons
      */
-    Collection<BeaconTo> getHiddenBeacons();
+    Collection<Beacon> getHiddenBeacons();
 
     /**
      * Finds beacon by its ID.
@@ -77,7 +76,7 @@ public interface BeaconDao {
      *
      * @return beacon with the given ID
      */
-    BeaconTo getBeacon(String beaconId);
+    Beacon getBeacon(String beaconId);
 
     /**
      * Finds a visible beacon by its ID.
@@ -86,16 +85,7 @@ public interface BeaconDao {
      *
      * @return beacon with the given ID or null if the beacon is invisible/does not exist
      */
-    BeaconTo getVisibleBeacon(String beaconId);
-
-    /**
-     * Retrieves the processor for a given beacon.
-     *
-     * @param b beacon
-     *
-     * @return beacon processor
-     */
-    BeaconProcessor getProcessor(BeaconTo b);
+    Beacon getVisibleBeacon(String beaconId);
 
     /**
      * Checks if a given beacon is aggregator.
@@ -104,16 +94,7 @@ public interface BeaconDao {
      *
      * @return true if b is aggregator, false if it is a regular beacon
      */
-    boolean isAgregator(BeaconTo b);
-
-    /**
-     * Retrieves the aggregators of a given beacon.
-     *
-     * @param b beacon
-     *
-     * @return collection of aggregators processor
-     */
-    Collection<BeaconTo> getAggregators(BeaconTo b);
+    boolean isAgregator(Beacon b);
 
     /**
      * Retrieves the aggregatees of a given beacon.
@@ -122,5 +103,5 @@ public interface BeaconDao {
      *
      * @return collection of agregatees
      */
-    Collection<BeaconTo> getAggregatees(BeaconTo b);
+    Collection<Beacon> getAggregatees(Beacon b);
 }

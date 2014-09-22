@@ -23,7 +23,6 @@
  */
 package com.dnastack.beacon.dao;
 
-import com.dnastack.beacon.dto.BeaconTo;
 import com.dnastack.beacon.entity.Beacon;
 import com.dnastack.beacon.processor.AmpLab;
 import com.dnastack.beacon.processor.BeaconProcessor;
@@ -55,7 +54,7 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
     private static final long serialVersionUID = 5L;
 
     private Set<Beacon> beacons;
-    private Multimap<BeaconTo, BeaconTo> aggregations;
+    private Multimap<Beacon, Beacon> aggregations;
 
     @Inject
     @Ucsc
@@ -130,7 +129,7 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
             if (b.getProcessor() != null) {
                 for (Beacon parent : b.getAggregators()) {
                     if (parent.getProcessor() == null) {
-                        aggregations.put(new BeaconTo(parent), new BeaconTo(b));
+                        aggregations.put(parent, b);
                     }
                 }
             }
@@ -154,18 +153,16 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
     }
 
     @Override
-    public Collection<BeaconTo> getAllBeacons() {
-        Set<BeaconTo> res = new HashSet<>();
-
-        return res;
+    public Collection<Beacon> getAllBeacons() {
+        return Collections.unmodifiableCollection(beacons);
     }
 
     @Override
-    public Collection<BeaconTo> getAggregatingBeacons() {
-        Set<BeaconTo> res = new HashSet<>();
-        for (Beacon b : beacons) {
+    public Collection<Beacon> getAggregatingBeacons() {
+        Set<Beacon> res = new HashSet<>();
+        for (Beacon b : getAllBeacons()) {
             if (b.getProcessor() == null) {
-                res.add(new BeaconTo(b));
+                res.add(b);
             }
         }
 
@@ -173,49 +170,49 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
     }
 
     @Override
-    public Collection<BeaconTo> getRegularBeacons() {
-        Set<BeaconTo> res = new HashSet<>();
-        for (Beacon b : beacons) {
+    public Collection<Beacon> getRegularBeacons() {
+        Set<Beacon> res = new HashSet<>();
+        for (Beacon b : getAllBeacons()) {
             if (b.getProcessor() != null) {
-                res.add(new BeaconTo(b));
+                res.add(b);
             }
         }
         return res;
     }
 
     @Override
-    public Collection<BeaconTo> getVisibleBeacons() {
-        Set<BeaconTo> res = new HashSet<>();
-        for (Beacon b : beacons) {
+    public Collection<Beacon> getVisibleBeacons() {
+        Set<Beacon> res = new HashSet<>();
+        for (Beacon b : getAllBeacons()) {
             if (b.isVisible()) {
-                res.add(new BeaconTo(b));
+                res.add(b);
             }
         }
         return res;
     }
 
     @Override
-    public Collection<BeaconTo> getHiddenBeacons() {
-        Set<BeaconTo> res = new HashSet<>();
-        for (Beacon b : beacons) {
+    public Collection<Beacon> getHiddenBeacons() {
+        Set<Beacon> res = new HashSet<>();
+        for (Beacon b : getAllBeacons()) {
             if (!b.isVisible()) {
-                res.add(new BeaconTo(b));
+                res.add(b);
             }
         }
         return res;
     }
 
     @Override
-    public BeaconTo getBeacon(String beaconId) {
+    public Beacon getBeacon(String beaconId) {
         if (beaconId == null) {
             throw new NullPointerException("beaconId");
         }
 
-        return new BeaconTo(findBeacon(beaconId));
+        return findBeacon(beaconId);
     }
 
     @Override
-    public BeaconTo getVisibleBeacon(String beaconId) {
+    public Beacon getVisibleBeacon(String beaconId) {
         if (beaconId == null) {
             throw new NullPointerException("beaconId");
         }
@@ -225,33 +222,16 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
             return null;
         }
 
-        return b.isVisible() ? new BeaconTo(b) : null;
+        return b.isVisible() ? b : null;
     }
 
     @Override
-    public BeaconProcessor getProcessor(BeaconTo b) {
-        return findBeacon(b.getId()).getProcessor();
+    public boolean isAgregator(Beacon b) {
+        return b.getProcessor() == null;
     }
 
     @Override
-    public boolean isAgregator(BeaconTo b) {
-        return findBeacon(b.getId()).getProcessor() == null;
-    }
-
-    @Override
-    public Collection<BeaconTo> getAggregators(BeaconTo b) {
-        Set<Beacon> bs = findBeacon(b.getId()).getAggregators();
-
-        Set<BeaconTo> res = new HashSet<>();
-        for (Beacon a : bs) {
-            res.add(new BeaconTo(a));
-        }
-
-        return res;
-    }
-
-    @Override
-    public Collection<BeaconTo> getAggregatees(BeaconTo b) {
+    public Collection<Beacon> getAggregatees(Beacon b) {
         return Collections.unmodifiableCollection(aggregations.get(b));
     }
 

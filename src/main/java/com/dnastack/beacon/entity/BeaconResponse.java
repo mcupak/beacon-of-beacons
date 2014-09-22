@@ -21,12 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.service;
+package com.dnastack.beacon.entity;
 
-import com.dnastack.beacon.dto.BeaconTo;
-import com.dnastack.beacon.dto.QueryTo;
+import com.dnastack.beacon.entity.Beacon;
+import com.dnastack.beacon.entity.Query;
 import java.io.Serializable;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Representation of a query result provided by a beacon.
@@ -34,38 +33,33 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@XmlRootElement(name = "beacon-response")
 public class BeaconResponse implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private BeaconTo beacon;
-    private QueryTo query;
+    private Beacon beacon;
+    private Query query;
     private Boolean response = null;
 
-    public BeaconResponse() {
-        // needed for JAXB
-    }
-
-    public BeaconResponse(BeaconTo beacon, QueryTo query, Boolean response) {
+    public BeaconResponse(Beacon beacon, Query query, Boolean response) {
         this.beacon = beacon;
         this.query = query;
         this.response = response;
     }
 
-    public BeaconTo getBeacon() {
+    public Beacon getBeacon() {
         return beacon;
     }
 
-    public void setBeacon(BeaconTo beacon) {
+    public void setBeacon(Beacon beacon) {
         this.beacon = beacon;
     }
 
-    public QueryTo getQuery() {
+    public Query getQuery() {
         return query;
     }
 
-    public void setQuery(QueryTo query) {
+    public void setQuery(Query query) {
         this.query = query;
     }
 
@@ -109,7 +103,7 @@ public class BeaconResponse implements Serializable {
 
     @Override
     public String toString() {
-        return "Response of '" + beacon + "' to '" + query + "': '" + response + "'";
+        return "BeaconResponse{" + "beacon=" + beacon + ", query=" + query + ", response=" + response + '}';
     }
 
 }

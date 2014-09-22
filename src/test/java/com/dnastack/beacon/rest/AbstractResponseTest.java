@@ -26,7 +26,7 @@ package com.dnastack.beacon.rest;
 import com.dnastack.beacon.entity.Chromosome;
 import com.dnastack.beacon.entity.Query;
 import com.dnastack.beacon.entity.Reference;
-import com.dnastack.beacon.service.BeaconResponse;
+import com.dnastack.beacon.dto.BeaconResponseTo;
 import com.google.common.collect.ImmutableList;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -54,7 +54,7 @@ public abstract class AbstractResponseTest extends BasicTest {
     public static final List<String> REF_PATH = ImmutableList.of(BEACON_RESPONSE, QUERY, "reference");
 
     /**
-     * Construct URL for the given BeaconResponse.
+     * Construct URL for the given BeaconResponseTo.
      *
      * @param beacon beacon id
      * @param params parameter array containing the following elements as strings: chrom, pos, allele, ref
@@ -75,8 +75,8 @@ public abstract class AbstractResponseTest extends BasicTest {
         return res;
     }
 
-    protected static BeaconResponse readBeaconResponse(String url) throws JAXBException, MalformedURLException {
-        return (BeaconResponse) readObject(BeaconResponse.class, url);
+    protected static BeaconResponseTo readBeaconResponse(String url) throws JAXBException, MalformedURLException {
+        return (BeaconResponseTo) readObject(BeaconResponseTo.class, url);
     }
 
     protected static String readBeaconId(String response) {

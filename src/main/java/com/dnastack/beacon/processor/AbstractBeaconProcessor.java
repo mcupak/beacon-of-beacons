@@ -23,8 +23,8 @@
  */
 package com.dnastack.beacon.processor;
 
-import com.dnastack.beacon.dto.BeaconTo;
-import com.dnastack.beacon.dto.QueryTo;
+import com.dnastack.beacon.entity.Beacon;
+import com.dnastack.beacon.entity.Query;
 import com.dnastack.beacon.entity.Reference;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -44,12 +44,12 @@ public abstract class AbstractBeaconProcessor implements BeaconProcessor, Serial
 
     private static final long serialVersionUID = 10L;
 
-    private List<Future<String>> executeQueriesInParallel(BeaconTo beacon, QueryTo query) {
+    private List<Future<String>> executeQueriesInParallel(Beacon beacon, Query query) {
         List<Future<String>> fs = new ArrayList<>();
         if (query.getReference() == null) {
             // query all refs
             for (Reference ref : getSupportedReferences()) {
-                fs.add(getQueryResponse(beacon, new QueryTo(query.getChromosome(), query.getPosition(), query.getAllele(), ref)));
+                fs.add(getQueryResponse(beacon, new Query(query.getChromosome(), query.getPosition(), query.getAllele(), ref)));
             }
         } else if (getSupportedReferences().contains(query.getReference())) {
             // query only the specified ref
@@ -99,7 +99,7 @@ public abstract class AbstractBeaconProcessor implements BeaconProcessor, Serial
 
     @Override
     @Asynchronous
-    public Future<Boolean> executeQuery(BeaconTo beacon, QueryTo query) {
+    public Future<Boolean> executeQuery(Beacon beacon, Query query) {
         Boolean res = null;
 
         if (query != null) {

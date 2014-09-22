@@ -34,7 +34,7 @@ import java.util.Set;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public class ResponseTestUtils {
+public class BeaconResponseTestUtils {
 
     private static boolean stringsEqual(String a, String b) {
         boolean onlyOneNull = (a == null && b != null) || (a != null && b == null);

@@ -23,7 +23,7 @@
  */
 package com.dnastack.beacon.dao;
 
-import com.dnastack.beacon.dto.QueryTo;
+import com.dnastack.beacon.entity.Query;
 
 /**
  * Provider of queries.
@@ -43,15 +43,5 @@ public interface QueryDao {
      *
      * @return normalized query
      */
-    QueryTo getQuery(String chrom, Long pos, String allele, String ref);
-
-    /**
-     * Validates query.
-     *
-     * @param q   query
-     * @param ref reference
-     *
-     * @return true if the query is valid, false otherwise
-     */
-    public boolean checkIfQuerySuccessfullyNormalizedAndValid(QueryTo q, String ref);
+    Query getQuery(String chrom, Long pos, String allele, String ref);
 }

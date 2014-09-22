@@ -23,8 +23,8 @@
  */
 package com.dnastack.beacon.processor;
 
-import com.dnastack.beacon.dto.BeaconTo;
-import com.dnastack.beacon.dto.QueryTo;
+import com.dnastack.beacon.entity.Beacon;
+import com.dnastack.beacon.entity.Query;
 import com.dnastack.beacon.entity.Reference;
 import com.dnastack.beacon.util.HttpUtils;
 import com.dnastack.beacon.util.ParsingUtils;
@@ -72,7 +72,7 @@ public class AmpLabBeaconProcessor extends AbstractBeaconProcessor {
 
     @Override
     @Asynchronous
-    public Future<String> getQueryResponse(BeaconTo beacon, QueryTo query) {
+    public Future<String> getQueryResponse(Beacon beacon, Query query) {
         String res = null;
         try {
             res = HttpUtils.executeRequest(HttpUtils.createRequest(BASE_URL, true, getQueryData(query.getReference().toString(), QueryUtils.denormalizeChromosome(CHROM_TEMPLATE, query.getChromosome()), QueryUtils.denormalizePosition(query.getPosition()), QueryUtils.denormalizeAllele(query.getAllele()))));
