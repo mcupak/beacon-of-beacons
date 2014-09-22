@@ -26,8 +26,10 @@ package com.dnastack.beacon.service;
 import com.dnastack.beacon.dao.BeaconDao;
 import com.dnastack.beacon.dto.BeaconTo;
 import com.dnastack.beacon.log.Logged;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 
@@ -47,6 +49,20 @@ public class BeaconServiceImpl implements BeaconService {
     @Override
     public BeaconTo getBeacon(String beaconId) {
         return beaconDao.getVisibleBeacon(beaconId);
+    }
+
+    @Logged
+    @Override
+    public Collection<BeaconTo> getBeacons(Collection<String> beaconIds) {
+        List<BeaconTo> res = new ArrayList<>();
+        for (String id : beaconIds) {
+            BeaconTo b = getBeacon(id);
+            if (b != null) {
+                res.add(b);
+            }
+        }
+
+        return res;
     }
 
     @Logged

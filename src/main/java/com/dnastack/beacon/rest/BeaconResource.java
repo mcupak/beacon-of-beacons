@@ -26,6 +26,7 @@ package com.dnastack.beacon.rest;
 import com.dnastack.beacon.dto.BeaconTo;
 import com.dnastack.beacon.log.Logged;
 import com.dnastack.beacon.service.BeaconService;
+import com.dnastack.beacon.util.ParsingUtils;
 import java.net.HttpURLConnection;
 import java.util.Collection;
 import java.util.Set;
@@ -75,18 +76,18 @@ public class BeaconResource {
     /**
      * Shows all the beacons or a specific beacon as determined by a param.
      *
-     * @param beaconId beacon ID
+     * @param beaconIds beacon ID
      *
      * @return set of beacons
      */
     @Logged
     @GET
-    public Collection<BeaconTo> show(@QueryParam("beacon") String beaconId) {
+    public Collection<BeaconTo> show(@QueryParam("beacon") String beaconIds) {
         Set<BeaconTo> bs = new TreeSet<>(beaconComparator);
-        if (beaconId == null) {
+        if (beaconIds == null) {
             bs.addAll(beaconService.getAll());
         } else {
-            bs.add(beaconService.getBeacon(beaconId));
+            bs.addAll(beaconService.getBeacons(ParsingUtils.parseMultipleParameterValues(beaconIds)));
         }
 
         return bs;

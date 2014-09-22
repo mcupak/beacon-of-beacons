@@ -92,12 +92,14 @@ public class BeaconsTest extends BasicTest {
     }
 
     @Test
-    public void testBeaconsFilteredForBob(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        final String id = "bob";
-        List<BeaconTo> beacons = readBeacons(url.toExternalForm() + getUrl(id, true));
+    public void testMultipleBeaconsFiltered(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
+        String id1 = "clinvar";
+        String id2 = "amplab";
+        List<BeaconTo> beacons = readBeacons(url.toExternalForm() + getUrl("[" + id1 + "," + id2 + "]", true));
 
         assertNotNull(beacons);
-        assertEquals(beacons.get(0).getId(), id);
+        assertTrue(beacons.size() == 2);
+        assertTrue((beacons.get(0).getId().equals(id1) || beacons.get(0).getId().equals(id2)) && (beacons.get(1).getId().equals(id1) || beacons.get(0).getId().equals(id2)));
     }
 
     @Test
@@ -108,14 +110,5 @@ public class BeaconsTest extends BasicTest {
             assertNotNull(b);
             assertEquals(id, b.getId());
         }
-    }
-
-    @Test
-    public void testBeaconBob(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        final String id = "bob";
-        BeaconTo b = readBeacon(url.toExternalForm() + getUrl(id, false));
-
-        assertNotNull(b);
-        assertEquals(id, b.getId());
     }
 }

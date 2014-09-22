@@ -47,6 +47,19 @@ public interface BeaconResponseService {
     BeaconResponse queryBeacon(String beaconId, String chrom, Long pos, String allele, String ref);
 
     /**
+     * Query specified beacons.
+     *
+     * @param beaconIds collection of beacon IDs
+     * @param chrom     chromosome
+     * @param pos       position
+     * @param allele    allele
+     * @param ref       reference genome (optional)
+     *
+     * @return collection of beacon responses
+     */
+    Collection<BeaconResponse> queryBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref);
+
+    /**
      * Query all the beacons.
      *
      * @param chrom  chromosome

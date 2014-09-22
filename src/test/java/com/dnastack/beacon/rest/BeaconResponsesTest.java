@@ -50,7 +50,7 @@ import static org.junit.Assert.assertTrue;
  */
 @RunWith(Arquillian.class)
 @RunAsClient
-public class ResponsesTest extends BasicTest {
+public class BeaconResponsesTest extends BasicTest {
 
     public static final String QUERY_BEACON_TEMPLATE = "rest/responses?beacon=%s&chrom=%s&pos=%s&allele=%s";
     public static final String QUERY_BEACON_WITH_REF_TEMPLATE = "rest/responses?beacon=%s&chrom=%s&pos=%s&allele=%s&ref=%s";
@@ -234,6 +234,23 @@ public class ResponsesTest extends BasicTest {
         assertTrue(beaconsMatch(br.getBeacon(), b));
         assertTrue(queriesMatch(br.getQuery(), q));
         assertTrue(br.getResponse());
+    }
+
+    @Test
+    public void testMultipleResponsesFiltered(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
+        String id1 = "amplab";
+        String id2 = "clinvar";
+        String[] q = {"13", "32888799", "G", null};
+        List<BeaconResponse> brs = readResponses(url.toExternalForm() + getUrl("[" + id1 + "," + id2 + "]", q));
+
+        assertNotNull(brs);
+        assertTrue(brs.size() == 2);
+        assertTrue(beaconsMatch(brs.get(0).getBeacon(), id1) || beaconsMatch(brs.get(0).getBeacon(), id2));
+        assertTrue(beaconsMatch(brs.get(1).getBeacon(), id1) || beaconsMatch(brs.get(1).getBeacon(), id2));
+        assertTrue(queriesMatch(brs.get(0).getQuery(), q));
+        assertTrue(queriesMatch(brs.get(1).getQuery(), q));
+        assertNotNull(brs.get(0).getResponse());
+        assertNotNull(brs.get(1).getResponse());
     }
 
 }

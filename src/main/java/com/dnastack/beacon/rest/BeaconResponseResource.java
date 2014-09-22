@@ -25,6 +25,7 @@ package com.dnastack.beacon.rest;
 
 import com.dnastack.beacon.service.BeaconResponse;
 import com.dnastack.beacon.service.BeaconResponseService;
+import com.dnastack.beacon.util.ParsingUtils;
 import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
@@ -44,7 +45,7 @@ import javax.ws.rs.core.MediaType;
  */
 @Path("/responses")
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN})
-public class ResponseResource {
+public class BeaconResponseResource {
 
     @Inject
     private BeaconResponseService responseService;
@@ -72,21 +73,21 @@ public class ResponseResource {
     /**
      * Query all the beacons or a specific beacon as determined by a param.
      *
-     * @param beaconId beacon to query (optional)
-     * @param chrom    chromosome
-     * @param pos      position
-     * @param allele   allele
-     * @param ref      reference genome (optional)
+     * @param beaconIds beacon to query (optional)
+     * @param chrom     chromosome
+     * @param pos       position
+     * @param allele    allele
+     * @param ref       reference genome (optional)
      *
      * @return list of beacon responses
      */
     @GET
-    public Collection<BeaconResponse> query(@QueryParam("beacon") String beaconId, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele, @QueryParam("ref") String ref) {
+    public Collection<BeaconResponse> query(@QueryParam("beacon") String beaconIds, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele, @QueryParam("ref") String ref) {
         Set<BeaconResponse> brs = new TreeSet<>(beaconResponseComparator);
-        if (beaconId == null) {
+        if (beaconIds == null) {
             brs.addAll(responseService.queryAll(chrom, pos, allele, ref));
         } else {
-            brs.add(responseService.queryBeacon(beaconId, chrom, pos, allele, ref));
+            brs.addAll(responseService.queryBeacons(ParsingUtils.parseMultipleParameterValues(beaconIds), chrom, pos, allele, ref));
         }
 
         return brs;

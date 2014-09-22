@@ -30,6 +30,7 @@ import com.dnastack.beacon.dto.QueryTo;
 import com.dnastack.beacon.log.Logged;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
@@ -119,22 +120,27 @@ public class BeaconResponseServiceImpl implements BeaconResponseService {
         return br;
     }
 
-    @Logged
-    @Override
-    public Collection<BeaconResponse> queryAll(String chrom, Long pos, String allele, String ref) {
-        QueryTo q = queryDao.getQuery(chrom, pos, allele, ref);
-
-        // init to create a response for each beacon even if the query is invalid
+    private Map<BeaconTo, BeaconResponse> setUpBeaconResponseMap(Collection<String> beaconIds, QueryTo q) {
         Map<BeaconTo, BeaconResponse> brs = new HashMap<>();
-        for (BeaconTo b : beaconDao.getVisibleBeacons()) {
-            brs.put(b, new BeaconResponse(b, q, null));
+        if (beaconIds == null) {
+            // fetch all beacons
+            Collection<BeaconTo> beacons = beaconDao.getVisibleBeacons();
+            for (BeaconTo b : beacons) {
+                brs.put(b, new BeaconResponse(b, q, null));
+            }
+        } else {
+            for (String id : beaconIds) {
+                BeaconTo b = beaconDao.getVisibleBeacon(id);
+                if (b != null) {
+                    brs.put(b, new BeaconResponse(b, q, null));
+                }
+            }
         }
 
-        // validate query
-        if (queryDao.checkIfQuerySuccessfullyNormalizedAndValid(q, ref)) {
-            return brs.values();
-        }
+        return brs;
+    }
 
+    private Map<BeaconTo, BeaconResponse> fillBeaconResponseMap(Map<BeaconTo, BeaconResponse> brs, QueryTo q) {
         // execute queries in parallel
         Map<BeaconTo, Future<Boolean>> futures = new HashMap<>();
         for (BeaconTo b : brs.keySet()) {
@@ -154,7 +160,37 @@ public class BeaconResponseServiceImpl implements BeaconResponseService {
             }
         }
 
-        return brs.values();
+        return brs;
+    }
+
+    private Collection<BeaconResponse> queryMultipleBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref) {
+        QueryTo q = queryDao.getQuery(chrom, pos, allele, ref);
+
+        // init to create a response for each beacon even if the query is invalid
+        Map<BeaconTo, BeaconResponse> brs = setUpBeaconResponseMap(beaconIds, q);
+
+        // validate query
+        if (queryDao.checkIfQuerySuccessfullyNormalizedAndValid(q, ref)) {
+            return brs.values();
+        }
+
+        return fillBeaconResponseMap(brs, q).values();
+    }
+
+    @Logged
+    @Override
+    public Collection<BeaconResponse> queryBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref) {
+        if (beaconIds == null) {
+            return new HashSet<>();
+        }
+
+        return queryMultipleBeacons(beaconIds, chrom, pos, allele, ref);
+    }
+
+    @Logged
+    @Override
+    public Collection<BeaconResponse> queryAll(String chrom, Long pos, String allele, String ref) {
+        return queryMultipleBeacons(null, chrom, pos, allele, ref);
     }
 
 }

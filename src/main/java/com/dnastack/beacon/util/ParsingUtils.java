@@ -23,6 +23,10 @@
  */
 package com.dnastack.beacon.util;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,9 +41,10 @@ public class ParsingUtils {
     /**
      * Checks whether a given response contains the specified string (found/not found), case insensitive.
      *
-     * @param response response
-     * @param trueString string reporting a positive query result
+     * @param response    response
+     * @param trueString  string reporting a positive query result
      * @param falseString string reporting a negative query result
+     *
      * @return true if the response contains trueString, false if the response contains falseString, null otherwise
      */
     public static Boolean parseContainsStringCaseInsensitive(String response, String trueString, String falseString) {
@@ -61,9 +66,10 @@ public class ParsingUtils {
     /**
      * Checks whether a given response starts with the specified string, case insensitive.
      *
-     * @param response response
-     * @param trueString string reporting a positive query result
+     * @param response    response
+     * @param trueString  string reporting a positive query result
      * @param falseString string reporting a negative query result
+     *
      * @return true if the response contains trueString, false if the response contains falseString, null otherwise
      */
     public static Boolean parseStartsWithStringCaseInsensitive(String response, String trueString, String falseString) {
@@ -86,6 +92,7 @@ public class ParsingUtils {
      * Checks whether the response is yes or no.
      *
      * @param response response
+     *
      * @return true if the response is yes, false if the response is no, null otherwise
      */
     public static Boolean parseYesNoCaseInsensitive(String response) {
@@ -96,6 +103,7 @@ public class ParsingUtils {
      * Checks whether the response is "ref", i.e. this is the reference allele at the given location.
      *
      * @param response response
+     *
      * @return true if the response is ref, false otherwise, null if there are problems
      */
     public static Boolean parseRef(String response) {
@@ -110,7 +118,8 @@ public class ParsingUtils {
      * Parses boolean value out of the given field in a JSON response.
      *
      * @param response response in JSON format
-     * @param field field name
+     * @param field    field name
+     *
      * @return field value if it is true/false, null otherwise
      */
     public static Boolean parseBooleanFromJson(String response, String field) {
@@ -125,5 +134,63 @@ public class ParsingUtils {
             // cannot parse the response or no record message
             return null;
         }
+    }
+
+    /**
+     * Checks if there are multiple values given as a parameter.
+     *
+     * @param param values
+     *
+     * @return true/false
+     */
+    public static boolean parameterHasMultipleValidValue(String param) {
+        if (param == null) {
+            throw new NullPointerException("param");
+        }
+
+        if (param.matches("\\[((\\w)*,)*(\\w)*\\]")) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks if there is a single value given for the specified parameter.
+     *
+     * @param param parameter value
+     *
+     * @return true/false
+     */
+    public static boolean parameterHasSingleValidValue(String param) {
+        if (param == null) {
+            throw new NullPointerException("param");
+        }
+
+        if (param.matches("(\\w)*")) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Extract multiple values of a single parameter using "," as a deliminer and "[]" as borders.
+     *
+     * @param param parameter value
+     *
+     * @return collection of individual values
+     */
+    public static Collection<String> parseMultipleParameterValues(String param) {
+        if (param == null) {
+            throw new NullPointerException("param");
+        }
+
+        List<String> values = new ArrayList<>();
+        if (parameterHasSingleValidValue(param)) {
+            values.add(param);
+        } else if (parameterHasMultipleValidValue(param)) {
+            values.addAll(Arrays.asList(param.substring(param.indexOf("[") + 1, param.indexOf("]")).split(",")));
+        }
+
+        return values;
     }
 }

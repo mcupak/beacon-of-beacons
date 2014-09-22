@@ -44,6 +44,15 @@ public interface BeaconService {
     BeaconTo getBeacon(String beaconId);
 
     /**
+     * Retrieves beacons with specified IDs.
+     *
+     * @param beaconIds collection of beacon ids
+     *
+     * @return collection of beacons
+     */
+    Collection<BeaconTo> getBeacons(Collection<String> beaconIds);
+
+    /**
      * Retrieves all the beacons.
      *
      * @return collection of beacons
