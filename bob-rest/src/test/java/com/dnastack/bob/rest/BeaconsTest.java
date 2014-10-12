@@ -27,6 +27,7 @@ import com.dnastack.bob.dto.BeaconTo;
 import com.google.common.collect.ImmutableSet;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.xml.bind.JAXBException;
@@ -75,10 +76,13 @@ public class BeaconsTest extends BasicTest {
     @Test
     public void testAllBeacons(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         List<BeaconTo> bs = readBeacons(url.toExternalForm() + getUrl());
-
-        assertEquals(bs.size(), BEACON_IDS.size());
+        Set<String> ids = new HashSet<>();
         for (BeaconTo b : bs) {
-            assertTrue(BEACON_IDS.contains(b.getId()));
+            ids.add(b.getId());
+        }
+
+        for (String s : BEACON_IDS) {
+            assertTrue(ids.contains(s));
         }
     }
 

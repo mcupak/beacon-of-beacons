@@ -27,8 +27,10 @@ import com.dnastack.bob.entity.Beacon;
 import com.dnastack.bob.processor.AmpLab;
 import com.dnastack.bob.processor.BeaconProcessor;
 import com.dnastack.bob.processor.Ebi;
+import com.dnastack.bob.processor.IntegerChromosomeBeaconizer;
 import com.dnastack.bob.processor.Kaviar;
 import com.dnastack.bob.processor.Ncbi;
+import com.dnastack.bob.processor.StringChromosomeBeaconizer;
 import com.dnastack.bob.processor.Ucsc;
 import com.dnastack.bob.processor.Wtsi;
 import com.google.common.collect.HashMultimap;
@@ -80,6 +82,14 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
     @Kaviar
     private BeaconProcessor kaviarService;
 
+    @Inject
+    @IntegerChromosomeBeaconizer
+    private BeaconProcessor integerBeaconizerService;
+
+    @Inject
+    @StringChromosomeBeaconizer
+    private BeaconProcessor stringBeaconizerService;
+
     private void setUpBeacons() {
         this.beacons = new HashSet<>();
 
@@ -96,10 +106,19 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
         Beacon amplab = new Beacon("amplab", "AMPLab", ampLabService, true);
         Beacon kaviar = new Beacon("kaviar", "Known VARiants", kaviarService, true);
 
+        Beacon platinum = new Beacon("platinum", "Illiumina Platinum Genomes", stringBeaconizerService, true);
+        Beacon thousandGenomes = new Beacon("thousandgenomes", "1000 Genomes Project", integerBeaconizerService, true);
+        Beacon thousandGenomesPhase3 = new Beacon("thousandgenomes-phase3", "1000 Genomes Project - Phase 3", integerBeaconizerService, true);
+
         // set up aggregators
         Beacon pathogenic = new Beacon("pathogenic", "Pathogenic", null, true);
         lovd.addAggregator(pathogenic);
         clinvar.addAggregator(pathogenic);
+
+        Beacon google = new Beacon("google", "Google Genomics Public Data", null, true);
+        platinum.addAggregator(google);
+        thousandGenomes.addAggregator(google);
+        thousandGenomesPhase3.addAggregator(google);
 
         // add beacons ot collection
         beacons.add(bob);
@@ -113,6 +132,11 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
         beacons.add(wtsi);
         beacons.add(amplab);
         beacons.add(kaviar);
+
+        beacons.add(google);
+        beacons.add(platinum);
+        beacons.add(thousandGenomes);
+        beacons.add(thousandGenomesPhase3);
 
         // point all regular beacons to bob
         for (Beacon b : beacons) {

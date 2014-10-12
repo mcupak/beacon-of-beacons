@@ -27,6 +27,7 @@ import com.dnastack.bob.dto.BeaconResponseTo;
 import com.google.common.collect.ImmutableSet;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.xml.bind.JAXBException;
@@ -39,7 +40,6 @@ import org.junit.runner.RunWith;
 import static com.dnastack.bob.rest.BasicTest.readObject;
 import static com.dnastack.bob.rest.util.BeaconResponseTestUtils.beaconsMatch;
 import static com.dnastack.bob.rest.util.BeaconResponseTestUtils.queriesMatch;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -97,9 +97,16 @@ public class BeaconResponsesTest extends BasicTest {
         String[] q = {"13", "32888799", "G", null};
         List<BeaconResponseTo> brs = readResponses(url.toExternalForm() + getUrl(q));
 
-        assertEquals(brs.size(), BEACON_IDS.size());
+        Set<String> ids = new HashSet<>();
         for (BeaconResponseTo br : brs) {
-            assertTrue(BEACON_IDS.contains(br.getBeacon().getId()));
+            ids.add(br.getBeacon().getId());
+        }
+        for (String s : BEACON_IDS) {
+            assertTrue(ids.contains(s));
+
+        }
+
+        for (BeaconResponseTo br : brs) {
             assertTrue(queriesMatch(br.getQuery(), q));
         }
     }
@@ -109,10 +116,16 @@ public class BeaconResponsesTest extends BasicTest {
         String[] q = {"13", "32888799", "G", "hg19"};
         List<BeaconResponseTo> brs = readResponses(url.toExternalForm() + getUrl(q));
 
-        assertEquals(brs.size(), BEACON_IDS.size());
+        Set<String> ids = new HashSet<>();
         for (BeaconResponseTo br : brs) {
-            System.out.println(br.toString());
-            assertTrue(BEACON_IDS.contains(br.getBeacon().getId()));
+            ids.add(br.getBeacon().getId());
+        }
+        for (String s : BEACON_IDS) {
+            assertTrue(ids.contains(s));
+
+        }
+
+        for (BeaconResponseTo br : brs) {
             assertTrue(queriesMatch(br.getQuery(), q));
         }
     }
