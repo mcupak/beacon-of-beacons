@@ -48,6 +48,7 @@ public class Beacon implements Serializable {
     @NotNull
     @Size(min = 1)
     private String name;
+    private String organization;
     private BeaconProcessor processor;
     private boolean visible;
     @NotNull
@@ -77,6 +78,15 @@ public class Beacon implements Serializable {
         this.aggregators = new HashSet<>();
     }
 
+    public Beacon(String id, String name, BeaconProcessor processor, boolean visible, String organization) {
+        this.id = id;
+        this.name = name;
+        this.processor = processor;
+        this.visible = visible;
+        this.organization = organization;
+        this.aggregators = new HashSet<>();
+    }
+
     public String getId() {
         return id;
     }
@@ -95,6 +105,10 @@ public class Beacon implements Serializable {
 
     public BeaconProcessor getProcessor() {
         return processor;
+    }
+
+    public boolean isAggregator() {
+        return getProcessor() == null;
     }
 
     public void setProcessor(BeaconProcessor processor) {
@@ -132,14 +146,23 @@ public class Beacon implements Serializable {
         }
     }
 
+    public String getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(String organization) {
+        this.organization = organization;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 13 * hash + Objects.hashCode(this.id);
-        hash = 13 * hash + Objects.hashCode(this.name);
-        hash = 13 * hash + Objects.hashCode(this.processor);
-        hash = 13 * hash + (this.visible ? 1 : 0);
-        hash = 13 * hash + Objects.hashCode(this.aggregators);
+        int hash = 7;
+        hash = 53 * hash + Objects.hashCode(this.id);
+        hash = 53 * hash + Objects.hashCode(this.name);
+        hash = 53 * hash + Objects.hashCode(this.organization);
+        hash = 53 * hash + Objects.hashCode(this.processor);
+        hash = 53 * hash + (this.visible ? 1 : 0);
+        hash = 53 * hash + Objects.hashCode(this.aggregators);
         return hash;
     }
 
@@ -158,6 +181,9 @@ public class Beacon implements Serializable {
         if (!Objects.equals(this.name, other.name)) {
             return false;
         }
+        if (!Objects.equals(this.organization, other.organization)) {
+            return false;
+        }
         if (!Objects.equals(this.processor, other.processor)) {
             return false;
         }
@@ -172,6 +198,7 @@ public class Beacon implements Serializable {
 
     @Override
     public String toString() {
-        return "Beacon{" + "id=" + id + ", name=" + name + '}';
+        return "Beacon{" + "id=" + id + ", name=" + name + ", organization=" + organization + '}';
     }
+
 }

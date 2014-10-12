@@ -94,28 +94,28 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
         this.beacons = new HashSet<>();
 
         // set up bob
-        Beacon bob = new Beacon("bob", "Beacon of Beacons", null, true);
+        Beacon bob = new Beacon("bob", "Beacon of Beacons", null, true, "Global Alliance for Genomics and Health");
 
         // set up regular beacons
-        Beacon clinvar = new Beacon("clinvar", "ClinVar", ucscService, true);
-        Beacon uniprot = new Beacon("uniprot", "UniProt", ucscService, true);
-        Beacon lovd = new Beacon("lovd", "Leiden Open Variation", ucscService, true);
-        Beacon ebi = new Beacon("ebi", "EMBL-EBI", ebiService, true);
-        Beacon ncbi = new Beacon("ncbi", "NCBI", ncbiService, true);
-        Beacon wtsi = new Beacon("wtsi", "Wellcome Trust Sanger Institute", wtsiService, true);
-        Beacon amplab = new Beacon("amplab", "AMPLab", ampLabService, true);
-        Beacon kaviar = new Beacon("kaviar", "Known VARiants", kaviarService, true);
+        Beacon clinvar = new Beacon("clinvar", "ClinVar", ucscService, true, "UCSC");
+        Beacon uniprot = new Beacon("uniprot", "UniProt", ucscService, true, "UCSC");
+        Beacon lovd = new Beacon("lovd", "Leiden Open Variation", ucscService, true, "UCSC");
+        Beacon ebi = new Beacon("ebi", "EMBL-EBI", ebiService, true, "EBI");
+        Beacon ncbi = new Beacon("ncbi", "NCBI", ncbiService, true, "NCBI");
+        Beacon wtsi = new Beacon("wtsi", "Wellcome Trust Sanger Institute", wtsiService, true, "WTSI");
+        Beacon amplab = new Beacon("amplab", "AMPLab", ampLabService, true, "APMLab");
+        Beacon kaviar = new Beacon("kaviar", "Known VARiants", kaviarService, true, "Institute for Systems Biology");
 
-        Beacon platinum = new Beacon("platinum", "Illiumina Platinum Genomes", stringBeaconizerService, true);
-        Beacon thousandGenomes = new Beacon("thousandgenomes", "1000 Genomes Project", integerBeaconizerService, true);
-        Beacon thousandGenomesPhase3 = new Beacon("thousandgenomes-phase3", "1000 Genomes Project - Phase 3", integerBeaconizerService, true);
+        Beacon platinum = new Beacon("platinum", "Illumina Platinum Genomes", stringBeaconizerService, true, "Google");
+        Beacon thousandGenomes = new Beacon("thousandgenomes", "1000 Genomes Project", integerBeaconizerService, true, "Google");
+        Beacon thousandGenomesPhase3 = new Beacon("thousandgenomes-phase3", "1000 Genomes Project - Phase 3", integerBeaconizerService, true, "Google");
 
         // set up aggregators
-        Beacon pathogenic = new Beacon("pathogenic", "Pathogenic", null, true);
+        Beacon pathogenic = new Beacon("pathogenic", "Pathogenic", null, true, "Anonymized");
         lovd.addAggregator(pathogenic);
         clinvar.addAggregator(pathogenic);
 
-        Beacon google = new Beacon("google", "Google Genomics Public Data", null, true);
+        Beacon google = new Beacon("google", "Google Genomics Public Data", null, true, "Google");
         platinum.addAggregator(google);
         thousandGenomes.addAggregator(google);
         thousandGenomesPhase3.addAggregator(google);
@@ -247,11 +247,6 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
         }
 
         return b.isVisible() ? b : null;
-    }
-
-    @Override
-    public boolean isAgregator(Beacon b) {
-        return b.getProcessor() == null;
     }
 
     @Override

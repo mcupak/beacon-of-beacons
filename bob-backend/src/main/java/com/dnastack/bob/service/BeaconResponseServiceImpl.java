@@ -54,25 +54,25 @@ import javax.validation.Validator;
 @Stateless
 @LocalBean
 public class BeaconResponseServiceImpl implements BeaconResponseService {
-    
+
     @Inject
     private BeaconDao beaconDao;
-    
+
     @Inject
     private QueryDao queryDao;
-    
+
     @Inject
     private Validator validator;
-    
+
     private boolean checkIfQuerySuccessfullyNormalizedAndValid(Query q, String ref) {
         return (!(ref == null || ref.isEmpty()) && q.getReference() == null) || !validator.validate(q).isEmpty();
     }
-    
+
     @Asynchronous
     private Future<Boolean> queryBeacon(Beacon b, Query q) {
         Boolean total = null;
-        
-        if (beaconDao.isAgregator(b)) {
+
+        if (b.isAggregator()) {
             total = false;
 
             // execute queries in parallel
@@ -100,11 +100,11 @@ public class BeaconResponseServiceImpl implements BeaconResponseService {
                 // ignore
             }
         }
-        
+
         return new AsyncResult<>(total);
-        
+
     }
-    
+
     private Map<Beacon, BeaconResponse> setUpBeaconResponseMap(Collection<String> beaconIds, Query q) {
         Map<Beacon, BeaconResponse> brs = new HashMap<>();
         if (beaconIds == null) {
@@ -121,10 +121,10 @@ public class BeaconResponseServiceImpl implements BeaconResponseService {
                 }
             }
         }
-        
+
         return brs;
     }
-    
+
     private Map<Beacon, BeaconResponse> fillBeaconResponseMap(Map<Beacon, BeaconResponse> brs, Query q) {
         // execute queries in parallel
         Map<Beacon, Future<Boolean>> futures = new HashMap<>();
@@ -144,10 +144,10 @@ public class BeaconResponseServiceImpl implements BeaconResponseService {
                 brs.get(e.getKey()).setResponse(b);
             }
         }
-        
+
         return brs;
     }
-    
+
     private Collection<BeaconResponse> queryMultipleBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref) {
         Query q = queryDao.getQuery(chrom, pos, allele, ref);
 
@@ -158,49 +158,49 @@ public class BeaconResponseServiceImpl implements BeaconResponseService {
         if (checkIfQuerySuccessfullyNormalizedAndValid(q, ref)) {
             return brs.values();
         }
-        
+
         return fillBeaconResponseMap(brs, q).values();
     }
-    
+
     @Logged
     @Override
     public BeaconResponseTo queryBeacon(String beaconId, String chrom, Long pos, String allele, String ref) {
         Query q = queryDao.getQuery(chrom, pos, allele, ref);
-        
+
         Beacon b = beaconDao.getVisibleBeacon(beaconId);
         if (b == null) {
             // nonexisting beaconId param specified
             return Entity2ToConvertor.getBeaconResponseTo(new BeaconResponse(new Beacon(null, "invalid beacon"), q, null));
         }
-        
+
         BeaconResponse br = new BeaconResponse(b, q, null);
         if (checkIfQuerySuccessfullyNormalizedAndValid(q, ref)) {
             return Entity2ToConvertor.getBeaconResponseTo(br);
         }
-        
+
         try {
             br.setResponse(queryBeacon(b, q).get());
         } catch (InterruptedException | ExecutionException ex) {
             // ignore, response already null
         }
-        
+
         return Entity2ToConvertor.getBeaconResponseTo(br);
     }
-    
+
     @Logged
     @Override
     public Collection<BeaconResponseTo> queryBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref) {
         if (beaconIds == null) {
             return new HashSet<>();
         }
-        
+
         return Entity2ToConvertor.getBeaconResponseTos(queryMultipleBeacons(beaconIds, chrom, pos, allele, ref));
     }
-    
+
     @Logged
     @Override
     public Collection<BeaconResponseTo> queryAll(String chrom, Long pos, String allele, String ref) {
         return Entity2ToConvertor.getBeaconResponseTos(queryMultipleBeacons(null, chrom, pos, allele, ref));
     }
-    
+
 }

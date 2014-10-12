@@ -40,14 +40,18 @@ public class BeaconTo implements Serializable {
 
     private String id;
     private String name;
+    private String organization;
+    private boolean aggregator;
 
     public BeaconTo() {
         // needed for JAXB
     }
 
-    public BeaconTo(String id, String name) {
+    public BeaconTo(String id, String name, String organization, boolean aggregator) {
         this.id = id;
         this.name = name;
+        this.organization = organization;
+        this.aggregator = aggregator;
     }
 
     public String getId() {
@@ -66,9 +70,29 @@ public class BeaconTo implements Serializable {
         this.name = name;
     }
 
+    public String getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(String organization) {
+        this.organization = organization;
+    }
+
+    public boolean isAggregator() {
+        return aggregator;
+    }
+
+    public void setAggregator(boolean aggregator) {
+        this.aggregator = aggregator;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
+        hash = 97 * hash + Objects.hashCode(this.id);
+        hash = 97 * hash + Objects.hashCode(this.name);
+        hash = 97 * hash + Objects.hashCode(this.organization);
+        hash = 97 * hash + (this.aggregator ? 1 : 0);
         return hash;
     }
 
@@ -87,12 +111,18 @@ public class BeaconTo implements Serializable {
         if (!Objects.equals(this.name, other.name)) {
             return false;
         }
+        if (!Objects.equals(this.organization, other.organization)) {
+            return false;
+        }
+        if (this.aggregator != other.aggregator) {
+            return false;
+        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "Beacon{" + "id=" + id + ", name=" + name + '}';
+        return "BeaconTo{" + "id=" + id + ", name=" + name + ", organization=" + organization + ", aggregator=" + aggregator + '}';
     }
 
 }

@@ -49,7 +49,7 @@ public class Entity2ToConvertor {
      * @return beacon TO
      */
     public static BeaconTo getBeaconTo(Beacon b) {
-        return new BeaconTo(b.getId(), b.getName());
+        return new BeaconTo(b.getId(), b.getName(), b.getOrganization(), b.isAggregator());
     }
 
     /**

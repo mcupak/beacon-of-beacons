@@ -88,15 +88,6 @@ public interface BeaconDao {
     Beacon getVisibleBeacon(String beaconId);
 
     /**
-     * Checks if a given beacon is aggregator.
-     *
-     * @param b beacon
-     *
-     * @return true if b is aggregator, false if it is a regular beacon
-     */
-    boolean isAgregator(Beacon b);
-
-    /**
      * Retrieves the aggregatees of a given beacon.
      *
      * @param b beacon
