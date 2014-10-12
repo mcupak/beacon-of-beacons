@@ -21,32 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.rest;
+package com.dnastack.bob.rest.util;
 
-import com.dnastack.bob.dto.BeaconResponseTo;
-import java.util.Comparator;
-import javax.inject.Inject;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+import javax.inject.Qualifier;
+
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Comparator of BeaconResponseTo objects. Performs comparison of BeaconTo objects in the responses.
+ * Comparator using names.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
- * @version 1.0
  */
-public class BeaconResponseToComparator implements Comparator<BeaconResponseTo> {
-
-    @Inject
-    private BeaconToComparator beaconComparator;
-
-    @Override
-    public int compare(BeaconResponseTo o1, BeaconResponseTo o2) {
-        if (o1 == null || o2 == null) {
-            throw new NullPointerException("Beacon response is null.");
-        }
-        if (o1.getBeacon() == null || o2.getBeacon() == null) {
-            throw new NullPointerException("Beacon is null.");
-        }
-        return beaconComparator.compare(o1.getBeacon(), o2.getBeacon());
-    }
-
+@Qualifier
+@Retention(RUNTIME)
+@Target({METHOD, FIELD, PARAMETER, TYPE})
+public @interface NameComparator {
 }

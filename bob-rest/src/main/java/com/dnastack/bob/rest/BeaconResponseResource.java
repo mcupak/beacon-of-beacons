@@ -23,6 +23,7 @@
  */
 package com.dnastack.bob.rest;
 
+import com.dnastack.bob.rest.util.BeaconResponseToComparator;
 import com.dnastack.bob.dto.BeaconResponseTo;
 import com.dnastack.bob.service.BeaconResponseService;
 import com.dnastack.bob.util.ParsingUtils;

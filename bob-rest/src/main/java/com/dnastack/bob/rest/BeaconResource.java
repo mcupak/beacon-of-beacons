@@ -24,6 +24,8 @@
 package com.dnastack.bob.rest;
 
 import com.dnastack.bob.dto.BeaconTo;
+import com.dnastack.bob.rest.util.BeaconToComparator;
+import com.dnastack.bob.rest.util.NameComparator;
 import com.dnastack.bob.service.BeaconService;
 import com.dnastack.bob.util.ParsingUtils;
 import java.net.HttpURLConnection;
@@ -53,6 +55,7 @@ public class BeaconResource {
     private BeaconService beaconService;
 
     @Inject
+    @NameComparator
     private BeaconToComparator beaconComparator;
 
     /**
