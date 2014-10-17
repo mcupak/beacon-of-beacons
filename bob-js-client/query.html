@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Global Alliance for Genomics and Health - Beacon of Beacons</title>
+
+        <!-- Bootstrap -->
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/custom.css" rel="stylesheet">
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="js/bootstrap.min.js"></script>
+        <script>
+            $(function () {
+                $("#footer").load("footer.html");
+            });
+        </script>
+    </head>
+    <body>
+        <script>
+            function getParameterByName(name) {
+                name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+                var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"), results = regex.exec(location.search);
+                return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+            }
+
+            function isNull(value) {
+                if (value == null || value === "") {
+                    return true;
+                }
+                return false;
+            }
+
+            function writeInvalid(name) {
+                var div = document.getElementById("params");
+                var newHTML = div.innerHTML + "<div class=\"alert alert-danger\" role=\"alert\">Invalid " + name + "</div>";
+                div.innerHTML = newHTML;
+            }
+
+            function queryBeacon(beacon, chrom, pos, alt, ref) {
+                var xmlhttp;
+                if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+                    xmlhttp = new XMLHttpRequest();
+                } else {// code for IE6, IE5
+                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                xmlhttp.onreadystatechange = function () {
+
+                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                        obj = JSON.parse(xmlhttp.responseText);
+                        var arrayLength = obj.length;
+                        var resultTable = "";
+                        resultTable += "<center><table><tr><th>Beacon</th><th>Result</th></tr>";
+
+                        for (var i = 0; i < arrayLength; i++) {
+                            var response = obj[i].response;
+                            var responseIndicator = "";
+
+                            if (response == null) {
+                                responseIndicator = "<span class='label label-warning'>Null</span>";
+                            } else if (response == true) {
+                                responseIndicator = "<span class='label label-success'>Yes</span>";
+                            } else {
+                                responseIndicator = "<span class='label label-danger'>No</span>";
+                            }
+
+                            resultTable += "<tr><td>" + obj[i].beacon.name + "</td><td>" + responseIndicator + "</td></tr>";
+                        }
+                        resultTable += "</table></center>";
+
+                        document.getElementById("results").innerHTML = resultTable;
+                    }
+                };
+
+                var urlArr = [];
+                urlArr.push("http://dnastack.com/ga4gh/bob/api-responses.php?",
+                        "chrom=" + chrom, "&pos=" + pos, "&allele=" + alt);
+
+                if (beacon != "all") {
+                    urlArr.push("&beacon=" + beacon);
+                }
+                if (ref != "all") {
+                    urlArr.push("&ref=" + ref);
+                }
+                var url = urlArr.join("");
+
+                xmlhttp.open("GET", url, true);
+                xmlhttp.send();
+            }
+        </script>
+
+        <div class="container">
+            <div class="row row-centered">
+
+                <div class="col-xs-6 col-centered">
+
+                    <center style="margin-bottom: 40px">
+                        <a href="index.html"><img src="img/beacon.png" height="150" border="0"/></a>
+                        <h4 style="margin-bottom: 0px">Global Alliance for Genomics and Health</h4>
+                        <h3 style="margin-top: 2px">Beacon of Beacons</h3>
+                    </center>
+                </div>
+            </div>
+            <div class="row row-centered">
+                <div class="col-xs-6 col-centered">
+                    <div id="params"></div>
+                </div>
+            </div>
+            <div class="row row-centered">
+                <div class="col-xs-6 col-centered">
+                    <div id="results" style="margin-top:40px"></div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            var beacon = getParameterByName("beacon");
+            var chrom = getParameterByName("chrom");
+            var pos = getParameterByName("pos");
+            var alt = getParameterByName("alt");
+            var ref = getParameterByName("ref");
+
+            var failed = false;
+
+            if (isNull(beacon)) {
+                writeInvalid("beacon");
+                failed = true;
+            }
+
+            if (isNull(chrom)) {
+                writeInvalid("chromosome");
+                failed = true;
+            }
+
+            if (isNull(pos)) {
+                writeInvalid("position");
+                failed = true;
+            }
+
+            if (isNull(alt)) {
+                writeInvalid("alternate");
+                failed = true;
+            }
+
+            if (isNull(ref)) {
+                writeInvalid("genome");
+                failed = true;
+            }
+
+            if (!failed) {
+
+                var paramArr = [];
+                paramArr.push(
+                        "<center><div>",
+                        "<span class='label label-primary'>Beacon: " + beacon + "</span> ",
+                        "<span class='label label-success'>Chromosome: " + chrom + "</span> ",
+                        "<span class='label label-warning'>Position: " + pos + "</span> ",
+                        "<span class='label label-danger'>Alt: " + alt + "</span> ",
+                        "<span class='label label-info'>Genome: " + ref + "</span>",
+                        "</div></center>");
+                var paramString = paramArr.join("");
+
+                document.getElementById("params").innerHTML = paramString;
+                queryBeacon(beacon, chrom, pos, alt, ref);
+                document.getElementById("results").innerHTML = "<center><img height='30' src='img/wait.gif'</center>";
+            }
+        </script>
+
+        <div id="footer">
+        </div>
+
+        <script>
+            (function (i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r;
+                i[r] = i[r] ||
+                        function () {
+                            (i[r].q = i[r].q || []).push(arguments)
+                        }, i[r].l = 1 * new Date();
+                a = s.createElement(o), m = s.getElementsByTagName(o)[0];
+                a.async = 1;
+                a.src = g;
+                m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+            ga('create', 'UA-52918106-1', 'auto');
+            ga('require', 'displayfeatures');
+            ga('send', 'pageview');
+
+        </script>
+    </body>
+</html>
