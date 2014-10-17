@@ -166,7 +166,7 @@ public class ParsingUtils {
             throw new NullPointerException("param");
         }
 
-        if (param.matches("(\\w)*")) {
+        if (param.matches("[-a-zA-Z0-9]*")) {
             return true;
         }
         return false;

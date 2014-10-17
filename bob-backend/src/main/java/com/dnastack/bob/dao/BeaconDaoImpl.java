@@ -111,10 +111,6 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
         Beacon thousandGenomesPhase3 = new Beacon("thousandgenomes-phase3", "1000 Genomes Project - Phase 3", integerBeaconizerService, true, "Google");
 
         // set up aggregators
-        Beacon pathogenic = new Beacon("pathogenic", "Pathogenic", null, true, "Anonymized");
-        lovd.addAggregator(pathogenic);
-        clinvar.addAggregator(pathogenic);
-
         Beacon google = new Beacon("google", "Google Genomics Public Data", null, true, "Google");
         platinum.addAggregator(google);
         thousandGenomes.addAggregator(google);
@@ -122,7 +118,6 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
 
         // add beacons ot collection
         beacons.add(bob);
-        beacons.add(pathogenic);
 
         beacons.add(clinvar);
         beacons.add(uniprot);
