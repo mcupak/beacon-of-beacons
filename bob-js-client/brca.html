@@ -24,7 +24,7 @@
         <script src="js/bootstrap-switch.min.js"></script>
         <script>
 			$(function() {
-				$("#banner").load("banner.html");
+				$("#banner").load("banner-brca.html");
 			});
 		</script>
         <script>
@@ -78,20 +78,23 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="ref" class="control-label col-xs-3">Genome</label>
+                            <label for="ref" class="control-label col-xs-3">Coordinates</label>
                             <div class="col-xs-9">
                                 <select class="form-control" name="ref">
-                                    <option value="all">All</option>
-                                    <option value="hg18">GRCh36/hg18</option>
+                                	<option value="lrg">LRG</option>
+                                    <!--<option value="hg18">GRCh36/hg18</option>
                                     <option value="hg19">GRCh37/hg19</option>
-                                    <option value="hg38">GRCh38/hg38</option>
+                                    <option value="hg38">GRCh38/hg38</option>-->
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="chrom" class="control-label col-xs-3">Chromosome</label>
+                            <label for="chrom" class="control-label col-xs-3">Locus</label>
                             <div class="col-xs-9">
                                 <select class="form-control" name="chrom">
+                                	<option value="LRG_292">BRCA1 (LRG_292)</option>
+                                	<option value="LRG_293">BRCA2 (LRG_293)</option>
+                                	<!--
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>
@@ -116,7 +119,7 @@
                                     <option value="22">22</option>
                                     <option value="X">X</option>
                                     <option value="Y">Y</option>
-                                    <option value="MT">MT</option>
+                                    <option value="MT">MT</option>-->
                                 </select>
                             </div>
                         </div>

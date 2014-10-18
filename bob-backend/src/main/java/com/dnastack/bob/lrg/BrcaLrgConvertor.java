@@ -57,7 +57,7 @@ public class BrcaLrgConvertor implements LrgConvertor {
 
     @Override
     public Long getPosition(long pos) {
-        LrgCoordinates from = new LrgCoordinates(LrgReference.LRG.toString().toLowerCase(), LrgLocus.LRG_292.toString(), pos, pos, "-1");
+        LrgCoordinates from = new LrgCoordinates(LrgReference.LRG.toString().toLowerCase(), LrgLocus.LRG_292.toString(), pos, pos, false);
         System.out.println(from);
         System.out.println(mapping);
 

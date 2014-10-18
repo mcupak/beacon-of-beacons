@@ -69,13 +69,19 @@ class LrgMapping {
 
         String remappedName = toCoordinates.getName();
         String remappedLocus = toCoordinates.getLocus();
-        String remappedStrand = toCoordinates.getStrand();
+        Boolean remappedStrand = toCoordinates.isPositiveStrand();
 
         long startDiff = coord.getStart() - fromCoordinates.getStart();
         long endDiff = coord.getEnd() - fromCoordinates.getStart();
 
         long remappedStart = toCoordinates.getStart() + startDiff;
         long remappedEnd = toCoordinates.getStart() + endDiff;
+        
+        // TODO:double check
+        if (fromCoordinates.isPositiveStrand() != toCoordinates.isPositiveStrand()) {
+            remappedStart = toCoordinates.getEnd() - startDiff;
+            remappedEnd = toCoordinates.getEnd() - endDiff;
+        }
 
         LrgCoordinates remappedCoords = new LrgCoordinates(remappedName, remappedLocus, remappedStart, remappedEnd, remappedStrand);
         checkInBounds(toCoordinates, remappedCoords);
@@ -106,7 +112,7 @@ class LrgMapping {
         }
 
         // check strand
-        if (query.getStrand() == null ? target.getStrand() != null : !query.getStrand().equals(target.getStrand())) {
+        if (query.isPositiveStrand() == null ? target.isPositiveStrand() != null : !query.isPositiveStrand().equals(target.isPositiveStrand())) {
             throw new IndexOutOfBoundsException("Strand mismatch: " + query.getEnd() + " does not match " + target.getEnd());
         }
     }

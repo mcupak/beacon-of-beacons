@@ -58,9 +58,14 @@ public class LrgMappingProvider {
                 String otherName = (String) otherMap.get("other_name");
                 long otherStart = Long.parseLong((String) otherMap.get("other_start"));
                 long otherEnd = Long.parseLong((String) otherMap.get("other_end"));
-                String otherStrand = (String) otherMap.get("strand");
+                String otherStrandStr = (String) otherMap.get("strand");
 
-                LrgCoordinates otherCoords = new LrgCoordinates(targetAssembly, otherName, otherStart, otherEnd, otherStrand);
+                Boolean otherIsPositiveStrand = true;
+                if (otherStrandStr != null && otherStrandStr.contains("-")) {
+                    otherIsPositiveStrand = false;
+                }
+
+                LrgCoordinates otherCoords = new LrgCoordinates(targetAssembly, otherName, otherStart, otherEnd, otherIsPositiveStrand);
 
                 Object[] mapping = (Object[]) otherMap.get("mapping_span");
 
@@ -69,9 +74,14 @@ public class LrgMappingProvider {
 
                     long lrgStart = Long.parseLong((String) lrgMap.get("lrg_start"));
                     long lrgEnd = Long.parseLong((String) lrgMap.get("lrg_end"));
-                    String lrgStrand = (String) lrgMap.get("strand");
+                    String lrgStrandStr = (String) lrgMap.get("strand");
 
-                    LrgCoordinates lrgCoords = new LrgCoordinates("lrg", lrgID, lrgStart, lrgEnd, lrgStrand);
+                    Boolean lrgIsPositiveStrand = true;
+                    if (lrgStrandStr != null && lrgStrandStr.contains("-")) {
+                        lrgIsPositiveStrand = false;
+                    }
+
+                    LrgCoordinates lrgCoords = new LrgCoordinates("lrg", lrgID, lrgStart, lrgEnd, lrgIsPositiveStrand);
 
                     return new LrgMapping(lrgCoords, otherCoords);
                 }

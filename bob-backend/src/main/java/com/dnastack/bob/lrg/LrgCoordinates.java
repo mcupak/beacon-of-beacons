@@ -35,19 +35,19 @@ class LrgCoordinates {
 
     private final long start;
     private final long end;
-    private final String strand;
+    private final Boolean isPositiveStrand;
 
-    public LrgCoordinates(String name, String locus, long start, long end, String strand) {
+    public LrgCoordinates(String name, String locus, long start, long end, Boolean isPositiveStrand) {
         this.name = name;
         this.locus = locus;
         this.start = start;
         this.end = end;
-        this.strand = strand;
+        this.isPositiveStrand = isPositiveStrand;
     }
 
     @Override
     public String toString() {
-        return "Coordinates{" + "name=" + name + ", locus=" + locus + ", start=" + start + ", end=" + end + ", strand=" + strand + '}';
+        return "Coordinates{" + "name=" + name + ", locus=" + locus + ", start=" + start + ", end=" + end + ", strand=" + isPositiveStrand + '}';
     }
 
     public String getName() {
@@ -66,8 +66,8 @@ class LrgCoordinates {
         return end;
     }
 
-    public String getStrand() {
-        return strand;
+    public Boolean isPositiveStrand() {
+        return isPositiveStrand;
     }
 
 }
