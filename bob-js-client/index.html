@@ -55,26 +55,23 @@
             }
         </script>
         <script>
-            $(function () {
-                $("#footer").load("footer.html");
-            });
-        </script>
+			$(function() {
+				$("#banner").load("banner.html");
+			});
+		</script>
     </head>
     <body>
         <script>
             getBeacons();
-            BootstrapDialog.show({
-            message: 'Hi Apple!'
-        });
         </script>
         <div class="container">
+        	<div class="row row-centered">
+        		<div id="banner"></div>
+        	</div>
             <div class="row row-centered">
                 <div class="col-xs-6 col-centered wide-container">
-                    <center style="margin-bottom: 40px">
-                        <a href="index.html"><img src="img/beacon.png" height="150" border="0"/></a>
-                        <h4 style="margin-bottom: 0px">Global Alliance for Genomics and Health</h4>
-                        <h3 style="margin-top: 2px">Beacon of Beacons</h3>
-                    </center>
+                    <div id="banner"></div>
+
                     <form class="form-horizontal" action="query.html">
                         <div class="form-group">
                             <label for="beacon" class="control-label col-xs-2">Beacons</label>
@@ -161,9 +158,6 @@
                     </form>
                 </div>
             </div>
-        </div>
-
-        <div id="footer">
         </div>
 
         <script>
