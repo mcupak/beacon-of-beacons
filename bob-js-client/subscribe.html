@@ -22,10 +22,10 @@
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="js/bootstrap.min.js"></script>
         <script>
-            $(function () {
-                $("#footer").load("footer.html");
-            });
-        </script>
+			$(function() {
+				$("#banner").load("banner.html");
+			});
+		</script>
     </head>
     <body>
         <script>
@@ -33,13 +33,7 @@
         </script>
         <div class="container">
             <div class="row row-centered">
-                <div class="col-xs-6 col-centered">
-                    <center style="margin-bottom: 40px">
-                        <a href="index.html"><img src="img/beacon.png" height="150" border="0"/></a>
-                        <h4 style="margin-bottom: 0px">Global Alliance for Genomics and Health</h4>
-                        <h3 style="margin-top: 2px">Beacon of Beacons</h3>
-                    </center>
-                </div>
+                <div id="banner"></div>
             </div>
             <div class="center narrow">
                 <h4>Subscribe a new beacon</h4>
@@ -52,9 +46,6 @@
                 </ul>
                 <p>For more information about beacons, please visit the web of the <a href="http://ga4gh.org/#/beacon">Beacon Project</a>.</p>
             </div>
-        </div>
-
-        <div id="footer">
         </div>
 
         <script>
