@@ -34,6 +34,7 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * BRCA2 qualifier.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  */

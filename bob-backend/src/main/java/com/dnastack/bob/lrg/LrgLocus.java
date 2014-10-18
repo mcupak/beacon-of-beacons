@@ -24,6 +24,7 @@
 package com.dnastack.bob.lrg;
 
 /**
+ * Locus IDs.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0

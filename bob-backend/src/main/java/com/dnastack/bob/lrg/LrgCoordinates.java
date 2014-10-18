@@ -24,6 +24,7 @@
 package com.dnastack.bob.lrg;
 
 /**
+ * Coordinates in LRG:
  *
  * @author mfiume
  */

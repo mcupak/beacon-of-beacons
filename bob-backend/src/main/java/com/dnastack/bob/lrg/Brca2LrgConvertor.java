@@ -29,6 +29,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Singleton;
 
 /**
+ * BRCA2 convertor.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0

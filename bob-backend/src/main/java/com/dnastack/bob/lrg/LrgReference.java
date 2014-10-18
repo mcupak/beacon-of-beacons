@@ -24,6 +24,7 @@
 package com.dnastack.bob.lrg;
 
 /**
+ * Reference specification for LRG queries. Currently a single value - LRG.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0

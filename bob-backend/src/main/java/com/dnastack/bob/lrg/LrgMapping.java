@@ -24,6 +24,7 @@
 package com.dnastack.bob.lrg;
 
 /**
+ * LRG mapping.
  *
  * @author mfiume
  */

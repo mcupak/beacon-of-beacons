@@ -29,7 +29,8 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 
 /**
- *
+ * BRCA convertor.
+ * 
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */

@@ -27,6 +27,7 @@ import com.dnastack.bob.shared.Chromosome;
 import com.dnastack.bob.shared.Reference;
 
 /**
+ * Convertor of LRG queries to standard genome queries.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
