@@ -110,6 +110,9 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
         Beacon thousandGenomes = new Beacon("thousandgenomes", "1000 Genomes Project", integerBeaconizerService, true, "Google");
         Beacon thousandGenomesPhase3 = new Beacon("thousandgenomes-phase3", "1000 Genomes Project - Phase 3", integerBeaconizerService, true, "Google");
 
+        Beacon curoverse = new Beacon("curoverse", "PGP", integerBeaconizerService, true, "Curoverse");
+        Beacon curoverseRef = new Beacon("curoverse-ref", "GA4GH Example Data", integerBeaconizerService, true, "Curoverse");
+
         // set up aggregators
         Beacon google = new Beacon("google", "Google Genomics Public Data", null, true, "Google");
         platinum.addAggregator(google);
@@ -132,6 +135,9 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
         beacons.add(platinum);
         beacons.add(thousandGenomes);
         beacons.add(thousandGenomesPhase3);
+
+        beacons.add(curoverse);
+        beacons.add(curoverseRef);
 
         // point all regular beacons to bob
         for (Beacon b : beacons) {
