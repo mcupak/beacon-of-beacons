@@ -30,6 +30,11 @@ import com.dnastack.bob.entity.Beacon;
 import com.dnastack.bob.entity.BeaconResponse;
 import com.dnastack.bob.entity.Query;
 import com.dnastack.bob.log.Logged;
+import com.dnastack.bob.lrg.Brca;
+import com.dnastack.bob.lrg.Brca2;
+import com.dnastack.bob.lrg.LRGReference;
+import com.dnastack.bob.lrg.Locus;
+import com.dnastack.bob.lrg.LrgConvertor;
 import com.dnastack.bob.util.Entity2ToConvertor;
 import java.util.Collection;
 import java.util.HashMap;
@@ -63,6 +68,14 @@ public class BeaconResponseServiceImpl implements BeaconResponseService {
 
     @Inject
     private Validator validator;
+
+    @Inject
+    @Brca
+    private LrgConvertor brcaConvertor;
+
+    @Inject
+    @Brca2
+    private LrgConvertor brca2Convertor;
 
     private boolean checkIfQuerySuccessfullyNormalizedAndValid(Query q, String ref) {
         return (!(ref == null || ref.isEmpty()) && q.getReference() == null) || !validator.validate(q).isEmpty();
@@ -102,7 +115,6 @@ public class BeaconResponseServiceImpl implements BeaconResponseService {
         }
 
         return new AsyncResult<>(total);
-
     }
 
     private Map<Beacon, BeaconResponse> setUpBeaconResponseMap(Collection<String> beaconIds, Query q) {
@@ -148,8 +160,27 @@ public class BeaconResponseServiceImpl implements BeaconResponseService {
         return brs;
     }
 
+    private Query getQuery(String chrom, Long pos, String allele, String ref) {
+        LrgConvertor l = null;
+        if (ref != null && ref.equalsIgnoreCase(LRGReference.LRG.toString())) {
+            if (chrom.equalsIgnoreCase(Locus.LRG_292.toString())) {
+                l = brcaConvertor;
+            } else if (chrom.equalsIgnoreCase(Locus.LRG_293.toString())) {
+                l = brca2Convertor;
+            }
+
+            if (l != null) {
+                String c = l.getChromosome().toString();
+                Long p = l.getPosition(pos);
+                String r = l.getReference().toString();
+            }
+        }
+
+        return queryDao.getQuery(chrom, pos, allele, ref);
+    }
+
     private Collection<BeaconResponse> queryMultipleBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref) {
-        Query q = queryDao.getQuery(chrom, pos, allele, ref);
+        Query q = getQuery(chrom, pos, allele, ref);
 
         // init to create a response for each beacon even if the query is invalid
         Map<Beacon, BeaconResponse> brs = setUpBeaconResponseMap(beaconIds, q);
@@ -165,7 +196,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService {
     @Logged
     @Override
     public BeaconResponseTo queryBeacon(String beaconId, String chrom, Long pos, String allele, String ref) {
-        Query q = queryDao.getQuery(chrom, pos, allele, ref);
+        Query q = getQuery(chrom, pos, allele, ref);
 
         Beacon b = beaconDao.getVisibleBeacon(beaconId);
         if (b == null) {
