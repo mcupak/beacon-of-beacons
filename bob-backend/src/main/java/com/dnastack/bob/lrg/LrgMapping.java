@@ -30,6 +30,8 @@ package com.dnastack.bob.lrg;
  */
 class LrgMapping {
 
+
+
     private final LrgCoordinates sourceCoordinates;
     private final LrgCoordinates targetCoordinates;
 
@@ -113,7 +115,7 @@ class LrgMapping {
 
         // check strand
         if (query.isPositiveStrand() == null ? target.isPositiveStrand() != null : !query.isPositiveStrand().equals(target.isPositiveStrand())) {
-            throw new IndexOutOfBoundsException("Strand mismatch: " + query.getEnd() + " does not match " + target.getEnd());
+            throw new IndexOutOfBoundsException("Strand mismatch: " + query.isPositiveStrand() + " does not match " + target.isPositiveStrand());
         }
     }
 
