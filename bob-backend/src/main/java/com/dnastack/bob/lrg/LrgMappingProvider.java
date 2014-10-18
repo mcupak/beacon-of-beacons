@@ -34,11 +34,11 @@ import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
  *
  * @author mfiume
  */
-public class LRG {
+public class LrgMappingProvider {
 
     private static final String authenticationKey = "TWFyYyBGaXVtZTo0dSVVVkVTWQ==";
 
-    public static Mapping getMapping(String lrgID, String targetAssembly) {
+    public static LrgMapping getMapping(String lrgID, String targetAssembly) {
 
         try {
             String server_url = "http://www.lrg-sequence.org/xmlrpc.php";
@@ -59,7 +59,7 @@ public class LRG {
                 long otherEnd = Long.parseLong((String) otherMap.get("other_end"));
                 String otherStrand = (String) otherMap.get("strand");
 
-                Coordinates otherCoords = new Coordinates(targetAssembly, otherName, otherStart, otherEnd, otherStrand);
+                LrgCoordinates otherCoords = new LrgCoordinates(targetAssembly, otherName, otherStart, otherEnd, otherStrand);
 
                 Object[] mapping = (Object[]) otherMap.get("mapping_span");
 
@@ -70,11 +70,10 @@ public class LRG {
                     long lrgEnd = Long.parseLong((String) lrgMap.get("lrg_end"));
                     String lrgStrand = (String) lrgMap.get("strand");
 
-                    Coordinates lrgCoords = new Coordinates("lrg", lrgID, lrgStart, lrgEnd, lrgStrand);
+                    LrgCoordinates lrgCoords = new LrgCoordinates("lrg", lrgID, lrgStart, lrgEnd, lrgStrand);
 
-                    return new Mapping(lrgCoords, otherCoords);
+                    return new LrgMapping(lrgCoords, otherCoords);
                 }
-
             }
         } catch (MalformedURLException ex) {
             ex.printStackTrace();

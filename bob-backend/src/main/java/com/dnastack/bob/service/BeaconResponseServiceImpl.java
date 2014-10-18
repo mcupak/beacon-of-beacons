@@ -32,8 +32,8 @@ import com.dnastack.bob.entity.Query;
 import com.dnastack.bob.log.Logged;
 import com.dnastack.bob.lrg.Brca;
 import com.dnastack.bob.lrg.Brca2;
-import com.dnastack.bob.lrg.LRGReference;
-import com.dnastack.bob.lrg.Locus;
+import com.dnastack.bob.lrg.LrgReference;
+import com.dnastack.bob.lrg.LrgLocus;
 import com.dnastack.bob.lrg.LrgConvertor;
 import com.dnastack.bob.util.Entity2ToConvertor;
 import java.util.Collection;
@@ -162,21 +162,26 @@ public class BeaconResponseServiceImpl implements BeaconResponseService {
 
     private Query getQuery(String chrom, Long pos, String allele, String ref) {
         LrgConvertor l = null;
-        if (ref != null && ref.equalsIgnoreCase(LRGReference.LRG.toString())) {
-            if (chrom.equalsIgnoreCase(Locus.LRG_292.toString())) {
+        String c = chrom;
+        Long p = pos;
+        String r = ref;
+        String a = allele;
+
+        if (ref != null && ref.equalsIgnoreCase(LrgReference.LRG.toString())) {
+            if (chrom.equalsIgnoreCase(LrgLocus.LRG_292.toString())) {
                 l = brcaConvertor;
-            } else if (chrom.equalsIgnoreCase(Locus.LRG_293.toString())) {
+            } else if (chrom.equalsIgnoreCase(LrgLocus.LRG_293.toString())) {
                 l = brca2Convertor;
             }
 
             if (l != null) {
-                String c = l.getChromosome().toString();
-                Long p = l.getPosition(pos);
-                String r = l.getReference().toString();
+                c = l.getChromosome().toString();
+                p = l.getPosition(pos);
+                r = l.getReference().toString();
             }
         }
 
-        return queryDao.getQuery(chrom, pos, allele, ref);
+        return queryDao.getQuery(c, p, a, r);
     }
 
     private Collection<BeaconResponse> queryMultipleBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref) {

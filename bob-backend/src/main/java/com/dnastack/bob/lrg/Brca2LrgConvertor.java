@@ -37,11 +37,11 @@ import javax.inject.Singleton;
 @Brca2
 public class Brca2LrgConvertor implements LrgConvertor {
 
-    private Mapping mapping;
+    private LrgMapping mapping;
 
     @PostConstruct
     private void init() {
-        mapping = LRG.getMapping(Locus.LRG_293.toString(), "GRCh37.p13");
+        mapping = LrgMappingProvider.getMapping(LrgLocus.LRG_293.toString(), "GRCh37.p13");
     }
 
     @Override
@@ -56,7 +56,7 @@ public class Brca2LrgConvertor implements LrgConvertor {
 
     @Override
     public Long getPosition(long pos) {
-        Coordinates from = new Coordinates(LRGReference.LRG.toString().toLowerCase(), Locus.LRG_293.toString(), pos, pos, "-1");
+        LrgCoordinates from = new LrgCoordinates(LrgReference.LRG.toString().toLowerCase(), LrgLocus.LRG_293.toString(), pos, pos, "-1");
         System.out.println(from);
         System.out.println(mapping);
 

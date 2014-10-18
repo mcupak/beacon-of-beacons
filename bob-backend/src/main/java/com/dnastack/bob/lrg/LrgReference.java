@@ -28,19 +28,19 @@ package com.dnastack.bob.lrg;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public enum LRGReference {
+public enum LrgReference {
 
     LRG("LRG");
 
     private final String ref;
 
-    private LRGReference(String ref) {
+    private LrgReference(String ref) {
         this.ref = ref;
     }
 
-    public static LRGReference fromString(String text) {
+    public static LrgReference fromString(String text) {
         if (text != null) {
-            for (LRGReference b : LRGReference.values()) {
+            for (LrgReference b : LrgReference.values()) {
                 if (text.equalsIgnoreCase(b.toString())) {
                     return b;
                 }

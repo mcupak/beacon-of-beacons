@@ -27,7 +27,7 @@ package com.dnastack.bob.lrg;
  *
  * @author mfiume
  */
-class Coordinates {
+class LrgCoordinates {
 
     private final String name;
     private final String locus;
@@ -36,7 +36,7 @@ class Coordinates {
     private final long end;
     private final String strand;
 
-    public Coordinates(String name, String locus, long start, long end, String strand) {
+    public LrgCoordinates(String name, String locus, long start, long end, String strand) {
         this.name = name;
         this.locus = locus;
         this.start = start;

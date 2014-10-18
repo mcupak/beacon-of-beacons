@@ -28,19 +28,19 @@ package com.dnastack.bob.lrg;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public enum Locus {
+public enum LrgLocus {
 
     LRG_292("LRG_292"), LRG_293("LRG_293");
 
     private final String ref;
 
-    private Locus(String ref) {
+    private LrgLocus(String ref) {
         this.ref = ref;
     }
 
-    public static Locus fromString(String text) {
+    public static LrgLocus fromString(String text) {
         if (text != null) {
-            for (Locus b : Locus.values()) {
+            for (LrgLocus b : LrgLocus.values()) {
                 if (text.equalsIgnoreCase(b.toString())) {
                     return b;
                 }

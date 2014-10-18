@@ -27,12 +27,12 @@ package com.dnastack.bob.lrg;
  *
  * @author mfiume
  */
-class Mapping {
+class LrgMapping {
 
-    private final Coordinates sourceCoordinates;
-    private final Coordinates targetCoordinates;
+    private final LrgCoordinates sourceCoordinates;
+    private final LrgCoordinates targetCoordinates;
 
-    Mapping(Coordinates sourceCoordinates, Coordinates targetCoordinates) {
+    LrgMapping(LrgCoordinates sourceCoordinates, LrgCoordinates targetCoordinates) {
         this.sourceCoordinates = sourceCoordinates;
         this.targetCoordinates = targetCoordinates;
 
@@ -46,23 +46,23 @@ class Mapping {
         return "Mapping{" + "lrgCoords=" + sourceCoordinates + ", otherCoords=" + targetCoordinates + '}';
     }
 
-    public Coordinates mapForward(Coordinates coord) {
+    public LrgCoordinates mapForward(LrgCoordinates coord) {
         return map(sourceCoordinates, targetCoordinates, coord);
     }
 
-    public Coordinates mapBackward(Coordinates coord) {
+    public LrgCoordinates mapBackward(LrgCoordinates coord) {
         return map(targetCoordinates, sourceCoordinates, coord);
     }
 
-    public Coordinates getSourceCoordinates() {
+    public LrgCoordinates getSourceCoordinates() {
         return sourceCoordinates;
     }
 
-    public Coordinates getTargetCoordinates() {
+    public LrgCoordinates getTargetCoordinates() {
         return targetCoordinates;
     }
 
-    private Coordinates map(Coordinates fromCoordinates, Coordinates toCoordinates, Coordinates coord) throws IndexOutOfBoundsException {
+    private LrgCoordinates map(LrgCoordinates fromCoordinates, LrgCoordinates toCoordinates, LrgCoordinates coord) throws IndexOutOfBoundsException {
 
         checkInBounds(fromCoordinates, coord);
 
@@ -76,13 +76,13 @@ class Mapping {
         long remappedStart = toCoordinates.getStart() + startDiff;
         long remappedEnd = toCoordinates.getStart() + endDiff;
 
-        Coordinates remappedCoords = new Coordinates(remappedName, remappedLocus, remappedStart, remappedEnd, remappedStrand);
+        LrgCoordinates remappedCoords = new LrgCoordinates(remappedName, remappedLocus, remappedStart, remappedEnd, remappedStrand);
         checkInBounds(toCoordinates, remappedCoords);
 
         return remappedCoords;
     }
 
-    private void checkInBounds(Coordinates target, Coordinates query) throws IndexOutOfBoundsException {
+    private void checkInBounds(LrgCoordinates target, LrgCoordinates query) throws IndexOutOfBoundsException {
 
         // check name
         if (!query.getName().equals(target.getName())) {
@@ -110,7 +110,7 @@ class Mapping {
         }
     }
 
-    private void checkNulls(Coordinates coords) {
+    private void checkNulls(LrgCoordinates coords) {
         if (coords.getName() == null) {
             throw new RuntimeException("Name for coordinate is null");
         }
@@ -119,7 +119,7 @@ class Mapping {
         }
     }
 
-    private void checkSpans(Coordinates sourceCoordinates, Coordinates targetCoordinates) {
+    private void checkSpans(LrgCoordinates sourceCoordinates, LrgCoordinates targetCoordinates) {
         if (sourceCoordinates.getEnd() - sourceCoordinates.getStart() != targetCoordinates.getEnd() - targetCoordinates.getStart()) {
             throw new RuntimeException("Source and target lengths do not match");
         }
