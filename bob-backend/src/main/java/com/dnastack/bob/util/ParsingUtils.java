@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -118,22 +119,43 @@ public class ParsingUtils {
      * Parses boolean value out of the given field in a JSON response.
      *
      * @param response response in JSON format
-     * @param field    field name
+     * @param path     list of JSON keys determining the path to the searched value
      *
      * @return field value if it is true/false, null otherwise
      */
-    public static Boolean parseBooleanFromJson(String response, String field) {
+    public static Boolean parseBooleanFromJson(String response, String... path) {
         if (response == null) {
             return null;
         }
 
         JSONObject jo = new JSONObject(response);
-        try {
-            return jo.getBoolean(field);
-        } catch (JSONException jex) {
-            // cannot parse the response or no record message
-            return null;
+        JSONObject current = null;
+        for (String s : path) {
+            current = jo.optJSONObject(s);
+            if (current == null) {
+                JSONArray a = jo.optJSONArray(s);
+                if (a != null) {
+                    current = a.optJSONObject(0);
+                    if (current == null) {
+                        try {
+                            return a.getBoolean(0);
+                        } catch (JSONException jex) {
+                            return null;
+                        }
+                    }
+                }
+            }
+            if (current == null) {
+                try {
+                    return jo.getBoolean(s);
+                } catch (JSONException jex) {
+                    return null;
+                }
+            }
+            jo = current;
         }
+
+        return null;
     }
 
     /**

@@ -88,6 +88,30 @@ public class QueryUtils {
     }
 
     /**
+     * Converts X/Y chromosomes to number (23/24, respectively).
+     *
+     * @param c chromosome
+     *
+     * @return integral chromosome
+     */
+    public static Integer denormalizeChromosomeToNumber(Chromosome c) {
+        if (null != c.toString()) {
+            switch (c.toString()) {
+                case "X":
+                    return 23;
+                case "Y":
+                    return 24;
+                case "MT":
+                    return 25;
+                default:
+                    return Integer.parseInt(c.toString());
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Converts 0-based position to 1-based position.
      *
      * @param pos 0-based position
