@@ -21,10 +21,10 @@
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="js/bootstrap.min.js"></script>
         <script>
-			$(function() {
-				$("#banner").load("banner.html");
-			});
-		</script>
+            $(function () {
+                $("#banner").load("banner.html");
+            });
+        </script>
     </head>
     <body>
         <script>
@@ -57,7 +57,7 @@
                 xmlhttp.onreadystatechange = function () {
 
                     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                    	
+
                         obj = JSON.parse(xmlhttp.responseText);
                         var arrayLength = obj.length;
                         var resultTable = "";
@@ -68,19 +68,19 @@
                             var responseIndicator = "";
 
                             if (response == null) {
-                                responseIndicator = "<span class='label label-warning'>Null</span>";
+                                responseIndicator = "<span title='There was a problem obtaining the response for this beacon.' class='label label-warning'>&#x2005;&#x2005;&#x2005;&#x2005;</span>";
                             } else if (response == true) {
                                 responseIndicator = "<span class='label label-success'>Yes</span>";
                             } else {
                                 responseIndicator = "<span class='label label-danger'>No</span>";
                             }
 
-							var aggField = obj[i].beacon.aggregator;
-							var aggString = "";
-							
-							if (aggField != null && aggField == true) {
-								aggString = " [aggregator]";
-							}
+                            var aggField = obj[i].beacon.aggregator;
+                            var aggString = "";
+
+                            if (aggField != null && aggField == true) {
+                                aggString = " [aggregator]";
+                            }
 
                             resultTable += "<tr><td>" + obj[i].beacon.name + " (" + obj[i].beacon.organization + ")" + aggString + "</td><td>" + responseIndicator + "</td></tr>";
                         }
