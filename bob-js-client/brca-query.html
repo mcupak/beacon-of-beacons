@@ -61,31 +61,39 @@
                         obj = JSON.parse(xmlhttp.responseText);
                         var arrayLength = obj.length;
                         var resultTable = "";
-                        //resultTable += "<center><table><tr><th>Beacon</th><th>Result</th></tr>";
-                        resultTable += "<center><table><tr><th></th><th>Beacon</th></tr>";
+                        resultTable += "<center><table>";
                         
+                        var rows = "";
+
                         for (var i = 0; i < arrayLength; i++) {
                             var response = obj[i].response;
                             var responseIndicator = "";
 
                             if (response == null) {
-                                responseIndicator = "<span class='label label-warning'>Null</span>";
+                                responseIndicator = "<span title='There was a problem obtaining the response for this beacon.' class='label label-warning'>&#x2005;&#x2005;&#x2005;&#x2005;</span>";
                             } else if (response == true) {
                                 responseIndicator = "<span class='label label-success'>Yes</span>";
                             } else {
                                 responseIndicator = "<span class='label label-danger'>No</span>";
                             }
 
-							var aggField = obj[i].beacon.aggregator;
-							var aggString = "";
-							
-							if (aggField != null && aggField == true) {
-								aggString = " [aggregator]";
-							}
+                            var aggField = obj[i].beacon.aggregator;
+                            var aggString = "";
 
- 							//resultTable += "<tr><td>" + obj[i].beacon.name + " (" + obj[i].beacon.organization + ")" + aggString + "</td><td>" + responseIndicator + "</td></tr>";
-                            resultTable += "<tr><td>" + responseIndicator + "</td><td>" + obj[i].beacon.name + " (" + obj[i].beacon.organization + ")" + aggString + "</td></tr>";
+                            if (aggField != null && aggField == true) {
+                                aggString = " [aggregator]";
+                            }
+
+							if (obj[i].beacon.name == "Beacon of Beacons") {
+								var line = "<tr style=\"padding-bottom: 10em;\"><td>" + responseIndicator + "</td><td><b>" + obj[i].beacon.name + " (" + obj[i].beacon.organization + ")</b></td></tr>";							
+								rows = line + rows; // prepend
+							} else {
+								var line = "<tr><td>" + responseIndicator + "</td><td>" + obj[i].beacon.name + " (" + obj[i].beacon.organization + ")" + aggString + "</td></tr>";
+								rows += line; // append
+							}
                         }
+                        
+                        resultTable += rows;
                         resultTable += "</table></center>";
 
                         document.getElementById("results").innerHTML = resultTable;
