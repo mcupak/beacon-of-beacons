@@ -169,7 +169,7 @@ public class BeaconResponsesTest extends BasicTest {
     @Test
     public void testResponsesFilteredForLovd(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String b = "lovd";
-        String[] q = {"1", "808922", "T", null};
+        String[] q = {"1", "808922", "A", null};
         BeaconResponseTo br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
