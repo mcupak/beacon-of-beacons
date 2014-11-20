@@ -80,7 +80,7 @@ public class QueryUtils {
      *
      * @return denormalized chromosome
      */
-    public static String makeChromXYLowercase(Chromosome c) {
+    public static String denormalizeChromXYToLowercase(Chromosome c) {
         if ("X".equals(c.toString()) || "Y".equals(c.toString())) {
             return c.toString().toLowerCase();
         }
@@ -180,6 +180,26 @@ public class QueryUtils {
         }
         if (res.equals("I")) {
             return "INS";
+        }
+
+        return res;
+    }
+
+    /**
+     * Generate a domain-specific allele string with indels wrapped in <> (url encoded).
+     *
+     * @param allele allele
+     *
+     * @return denormalized allele
+     */
+    public static String denormalizeAlleleToBrackets(String allele) {
+        if (allele == null || allele.isEmpty()) {
+            return null;
+        }
+
+        String res = allele.toUpperCase();
+        if (res.equals("D") || res.equals("DEL") || res.equals("I") || res.equals("INS")) {
+            return "%3C" + allele + "%3E";
         }
 
         return res;
