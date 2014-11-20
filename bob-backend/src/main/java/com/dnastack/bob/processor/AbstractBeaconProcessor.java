@@ -31,8 +31,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
+
+import static com.dnastack.bob.util.Constants.REQUEST_TIMEOUT;
 
 /**
  * Abstract beacon service handling multiple genome specific queries.
@@ -63,8 +67,8 @@ public abstract class AbstractBeaconProcessor implements BeaconProcessor, Serial
         List<Future<Boolean>> bs = new ArrayList<>();
         for (Future<String> f : fs) {
             try {
-                bs.add(parseQueryResponse(b, f.get()));
-            } catch (InterruptedException | ExecutionException ex) {
+                bs.add(parseQueryResponse(b, f.get(REQUEST_TIMEOUT, TimeUnit.SECONDS)));
+            } catch (InterruptedException | ExecutionException | TimeoutException ex) {
                 // ignore
             }
         }
@@ -78,8 +82,8 @@ public abstract class AbstractBeaconProcessor implements BeaconProcessor, Serial
         for (Future<Boolean> b : bs) {
             Boolean r = null;
             try {
-                r = b.get();
-            } catch (InterruptedException | ExecutionException ex) {
+                r = b.get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
+            } catch (InterruptedException | ExecutionException | TimeoutException ex) {
                 // ignore, already null
             }
             if (r != null) {

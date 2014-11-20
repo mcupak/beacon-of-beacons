@@ -32,9 +32,9 @@ import com.dnastack.bob.entity.Query;
 import com.dnastack.bob.log.Logged;
 import com.dnastack.bob.lrg.Brca;
 import com.dnastack.bob.lrg.Brca2;
-import com.dnastack.bob.lrg.LrgReference;
-import com.dnastack.bob.lrg.LrgLocus;
 import com.dnastack.bob.lrg.LrgConvertor;
+import com.dnastack.bob.lrg.LrgLocus;
+import com.dnastack.bob.lrg.LrgReference;
 import com.dnastack.bob.util.Entity2ToConvertor;
 import java.util.Collection;
 import java.util.HashMap;
@@ -43,12 +43,16 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.validation.Validator;
+
+import static com.dnastack.bob.util.Constants.REQUEST_TIMEOUT;
 
 /**
  * Implementation of a service for managing beacon responses.
@@ -98,8 +102,8 @@ public class BeaconResponseServiceImpl implements BeaconResponseService {
             for (Entry<Beacon, Future<Boolean>> e : futures.entrySet()) {
                 Boolean res = null;
                 try {
-                    res = e.getValue().get();
-                } catch (InterruptedException | ExecutionException ex) {
+                    res = e.getValue().get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
+                } catch (InterruptedException | ExecutionException | TimeoutException ex) {
                     // ignore, response already null
                 }
                 if (res != null && res) {
@@ -108,8 +112,8 @@ public class BeaconResponseServiceImpl implements BeaconResponseService {
             }
         } else {
             try {
-                total = b.getProcessor().executeQuery(b, q).get();
-            } catch (InterruptedException | ExecutionException ex) {
+                total = b.getProcessor().executeQuery(b, q).get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
+            } catch (InterruptedException | ExecutionException | TimeoutException ex) {
                 // ignore
             }
         }
@@ -148,8 +152,8 @@ public class BeaconResponseServiceImpl implements BeaconResponseService {
         for (Entry<Beacon, Future<Boolean>> e : futures.entrySet()) {
             Boolean b = null;
             try {
-                b = e.getValue().get();
-            } catch (InterruptedException | ExecutionException ex) {
+                b = e.getValue().get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
+            } catch (InterruptedException | ExecutionException | TimeoutException ex) {
                 // ignore, response already null
             }
             if (b != null) {
@@ -215,8 +219,8 @@ public class BeaconResponseServiceImpl implements BeaconResponseService {
         }
 
         try {
-            br.setResponse(queryBeacon(b, q).get());
-        } catch (InterruptedException | ExecutionException ex) {
+            br.setResponse(queryBeacon(b, q).get(REQUEST_TIMEOUT, TimeUnit.SECONDS));
+        } catch (InterruptedException | ExecutionException | TimeoutException ex) {
             // ignore, response already null
         }
 
