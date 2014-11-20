@@ -59,11 +59,11 @@ public abstract class AbstractBeaconProcessor implements BeaconProcessor, Serial
         return fs;
     }
 
-    private List<Future<Boolean>> parseResultsInParallel(List<Future<String>> fs) {
+    private List<Future<Boolean>> parseResultsInParallel(Beacon b, List<Future<String>> fs) {
         List<Future<Boolean>> bs = new ArrayList<>();
         for (Future<String> f : fs) {
             try {
-                bs.add(parseQueryResponse(f.get()));
+                bs.add(parseQueryResponse(b, f.get()));
             } catch (InterruptedException | ExecutionException ex) {
                 // ignore
             }
@@ -103,7 +103,7 @@ public abstract class AbstractBeaconProcessor implements BeaconProcessor, Serial
         Boolean res = null;
 
         if (query != null) {
-            res = collectResults(parseResultsInParallel(executeQueriesInParallel(beacon, query)));
+            res = collectResults(parseResultsInParallel(beacon, executeQueriesInParallel(beacon, query)));
         }
 
         return new AsyncResult<>(res);

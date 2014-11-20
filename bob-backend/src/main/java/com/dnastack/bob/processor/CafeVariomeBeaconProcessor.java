@@ -40,33 +40,46 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
 /**
- * EBI beacon service.
+ * Cafe Variome beacon service.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
 @Stateless
 @LocalBean
-@Ebi
-public class EbiBeaconProcessor extends AbstractBeaconProcessor {
+@CafeVariome
+public class CafeVariomeBeaconProcessor extends AbstractBeaconProcessor {
 
-    private static final long serialVersionUID = 11L;
-    private static final String BASE_URL = "http://wwwdev.ebi.ac.uk/eva/webservices/rest/v1/variants/";
-    private static final String PARAM_TEMPLATE = "%d:%d::%s/exists?studies=";
+    private static final long serialVersionUID = 12L;
+    private static final String BASE_URL = "http://beacon.cafevariome.org/query";
+    private static final String PARAM_TEMPLATE = "?chrom=%s&pos=%d&allele=%s";
     private static final Set<Reference> SUPPORTED_REFS = ImmutableSet.of(Reference.HG19);
+    private static final String BEACON_PREFIX = "cafe-";
+    private static final String RESPONSE_FIELD = "response";
 
-    private String getQueryUrl(Integer chrom, Long pos, String allele) throws MalformedURLException {
+    private String getQueryUrl(String chrom, Long pos, String allele) throws MalformedURLException {
         String params = String.format(PARAM_TEMPLATE, chrom, pos, allele);
 
         return BASE_URL + params;
+    }
+
+    private String getJsonFieldName(Beacon b) {
+        String res = null;
+        if (b.getId().startsWith(BEACON_PREFIX)) {
+            res = b.getId().substring(BEACON_PREFIX.length()) + "_" + RESPONSE_FIELD;
+        } else {
+            res = b.getId() + "_" + RESPONSE_FIELD;
+        }
+        return res;
     }
 
     @Override
     @Asynchronous
     public Future<String> getQueryResponse(Beacon beacon, Query query) {
         String res = null;
+
         try {
-            res = HttpUtils.executeRequest(HttpUtils.createRequest(getQueryUrl(QueryUtils.denormalizeChromosomeToNumber(query.getChromosome()), query.getPosition(), QueryUtils.denormalizeAllele(query.getAllele())), false, null));
+            res = HttpUtils.executeRequest(HttpUtils.createRequest(getQueryUrl(QueryUtils.denormalizeChromosome("chr%s", query.getChromosome()).toLowerCase(), query.getPosition(), query.getAllele()), false, null));
         } catch (MalformedURLException | UnsupportedEncodingException ex) {
             // ignore, already null
         }
@@ -77,7 +90,7 @@ public class EbiBeaconProcessor extends AbstractBeaconProcessor {
     @Override
     @Asynchronous
     public Future<Boolean> parseQueryResponse(Beacon b, String response) {
-        Boolean res = ParsingUtils.parseBooleanFromJson(response, "response", "result");
+        Boolean res = ParsingUtils.parseBooleanFromJson(response, RESPONSE_FIELD, getJsonFieldName(b));
 
         return new AsyncResult<>(res);
     }

@@ -85,7 +85,7 @@ public class AmpLabBeaconProcessor extends AbstractBeaconProcessor {
 
     @Override
     @Asynchronous
-    public Future<Boolean> parseQueryResponse(String response) {
+    public Future<Boolean> parseQueryResponse(Beacon b, String response) {
         Boolean res = ParsingUtils.parseContainsStringCaseInsensitive(response, "beacon found", "beacon cannot find");
 
         return new AsyncResult<>(res);

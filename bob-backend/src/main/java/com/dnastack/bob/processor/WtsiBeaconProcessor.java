@@ -82,7 +82,7 @@ public class WtsiBeaconProcessor extends AbstractBeaconProcessor {
 
     @Override
     @Asynchronous
-    public Future<Boolean> parseQueryResponse(String response) {
+    public Future<Boolean> parseQueryResponse(Beacon b, String response) {
         Boolean res = ParsingUtils.parseYesNoCaseInsensitive(response);
         if (res == null) {
             // ref response is treated as false

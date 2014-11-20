@@ -78,7 +78,7 @@ public class NcbiBeaconProcessor extends AbstractBeaconProcessor {
 
     @Override
     @Asynchronous
-    public Future<Boolean> parseQueryResponse(String response) {
+    public Future<Boolean> parseQueryResponse(Beacon b, String response) {
         Boolean res = ParsingUtils.parseBooleanFromJson(response, "exist_gt");
 
         return new AsyncResult<>(res);

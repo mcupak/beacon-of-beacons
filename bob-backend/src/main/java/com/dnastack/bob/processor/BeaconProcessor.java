@@ -57,11 +57,12 @@ public interface BeaconProcessor {
     /**
      * Asynchronously xtracts beacon response value from the given raw query reponse.
      *
+     * @param beacon beacon
      * @param response response
      *
      * @return true/false for valid values, null otherwise
      */
-    Future<Boolean> parseQueryResponse(String response);
+    Future<Boolean> parseQueryResponse(Beacon beacon, String response);
 
     /**
      * Asynchronously obtains raw response to the query from the beacon.

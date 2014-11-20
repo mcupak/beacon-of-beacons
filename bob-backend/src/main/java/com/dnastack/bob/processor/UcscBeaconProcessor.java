@@ -77,7 +77,7 @@ public class UcscBeaconProcessor extends AbstractBeaconProcessor {
 
     @Override
     @Asynchronous
-    public Future<Boolean> parseQueryResponse(String response) {
+    public Future<Boolean> parseQueryResponse(Beacon b, String response) {
         Boolean res = ParsingUtils.parseYesNoCaseInsensitive(response);
 
         return new AsyncResult<>(res);

@@ -26,6 +26,7 @@ package com.dnastack.bob.dao;
 import com.dnastack.bob.entity.Beacon;
 import com.dnastack.bob.processor.AmpLab;
 import com.dnastack.bob.processor.BeaconProcessor;
+import com.dnastack.bob.processor.CafeVariome;
 import com.dnastack.bob.processor.Ebi;
 import com.dnastack.bob.processor.IntegerChromosomeBeaconizer;
 import com.dnastack.bob.processor.Kaviar;
@@ -90,6 +91,10 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
     @StringChromosomeBeaconizer
     private BeaconProcessor stringBeaconizerService;
 
+    @Inject
+    @CafeVariome
+    private BeaconProcessor cafeVariomeService;
+
     private void setUpBeacons() {
         this.beacons = new HashSet<>();
 
@@ -113,11 +118,18 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
         Beacon curoverse = new Beacon("curoverse", "PGP", integerBeaconizerService, true, "Curoverse");
         Beacon curoverseRef = new Beacon("curoverse-ref", "GA4GH Example Data", integerBeaconizerService, true, "Curoverse");
 
+        Beacon cafeVariomeCentral = new Beacon("cafe-central", "Cafe Variome Central", cafeVariomeService, true, "University of Leicester");
+        Beacon cafeCardioKit = new Beacon("cafe-cardiokit", "Cafe CardioKit", cafeVariomeService, true, "University of Leicester");
+
         // set up aggregators
         Beacon google = new Beacon("google", "Google Genomics Public Data", null, true, "Google");
         platinum.addAggregator(google);
         thousandGenomes.addAggregator(google);
         thousandGenomesPhase3.addAggregator(google);
+
+        Beacon cafeVariome = new Beacon("cafe-variome", "Cafe Variome", null, true, "University of Leicester");
+        cafeVariomeCentral.addAggregator(cafeVariome);
+        cafeCardioKit.addAggregator(cafeVariome);
 
         // add beacons ot collection
         beacons.add(bob);
@@ -138,6 +150,10 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
 
         beacons.add(curoverse);
         beacons.add(curoverseRef);
+
+        beacons.add(cafeVariome);
+        beacons.add(cafeVariomeCentral);
+        beacons.add(cafeCardioKit);
 
         // point all regular beacons to bob
         for (Beacon b : beacons) {
