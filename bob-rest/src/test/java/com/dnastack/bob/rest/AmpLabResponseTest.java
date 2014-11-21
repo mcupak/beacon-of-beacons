@@ -24,7 +24,7 @@
 package com.dnastack.bob.rest;
 
 import com.dnastack.bob.dto.BeaconResponseTo;
-import com.dnastack.bob.shared.Reference;
+import com.dnastack.bob.dto.ReferenceTo;
 import java.net.MalformedURLException;
 import java.net.URL;
 import javax.xml.bind.JAXBException;
@@ -113,7 +113,7 @@ public class AmpLabResponseTest extends AbstractResponseTest {
         assertNotNull(br);
         assertTrue(beaconsMatch(br.getBeacon(), BEACON));
         assertTrue(getNonMachingFields(br.getQuery(), query).size() == 1);
-        assertEquals(br.getQuery().getReference(), Reference.HG38);
+        assertEquals(br.getQuery().getReference(), ReferenceTo.HG38);
         assertNotNull(br.getResponse());
     }
 

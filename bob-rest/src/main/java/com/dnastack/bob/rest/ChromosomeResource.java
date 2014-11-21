@@ -23,8 +23,8 @@
  */
 package com.dnastack.bob.rest;
 
+import com.dnastack.bob.dto.ChromosomeTo;
 import com.dnastack.bob.rest.util.ItemWrapper;
-import com.dnastack.bob.shared.Chromosome;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -44,9 +44,9 @@ import javax.ws.rs.core.MediaType;
 public class ChromosomeResource {
 
     @GET
-    public Collection<ItemWrapper<Chromosome>> showAll() {
-        List<ItemWrapper<Chromosome>> vals = new ArrayList<>();
-        for (Chromosome chr : Chromosome.values()) {
+    public Collection<ItemWrapper<ChromosomeTo>> showAll() {
+        List<ItemWrapper<ChromosomeTo>> vals = new ArrayList<>();
+        for (ChromosomeTo chr : ChromosomeTo.values()) {
             vals.add(new ItemWrapper<>(chr));
         }
 

@@ -10,9 +10,11 @@
     <version>1.0-SNAPSHOT</version>
     
     <modules>
+        <module>bob-data</module>
+        <module>bob-service</module>
+        <module>bob-service-api</module>
         <module>bob-rest</module>
-        <module>bob-backend</module>
-        <module>bob-backend-api</module>
+        <module>bob-js-client</module>
     </modules>
     
     <scm>
@@ -59,10 +61,14 @@
         <version.eclipselink>2.6.0-M3</version.eclipselink>
         <version.xmlrpc-client>3.1.3</version.xmlrpc-client>
         <version.guava>18.0</version.guava>
-        <version.war.plugin>2.1.1</version.war.plugin>
+        <version.war.plugin>2.3</version.war.plugin>
         <version.surefire.plugin>2.17</version.surefire.plugin>
         <version.compiler.plugin>2.3.2</version.compiler.plugin>
-        <version.compiler.plugin>3.0</version.compiler.plugin>
+        <version.jar.plugin>2.2</version.jar.plugin>
+        <version.exec.plugin>1.2.1</version.exec.plugin>
+        <version.deploy.plugin>2.8</version.deploy.plugin>
+        <version.install.plugin>2.3.1</version.install.plugin>
+        <version.ejb.plugin>2.3</version.ejb.plugin>
         <maven.compiler.target>1.7</maven.compiler.target>
         <maven.compiler.source>1.7</maven.compiler.source>
     </properties>
@@ -123,4 +129,61 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+    
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${version.compiler.plugin}</version>
+                    <configuration>
+                        <source>${maven.compiler.source}</source>
+                        <target>${maven.compiler.target}</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-ejb-plugin</artifactId>
+                    <version>${version.ejb.plugin}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>${version.install.plugin}</version>
+                    <configuration>
+                        <createChecksum>true</createChecksum>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>${version.deploy.plugin}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>${version.war.plugin}</version>
+                    <configuration>
+                        <failOnMissingWebXml>false</failOnMissingWebXml>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${version.jar.plugin}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>${version.exec.plugin}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.jboss.as.plugins</groupId>
+                    <artifactId>jboss-as-maven-plugin</artifactId>
+                    <version>${version.jboss.maven.plugin}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>

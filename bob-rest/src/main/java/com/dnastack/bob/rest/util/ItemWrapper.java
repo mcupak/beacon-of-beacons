@@ -23,8 +23,8 @@
  */
 package com.dnastack.bob.rest.util;
 
-import com.dnastack.bob.shared.Chromosome;
-import com.dnastack.bob.shared.Reference;
+import com.dnastack.bob.dto.ChromosomeTo;
+import com.dnastack.bob.dto.ReferenceTo;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
  * @param <T> item type
  */
 @XmlRootElement(name = "item")
-@XmlSeeAlso({Reference.class, Chromosome.class, String.class})
+@XmlSeeAlso({ReferenceTo.class, ChromosomeTo.class, String.class})
 public class ItemWrapper<T> {
 
     private T item;

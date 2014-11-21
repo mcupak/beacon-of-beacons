@@ -24,9 +24,9 @@
 package com.dnastack.bob.rest;
 
 import com.dnastack.bob.dto.BeaconResponseTo;
-import com.dnastack.bob.shared.Chromosome;
-import com.dnastack.bob.entity.Query;
-import com.dnastack.bob.shared.Reference;
+import com.dnastack.bob.dto.QueryTo;
+import com.dnastack.bob.dto.ChromosomeTo;
+import com.dnastack.bob.dto.ReferenceTo;
 import com.google.common.collect.ImmutableList;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -87,20 +87,20 @@ public abstract class AbstractResponseTest extends BasicTest {
         return Long.valueOf(readField(response, POS_PATH));
     }
 
-    protected static Chromosome readChrom(String response) {
-        return Chromosome.fromString(readField(response, CHROM_PATH).substring(3));
+    protected static ChromosomeTo readChrom(String response) {
+        return ChromosomeTo.fromString(readField(response, CHROM_PATH).substring(3));
     }
 
     protected static String readAllele(String response) {
         return readField(response, ALLELE_PATH);
     }
 
-    protected static Reference readRef(String response) {
-        return Reference.fromString(readField(response, REF_PATH));
+    protected static ReferenceTo readRef(String response) {
+        return ReferenceTo.fromString(readField(response, REF_PATH));
     }
 
-    protected static Query readQuery(String response) {
-        return new Query(readChrom(response), readPos(response), readAllele(response), readRef(response));
+    protected static QueryTo readQuery(String response) {
+        return new QueryTo(readChrom(response), readPos(response), readAllele(response), readRef(response));
     }
 
     protected static Boolean readResponsePredicate(String response) {

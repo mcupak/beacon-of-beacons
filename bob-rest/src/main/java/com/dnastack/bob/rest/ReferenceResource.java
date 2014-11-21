@@ -23,8 +23,8 @@
  */
 package com.dnastack.bob.rest;
 
+import com.dnastack.bob.dto.ReferenceTo;
 import com.dnastack.bob.rest.util.ItemWrapper;
-import com.dnastack.bob.shared.Reference;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -44,9 +44,9 @@ import javax.ws.rs.core.MediaType;
 public class ReferenceResource {
 
     @GET
-    public Collection<ItemWrapper<Reference>> showAll() {
-        List<ItemWrapper<Reference>> vals = new ArrayList<>();
-        for (Reference ref : Reference.values()) {
+    public Collection<ItemWrapper<ReferenceTo>> showAll() {
+        List<ItemWrapper<ReferenceTo>> vals = new ArrayList<>();
+        for (ReferenceTo ref : ReferenceTo.values()) {
             vals.add(new ItemWrapper<>(ref));
         }
 
