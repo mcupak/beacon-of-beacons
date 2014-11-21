@@ -23,10 +23,10 @@
         <script src="js/bootstrap.min.js"></script>
         <script src="js/bootstrap-switch.min.js"></script>
         <script>
-			$(function() {
-				$("#banner").load("banner-brca.html");
-			});
-		</script>
+            $(function () {
+                $("#banner").load("banner-brca.html");
+            });
+        </script>
         <script>
             function getBeacons() {
                 var xmlhttp;
@@ -44,7 +44,7 @@
                         resultTable += '<option value="all">All</option>';
                         for (var i = 0; i < arrayLength; i++) {
                             if (obj[i] != null) {
-                                var tags = (obj[i].aggregator)?"[aggregator]":"";
+                                var tags = (obj[i].aggregator) ? "[aggregator]" : "";
                                 resultTable += '<option value="' + obj[i].id + '">' + obj[i].name + ' (' + obj[i].organization + ') ' + tags + '</option>';
                             }
                         }
@@ -54,12 +54,17 @@
                     }
                 };
 
+                xmlhttp.ontimeout = function () {
+                    document.getElementById("beaconlist").innerHTML = "Request timed out.";
+                };
+
                 var url = "http://dnastack.com/ga4gh/bob/api-beacons.php";
                 xmlhttp.open("GET", url, true);
+                xmlhttp.timeout = 30000;
                 xmlhttp.send();
             }
         </script>
-        
+
     </head>
     <body>
         <script>
@@ -67,7 +72,7 @@
         </script>
         <div class="container">
             <div class="row row-centered">
-            	<div id="banner"></div>
+                <div id="banner"></div>
                 <div class="col-xs-6 col-centered wide-container">
                     <div id="banner"></div>
 
@@ -81,7 +86,7 @@
                             <label for="ref" class="control-label col-xs-3">Coordinates</label>
                             <div class="col-xs-9">
                                 <select class="form-control" name="ref">
-                                	<option value="lrg">LRG</option>
+                                    <option value="lrg">LRG</option>
                                     <!--<option value="hg18">GRCh36/hg18</option>
                                     <option value="hg19">GRCh37/hg19</option>
                                     <option value="hg38">GRCh38/hg38</option>-->
@@ -92,9 +97,9 @@
                             <label for="chrom" class="control-label col-xs-3">Locus</label>
                             <div class="col-xs-9">
                                 <select class="form-control" name="chrom">
-                                	<option value="LRG_292">BRCA1 (LRG_292)</option>
-                                	<option value="LRG_293">BRCA2 (LRG_293)</option>
-                                	<!--
+                                    <option value="LRG_292">BRCA1 (LRG_292)</option>
+                                    <option value="LRG_293">BRCA2 (LRG_293)</option>
+                                    <!--
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>
@@ -136,7 +141,7 @@
                                 <input type="text" class="form-control" name="alt" placeholder="">
                             </div>
                         </div>
-                        
+
 
                         <div class="form-group">
                             <div class="col-xs-offset-3 col-xs-9 row-centered">

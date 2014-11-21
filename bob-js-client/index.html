@@ -23,10 +23,10 @@
         <script src="js/bootstrap.min.js"></script>
         <script src="js/bootstrap-switch.min.js"></script>
         <script>
-			$(function() {
-				$("#banner").load("banner.html");
-			});
-		</script>
+            $(function () {
+                $("#banner").load("banner.html");
+            });
+        </script>
         <script>
             function getBeacons() {
                 var xmlhttp;
@@ -44,7 +44,7 @@
                         resultTable += '<option value="all">All</option>';
                         for (var i = 0; i < arrayLength; i++) {
                             if (obj[i] != null) {
-                                var tags = (obj[i].aggregator)?"[aggregator]":"";
+                                var tags = (obj[i].aggregator) ? "[aggregator]" : "";
                                 resultTable += '<option value="' + obj[i].id + '">' + obj[i].name + ' (' + obj[i].organization + ') ' + tags + '</option>';
                             }
                         }
@@ -54,12 +54,17 @@
                     }
                 };
 
+                xmlhttp.ontimeout = function () {
+                    document.getElementById("beaconlist").innerHTML = "Request timed out.";
+                };
+
                 var url = "http://dnastack.com/ga4gh/bob/api-beacons.php";
                 xmlhttp.open("GET", url, true);
+                xmlhttp.timeout = 30000;
                 xmlhttp.send();
             }
         </script>
-        
+
     </head>
     <body>
         <script>
@@ -67,7 +72,7 @@
         </script>
         <div class="container">
             <div class="row row-centered">
-            	<div id="banner"></div>
+                <div id="banner"></div>
                 <div class="col-xs-6 col-centered wide-container">
                     <div id="banner"></div>
 
@@ -133,7 +138,7 @@
                                 <input type="text" class="form-control" name="alt" placeholder="">
                             </div>
                         </div>
-                        
+
 
                         <div class="form-group">
                             <div class="col-xs-offset-3 col-xs-9 row-centered">

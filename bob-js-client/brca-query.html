@@ -21,10 +21,10 @@
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="js/bootstrap.min.js"></script>
         <script>
-			$(function() {
-				$("#banner").load("banner-brca.html");
-			});
-		</script>
+            $(function () {
+                $("#banner").load("banner-brca.html");
+            });
+        </script>
     </head>
     <body>
         <script>
@@ -57,12 +57,12 @@
                 xmlhttp.onreadystatechange = function () {
 
                     if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                    	
+
                         obj = JSON.parse(xmlhttp.responseText);
                         var arrayLength = obj.length;
                         var resultTable = "";
                         resultTable += "<center><table>";
-                        
+
                         var rows = "";
 
                         for (var i = 0; i < arrayLength; i++) {
@@ -84,20 +84,24 @@
                                 aggString = " [aggregator]";
                             }
 
-							if (obj[i].beacon.name == "Beacon of Beacons") {
-								var line = "<tr style=\"padding-bottom: 10em;\"><td>" + responseIndicator + "</td><td><b>" + obj[i].beacon.name + " (" + obj[i].beacon.organization + ")</b></td></tr>";							
-								rows = line + rows; // prepend
-							} else {
-								var line = "<tr><td>" + responseIndicator + "</td><td>" + obj[i].beacon.name + " (" + obj[i].beacon.organization + ")" + aggString + "</td></tr>";
-								rows += line; // append
-							}
+                            if (obj[i].beacon.name == "Beacon of Beacons") {
+                                var line = "<tr style=\"padding-bottom: 10em;\"><td>" + responseIndicator + "</td><td><b>" + obj[i].beacon.name + " (" + obj[i].beacon.organization + ")</b></td></tr>";
+                                rows = line + rows; // prepend
+                            } else {
+                                var line = "<tr><td>" + responseIndicator + "</td><td>" + obj[i].beacon.name + " (" + obj[i].beacon.organization + ")" + aggString + "</td></tr>";
+                                rows += line; // append
+                            }
                         }
-                        
+
                         resultTable += rows;
                         resultTable += "</table></center>";
 
                         document.getElementById("results").innerHTML = resultTable;
                     }
+                };
+
+                xmlhttp.ontimeout = function () {
+                    document.getElementById("results").innerHTML = "Request timed out.";
                 };
 
                 var urlArr = [];
@@ -113,6 +117,7 @@
                 var url = urlArr.join("");
 
                 xmlhttp.open("GET", url, true);
+                xmlhttp.timeout = 60000;
                 xmlhttp.send();
             }
         </script>
