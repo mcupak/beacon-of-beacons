@@ -239,6 +239,18 @@ public class BeaconResponsesTest extends BasicTest {
     }
 
     @Test
+    public void testResponsesFilteredForCafeVariome(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
+        String b = "cafe-variome";
+        String[] q = {"2", "179612321", "T", null};
+        BeaconResponseTo br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
+
+        assertNotNull(br);
+        assertTrue(beaconsMatch(br.getBeacon(), b));
+        assertTrue(queriesMatch(br.getQuery(), q));
+        assertTrue(br.getResponse());
+    }
+
+    @Test
     public void testResponsesFilteredForBob(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String b = "bob";
         String[] q = {"13", "32888799", "G", null};

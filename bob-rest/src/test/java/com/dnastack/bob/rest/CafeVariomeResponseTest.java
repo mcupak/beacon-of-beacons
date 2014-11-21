@@ -58,7 +58,7 @@ public class CafeVariomeResponseTest extends AbstractResponseTest {
     @Override
     @Test
     public void testAllRefsFound(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String[] query = {"17", "41197712", "G", null};
+        String[] query = {"2", "179612321", "T", null};
         BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
@@ -82,7 +82,7 @@ public class CafeVariomeResponseTest extends AbstractResponseTest {
     @Test
     public void testFoundCafeCentral(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String b = "cafe-central";
-        String[] query = {"17", "41197712", "G", null};
+        String[] query = {"2", "179612321", "T", null};
         BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(b, query));
 
         assertNotNull(br);
@@ -94,7 +94,7 @@ public class CafeVariomeResponseTest extends AbstractResponseTest {
     @Test
     @Override
     public void testSpecificRefFound(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String[] query = {"17", "41197712", "G", "hg19"};
+        String[] query = {"2", "179612321", "T", "hg19"};
         BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
@@ -106,7 +106,7 @@ public class CafeVariomeResponseTest extends AbstractResponseTest {
     @Test
     @Override
     public void testSpecificRefNotFound(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String[] query = {"17", "41197712", "G", "hg38"};
+        String[] query = {"2", "179612321", "T", "hg38"};
         BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
@@ -186,7 +186,7 @@ public class CafeVariomeResponseTest extends AbstractResponseTest {
     @Test
     @Override
     public void testAllRefsNotFound(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String[] query = {"17", "41197713", "G", null};
+        String[] query = {"1", "41197713", "G", null};
         BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
