@@ -252,7 +252,7 @@ public class WtsiResponseTest extends AbstractResponseTest {
     @Test
     @Override
     public void testChromMT(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String[] query = {"MT", "41087870", "A", null};
+        String[] query = {"MT", "2", "A", null};
         BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
