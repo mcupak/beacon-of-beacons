@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
+ * Copyright 2014 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,25 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.rest;
+package com.dnastack.bob.rest.util;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
+import com.dnastack.bob.shared.Chromosome;
+import com.dnastack.bob.shared.Reference;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
 /**
- * REST application.
+ * Convenient JAXB wrapper for enums and other items.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
+ * @param <T> item type
  */
-@ApplicationPath("/rest")
-public class BeaconApplication extends Application {
+@XmlRootElement(name = "item")
+@XmlSeeAlso({Reference.class, Chromosome.class, String.class})
+public class ItemWrapper<T> {
 
-    @Override
-    public Set<Class<?>> getClasses() {
-        return new HashSet<>(Arrays.asList(HelpResource.class, BeaconResource.class, BeaconResponseResource.class, ReferenceResource.class, ChromosomeResource.class, AllleleResource.class));
+    private T item;
+
+    public ItemWrapper() {
+    }
+
+    public ItemWrapper(T item) {
+        this.item = item;
+    }
+
+    @XmlElement(name = "value")
+    public T getItem() {
+        return item;
     }
 }

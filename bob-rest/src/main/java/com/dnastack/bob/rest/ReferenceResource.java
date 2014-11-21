@@ -23,23 +23,33 @@
  */
 package com.dnastack.bob.rest;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
+import com.dnastack.bob.rest.util.ItemWrapper;
+import com.dnastack.bob.shared.Reference;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 /**
- * REST application.
+ * Reference rest resource.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@ApplicationPath("/rest")
-public class BeaconApplication extends Application {
+@Path("/references")
+@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN})
+public class ReferenceResource {
 
-    @Override
-    public Set<Class<?>> getClasses() {
-        return new HashSet<>(Arrays.asList(HelpResource.class, BeaconResource.class, BeaconResponseResource.class, ReferenceResource.class, ChromosomeResource.class, AllleleResource.class));
+    @GET
+    public Collection<ItemWrapper<Reference>> showAll() {
+        List<ItemWrapper<Reference>> vals = new ArrayList<>();
+        for (Reference ref : Reference.values()) {
+            vals.add(new ItemWrapper<>(ref));
+        }
+
+        return vals;
     }
 }

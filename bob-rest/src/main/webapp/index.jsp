@@ -25,6 +25,9 @@
         </ul>
         <p>Or learn the API by example:</p>
         <ul>
+            <li><a href="<%= request.getRequestURL()%>rest/references"><%= request.getRequestURL()%>rest/references</a></li>
+            <li><a href="<%= request.getRequestURL()%>rest/chromosomes"><%= request.getRequestURL()%>rest/chromosomes</a></li>
+            <li><a href="<%= request.getRequestURL()%>rest/alleles"><%= request.getRequestURL()%>rest/alleles</a></li>
             <li><a href="<%= request.getRequestURL()%>rest/beacons"><%= request.getRequestURL()%>rest/beacons</a></li>
             <li><a href="<%= request.getRequestURL()%>rest/beacons/bob"><%= request.getRequestURL()%>rest/beacons/bob</a></li>
             <li><a href="<%= request.getRequestURL()%>rest/beacons?beacon=wtsi"><%= request.getRequestURL()%>rest/beacons?beacon=wtsi</a></li>
