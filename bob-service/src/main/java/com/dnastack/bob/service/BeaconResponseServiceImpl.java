@@ -35,12 +35,16 @@ import com.dnastack.bob.lrg.Brca2;
 import com.dnastack.bob.lrg.LrgConvertor;
 import com.dnastack.bob.lrg.LrgLocus;
 import com.dnastack.bob.lrg.LrgReference;
+import com.dnastack.bob.util.BeaconAggregationResolver;
 import com.dnastack.bob.util.Entity2ToConvertor;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -66,6 +70,9 @@ public class BeaconResponseServiceImpl implements BeaconResponseService {
 
     @Inject
     private BeaconDao beaconDao;
+
+    @Inject
+    private BeaconAggregationResolver aggregationResolver;
 
     @Inject
     private QueryDao queryDao;
@@ -94,7 +101,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService {
 
             // execute queries in parallel
             Map<Beacon, Future<Boolean>> futures = new HashMap<>();
-            for (Beacon bt : beaconDao.getAggregatees(b)) {
+            for (Beacon bt : aggregationResolver.getAtomicAggregatees(b)) {
                 futures.put(bt, bt.getProcessor().executeQuery(bt, q));
             }
 
@@ -121,17 +128,10 @@ public class BeaconResponseServiceImpl implements BeaconResponseService {
         return new AsyncResult<>(total);
     }
 
-    private Map<Beacon, BeaconResponse> setUpBeaconResponseMap(Collection<String> beaconIds, Query q) {
+    private Map<Beacon, BeaconResponse> setUpBeaconResponseMapForBeacons(Collection<Beacon> bs, Query q) {
         Map<Beacon, BeaconResponse> brs = new HashMap<>();
-        if (beaconIds == null) {
-            // fetch all beacons
-            Collection<Beacon> beacons = beaconDao.getVisibleBeacons();
-            for (Beacon b : beacons) {
-                brs.put(b, new BeaconResponse(b, q, null));
-            }
-        } else {
-            for (String id : beaconIds) {
-                Beacon b = beaconDao.getVisibleBeacon(id);
+        if (bs != null) {
+            for (Beacon b : bs) {
                 if (b != null) {
                     brs.put(b, new BeaconResponse(b, q, null));
                 }
@@ -139,6 +139,22 @@ public class BeaconResponseServiceImpl implements BeaconResponseService {
         }
 
         return brs;
+    }
+
+    private Map<Beacon, BeaconResponse> setUpBeaconResponseMapForIds(Collection<String> beaconIds, Query q) {
+        if (beaconIds == null) {
+            return setUpBeaconResponseMapForBeacons(beaconDao.getVisibleBeacons(), q);
+        }
+
+        Set<Beacon> bs = new HashSet<>();
+        for (String id : beaconIds) {
+            Beacon b = beaconDao.getVisibleBeacon(id);
+            if (b != null) {
+                bs.add(b);
+            }
+        }
+
+        return setUpBeaconResponseMapForBeacons(bs, q);
     }
 
     private Map<Beacon, BeaconResponse> fillBeaconResponseMap(Map<Beacon, BeaconResponse> brs, Query q) {
@@ -188,18 +204,67 @@ public class BeaconResponseServiceImpl implements BeaconResponseService {
         return queryDao.getQuery(c, p, a, r);
     }
 
+    private Multimap<Beacon, Beacon> setUpChildrenMultimap(Collection<Beacon> beacons) {
+        Multimap<Beacon, Beacon> children = HashMultimap.create();
+        for (Beacon b : beacons) {
+            if (b.isAggregator()) {
+                children.putAll(b, aggregationResolver.getAtomicAggregatees(b));
+            } else {
+                children.put(b, b);
+            }
+        }
+        return children;
+    }
+
+    private Map<Beacon, BeaconResponse> fillAggregateResponses(Map<Beacon, BeaconResponse> parentResponses, Map<Beacon, BeaconResponse> childrenResponses, Multimap<Beacon, Beacon> children, Query q) {
+        Map<Beacon, BeaconResponse> res = new HashMap<>(parentResponses);
+
+        for (Entry<Beacon, BeaconResponse> e : res.entrySet()) {
+            BeaconResponse response = e.getValue();
+            if (response == null) {
+                response = new BeaconResponse(e.getKey(), q, null);
+            }
+
+            Collection<Beacon> cs = children.get(e.getKey());
+            boolean notAllResponsesNull = false;
+            for (Beacon c : cs) {
+                BeaconResponse cr = childrenResponses.get(c);
+                if (cr != null && cr.getResponse() != null) {
+                    notAllResponsesNull = true;
+                    if (cr.getResponse()) {
+                        response.setResponse(true);
+                        break;
+                    }
+                }
+            }
+            if (notAllResponsesNull && response.getResponse() == null) {
+                response.setResponse(false);
+            }
+
+            e.setValue(response);
+        }
+
+        return res;
+    }
+
     private Collection<BeaconResponse> queryMultipleBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref) {
         Query q = getQuery(chrom, pos, allele, ref);
 
         // init to create a response for each beacon even if the query is invalid
-        Map<Beacon, BeaconResponse> brs = setUpBeaconResponseMap(beaconIds, q);
+        Map<Beacon, BeaconResponse> brs = setUpBeaconResponseMapForIds(beaconIds, q);
 
         // validate query
         if (checkIfQuerySuccessfullyNormalizedAndValid(q, ref)) {
             return brs.values();
         }
 
-        return fillBeaconResponseMap(brs, q).values();
+        // construct map of atomic nodes covered by aggregates
+        Multimap<Beacon, Beacon> children = setUpChildrenMultimap(brs.keySet());
+        // obtain children's responses
+        Map<Beacon, BeaconResponse> childrenResponses = fillBeaconResponseMap(setUpBeaconResponseMapForBeacons(new HashSet<>(children.values()), q), q);
+
+        // aggregate
+        return fillAggregateResponses(brs, childrenResponses, children, q).values();
     }
 
     @Logged

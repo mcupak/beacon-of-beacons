@@ -278,5 +278,22 @@ public class BeaconResponsesTest extends BasicTest {
         assertNotNull(brs.get(0).getResponse());
         assertNotNull(brs.get(1).getResponse());
     }
+    
+    @Test
+    public void testMultipleResponsesOfAggregatorsFiltered(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
+        String id1 = "bob";
+        String id2 = "cafe-variome";
+        String[] q = {"2", "179393691", "T", null};
+        List<BeaconResponseTo> brs = readResponses(url.toExternalForm() + getUrl("[" + id1 + "," + id2 + "]", q));
+
+        assertNotNull(brs);
+        assertTrue(brs.size() == 2);
+        assertTrue(beaconsMatch(brs.get(0).getBeacon(), id1) || beaconsMatch(brs.get(0).getBeacon(), id2));
+        assertTrue(beaconsMatch(brs.get(1).getBeacon(), id1) || beaconsMatch(brs.get(1).getBeacon(), id2));
+        assertTrue(queriesMatch(brs.get(0).getQuery(), q));
+        assertTrue(queriesMatch(brs.get(1).getQuery(), q));
+        assertNotNull(brs.get(0).getResponse());
+        assertNotNull(brs.get(1).getResponse());
+    }
 
 }

@@ -170,7 +170,7 @@ public class ParsingUtils {
             throw new NullPointerException("param");
         }
 
-        if (param.matches("\\[((\\w)*,)*(\\w)*\\]")) {
+        if (param.matches("\\[(((\\w)*-(\\w)*)*(\\w)*,)*((\\w)*-(\\w)*)*(\\w)*\\]")) {
             return true;
         }
         return false;

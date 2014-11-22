@@ -86,13 +86,4 @@ public interface BeaconDao {
      * @return beacon with the given ID or null if the beacon is invisible/does not exist
      */
     Beacon getVisibleBeacon(String beaconId);
-
-    /**
-     * Retrieves the aggregatees of a given beacon.
-     *
-     * @param b beacon
-     *
-     * @return collection of agregatees
-     */
-    Collection<Beacon> getAggregatees(Beacon b);
 }

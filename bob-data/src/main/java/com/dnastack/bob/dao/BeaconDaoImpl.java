@@ -34,8 +34,6 @@ import com.dnastack.bob.processor.Ncbi;
 import com.dnastack.bob.processor.StringChromosomeBeaconizer;
 import com.dnastack.bob.processor.Ucsc;
 import com.dnastack.bob.processor.Wtsi;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
@@ -57,7 +55,6 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
     private static final long serialVersionUID = 5L;
 
     private Set<Beacon> beacons;
-    private Multimap<Beacon, Beacon> aggregations;
 
     @Inject
     @Ucsc
@@ -163,24 +160,9 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
         }
     }
 
-    private void computeAggregations() {
-        aggregations = HashMultimap.create();
-
-        for (Beacon b : beacons) {
-            if (b.getProcessor() != null) {
-                for (Beacon parent : b.getAggregators()) {
-                    if (parent.getProcessor() == null) {
-                        aggregations.put(parent, b);
-                    }
-                }
-            }
-        }
-    }
-
     @PostConstruct
     private void init() {
         setUpBeacons();
-        computeAggregations();
     }
 
     private Beacon findBeacon(String beaconId) {
@@ -264,11 +246,6 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
         }
 
         return b.isVisible() ? b : null;
-    }
-
-    @Override
-    public Collection<Beacon> getAggregatees(Beacon b) {
-        return Collections.unmodifiableCollection(aggregations.get(b));
     }
 
 }
