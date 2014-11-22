@@ -11,3 +11,6 @@ nbactions*.xml
 
 # auxiliary scripts
 *.sh
+
+# python files
+flask
