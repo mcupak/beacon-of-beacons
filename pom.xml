@@ -15,6 +15,7 @@
         <module>bob-service-api</module>
         <module>bob-rest</module>
         <module>bob-js-client</module>
+        <module>beacon-adapters</module>
     </modules>
     
     <scm>
