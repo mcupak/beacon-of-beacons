@@ -3,14 +3,9 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.dnastack</groupId>
-        <artifactId>bob</artifactId>
+        <artifactId>beacon-adapters</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>beacon-adapters</artifactId>
+    <artifactId>beacon-nodejs</artifactId>
     <packaging>pom</packaging>
-    <modules>
-        <module>beacon-java</module>
-        <module>beacon-python</module>
-        <module>beacon-nodejs</module>
-    </modules>
 </project>
