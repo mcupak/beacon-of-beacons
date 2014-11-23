@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Beacon of beacons by mcupak</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Beacon of beacons</h1>
+        <h2></h2>
+        <a href="https://github.com/mcupak/beacon-of-beacons" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="beacon-of-beacons" class="anchor" href="#beacon-of-beacons" aria-hidden="true"><span class="octicon octicon-link"></span></a>Beacon of Beacons</h1>
+
+<h2>
+<a id="contents" class="anchor" href="#contents" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contents</h2>
+
+<ul>
+<li><a href="#what-it-is">What it is</a></li>
+<li><a href="#system-requirements">System requirements</a></li>
+<li><a href="#how-to-run-it">How to run it</a></li>
+<li><a href="#api">API</a></li>
+<li><a href="#technologies">Technologies</a></li>
+</ul>
+
+<h2>
+<a id="what-it-is" class="anchor" href="#what-it-is" aria-hidden="true"><span class="octicon octicon-link"></span></a>What it is</h2>
+
+<p>Beacon of Beacons Project (BoB) provides a unified REST API to publicly available GA4GH Beacons (see <a href="http://ga4gh.org/#/beacon">http://ga4gh.org/#/beacon</a> for more details about the Beacon project itself). BoB standardizes the way beacons are accessed and aggregates their results, thus addressing one of the missing parts of the Beacon project itself.</p>
+
+<h2>
+<a id="system-requirements" class="anchor" href="#system-requirements" aria-hidden="true"><span class="octicon octicon-link"></span></a>System requirements</h2>
+
+<p>All you need to build this project is Java 7.0 (Java SDK 1.7) or later, Maven 3.0 or later. Since the project is Java EE based and utilizes some of the advanced features of Java EE 6, an application server with support for Java EE 6 Full profile is needed to deploy the application (e.g. JBoss EAP or WildFly).</p>
+
+<h2>
+<a id="how-to-run-it" class="anchor" href="#how-to-run-it" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to run it</h2>
+
+<p>Start the JBoss server:</p>
+
+<pre><code>For Linux:   JBOSS_HOME/bin/standalone.sh
+For Windows: JBOSS_HOME\bin\standalone.bat
+</code></pre>
+
+<p>Build and deploy the archive:</p>
+
+<pre><code>mvn clean install jboss-as:deploy
+</code></pre>
+
+<p>The application should now be running on <a href="http://localhost:8080/beacon-of-beacons">http://localhost:8080/beacon-of-beacons</a>.</p>
+
+<h2>
+<a id="api" class="anchor" href="#api" aria-hidden="true"><span class="octicon octicon-link"></span></a>API</h2>
+
+<p>BoB was designed with ease of programmatic access in mind. It provides XML, JSON and plaintext responses to accommodate needs of all the clients across all the programming languages. The API to use is determined using the header supplied by the client in its GET request, e.g.:</p>
+
+<pre><code>Accept: application/json
+</code></pre>
+
+<p>A beacon "Accepts a query of the form Do you have any genomes with an 'A' at position 100,735 on chromosome 3?" and responds with one of 'Yes' or 'No' (<a href="http://ga4gh.org/#/beacon">http://ga4gh.org/#/beacon</a>). This is provided by the following API endpoint:</p>
+
+<pre><code>GET http://localhost:8080/beacon-of-beacons/rest/responses?chrom={chromosome}&amp;pos={position}&amp;allele={allele}&amp;beacon={beacon}&amp;ref={reference}
+</code></pre>
+
+<p>where the (chrom, pos, allele) parameters tuple describes the query you want to ask with the following syntax/semantics:</p>
+
+<ul>
+<li>{chromosome}: Chromosome ID, one of the 1-22, X, Y, MT. For compatibility with conventions set by some of the existing beacons, an arbitrary prefix is accepted as well (e.g. chr1 is equivalent to chrom1 and 1).</li>
+<li>{position}: Coordinate within a chromosome. Position is a number and is 1-based.</li>
+<li>{allele}: Any string of nucleotides A,C,T,G or D, I for deletion and insertion. For compatibility with conventions set by some of the existing beacons, DEL and INS identifiers are also accepted.</li>
+<li>{beacon}: Beacon ID. Optional parameter. Filters the responses to specific beacons. Unless it is specified, the responses from all the supported beacons are obtained.</li>
+<li>{reference}: Genome ID. Optional parameter. Unless it is specified, all the genomes supported by the specific beacons are queried.</li>
+</ul>
+
+<p>Bob currently supports all the 7 publicly available beacons and converts the input information into the queries they can understand. This may include a change of chromosome identifier, using a 0-based position instead of a 1-based one as well as using a different allele representation. Some beacons support multiple projects or tracks, in which case BoB queries all of them and look for a positive response from almost one of them. Beacon IDs can be obtained by querying the following:</p>
+
+<pre><code>GET http://localhost:8080/beacon-of-beacons/rest/beacons
+</code></pre>
+
+<p>Response:</p>
+
+<pre><code>[
+    {
+        "id": "ebi",
+        "name": "EMBL-EBI"
+    },
+    {
+        "id": "wtsi",
+        "name": "Wellcome Trust Sanger Institute"
+    },
+    {
+        "id": "uniprot",
+        "name": "UniProt"
+    },
+    {
+        "id": "clinvar",
+        "name": "NCBI ClinVar"
+    },
+    {
+        "id": "lovd",
+        "name": "Leiden Open Variation"
+    },
+    {
+        "id": "ncbi",
+        "name": "NCBI"
+    },
+    {
+        "id": "amplab",
+        "name": "AMPLab"
+    },
+    {
+        "id": "kaviar",
+        "name": "Known VARiants"
+    }
+]
+</code></pre>
+
+<p>To display the information about a particular beacon, query its ID:. Example:</p>
+
+<pre><code>GET http://localhost:8080/beacon-of-beacons/rest/beacons/wtsi
+</code></pre>
+
+<p>Response:</p>
+
+<pre><code>{
+    "id": "wtsi",
+    "name": "Wellcome Trust Sanger Institute"
+}
+</code></pre>
+
+<p>Alternatively, just filter the list using the option "beacon" parameter. Example:</p>
+
+<pre><code>GET http://localhost:8080/beacon-of-beacons/rest/beacons?beacon=wtsi
+</code></pre>
+
+<p>Response:</p>
+
+<pre><code>[
+    {
+        "id": "wtsi",
+        "name": "Wellcome Trust Sanger Institute"
+    }
+]
+</code></pre>
+
+<p>Using the beacon information obtained this way, you can execute a query against a specific beacon. Example:</p>
+
+<pre><code>GET http://localhost:8080/beacon-of-beacons/rest/responses/lovd?chrom=1&amp;pos=808922&amp;allele=T
+</code></pre>
+
+<p>Response:</p>
+
+<pre><code>{
+    "beacon": {
+        "id": "lovd",
+        "name": "Leiden Open Variation"
+    },
+    "query": {
+        "allele": "T",
+        "chromosome": "CHR1",
+        "position": 808922,
+        "reference": null
+    },
+    "response": true
+}
+</code></pre>
+
+<p>As you can see, the beacon responded with its own info, the query details and a response field denoting whether a match was found (true) or not (false). Null value is used to describe a problem, e.g. an invalid query. Some beacons, for example, do not support allele strings of length&gt;1 or X/Y chromosomes.</p>
+
+<p>By default, BoB queries all the genomes supported by the individual beacons. To query for a specific genome, use the (optional) ref parameter. Example:</p>
+
+<pre><code>GET http://localhost:8080/beacon-of-beacons/rest/responses/amplab?chrom=15&amp;pos=41087870&amp;allele=A&amp;ref=hg19
+</code></pre>
+
+<p>Response:</p>
+
+<pre><code>{
+    "beacon": {
+        "id": "amplab",
+        "name": "AMPLab"
+    },
+    "query": {
+        "allele": "A",
+        "chromosome": "CHR15",
+        "position": 41087870,
+        "reference": "HG19"
+    },
+    "response": true
+}
+</code></pre>
+
+<p>You can also query all the beacons at once. Example:</p>
+
+<pre><code>GET http://localhost:8080/beacon-of-beacons/rest/responses?chrom=14&amp;pos=106833421&amp;allele=A
+</code></pre>
+
+<p>Response:</p>
+
+<pre><code>[
+    {
+        "beacon": {
+            "id": "ebi",
+            "name": "EMBL-EBI"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR14",
+            "position": 106833421,
+            "reference": null
+        },
+        "response": true
+    },
+    {
+        "beacon": {
+            "id": "wtsi",
+            "name": "Wellcome Trust Sanger Institute"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR14",
+            "position": 106833421,
+            "reference": null
+        },
+        "response": false
+    },
+    {
+        "beacon": {
+            "id": "uniprot",
+            "name": "UniProt"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR14",
+            "position": 106833421,
+            "reference": null
+        },
+        "response": false
+    },
+    {
+        "beacon": {
+            "id": "clinvar",
+            "name": "NCBI ClinVar"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR14",
+            "position": 106833421,
+            "reference": null
+        },
+        "response": null
+    },
+    {
+        "beacon": {
+            "id": "lovd",
+            "name": "Leiden Open Variation"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR14",
+            "position": 106833421,
+            "reference": null
+        },
+        "response": null
+    },
+    {
+        "beacon": {
+            "id": "ncbi",
+            "name": "NCBI"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR14",
+            "position": 106833421,
+            "reference": null
+        },
+        "response": true
+    },
+    {
+        "beacon": {
+            "id": "kaviar",
+            "name": "Known VARiants"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR14",
+            "position": 106833421,
+            "reference": null
+        },
+        "response": false
+    },
+    {
+        "beacon": {
+            "id": "amplab",
+            "name": "AMPLab"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR14",
+            "position": 106833421,
+            "reference": null
+        },
+        "response": true
+    }
+]
+</code></pre>
+
+<p>Or just filter for one of them. Example:</p>
+
+<pre><code>GET http://localhost:8080/beacon-of-beacons/rest/responses?chrom=14&amp;pos=106833421&amp;allele=A&amp;beacon=amplab
+</code></pre>
+
+<p>Response:</p>
+
+<pre><code>[
+    {
+        "beacon": {
+            "id": "amplab",
+            "name": "AMPLab"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR14",
+            "position": 106833421,
+            "reference": null
+        },
+        "response": true
+    }
+]
+</code></pre>
+
+<p>If you want to utilize the "beacon of beacons" feature and are only interested in whether any of the existing beacons have a particular variant, treat BoB as a beacon itself and let it perform the aggregation. Example:</p>
+
+<pre><code>GET http://localhost:8080/beacon-of-beacons/rest/beacons/bob
+</code></pre>
+
+<p>Response:</p>
+
+<pre><code>{
+    "id": "bob",
+    "name": "beacon of beacons"
+}
+</code></pre>
+
+<p>Query example:</p>
+
+<pre><code>GET http://localhost:8080/beacon-of-beacons/rest/responses/bob?chrom=14&amp;pos=106833421&amp;allele=D
+</code></pre>
+
+<p>Response:</p>
+
+<pre><code>{
+    "beacon": {
+        "id": "bob",
+        "name": "beacon of beacons"
+    },
+    "query": {
+        "allele": "D",
+        "chromosome": "CHR14",
+        "position": 106833421,
+        "reference": null
+    },
+    "response": true
+}
+</code></pre>
+
+<h2>
+<a id="technologies" class="anchor" href="#technologies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Technologies</h2>
+
+<p>Java EE. CDI, EJB, JAX-RS, JAXB, Bean Validation. Tested with Arquillian/ShrinkWrap.</p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/mcupak/beacon-of-beacons/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/mcupak/beacon-of-beacons/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/mcupak/beacon-of-beacons"></a> is maintained by <a href="https://github.com/mcupak">mcupak</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+            <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-57020491-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
