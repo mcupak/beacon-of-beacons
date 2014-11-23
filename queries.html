@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv="X-UA-Compatible" content="chrome=1">
+        <meta name="description" content="Beacon of beacons : ">
+
+        <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+        <link rel="stylesheet" type="text/css"  href="stylesheets/menu.css">
+        <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+        <script src="javascripts/script.js"></script>
+
+        <script>
+            $(function () {
+                $("#cssmenu").load("menu.html");
+                $("#header_wrap").load("header.html");
+                $("#footer_wrap").load("footer.html");
+            });
+        </script>
+
+        <title>Beacon of Beacons</title>
+    </head>
+
+    <body>
+
+        <!-- HEADER -->
+        <div id="header_wrap" class="outer">
+        </div>
+
+        <div id="main_content_wrap" class="outer">
+            <!--menu-->
+            <div id='cssmenu'>
+            </div>
+
+            <!-- MAIN CONTENT -->
+            <section id="main_content" class="inner">
+                <h2>
+                    <a id="api" class="anchor" href="#api" aria-hidden="true"><span class="octicon octicon-link"></span></a>Query examples</h2>
+
+                <p>View query:</p>
+                <ul>
+                    <li><a href="#list-beacons">List available beacons</a></li>
+                    <li><a href="#list-beacon">Show information about a beacon</a></li>
+                    <li><a href="#list-genomes">List supported genomes</a></li>
+                    <li><a href="#list-chromosomes">List supported chromosomes</a></li>
+                    <li><a href="#list-alleles">List supported alleles</a></li>
+                    <li><a href="#query-beacon">Query a specific beacon</a></li>
+                    <li><a href="#query-beacon-genome">Query beacon with a specific genome</a></li>
+                    <li><a href="#query-all-beacons">Query all beacons</a></li>
+                    <li><a href="#query-all-beacons-filter-one">Filter reponses for a specific beacon</a></li>
+                    <li><a href="#query-bob">Aggregate responses of all beacons via beacon of beacons</a></li>
+                </ul>
+
+                <h3><a id="list-beacons" class="anchor" href="#list-beacons" aria-hidden="true"><span class="octicon octicon-link"></span></a>List beacons</h3>
+                <p>Query:</p>
+
+                <pre><code>GET http://localhost:8080/beacon-of-beacons/rest/beacons
+</code></pre>
+
+                <p>Response:</p>
+
+                <pre><code>[
+    {
+        "aggregator": false,
+        "id": "thousandgenomes",
+        "name": "1000 Genomes Project",
+        "organization": "Google"
+    },
+    {
+        "aggregator": false,
+        "id": "thousandgenomes-phase3",
+        "name": "1000 Genomes Project - Phase 3",
+        "organization": "Google"
+    },
+    {
+        "aggregator": false,
+        "id": "amplab",
+        "name": "AMPLab",
+        "organization": "APMLab"
+    },
+    {
+        "aggregator": true,
+        "id": "bob",
+        "name": "Beacon of Beacons",
+        "organization": "Global Alliance for Genomics and Health"
+    },
+    {
+        "aggregator": false,
+        "id": "cafe-cardiokit",
+        "name": "Cafe CardioKit",
+        "organization": "University of Leicester"
+    },
+    {
+        "aggregator": true,
+        "id": "cafe-variome",
+        "name": "Cafe Variome",
+        "organization": "University of Leicester"
+    },
+    {
+        "aggregator": false,
+        "id": "cafe-central",
+        "name": "Cafe Variome Central",
+        "organization": "University of Leicester"
+    },
+    {
+        "aggregator": false,
+        "id": "clinvar",
+        "name": "ClinVar",
+        "organization": "UCSC"
+    },
+    {
+        "aggregator": false,
+        "id": "ebi",
+        "name": "EMBL-EBI",
+        "organization": "EBI"
+    },
+    {
+        "aggregator": false,
+        "id": "curoverse-ref",
+        "name": "GA4GH Example Data",
+        "organization": "Curoverse"
+    },
+    {
+        "aggregator": true,
+        "id": "google",
+        "name": "Google Genomics Public Data",
+        "organization": "Google"
+    },
+    {
+        "aggregator": false,
+        "id": "platinum",
+        "name": "Illumina Platinum Genomes",
+        "organization": "Google"
+    },
+    {
+        "aggregator": false,
+        "id": "kaviar",
+        "name": "Known VARiants",
+        "organization": "Institute for Systems Biology"
+    },
+    {
+        "aggregator": false,
+        "id": "lovd",
+        "name": "Leiden Open Variation",
+        "organization": "UCSC"
+    },
+    {
+        "aggregator": false,
+        "id": "ncbi",
+        "name": "NCBI",
+        "organization": "NCBI"
+    },
+    {
+        "aggregator": false,
+        "id": "curoverse",
+        "name": "PGP",
+        "organization": "Curoverse"
+    },
+    {
+        "aggregator": false,
+        "id": "uniprot",
+        "name": "UniProt",
+        "organization": "UCSC"
+    },
+    {
+        "aggregator": false,
+        "id": "wtsi",
+        "name": "Wellcome Trust Sanger Institute",
+        "organization": "WTSI"
+    }
+]</code></pre>
+                
+                
+                <h3><a id="list-beacon" class="anchor" href="#list-beacon" aria-hidden="true"><span class="octicon octicon-link"></span></a>Show information about a beacon</h3>
+                <p>Query:</p>
+
+                <pre><code>GET http://localhost:8080/beacon-of-beacons/rest/beacons/wtsi
+</code></pre>
+
+                <p>Response:</p>
+
+                <pre><code>{
+    "aggregator": false,
+    "id": "wtsi",
+    "name": "Wellcome Trust Sanger Institute",
+    "organization": "WTSI"
+}
+
+</code></pre>
+
+                <p>Alternatively, just filter the list using the optional "beacon" parameter. Example:</p>
+
+                <pre><code>GET http://localhost:8080/beacon-of-beacons/rest/beacons?beacon=wtsi
+</code></pre>
+
+                <p>Response:</p>
+
+                <pre><code>[
+    {
+        "aggregator": false,
+        "id": "wtsi",
+        "name": "Wellcome Trust Sanger Institute",
+        "organization": "WTSI"
+    }
+]
+</code></pre>
+                
+                <h3><a id="list-genomes" class="anchor" href="#list-genomes" aria-hidden="true"><span class="octicon octicon-link"></span></a>List supported genomes</h3>
+                <p>Query:</p>
+
+                <pre><code>GET http://localhost:8080/beacon-of-beacons/rest/references
+</code></pre>
+
+                <p>Response:</p>
+
+                <pre><code>[
+    {
+        "item": "HG38"
+    },
+    {
+        "item": "HG19"
+    },
+    {
+        "item": "HG18"
+    },
+    {
+        "item": "HG17"
+    },
+    {
+        "item": "HG16"
+    }
+]
+</code></pre>
+                <h3><a id="list-chromosomes" class="anchor" href="#list-chromosomes" aria-hidden="true"><span class="octicon octicon-link"></span></a>List supported chromosomes</h3>
+                <p>Query:</p>
+
+                <pre><code>GET http://localhost:8080/beacon-of-beacons/rest/chromosomes
+</code></pre>
+
+                <p>Response:</p>
+
+                <pre><code>[
+    {
+        "item": "CHR22"
+    },
+    {
+        "item": "CHR21"
+    },
+    {
+        "item": "CHR20"
+    },
+    {
+        "item": "CHR19"
+    },
+    {
+        "item": "CHR18"
+    },
+    {
+        "item": "CHR17"
+    },
+    {
+        "item": "CHR16"
+    },
+    {
+        "item": "CHR15"
+    },
+    {
+        "item": "CHR14"
+    },
+    {
+        "item": "CHR13"
+    },
+    {
+        "item": "CHR12"
+    },
+    {
+        "item": "CHR11"
+    },
+    {
+        "item": "CHR10"
+    },
+    {
+        "item": "CHR9"
+    },
+    {
+        "item": "CHR8"
+    },
+    {
+        "item": "CHR7"
+    },
+    {
+        "item": "CHR6"
+    },
+    {
+        "item": "CHR5"
+    },
+    {
+        "item": "CHR4"
+    },
+    {
+        "item": "CHR3"
+    },
+    {
+        "item": "CHR2"
+    },
+    {
+        "item": "CHR1"
+    },
+    {
+        "item": "CHRX"
+    },
+    {
+        "item": "CHRY"
+    },
+    {
+        "item": "CHRMT"
+    }
+]
+</code></pre>
+                <h3><a id="list-alleles" class="anchor" href="#list-alleles" aria-hidden="true"><span class="octicon octicon-link"></span></a>List supported alleles</h3>
+                <p>Query:</p>
+
+                <pre><code>GET http://localhost:8080/beacon-of-beacons/rest/alleles
+</code></pre>
+
+                <p>Response:</p>
+
+                <pre><code>[
+    {
+        "item": "A"
+    },
+    {
+        "item": "C"
+    },
+    {
+        "item": "G"
+    },
+    {
+        "item": "T"
+    },
+    {
+        "item": "D"
+    },
+    {
+        "item": "I"
+    }
+]
+</code></pre>
+
+                <h3><a id="query-beacon" class="anchor" href="#query-beacon" aria-hidden="true"><span class="octicon octicon-link"></span></a>Query a specific beacon</h3>
+                <p>Query:</p>
+
+                <pre><code>GET http://localhost:8080/beacon-of-beacons/rest/responses/lovd?chrom=1&amp;pos=808922&amp;allele=T
+</code></pre>
+
+                <p>Response:</p>
+
+                <pre><code>{
+    "beacon": {
+        "aggregator": false,
+        "id": "lovd",
+        "name": "Leiden Open Variation",
+        "organization": "UCSC"
+    },
+    "query": {
+        "allele": "T",
+        "chromosome": "CHR1",
+        "position": 808922,
+        "reference": null
+    },
+    "response": false
+}
+</code></pre>
+
+                <p>As you can see, the beacon responded with its own info, the query details and a response field denoting whether a match was found (true) or not (false). Null value is used to describe a problem, e.g. an invalid query. Some beacons, for example, do not support allele strings of length&gt;1 or X/Y chromosomes.</p>
+
+                <h3><a id="query-beacon-genome" class="anchor" href="#query-beacon-genome" aria-hidden="true"><span class="octicon octicon-link"></span></a>Query beacon with a specific genome</h3>
+                <p>Query:</p>
+
+                <pre><code>GET http://localhost:8080/beacon-of-beacons/rest/responses/amplab?chrom=15&amp;pos=41087870&amp;allele=A&amp;ref=hg19
+</code></pre>
+
+                <p>Response:</p>
+
+                <pre><code>{
+    "beacon": {
+        "aggregator": false,
+        "id": "amplab",
+        "name": "AMPLab",
+        "organization": "APMLab"
+    },
+    "query": {
+        "allele": "A",
+        "chromosome": "CHR15",
+        "position": 41087870,
+        "reference": "HG19"
+    },
+    "response": true
+}
+</code></pre>
+
+                <h3><a id="query-all-beacons" class="anchor" href="#query-all-beacons" aria-hidden="true"><span class="octicon octicon-link"></span></a>Query all beacons</h3>
+                <p>Query:</p>
+
+                <pre><code>GET http://localhost:8080/beacon-of-beacons/rest/responses?chrom=14&amp;pos=106833421&amp;allele=A
+</code></pre>
+
+                <p>Response:</p>
+
+                <pre><code>[
+    {
+        "beacon": {
+            "aggregator": false,
+            "id": "thousandgenomes",
+            "name": "1000 Genomes Project",
+            "organization": "Google"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR14",
+            "position": 106833421,
+            "reference": null
+        },
+        "response": false
+    },
+    {
+        "beacon": {
+            "aggregator": false,
+            "id": "thousandgenomes-phase3",
+            "name": "1000 Genomes Project - Phase 3",
+            "organization": "Google"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR14",
+            "position": 106833421,
+            "reference": null
+        },
+        "response": false
+    },
+    {
+        "beacon": {
+            "aggregator": false,
+            "id": "amplab",
+            "name": "AMPLab",
+            "organization": "APMLab"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR14",
+            "position": 106833421,
+            "reference": null
+        },
+        "response": true
+    },
+    {
+        "beacon": {
+            "aggregator": true,
+            "id": "bob",
+            "name": "Beacon of Beacons",
+            "organization": "Global Alliance for Genomics and Health"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR14",
+            "position": 106833421,
+            "reference": null
+        },
+        "response": true
+    },
+    {
+        "beacon": {
+            "aggregator": false,
+            "id": "cafe-cardiokit",
+            "name": "Cafe CardioKit",
+            "organization": "University of Leicester"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR14",
+            "position": 106833421,
+            "reference": null
+        },
+        "response": false
+    },
+    {
+        "beacon": {
+            "aggregator": true,
+            "id": "cafe-variome",
+            "name": "Cafe Variome",
+            "organization": "University of Leicester"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR14",
+            "position": 106833421,
+            "reference": null
+        },
+        "response": false
+    },
+    {
+        "beacon": {
+            "aggregator": false,
+            "id": "cafe-central",
+            "name": "Cafe Variome Central",
+            "organization": "University of Leicester"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR14",
+            "position": 106833421,
+            "reference": null
+        },
+        "response": false
+    },
+    {
+        "beacon": {
+            "aggregator": false,
+            "id": "clinvar",
+            "name": "ClinVar",
+            "organization": "UCSC"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR14",
+            "position": 106833421,
+            "reference": null
+        },
+        "response": false
+    },
+    {
+        "beacon": {
+            "aggregator": false,
+            "id": "ebi",
+            "name": "EMBL-EBI",
+            "organization": "EBI"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR14",
+            "position": 106833421,
+            "reference": null
+        },
+        "response": false
+    },
+    {
+        "beacon": {
+            "aggregator": false,
+            "id": "curoverse-ref",
+            "name": "GA4GH Example Data",
+            "organization": "Curoverse"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR14",
+            "position": 106833421,
+            "reference": null
+        },
+        "response": false
+    },
+    {
+        "beacon": {
+            "aggregator": true,
+            "id": "google",
+            "name": "Google Genomics Public Data",
+            "organization": "Google"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR14",
+            "position": 106833421,
+            "reference": null
+        },
+        "response": false
+    },
+    {
+        "beacon": {
+            "aggregator": false,
+            "id": "platinum",
+            "name": "Illumina Platinum Genomes",
+            "organization": "Google"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR14",
+            "position": 106833421,
+            "reference": null
+        },
+        "response": false
+    },
+    {
+        "beacon": {
+            "aggregator": false,
+            "id": "kaviar",
+            "name": "Known VARiants",
+            "organization": "Institute for Systems Biology"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR14",
+            "position": 106833421,
+            "reference": null
+        },
+        "response": false
+    },
+    {
+        "beacon": {
+            "aggregator": false,
+            "id": "lovd",
+            "name": "Leiden Open Variation",
+            "organization": "UCSC"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR14",
+            "position": 106833421,
+            "reference": null
+        },
+        "response": false
+    },
+    {
+        "beacon": {
+            "aggregator": false,
+            "id": "ncbi",
+            "name": "NCBI",
+            "organization": "NCBI"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR14",
+            "position": 106833421,
+            "reference": null
+        },
+        "response": true
+    },
+    {
+        "beacon": {
+            "aggregator": false,
+            "id": "curoverse",
+            "name": "PGP",
+            "organization": "Curoverse"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR14",
+            "position": 106833421,
+            "reference": null
+        },
+        "response": false
+    },
+    {
+        "beacon": {
+            "aggregator": false,
+            "id": "uniprot",
+            "name": "UniProt",
+            "organization": "UCSC"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR14",
+            "position": 106833421,
+            "reference": null
+        },
+        "response": false
+    },
+    {
+        "beacon": {
+            "aggregator": false,
+            "id": "wtsi",
+            "name": "Wellcome Trust Sanger Institute",
+            "organization": "WTSI"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR14",
+            "position": 106833421,
+            "reference": null
+        },
+        "response": false
+    }
+]
+</code></pre>
+
+                <h3><a id="query-all-beacons-filter-one" class="anchor" href="#query-all-beacons-filter-one" aria-hidden="true"><span class="octicon octicon-link"></span></a>Filter reponses for a specific beacon</h3>
+                <p>Query:</p>
+
+                <pre><code>GET http://localhost:8080/beacon-of-beacons/rest/responses?chrom=14&amp;pos=106833421&amp;allele=A&amp;beacon=amplab
+</code></pre>
+
+                <p>Response:</p>
+
+                <pre><code>[
+    {
+        "beacon": {
+            "aggregator": false,
+            "id": "amplab",
+            "name": "AMPLab",
+            "organization": "APMLab"
+        },
+        "query": {
+            "allele": "A",
+            "chromosome": "CHR14",
+            "position": 106833421,
+            "reference": null
+        },
+        "response": true
+    }
+]
+</code></pre>
+
+                <h3><a id="query-bob" class="anchor" href="#query-bob" aria-hidden="true"><span class="octicon octicon-link"></span></a>Aggregate responses of all beacons via beacon of beacons</h3>
+                <p>If you want to utilize the "beacon of beacons" feature and are only interested in whether any of the existing beacons have a particular variant, treat BoB as a beacon itself and let it perform the aggregation. Query:</p>
+
+                <pre><code>GET http://localhost:8080/beacon-of-beacons/rest/responses/bob?chrom=14&amp;pos=106833421&amp;allele=D
+</code></pre>
+
+                <p>Response:</p>
+
+                <pre><code>{
+    "beacon": {
+        "aggregator": true,
+        "id": "bob",
+        "name": "Beacon of Beacons",
+        "organization": "Global Alliance for Genomics and Health"
+    },
+    "query": {
+        "allele": "D",
+        "chromosome": "CHR14",
+        "position": 106833421,
+        "reference": null
+    },
+    "response": true
+}
+</code></pre>
+            </section>
+        </div>
+
+        <!-- FOOTER  -->
+        <div id="footer_wrap" class="outer">
+        </div>
+
+        <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script type="text/javascript">
+            try {
+                var pageTracker = _gat._getTracker("UA-57020491-1");
+                pageTracker._trackPageview();
+            } catch (err) {
+            }
+        </script>
+
+
+    </body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv="X-UA-Compatible" content="chrome=1">
+        <meta name="description" content="Beacon of beacons : ">
+
+        <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+        <link rel="stylesheet" type="text/css"  href="stylesheets/menu.css">
+        <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+        <script src="javascripts/script.js"></script>
+
+        <script>
+            $(function () {
+                $("#cssmenu").load("menu.html");
+                $("#header_wrap").load("header.html");
+                $("#footer_wrap").load("footer.html");
+            });
+        </script>
+
+        <title>Beacon of Beacons</title>
+    </head>
+
+    <body>
+
+        <!-- HEADER -->
+        <div id="header_wrap" class="outer">
+        </div>
+
+        <div id="main_content_wrap" class="outer">
+            <!--menu-->
+            <div id='cssmenu'>
+            </div>
+
+            <!-- MAIN CONTENT -->
+            <section id="main_content" class="inner">
+                <h2>
+                    <a id="api" class="anchor" href="#api" aria-hidden="true"><span class="octicon octicon-link"></span></a>API</h2>
+
+                <p>BoB was designed with ease of programmatic access in mind. It provides XML, JSON and plaintext responses to accommodate needs of all the clients across all the programming languages. The API to use is determined using the header supplied by the client in its GET request, e.g.:</p>
+
+                <pre><code>Accept: application/json
+</code></pre>
+
+                <p>A beacon "Accepts a query of the form Do you have any genomes with an 'A' at position 100,735 on chromosome 3?" and responds with one of 'Yes' or 'No' (<a href="http://ga4gh.org/#/beacon">http://ga4gh.org/#/beacon</a>). This is provided by the following API endpoint:</p>
+
+                <pre><code>GET http://localhost:8080/beacon-of-beacons/rest/responses?chrom={chromosome}&amp;pos={position}&amp;allele={allele}&amp;beacon={beacon}&amp;ref={reference}
+</code></pre>
+
+                <p>where the (chrom, pos, allele) parameters tuple describes the query you want to ask with the following syntax/semantics:</p>
+
+                <ul>
+                    <li>{chromosome}: Chromosome ID, one of the 1-22, X, Y, MT. For compatibility with conventions set by some of the existing beacons, an arbitrary prefix is accepted as well (e.g. chr1 is equivalent to chrom1 and 1).</li>
+                    <li>{position}: Coordinate within a chromosome. Position is a number and is 1-based.</li>
+                    <li>{allele}: Any string of nucleotides A,C,T,G or D, I for deletion and insertion. For compatibility with conventions set by some of the existing beacons, DEL and INS identifiers are also accepted.</li>
+                    <li>{beacon}: Beacon ID. Optional parameter. Filters the responses to specific beacons. Unless it is specified, the responses from all the supported beacons are obtained.</li>
+                    <li>{reference}: Genome ID. Optional parameter. Unless it is specified, all the genomes supported by the specific beacons are queried.</li>
+                </ul>
+
+                <p>Bob currently supports over 18 publicly available beacons and converts the input information into the queries they can understand. This may include a change of chromosome identifier, using a 0-based position instead of a 1-based one as well as using a different allele representation. Some beacons support multiple projects or tracks, in which case BoB queries all of them and look for a positive response from almost one of them.</p>
+                
+                <p>To see more queries, go to the <a href="queries.html">queries page</a>.</p>
+            </section>
+        </div>
+
+        <!-- FOOTER  -->
+        <div id="footer_wrap" class="outer">
+        </div>
+
+        <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script type="text/javascript">
+            try {
+                var pageTracker = _gat._getTracker("UA-57020491-1");
+                pageTracker._trackPageview();
+            } catch (err) {
+            }
+        </script>
+
+
+    </body>
+</html>
