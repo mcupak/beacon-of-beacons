@@ -21,8 +21,8 @@ All you need to build this project is Python and Flask web framework. If you're 
 ##How to run it
 Launch beacon.py:
 
-    chmod a+x beacon.py
-    ./beacon.py
+    $ chmod a+x beacon.py
+    $ ./beacon.py
 
 This starts an embedded server. By default, the application will be available at <http://127.0.0.1:5000>
 
@@ -36,7 +36,7 @@ The API takes care of the rest and provides the following endpoints when you sta
 
 Query example:
 
-    http://127.0.0.1:5000/beacon-python/rest/query?chrom=15&pos=41087870&allele=A&ref=hg19
+    GET http://127.0.0.1:5000/beacon-python/rest/query?chrom=15&pos=41087870&allele=A&ref=hg19
 
 ##Technologies
 Python, Flask.
