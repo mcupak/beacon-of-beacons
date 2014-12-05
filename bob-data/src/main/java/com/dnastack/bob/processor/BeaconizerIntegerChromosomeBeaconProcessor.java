@@ -38,7 +38,7 @@ import javax.ejb.Stateless;
 public class BeaconizerIntegerChromosomeBeaconProcessor extends BeaconizerBeaconProcessor {
 
     private static final long serialVersionUID = 113L;
-    private static final String BASE_URL = "http://webdev.dnastack.com/p/beacon/";
+    private static final String BASE_URL = "http://dnastack.com/p/beacon/";
     private static final String PARAM_TEMPLATE = "%s?chromosome=%s&coordinate=%d&allele=%s";
 
     @Override
