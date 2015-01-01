@@ -1,6 +1,6 @@
 <html>
-	<head>
-		<meta charset="utf-8">
+    <head>
+        <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Demo</title>
@@ -21,51 +21,51 @@
         <!-- Include all compiled plugins (below), or include individual files as needed -->
         <script src="js/bootstrap.min.js"></script>
         <script src="js/bootstrap-switch.min.js"></script>
-        
+
         <script>
-        	function addBeaconResult(beaconName, beaconHost, beaconInfo, wasFound, frequency, isAggregator) {
-        		
-        		var str = "";
-        		
-        		str += "<div class=\"row row-centered\" style=\"border-top:1px solid gray;border-bottom:1px solid gray;\">";
-        		
-        			str += "<div class=\"col-xs-2 col-centered\">";
-        		
-        				str +="one";
-        				//str += "<img src=\"img/info.png\" height=\"20px\"/>";
-        		
-        			str += "</div>"; // end column
-        		
-        			str += "<div style=\"background-color:red\" class=\"col-xs-8 col-centered\">";
-        		
-        				str +="one";
-        				//str += "<img src=\"img/info.png\" height=\"20px\"/>";
-        		
-        			str += "</div>"; // end column
-        		
-        			str += "<div class=\"col-xs-2 col-centered\">";
-        		
-        				str +="one";
-        				//str += "<img src=\"img/info.png\" height=\"20px\"/>";
-        		
-        			str += "</div>"; // end column
-        		
-        		str += "</div>"; // end row
-        		 
-        		return str;
-        	}
+            function addBeaconResult(beaconName, beaconHost, beaconInfo, wasFound, frequency, isAggregator) {
+
+                var str = "";
+
+                str += "<div class=\"row row-centered\" style=\"border-top:1px solid gray;border-bottom:1px solid gray;\">";
+
+                str += "<div class=\"col-xs-2 col-centered\">";
+
+                str += "one";
+                //str += "<img src=\"img/info.png\" height=\"20px\"/>";
+
+                str += "</div>"; // end column
+
+                str += "<div style=\"background-color:red\" class=\"col-xs-8 col-centered\">";
+
+                str += "one";
+                //str += "<img src=\"img/info.png\" height=\"20px\"/>";
+
+                str += "</div>"; // end column
+
+                str += "<div class=\"col-xs-2 col-centered\">";
+
+                str += "one";
+                //str += "<img src=\"img/info.png\" height=\"20px\"/>";
+
+                str += "</div>"; // end column
+
+                str += "</div>"; // end row
+
+                return str;
+            }
         </script>
-	</head>
-	<body>
+    </head>
+    <body>
         <div class="container">
             <div class="row row-centered">
-            	<div style="width:400px">
-            		<script>
-            			document.write(addBeaconResult("PGP","Google","Info",true,0.00,true));
-            		</script>
-            	</div>
+                <div style="width:400px">
+                    <script>
+                        document.write(addBeaconResult("PGP", "Google", "Info", true, 0.00, true));
+                    </script>
+                </div>
             </div>
-            
+
         </div>
-	</body>
+    </body>
 </html>
