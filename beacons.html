@@ -51,6 +51,7 @@
                     <li><a href="#java-system-requirements">System requirements</a></li>
                     <li><a href="#java-how-to-run-it">How to run it</a></li>
                     <li><a href="#java-how-it-works">How it works</a></li>
+                    <li><a href="#java-source">Source code</a></li>
                     <li><a href="#java-technologies">Technologies</a></li>
                 </ul>
                 <h4 id="java-what-it-is">What it is</h4>
@@ -84,8 +85,12 @@ For Windows: JBOSS_HOME\bin\standalone.bat
                 <p>The API takes care of the rest and provides the following endpoints upon deployment of your beacon:</p>
                 <pre><code>http://localhost:8080/beacon-java/rest/info - information about your beacon
 http://localhost:8080/beacon-java/rest/query - access to query service
-</code></pre><h4 id="java-technologies">Technologies</h4>
+</code></pre>
+                <h4 id="java-source">Source code</h4>
+                <p>Available at <a href="https://github.com/mcupak/beacon-of-beacons/tree/master/beacon-adapters/beacon-java">https://github.com/mcupak/beacon-of-beacons/tree/master/beacon-adapters/beacon-java</a>.</p>
+                <h4 id="java-technologies">Technologies</h4>
                 <p>Java EE. CDI, JAX-RS, JAXB. Tested with Arquillian/ShrinkWrap.</p>
+
 
                 <h3><a id="nodejs" class="anchor" href="#nodejs" aria-hidden="true"><span class="octicon octicon-link"></span></a>Node.js BDK</h3>
                 <ul>
@@ -93,6 +98,7 @@ http://localhost:8080/beacon-java/rest/query - access to query service
                     <li><a href="#nodejs-system-requirements">System requirements</a></li>
                     <li><a href="#nodejs-how-to-run-it">How to run it</a></li>
                     <li><a href="#nodejs-how-it-works">How it works</a></li>
+                    <li><a href="#nodejs-source">Source code</a></li>
                     <li><a href="#nodejs-technologies">Technologies</a></li>
                 </ul>
                 <h4 id="nodejs-what-it-is">What it is</h4>
@@ -111,7 +117,10 @@ http://localhost:8080/beacon-java/rest/query - access to query service
 http://localhost:8080/beacon-nodejs/rest/query - access to query service
 </code></pre><p>Query example:</p>
                 <pre><code>GET http://localhost:8080/beacon-nodejs/rest/query?chrom=15&amp;pos=41087870&amp;allele=A&amp;ref=hg19
-</code></pre><h4 id="nodejs-technologies">Technologies</h4>
+</code></pre>
+                <h4 id="nodejs-source">Source code</h4>
+                <p>Available at <a href="https://github.com/mcupak/beacon-of-beacons/tree/master/beacon-adapters/beacon-nodejs">https://github.com/mcupak/beacon-of-beacons/tree/master/beacon-adapters/beacon-nodejs</a>.</p>
+                <h4 id="nodejs-technologies">Technologies</h4>
                 <p>Node.js, Restify.</p>
 
                 <h3><a id="python" class="anchor" href="#java" aria-hidden="true"><span class="octicon octicon-link"></span></a>Python BDK</h3>
@@ -120,6 +129,7 @@ http://localhost:8080/beacon-nodejs/rest/query - access to query service
                     <li><a href="#python-system-requirements">System requirements</a></li>
                     <li><a href="#python-how-to-run-it">How to run it</a></li>
                     <li><a href="#python-how-it-works">How it works</a></li>
+                    <li><a href="#python-source">Source code</a></li>
                     <li><a href="#python-technologies">Technologies</a></li>
                 </ul>
                 <h4 id="python-what-it-is">What it is</h4>
@@ -133,7 +143,7 @@ $ flask/bin/pip install flask
                 <p>Launch beacon.py:</p>
                 <pre><code>$ chmod a+x beacon.py
 $ ./beacon.py
-</code></pre><p>This starts an embedded server. By default, the application will be available at <a href="http://127.0.0.1:5000">http://127.0.0.1:5000</a></p>
+</code></pre><p>This starts an embedded server. By default, the application will be available at <a href="http://127.0.0.1:5000">http://127.0.0.1:5000</a>.</p>
                 <h4 id="python-how-it-works">How it works</h4>
                 <p>In order to implement a beacon, simply override beacon details and query function in beacon.py (marked with TODO in the source code).</p>
                 <p>The API takes care of the rest and provides the following endpoints when you start your beacon:</p>
@@ -141,7 +151,10 @@ $ ./beacon.py
 http://127.0.0.1:5000/beacon-python/rest/query - access to query service
 </code></pre><p>Query example:</p>
                 <pre><code>GET http://127.0.0.1:5000/beacon-python/rest/query?chrom=15&amp;pos=41087870&amp;allele=A&amp;ref=hg19
-</code></pre><h4 id="python-technologies">Technologies</h4>
+</code></pre>
+                <h4 id="python-source">Source code</h4>
+                <p>Available at <a href="https://github.com/mcupak/beacon-of-beacons/tree/master/beacon-adapters/beacon-python">https://github.com/mcupak/beacon-of-beacons/tree/master/beacon-adapters/beacon-python</a>.</p>
+                <h4 id="python-technologies">Technologies</h4>
                 <p>Python, Flask.</p>
             </section>
         </div>
