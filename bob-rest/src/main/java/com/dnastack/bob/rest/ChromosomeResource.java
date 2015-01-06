@@ -28,6 +28,8 @@ import com.dnastack.bob.rest.util.ItemWrapper;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Named;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -41,6 +43,8 @@ import javax.ws.rs.core.MediaType;
  */
 @Path("/chromosomes")
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN})
+@RequestScoped
+@Named
 public class ChromosomeResource {
 
     @GET

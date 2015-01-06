@@ -24,6 +24,8 @@
 package com.dnastack.bob.rest.util;
 
 import com.dnastack.bob.dto.BeaconTo;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Named;
 
 /**
  * Comparator of BeaconTo objects. Performs case-insensitive comparison of IDs of BeaconTo objects.
@@ -31,6 +33,8 @@ import com.dnastack.bob.dto.BeaconTo;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
+@RequestScoped
+@Named
 @IdComparator
 public class BeaconToIdComparator implements BeaconToComparator {
 

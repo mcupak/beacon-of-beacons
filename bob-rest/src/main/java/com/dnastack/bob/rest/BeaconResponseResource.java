@@ -23,14 +23,16 @@
  */
 package com.dnastack.bob.rest;
 
-import com.dnastack.bob.rest.util.BeaconResponseToComparator;
 import com.dnastack.bob.dto.BeaconResponseTo;
-import com.dnastack.bob.service.BeaconResponseService;
+import com.dnastack.bob.rest.util.BeaconResponseToComparator;
+import com.dnastack.bob.service.BeaconResponseServiceImpl;
 import com.dnastack.bob.util.ParsingUtils;
 import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -46,10 +48,12 @@ import javax.ws.rs.core.MediaType;
  */
 @Path("/responses")
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN})
+@RequestScoped
+@Named
 public class BeaconResponseResource {
 
     @Inject
-    private BeaconResponseService responseService;
+    private BeaconResponseServiceImpl beaconResponseService;
 
     @Inject
     private BeaconResponseToComparator beaconResponseComparator;
@@ -68,7 +72,7 @@ public class BeaconResponseResource {
     @GET
     @Path("/{beaconId}")
     public BeaconResponseTo queryBeacon(@PathParam("beaconId") String beaconId, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele, @QueryParam("ref") String ref) {
-        return responseService.queryBeacon(beaconId, chrom, pos, allele, ref);
+        return beaconResponseService.queryBeacon(beaconId, chrom, pos, allele, ref);
     }
 
     /**
@@ -86,9 +90,9 @@ public class BeaconResponseResource {
     public Collection<BeaconResponseTo> query(@QueryParam("beacon") String beaconIds, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele, @QueryParam("ref") String ref) {
         Set<BeaconResponseTo> brs = new TreeSet<>(beaconResponseComparator);
         if (beaconIds == null) {
-            brs.addAll(responseService.queryAll(chrom, pos, allele, ref));
+            brs.addAll(beaconResponseService.queryAll(chrom, pos, allele, ref));
         } else {
-            brs.addAll(responseService.queryBeacons(ParsingUtils.parseMultipleParameterValues(beaconIds), chrom, pos, allele, ref));
+            brs.addAll(beaconResponseService.queryBeacons(ParsingUtils.parseMultipleParameterValues(beaconIds), chrom, pos, allele, ref));
         }
 
         return brs;

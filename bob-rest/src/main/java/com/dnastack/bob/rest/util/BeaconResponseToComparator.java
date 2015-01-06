@@ -25,7 +25,9 @@ package com.dnastack.bob.rest.util;
 
 import com.dnastack.bob.dto.BeaconResponseTo;
 import java.util.Comparator;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * Comparator of BeaconResponseTo objects. Performs comparison of BeaconTo objects in the responses.
@@ -33,6 +35,8 @@ import javax.inject.Inject;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
+@RequestScoped
+@Named
 public class BeaconResponseToComparator implements Comparator<BeaconResponseTo> {
 
     @Inject

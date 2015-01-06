@@ -24,6 +24,7 @@
 package com.dnastack.bob.rest;
 
 import com.dnastack.bob.dto.BeaconTo;
+import com.dnastack.bob.log.Logged;
 import com.dnastack.bob.rest.util.BeaconToComparator;
 import com.dnastack.bob.rest.util.NameComparator;
 import com.dnastack.bob.service.BeaconService;
@@ -32,7 +33,9 @@ import java.net.HttpURLConnection;
 import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -49,6 +52,8 @@ import javax.ws.rs.core.MediaType;
  */
 @Path("/beacons")
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN})
+@RequestScoped
+@Named
 public class BeaconResource {
 
     @Inject
@@ -83,6 +88,7 @@ public class BeaconResource {
      * @return set of beacons
      */
     @GET
+    @Logged
     public Collection<BeaconTo> show(@QueryParam("beacon") String beaconIds) {
         Set<BeaconTo> bs = new TreeSet<>(beaconComparator);
         if (beaconIds == null) {

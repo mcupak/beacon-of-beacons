@@ -36,8 +36,6 @@ import java.util.Set;
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
 
 /**
  * A Genomics Alliance beacon service at UCSC.
@@ -45,8 +43,7 @@ import javax.ejb.Stateless;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Stateless
-@LocalBean
+@Processor
 @Ucsc
 public class UcscBeaconProcessor extends AbstractBeaconProcessor {
 

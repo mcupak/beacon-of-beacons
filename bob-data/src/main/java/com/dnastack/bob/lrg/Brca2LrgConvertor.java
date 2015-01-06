@@ -26,7 +26,8 @@ package com.dnastack.bob.lrg;
 import com.dnastack.bob.entity.Chromosome;
 import com.dnastack.bob.entity.Reference;
 import javax.annotation.PostConstruct;
-import javax.inject.Singleton;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Named;
 
 /**
  * BRCA2 convertor.
@@ -34,7 +35,8 @@ import javax.inject.Singleton;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Singleton
+@ApplicationScoped
+@Named
 @Brca2
 public class Brca2LrgConvertor implements LrgConvertor {
 

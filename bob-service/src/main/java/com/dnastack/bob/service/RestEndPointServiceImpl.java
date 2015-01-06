@@ -23,7 +23,6 @@
  */
 package com.dnastack.bob.service;
 
-import com.dnastack.bob.log.Logged;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -42,7 +41,6 @@ public class RestEndPointServiceImpl implements RestEndPointService {
     private static final RestEndPoint beacons = new RestEndPoint("beacons", "beacons", "beacons");
     private static final RestEndPoint responses = new RestEndPoint("responses", "responses", "responses?chrom=14&pos=106833421&allele=A");
 
-    @Logged
     @Override
     public Collection<RestEndPoint> showEndPoints(String url) {
         Set<RestEndPoint> reps = new HashSet<>();

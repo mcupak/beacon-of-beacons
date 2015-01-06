@@ -21,44 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.rest.util;
+package com.dnastack.bob.log;
 
-import com.dnastack.bob.dto.BeaconTo;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
+import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import javax.interceptor.AroundInvoke;
+import javax.interceptor.Interceptor;
+import javax.interceptor.InvocationContext;
 
 /**
- * Comparator of BeaconTo objects. Performs case-insensitive comparison of names of BeaconTo objects.
- * In case the names are equal, IDs are compared to distinguish similar beacons.
+ * Logging interceptor.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@RequestScoped
-@Named
-@NameComparator
-public class BeaconToNameComparator implements BeaconToComparator {
+@Logged
+@Interceptor
+public class Logger implements Serializable {
 
-    @Inject
-    @IdComparator
-    private BeaconToComparator idComparator;
+    private static final String APP_NAME = "BEACON-AGGREGATOR";
+    private static final long serialVersionUID = 20L;
+    private static final DateFormat DATE_FORMAT = SimpleDateFormat
+            .getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 
-    @Override
-    public int compare(BeaconTo o1, BeaconTo o2) {
-        if (o1 == null || o2 == null) {
-            throw new NullPointerException("Beacon is null.");
-        }
-        if (o1.getName() == null || o2.getName() == null) {
-            throw new NullPointerException("Beacon ID is null.");
-        }
+    @AroundInvoke
+    public Object log(InvocationContext context) throws Exception {
+        System.out.println("LOGGER: " + DATE_FORMAT.format(new Date()) + " : " + APP_NAME + ": "
+                + context.getMethod().getName() + "(" + Arrays.toString(context.getParameters()) + ")" + context.getContextData().toString());
 
-        int i = o1.getName().compareToIgnoreCase(o2.getName());
-        if (i == 0) {
-            i = idComparator.compare(o1, o2);
-        }
-
-        return i;
+        return context.proceed();
     }
 
 }

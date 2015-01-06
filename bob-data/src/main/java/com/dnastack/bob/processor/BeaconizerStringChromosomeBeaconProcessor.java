@@ -23,17 +23,13 @@
  */
 package com.dnastack.bob.processor;
 
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-
 /**
  * String chromosome beaconizer beacon service using integer chromosome identifiers.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Stateless
-@LocalBean
+@Processor
 @StringChromosomeBeaconizer
 public class BeaconizerStringChromosomeBeaconProcessor extends BeaconizerBeaconProcessor {
 

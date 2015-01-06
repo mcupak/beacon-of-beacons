@@ -29,7 +29,6 @@ import com.dnastack.bob.dto.BeaconResponseTo;
 import com.dnastack.bob.entity.Beacon;
 import com.dnastack.bob.entity.BeaconResponse;
 import com.dnastack.bob.entity.Query;
-import com.dnastack.bob.log.Logged;
 import com.dnastack.bob.lrg.Brca;
 import com.dnastack.bob.lrg.Brca2;
 import com.dnastack.bob.lrg.LrgConvertor;
@@ -39,6 +38,7 @@ import com.dnastack.bob.util.BeaconAggregationResolver;
 import com.dnastack.bob.util.Entity2ToConvertor;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -53,7 +53,9 @@ import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.validation.Validator;
 
 import static com.dnastack.bob.util.Constants.REQUEST_TIMEOUT;
@@ -66,7 +68,11 @@ import static com.dnastack.bob.util.Constants.REQUEST_TIMEOUT;
  */
 @Stateless
 @LocalBean
-public class BeaconResponseServiceImpl implements BeaconResponseService {
+@Named
+@Dependent
+public class BeaconResponseServiceImpl implements BeaconResponseService, Serializable {
+
+    private static final long serialVersionUID = 103L;
 
     @Inject
     private BeaconDao beaconDao;
@@ -267,7 +273,6 @@ public class BeaconResponseServiceImpl implements BeaconResponseService {
         return fillAggregateResponses(brs, childrenResponses, children, q).values();
     }
 
-    @Logged
     @Override
     public BeaconResponseTo queryBeacon(String beaconId, String chrom, Long pos, String allele, String ref) {
         Query q = getQuery(chrom, pos, allele, ref);
@@ -292,7 +297,6 @@ public class BeaconResponseServiceImpl implements BeaconResponseService {
         return Entity2ToConvertor.getBeaconResponseTo(br);
     }
 
-    @Logged
     @Override
     public Collection<BeaconResponseTo> queryBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref) {
         if (beaconIds == null) {
@@ -302,7 +306,6 @@ public class BeaconResponseServiceImpl implements BeaconResponseService {
         return Entity2ToConvertor.getBeaconResponseTos(queryMultipleBeacons(beaconIds, chrom, pos, allele, ref));
     }
 
-    @Logged
     @Override
     public Collection<BeaconResponseTo> queryAll(String chrom, Long pos, String allele, String ref) {
         return Entity2ToConvertor.getBeaconResponseTos(queryMultipleBeacons(null, chrom, pos, allele, ref));

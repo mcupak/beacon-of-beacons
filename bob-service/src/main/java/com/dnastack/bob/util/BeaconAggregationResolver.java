@@ -27,13 +27,15 @@ import com.dnastack.bob.dao.BeaconDao;
 import com.dnastack.bob.entity.Beacon;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.PostConstruct;
-import javax.ejb.Singleton;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * Resolver of beacon aggregations.
@@ -41,8 +43,11 @@ import javax.inject.Inject;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Singleton
-public class BeaconAggregationResolver {
+@ApplicationScoped
+@Named
+public class BeaconAggregationResolver implements Serializable {
+
+    private static final long serialVersionUID = 104L;
 
     @Inject
     private BeaconDao beaconDao;

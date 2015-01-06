@@ -26,7 +26,9 @@ package com.dnastack.bob.rest;
 import com.dnastack.bob.service.RestEndPoint;
 import com.dnastack.bob.service.RestEndPointService;
 import java.util.Collection;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -42,6 +44,8 @@ import javax.ws.rs.core.UriInfo;
  */
 @Path("/")
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN})
+@RequestScoped
+@Named
 public class HelpResource {
 
     @Context
