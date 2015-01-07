@@ -53,8 +53,6 @@
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
-        <version.jboss.maven.plugin>7.4.Final</version.jboss.maven.plugin>
         <version.jboss.spec.javaee.7.0>8.2.0.Final</version.jboss.spec.javaee.7.0>
         <version.shrinkwrap.resolver.bom>2.1.1</version.shrinkwrap.resolver.bom>
         <version.arquillian.bom>1.1.5.Final</version.arquillian.bom>
@@ -73,7 +71,7 @@
         <version.install.plugin>2.3.1</version.install.plugin>
         <version.ejb.plugin>2.3</version.ejb.plugin>
         <version.wildfly.arquillian.plugin>8.2.0.Final</version.wildfly.arquillian.plugin>
-        <version.jboss.arquillian.plugin>7.2.0.Final</version.jboss.arquillian.plugin>
+        <version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
         <maven.compiler.target>1.7</maven.compiler.target>
         <maven.compiler.source>1.7</maven.compiler.source>
     </properties>
@@ -182,11 +180,6 @@
                     <version>${version.exec.plugin}</version>
                 </plugin>
                 <plugin>
-                    <groupId>org.jboss.as.plugins</groupId>
-                    <artifactId>jboss-as-maven-plugin</artifactId>
-                    <version>${version.jboss.maven.plugin}</version>
-                </plugin>
-                <plugin>
                     <groupId>org.wildfly.plugins</groupId>
                     <artifactId>wildfly-maven-plugin</artifactId>
                     <version>${version.wildfly.maven.plugin}</version>
@@ -200,16 +193,6 @@
                     <groupId>org.wildfly</groupId>
                     <artifactId>wildfly-arquillian-container-remote</artifactId>
                     <version>${version.wildfly.arquillian.plugin}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.jboss.as</groupId>
-                    <artifactId>jboss-as-arquillian-container-managed</artifactId>
-                    <version>${version.jboss.arquillian.plugin}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.jboss.as</groupId>
-                    <artifactId>jboss-as-arquillian-container-remote</artifactId>
-                    <version>${version.jboss.arquillian.plugin}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
