@@ -48,8 +48,8 @@ import javax.ejb.Asynchronous;
 public class EbiBeaconProcessor extends AbstractBeaconProcessor {
 
     private static final long serialVersionUID = 11L;
-    private static final String BASE_URL = "http://wwwdev.ebi.ac.uk/eva/webservices/rest/v1/variants/";
-    private static final String PARAM_TEMPLATE = "%d:%d::%s/exists?studies=";
+    private static final String BASE_URL = "http://wwwdev.ebi.ac.uk/eva/webservices/rest/v1/ga4gh/beacon";
+    private static final String PARAM_TEMPLATE = "?referenceName=%d&start=%d&allele=%s";
     private static final Set<Reference> SUPPORTED_REFS = ImmutableSet.of(Reference.HG19);
 
     private String getQueryUrl(Integer chrom, Long pos, String allele) throws MalformedURLException {
@@ -74,7 +74,7 @@ public class EbiBeaconProcessor extends AbstractBeaconProcessor {
     @Override
     @Asynchronous
     public Future<Boolean> parseQueryResponse(Beacon b, String response) {
-        Boolean res = ParsingUtils.parseBooleanFromJson(response, "response", "result");
+        Boolean res = ParsingUtils.parseBooleanFromJson(response, "exists");
 
         return new AsyncResult<>(res);
     }
