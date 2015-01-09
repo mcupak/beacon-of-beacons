@@ -40,6 +40,7 @@ import org.junit.runner.RunWith;
 import static com.dnastack.bob.rest.BasicTest.readObject;
 import static com.dnastack.bob.rest.util.BeaconResponseTestUtils.beaconsMatch;
 import static com.dnastack.bob.rest.util.BeaconResponseTestUtils.queriesMatch;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -132,8 +133,8 @@ public class BeaconResponsesTest extends BasicTest {
 
     @Test
     public void testSpecificResponseWithSpecificRef(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String b = "clinvar";
-        String[] q = {"1", "10042538", "T", "hg19"};
+        String b = "lovd";
+        String[] q = {"1", "808922", "A", "hg19"};
         BeaconResponseTo br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
@@ -151,7 +152,7 @@ public class BeaconResponsesTest extends BasicTest {
         assertNotNull(br);
         assertTrue(beaconsMatch(br.getBeacon(), b));
         assertTrue(queriesMatch(br.getQuery(), q));
-        assertTrue(br.getResponse());
+        assertFalse(br.getResponse());
     }
 
     @Test
@@ -163,7 +164,7 @@ public class BeaconResponsesTest extends BasicTest {
         assertNotNull(br);
         assertTrue(beaconsMatch(br.getBeacon(), b));
         assertTrue(queriesMatch(br.getQuery(), q));
-        assertTrue(br.getResponse());
+        assertFalse(br.getResponse());
     }
 
     @Test
@@ -278,7 +279,7 @@ public class BeaconResponsesTest extends BasicTest {
         assertNotNull(brs.get(0).getResponse());
         assertNotNull(brs.get(1).getResponse());
     }
-    
+
     @Test
     public void testMultipleResponsesOfAggregatorsFiltered(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String id1 = "bob";

@@ -61,7 +61,7 @@ public class UcscResponseTest extends AbstractResponseTest {
     }
 
     @Test
-    public void testFoundClinvar(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
+    public void testClinvar(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String b = "clinvar";
         String[] query = {"1", "10042538", "T", null};
         BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(b, query));
@@ -69,11 +69,11 @@ public class UcscResponseTest extends AbstractResponseTest {
         assertNotNull(br);
         assertTrue(beaconsMatch(br.getBeacon(), b));
         assertTrue(queriesMatch(br.getQuery(), query));
-        assertTrue(br.getResponse());
+        assertFalse(br.getResponse());
     }
 
     @Test
-    public void testFoundUniprot(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
+    public void testUniprot(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String b = "uniprot";
         String[] query = {"1", "977028", "T", null};
         BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(b, query));
@@ -81,11 +81,11 @@ public class UcscResponseTest extends AbstractResponseTest {
         assertNotNull(br);
         assertTrue(beaconsMatch(br.getBeacon(), b));
         assertTrue(queriesMatch(br.getQuery(), query));
-        assertTrue(br.getResponse());
+        assertFalse(br.getResponse());
     }
 
     @Test
-    public void testFoundLovd(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
+    public void testLovd(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String b = "lovd";
         String[] query = {"1", "808922", "A", null};
         BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(b, query));
@@ -99,11 +99,12 @@ public class UcscResponseTest extends AbstractResponseTest {
     @Test
     @Override
     public void testSpecificRefFound(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String[] query = {"1", "10042538", "T", "hg19"};
-        BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
+        String b = "lovd";
+        String[] query = {"1", "808922", "A", "hg19"};
+        BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(b, query));
 
         assertNotNull(br);
-        assertTrue(beaconsMatch(br.getBeacon(), BEACON));
+        assertTrue(beaconsMatch(br.getBeacon(), b));
         assertTrue(queriesMatch(br.getQuery(), query));
         assertTrue(br.getResponse());
     }
