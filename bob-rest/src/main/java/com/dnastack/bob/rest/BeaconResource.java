@@ -24,7 +24,6 @@
 package com.dnastack.bob.rest;
 
 import com.dnastack.bob.dto.BeaconTo;
-import com.dnastack.bob.log.Logged;
 import com.dnastack.bob.rest.util.BeaconToComparator;
 import com.dnastack.bob.rest.util.NameComparator;
 import com.dnastack.bob.service.BeaconService;
@@ -88,7 +87,6 @@ public class BeaconResource {
      * @return set of beacons
      */
     @GET
-    @Logged
     public Collection<BeaconTo> show(@QueryParam("beacon") String beaconIds) {
         Set<BeaconTo> bs = new TreeSet<>(beaconComparator);
         if (beaconIds == null) {

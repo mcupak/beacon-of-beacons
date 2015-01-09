@@ -23,6 +23,7 @@
  */
 package com.dnastack.bob.rest;
 
+import com.dnastack.bob.log.LoggingFilter;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,6 +41,6 @@ public class BeaconApplication extends Application {
 
     @Override
     public Set<Class<?>> getClasses() {
-        return new HashSet<>(Arrays.asList(HelpResource.class, BeaconResource.class, BeaconResponseResource.class, ReferenceResource.class, ChromosomeResource.class, AllleleResource.class));
+        return new HashSet<>(Arrays.asList(HelpResource.class, BeaconResource.class, BeaconResponseResource.class, ReferenceResource.class, ChromosomeResource.class, AllleleResource.class, LoggingFilter.class));
     }
 }

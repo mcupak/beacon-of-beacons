@@ -21,18 +21,65 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.dnastack.bob.log;
 
+import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.ext.Provider;
+
 /**
+ * Filter logging IP addresses requests coming to the REST API.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public class LoggingFilter {
-//implements ContainerRequestFilter {
-//     @Override
-//     public void filter(ContainerRequestContext requestContext){
-//       if (not_authenticated){ requestContext.abortWith(response)};
-//     }
+@Provider
+public class LoggingFilter implements ContainerRequestFilter, Serializable {
+
+    private static final String APP_NAME = "BEACON-OF-BEACONS";
+    private static final long serialVersionUID = 20L;
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("DD-MM-YYYY HH:mm:ss Z");
+    private static final org.jboss.logging.Logger logger = org.jboss.logging.Logger.getLogger("com.dnastack.bob");
+
+    @Context
+    private HttpServletRequest request;
+
+    @Override
+    public void filter(ContainerRequestContext requestContext) {
+        String method = request.getMethod();
+        String url = request.getRequestURI();
+        String q = request.getQueryString();
+        if (q != null) {
+            url += "?";
+            url += q;
+        }
+
+        String ip = request.getHeader("X-FORWARDED-FOR");
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_CLIENT_IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteHost();
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+
+        logger.info(DATE_FORMAT.format(new Date()) + " : Request from " + ip + ": " + method + " " + url);
+    }
 }
