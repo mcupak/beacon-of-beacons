@@ -23,11 +23,13 @@
  */
 package com.dnastack.bob.rest;
 
-import com.dnastack.bob.service.RestEndPoint;
-import com.dnastack.bob.service.RestEndPointService;
+import com.dnastack.bob.rest.util.RestEndPoint;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -46,13 +48,23 @@ import javax.ws.rs.core.UriInfo;
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN})
 @RequestScoped
 @Named
-public class HelpResource {
+public class RestEndPointResource {
+
+    private static final RestEndPoint beacons = new RestEndPoint("beacons", "beacons", "beacons");
+    private static final RestEndPoint responses = new RestEndPoint("responses", "responses", "responses?chrom=14&pos=106833421&allele=A");
+    private static final RestEndPoint alleles = new RestEndPoint("alleles", "alleles", "alleles");
+    private static final RestEndPoint chromosomes = new RestEndPoint("chromosomes", "chromosomes", "chromosomes");
+    private static final RestEndPoint references = new RestEndPoint("references", "references", "references");
 
     @Context
     private UriInfo uriInfo;
 
-    @Inject
-    private RestEndPointService restEndPointService;
+    private String baseUrl;
+
+    @PostConstruct
+    private void init() {
+        baseUrl = uriInfo.getBaseUri().toString();
+    }
 
     /**
      * Shows REST welcome page.
@@ -61,7 +73,14 @@ public class HelpResource {
      */
     @GET
     public Collection<RestEndPoint> showEndPoints() {
-        return restEndPointService.showEndPoints(uriInfo.getBaseUri().toString());
+        Set<RestEndPoint> reps = new HashSet<>();
+        reps.add(new RestEndPoint(beacons.getId(), baseUrl + beacons.getBaseUrl(), baseUrl + beacons.getExample()));
+        reps.add(new RestEndPoint(responses.getId(), baseUrl + responses.getBaseUrl(), baseUrl + responses.getExample()));
+        reps.add(new RestEndPoint(alleles.getId(), baseUrl + alleles.getBaseUrl(), baseUrl + alleles.getExample()));
+        reps.add(new RestEndPoint(chromosomes.getId(), baseUrl + chromosomes.getBaseUrl(), baseUrl + chromosomes.getExample()));
+        reps.add(new RestEndPoint(references.getId(), baseUrl + references.getBaseUrl(), baseUrl + references.getExample()));
+
+        return Collections.unmodifiableSet(reps);
     }
 
 }

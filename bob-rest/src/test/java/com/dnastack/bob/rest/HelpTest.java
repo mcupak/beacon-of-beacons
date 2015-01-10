@@ -23,7 +23,7 @@
  */
 package com.dnastack.bob.rest;
 
-import com.dnastack.bob.service.RestEndPoint;
+import com.dnastack.bob.rest.util.RestEndPoint;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;

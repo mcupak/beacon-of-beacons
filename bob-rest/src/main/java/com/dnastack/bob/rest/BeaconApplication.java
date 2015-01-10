@@ -41,6 +41,6 @@ public class BeaconApplication extends Application {
 
     @Override
     public Set<Class<?>> getClasses() {
-        return new HashSet<>(Arrays.asList(HelpResource.class, BeaconResource.class, BeaconResponseResource.class, ReferenceResource.class, ChromosomeResource.class, AllleleResource.class, LoggingFilter.class));
+        return new HashSet<>(Arrays.asList(RestEndPointResource.class, BeaconResource.class, BeaconResponseResource.class, ReferenceResource.class, ChromosomeResource.class, AllleleResource.class, LoggingFilter.class));
     }
 }

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service;
+package com.dnastack.bob.rest.util;
 
 import java.io.Serializable;
 import java.util.Objects;
