@@ -12,6 +12,9 @@ nbactions*.xml
 # auxiliary scripts
 *.sh
 
+# log files
+*.log
+
 # python files
 flask
 
