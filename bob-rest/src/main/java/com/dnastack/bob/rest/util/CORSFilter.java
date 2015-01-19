@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
+ * Copyright 2015 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,27 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.rest;
+package com.dnastack.bob.rest.util;
 
-import com.dnastack.bob.log.LoggingFilter;
-import com.dnastack.bob.rest.util.CORSFilter;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
+import java.io.IOException;
+import java.io.Serializable;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerResponseContext;
+import javax.ws.rs.container.ContainerResponseFilter;
+import javax.ws.rs.ext.Provider;
 
 /**
- * REST application.
+ * Filter for setting CORS headers for use by an arbitrary client.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@ApplicationPath("/rest")
-public class BeaconApplication extends Application {
+@Provider
+public class CORSFilter implements ContainerResponseFilter, Serializable {
+
+    private static final long serialVersionUID = 4772820394842231989L;
 
     @Override
-    public Set<Class<?>> getClasses() {
-        return new HashSet<>(Arrays.asList(RestEndPointResource.class, BeaconResource.class, BeaconResponseResource.class, ReferenceResource.class, ChromosomeResource.class, AllleleResource.class, LoggingFilter.class, CORSFilter.class));
+    public void filter(final ContainerRequestContext requestContext, final ContainerResponseContext cres) throws IOException {
+        cres.getHeaders().add("Access-Control-Allow-Origin", "*");
+        cres.getHeaders().add("Access-Control-Allow-Headers", "origin, content-type, accept, authorization");
+        cres.getHeaders().add("Access-Control-Allow-Credentials", "true");
+        cres.getHeaders().add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+        cres.getHeaders().add("Access-Control-Max-Age", "1209600");
     }
+
 }
