@@ -6,71 +6,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Global Alliance for Genomics and Health - Beacon of Beacons</title>
 
-        <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/custom.css" rel="stylesheet">
 
-        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-        <![endif]-->
-
-        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <script src="js/jquery-1.11.1.min.js"></script>
-        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="js/jquery-1.11.2.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script src="js/bootstrap-switch.min.js"></script>
-        <script>
-            $(function () {
-                $("#banner").load("banner.html");
-                $("#footer").load("footer.html");
-            });
-        </script>
-        <script>
-            function getBeacons() {
-                var xmlhttp;
-                if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
-                    xmlhttp = new XMLHttpRequest();
-                } else {// code for IE6, IE5
-                    xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-                }
-                xmlhttp.onreadystatechange = function () {
-
-                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                        obj = JSON.parse(xmlhttp.responseText);
-                        var arrayLength = obj.length;
-                        var resultTable = '<select class="form-control" name="beacon">';
-                        resultTable += '<option value="all">All</option>';
-                        for (var i = 0; i < arrayLength; i++) {
-                            if (obj[i] != null) {
-                                var tags = (obj[i].aggregator) ? "[aggregator]" : "";
-                                resultTable += '<option value="' + obj[i].id + '">' + obj[i].name + ' (' + obj[i].organization + ') ' + tags + '</option>';
-                            }
-                        }
-                        resultTable += "</select>";
-
-                        document.getElementById("beaconlist").innerHTML = resultTable;
-                    }
-                };
-
-                xmlhttp.ontimeout = function () {
-                    document.getElementById("beaconlist").innerHTML = "Request timed out.";
-                };
-
-                var url = "http://dnastack.com/ga4gh/bob/api-beacons.php";
-                xmlhttp.open("GET", url, true);
-                xmlhttp.timeout = 30000;
-                xmlhttp.send();
-            }
-        </script>
-
+        <script src="js/bob-api.js"></script>
+        <script src="js/layout.js"></script>
     </head>
     <body>
-        <script>
-            getBeacons();
-        </script>
+        <div id="menu"></div>
         <div class="container">
             <div class="row row-centered">
                 <div id="banner"></div>
@@ -154,5 +100,9 @@
         </div>
 
         <div id="footer"></div>
+
+        <script>
+            getBeacons();
+        </script>
     </body>
 </html>
