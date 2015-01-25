@@ -24,20 +24,17 @@ Build the project:
 
     mvn clean install
 
-Use bob-rest module to:
+Use bob-rest module to...
 
-- deploy BoB:
-
+...deploy BoB:
 
     mvn wildfly:deploy
 
-- undeploy BoB:
-
+...undeploy BoB:
 
     mvn wildfly:undeploy
 
-- test the beacons:
-
+...test the beacons:
 
     mvn test -Parq-wildfly-managed
 
