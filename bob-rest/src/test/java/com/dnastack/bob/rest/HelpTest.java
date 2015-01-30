@@ -35,7 +35,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Test of help resource.
@@ -67,10 +66,7 @@ public class HelpTest extends BasicTest {
     public void testHelp(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         List<RestEndPoint> rs = readRestEndPoints(url.toExternalForm() + getUrl());
 
-        assertEquals(rs.size(), 2);
-        for (RestEndPoint r : rs) {
-            assertTrue(r.getId().equals(BEACONS) || r.getId().equals(RESPONSES));
-        }
+        assertEquals(5, rs.size());
     }
 
 }

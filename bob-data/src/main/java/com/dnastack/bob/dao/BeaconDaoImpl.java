@@ -26,6 +26,7 @@ package com.dnastack.bob.dao;
 import com.dnastack.bob.entity.Beacon;
 import com.dnastack.bob.processor.AmpLab;
 import com.dnastack.bob.processor.BeaconProcessor;
+import com.dnastack.bob.processor.Broad;
 import com.dnastack.bob.processor.CafeVariome;
 import com.dnastack.bob.processor.Ebi;
 import com.dnastack.bob.processor.IntegerChromosomeBeaconizer;
@@ -92,6 +93,10 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
     @CafeVariome
     private BeaconProcessor cafeVariomeService;
 
+    @Inject
+    @Broad
+    private BeaconProcessor broadInstituteService;
+
     private void setUpBeacons() {
         this.beacons = new HashSet<>();
 
@@ -128,6 +133,8 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
         cafeVariomeCentral.addAggregator(cafeVariome);
         cafeCardioKit.addAggregator(cafeVariome);
 
+        Beacon broad = new Beacon("broad", "Broad Institute", broadInstituteService, true, "Broad Institute");
+
         // add beacons ot collection
         beacons.add(bob);
 
@@ -151,6 +158,8 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
         beacons.add(cafeVariome);
         beacons.add(cafeVariomeCentral);
         beacons.add(cafeCardioKit);
+
+        beacons.add(broad);
 
         // point all regular beacons to bob
         for (Beacon b : beacons) {
