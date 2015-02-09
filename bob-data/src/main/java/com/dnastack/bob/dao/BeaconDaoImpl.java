@@ -110,7 +110,7 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
         Beacon ebi = new Beacon("ebi", "EMBL-EBI", ebiService, true, "EBI");
         Beacon ncbi = new Beacon("ncbi", "NCBI", ncbiService, true, "NCBI");
         Beacon wtsi = new Beacon("wtsi", "Wellcome Trust Sanger Institute", wtsiService, true, "WTSI");
-        Beacon amplab = new Beacon("amplab", "AMPLab", ampLabService, true, "APMLab");
+        Beacon amplab = new Beacon("amplab", "AMPLab", ampLabService, true, "AMPLab, University of California");
         Beacon kaviar = new Beacon("kaviar", "Known VARiants", kaviarService, true, "Institute for Systems Biology");
 
         Beacon platinum = new Beacon("platinum", "Illumina Platinum Genomes", stringBeaconizerService, true, "Google");
