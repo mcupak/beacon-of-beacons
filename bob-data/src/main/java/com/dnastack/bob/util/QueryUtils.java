@@ -38,7 +38,13 @@ import java.util.regex.Pattern;
  */
 public class QueryUtils {
 
-    private static final Map<Reference, String> chromMapping = ImmutableMap.of(Reference.HG38, "GRCh38", Reference.HG19, "GRCh37", Reference.HG18, "NCBI36", Reference.HG17, "NCBI35", Reference.HG16, "NCBI34");
+    private static final Map<Reference, String> chromMapping = ImmutableMap.of(
+            Reference.HG38, "GRCh38",
+            Reference.HG19, "GRCh37",
+            Reference.HG18, "NCBI36",
+            Reference.HG17, "NCBI35",
+            Reference.HG16, "NCBI34"
+    );
 
     /**
      * Generates a canonical chrom ID.

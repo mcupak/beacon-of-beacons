@@ -58,7 +58,7 @@ public class BeaconResponsesTest extends BasicTest {
     public static final String QUERY_BEACON_WITH_REF_TEMPLATE = "rest/responses?beacon=%s&chrom=%s&pos=%s&allele=%s&ref=%s";
     public static final String QUERY_TEMPLATE = "rest/responses?chrom=%s&pos=%s&allele=%s";
     public static final String QUERY_WITH_REF_TEMPLATE = "rest/responses?chrom=%s&pos=%s&allele=%s&ref=%s";
-    private static final Set<String> BEACON_IDS = ImmutableSet.of("clinvar", "uniprot", "lovd", "ebi", "ncbi", "wtsi", "amplab", "kaviar", "broad", "bob");
+    private static final Set<String> BEACON_IDS = ImmutableSet.of("clinvar", "uniprot", "lovd", "ebi", "ncbi", "wtsi", "amplab", "kaviar", "broad", "icgc", "bob");
 
     protected static String getUrl(String b, String[] params) {
         String res = null;
@@ -255,6 +255,18 @@ public class BeaconResponsesTest extends BasicTest {
     public void testResponsesFilteredForBroad(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String b = "broad";
         String[] q = {"1", "13417", "CGAGA", null};
+        BeaconResponseTo br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
+
+        assertNotNull(br);
+        assertTrue(beaconsMatch(br.getBeacon(), b));
+        assertTrue(queriesMatch(br.getQuery(), q));
+        assertTrue(br.getResponse());
+    }
+
+    @Test
+    public void testResponsesFilteredForIcgc(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
+        String b = "icgc";
+        String[] q = {"17", "7577120", "T", null};
         BeaconResponseTo br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);

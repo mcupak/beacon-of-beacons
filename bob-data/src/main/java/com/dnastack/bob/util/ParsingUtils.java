@@ -159,6 +159,49 @@ public class ParsingUtils {
     }
 
     /**
+     * Parses string value out of the given field in a JSON response.
+     *
+     * @param response response in JSON format
+     * @param path     list of JSON keys determining the path to the searched value
+     *
+     * @return field value if it is true/false, null otherwise
+     */
+    public static String parseStringFromJson(String response, String... path) {
+        if (response == null) {
+            return null;
+        }
+
+        JSONObject jo = new JSONObject(response);
+        JSONObject current = null;
+        for (String s : path) {
+            current = jo.optJSONObject(s);
+            if (current == null) {
+                JSONArray a = jo.optJSONArray(s);
+                if (a != null) {
+                    current = a.optJSONObject(0);
+                    if (current == null) {
+                        try {
+                            return a.getString(0);
+                        } catch (JSONException jex) {
+                            return null;
+                        }
+                    }
+                }
+            }
+            if (current == null) {
+                try {
+                    return jo.getString(s);
+                } catch (JSONException jex) {
+                    return null;
+                }
+            }
+            jo = current;
+        }
+
+        return null;
+    }
+
+    /**
      * Checks if there are multiple values given as a parameter.
      *
      * @param param values
