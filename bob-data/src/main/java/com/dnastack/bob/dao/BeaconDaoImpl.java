@@ -140,7 +140,7 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
 
         Beacon broad = new Beacon("broad", "Broad Institute", broadInstituteService, true, "Broad Institute");
 
-        Beacon icgc = new Beacon("icgc", "ICGC", icgcService, true, "International Cancer Genome Consortium");
+        Beacon icgc = new Beacon("icgc", "ICGC", icgcService, true, "Ontario Institute for Cancer Research");
 
         // add beacons ot collection
         beacons.add(bob);
