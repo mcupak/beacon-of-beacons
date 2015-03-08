@@ -17,8 +17,8 @@ Java 1.7 or newer, Maven 3.1 or newer, Java EE runtime (WildFly 8 recommended).
 ##How to run it
 Start the server:
 
-    For Linux:   JBOSS_HOME/bin/standalone.sh -c standalone-full.xml
-    For Windows: JBOSS_HOME\bin\standalone.bat -c standalone-full.xml
+    For Linux/Unix:   JBOSS_HOME/bin/standalone.sh -c standalone-full.xml
+    For Windows:      JBOSS_HOME\bin\standalone.bat -c standalone-full.xml
 
 Build the project:
 
