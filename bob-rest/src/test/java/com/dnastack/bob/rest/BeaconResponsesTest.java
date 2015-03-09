@@ -140,7 +140,7 @@ public class BeaconResponsesTest extends BasicTest {
         assertNotNull(br);
         assertTrue(beaconsMatch(br.getBeacon(), b));
         assertTrue(queriesMatch(br.getQuery(), q));
-        assertTrue(br.getResponse());
+        assertFalse(br.getResponse());
     }
 
     @Test
@@ -176,7 +176,7 @@ public class BeaconResponsesTest extends BasicTest {
         assertNotNull(br);
         assertTrue(beaconsMatch(br.getBeacon(), b));
         assertTrue(queriesMatch(br.getQuery(), q));
-        assertTrue(br.getResponse());
+        assertFalse(br.getResponse());
     }
 
     @Test

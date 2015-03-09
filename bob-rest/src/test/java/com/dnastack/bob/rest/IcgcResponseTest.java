@@ -140,7 +140,8 @@ public class IcgcResponseTest extends AbstractResponseTest {
         assertTrue(beaconsMatch(br.getBeacon(), BEACON));
         assertTrue(queriesMatch(br.getQuery(), query));
 
-        assertFalse(br.getResponse());
+        // not supported
+        assertNull(br.getResponse());
     }
 
     @Test
@@ -153,7 +154,8 @@ public class IcgcResponseTest extends AbstractResponseTest {
         assertTrue(beaconsMatch(br.getBeacon(), BEACON));
         assertTrue(queriesMatch(br.getQuery(), query));
 
-        assertFalse(br.getResponse());
+        // not supported
+        assertNull(br.getResponse());
     }
 
     @Test
@@ -204,7 +206,7 @@ public class IcgcResponseTest extends AbstractResponseTest {
         assertEquals(query[2].substring(0, 1), br.getQuery().getAllele());
 
         // unsupported
-        assertFalse(br.getResponse());
+        assertNull(br.getResponse());
     }
 
     @Test
