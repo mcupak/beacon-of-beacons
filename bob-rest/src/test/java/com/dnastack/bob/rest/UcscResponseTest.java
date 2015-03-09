@@ -93,7 +93,7 @@ public class UcscResponseTest extends AbstractResponseTest {
         assertNotNull(br);
         assertTrue(beaconsMatch(br.getBeacon(), b));
         assertTrue(queriesMatch(br.getQuery(), query));
-        assertTrue(br.getResponse());
+        assertFalse(br.getResponse());
     }
 
     @Test
@@ -106,7 +106,7 @@ public class UcscResponseTest extends AbstractResponseTest {
         assertNotNull(br);
         assertTrue(beaconsMatch(br.getBeacon(), b));
         assertTrue(queriesMatch(br.getQuery(), query));
-        assertTrue(br.getResponse());
+        assertNotNull(br.getResponse());
     }
 
     @Test
