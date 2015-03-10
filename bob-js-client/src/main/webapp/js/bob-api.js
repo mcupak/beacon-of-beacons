@@ -3,6 +3,7 @@ var timeout = 60000;
 var restUrl = "http://beacon-dnastack.rhcloud.com/rest/";
 var beaconsUrl = restUrl + "beacons";
 var responsesUrl = restUrl + "responses?";
+var beaconsListUrl = restUrl + "beacons";
 
 function createRequest() {
     var xhr = new XMLHttpRequest();
@@ -207,4 +208,75 @@ function printResponses() {
         queryBeacon(beacon, chrom, pos, alt, ref);
         document.getElementById("results").innerHTML = "<center><img height='30' src='img/wait.gif'</center>";
     }
+}
+
+/*
+ * helper method for printBeaconsList
+ * groups response based on organization
+ * returns  { organization-name: [ {'name' : beacon-name, 'aggregator' : value} ] }
+*/
+function groupResponseByOrganization(response) {
+
+	var groupedResponse = {};
+
+	for (var i = 0; i < response.length; i++) {
+		var current = response[i];
+		if (groupedResponse[current.organization] == undefined) {
+			var object = [{"name": current.name, "aggregator": current.aggregator}];
+			groupedResponse[current.organization] = object;
+		}
+		else {
+			groupedResponse[current.organization].push( {"name": current.name, "aggregator": current.aggregator} );
+		}
+	}
+	return groupedResponse;
+}
+
+function printBeaconsList(xhr) {
+
+	var response = groupResponseByOrganization(JSON.parse(xhr.response)),
+	rows = "", responseTable = "", beacons, aggregators, org,
+	sortedOrgs = Object.keys(response).sort();
+
+	responseTable += "<div><table class=\"table table-condensed row-centered\" style=\"height:50%\"><thead><tr style=\"background-color:#458CC8; color:white;\"><th style=\"text-align:center;\">Organization</th><th style=\"text-align:center;\">Beacon</th><th style=\"text-align:center;\">Aggregator</th></tr></thead><tbody>";
+
+	for (var i = 0; i < sortedOrgs.length; i++) {
+
+		org = sortedOrgs[i];
+		rows += "<tr><td style=\"vertical-align: middle\">" + org + "</td>";
+		beacons = "<table class=\"table\">";
+		aggregators = "<table class=\"table\">";
+
+		for(var j = 0; j < response[org].length; j++) {
+			var aggregatorIndicator = response[org][j]["aggregator"] == true ? "<span class=\"label label-success\">Yes</span>" : "<span class=\"label label-danger\">No</span>";
+			beacons += "<tr><td style=\"border: none\">" + response[org][j]["name"] + "</td></tr>";
+			aggregators += "<tr><td style=\"border: none\">" + aggregatorIndicator + "</td></tr>";
+		}
+
+		beacons += "</table>";
+		aggregators += "</table>";
+		rows += "<td>" + beacons + "</td>";
+		rows += "<td>" + aggregators + "</td></tr>";
+	}
+
+	responseTable += rows;
+	responseTable += "</tbody></table>";
+	document.getElementById("beacon_list_table").innerHTML = responseTable.trim();
+}
+
+function getBeaconsList() {
+
+	var xhr = openRequest(createRequest(), "GET", beaconsListUrl);
+
+	xhr.onreadystatechange=function() {
+		if (xhr.readyState==4 && xhr.status==200) {
+			printBeaconsList( xhr );
+		}
+	};
+
+	xhr.ontimeout = function () {
+		document.getElementById("beacon_list_table").innerHTML = "";
+	};
+
+	sendRequest(xhr);
 }

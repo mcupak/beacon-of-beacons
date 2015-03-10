@@ -25,6 +25,11 @@
                     <div id="banner"></div>
                     <div id="chart_div"></div>
                 </div>
+                <div class="row row-centered">
+					<div class="col-xs-8 col-centered">
+						<div id="beacon_list_table" style="margin-top:40px"></div>
+					</div>
+				</div>
             </div>
         </div>
 
@@ -63,6 +68,8 @@
                 var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));
                 chart.draw(data, options);
             }
+
+            getBeaconsList();
         </script>
 
         <div id="footer"></div>
