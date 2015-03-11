@@ -42,25 +42,59 @@ function sendRequest(xhr) {
     }
 }
 
-function getBeacons() {
-    var xhr = openRequest(createRequest(), "GET", beaconsUrl);
+function getBeaconsOtherViews(obj) {
 
+    var resultTable = '<select class="form-control" name="beacon">';
+    resultTable += '<option>All</option>';
+    var arrayLength = obj.length;
+
+    for (var i = 0; i < arrayLength; i++) {
+        if (obj[i] !== null) {
+            var tags = (obj[i].aggregator) ? "[aggregator]" : "";
+            resultTable += '<option>' + obj[i].name + ' (' + obj[i].organization + ') ' + tags + '</option>';
+        }
+    }
+
+    resultTable += "</select>";
+    document.getElementById("beaconlist").innerHTML = resultTable;
+
+}
+
+function getBeaconsGenerateSnippetView(obj){
+
+    var resultTable = '<select class="selectpicker" multiple data-live-search="true" title="All">';
+    var arrayLength = obj.length;
+    var beaconsInfo = {},
+    beaconOption = "";
+
+    for (var i = 0; i < arrayLength; i++) {
+        if (obj[i] !== null) {
+            var tags = (obj[i].aggregator) ? "[aggregator]" : "";
+            beaconOption = obj[i].name + ' (' + obj[i].organization + ') ' + tags;
+            resultTable += '<option>' + beaconOption + '</option>';
+            beaconsInfo[beaconOption.trim()] = obj[i].id;
+        }
+    }
+
+    resultTable += "</select>";
+    activateSelectPicker(resultTable, beaconsInfo);
+
+}
+
+function getBeacons(currentView) {
+
+    var xhr = openRequest(createRequest(), "GET", beaconsUrl);
     xhr.onreadystatechange = function () {
 
         if (xhr.readyState == 4 && xhr.status == 200) {
-            obj = JSON.parse(xhr.responseText);
-            var arrayLength = obj.length;
-            var resultTable = '<select class="form-control" name="beacon">';
-            resultTable += '<option value="all">All</option>';
-            for (var i = 0; i < arrayLength; i++) {
-                if (obj[i] !== null) {
-                    var tags = (obj[i].aggregator) ? "[aggregator]" : "";
-                    resultTable += '<option value="' + obj[i].id + '">' + obj[i].name + ' (' + obj[i].organization + ') ' + tags + '</option>';
-                }
-            }
-            resultTable += "</select>";
+            var obj = JSON.parse(xhr.responseText);
 
-            document.getElementById("beaconlist").innerHTML = resultTable;
+            if (currentView == undefined || currentView.localeCompare("generate-snippet") != 0) {
+            	getBeaconsOtherViews(obj);
+            }
+            else {
+            	getBeaconsGenerateSnippetView(obj);
+            }
         }
     };
 

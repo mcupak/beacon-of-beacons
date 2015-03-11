@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Global Alliance for Genomics and Health - BRCA Beacon of Beacons</title>
+		
+        <!-- Bootstrap -->
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/custom.css" rel="stylesheet">
+        <link href="css/bootstrap-select.css" rel="stylesheet">
+        <script src="js/jquery-1.11.2.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <!-- generate-snippet.js should be loaded before bob-api.js -->
+        <script src="js/generate-snippet.js"></script>
+        <script src="js/bob-api.js"></script>
+        <script src="js/layout.js"></script>
+        <script src="js/bootstrap-select.js"></script>
+        <script src="js/ZeroClipboard.min.js"></script>
+    	<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+    </head>
+    <body>
+        <div id="menu"></div>
+        <div class="container">  
+            <div class="row row-centered">
+                <div id="banner"></div>
+       				<div class="col-xs-6 col-centered wide-container">		
+    					<label for="beacon" style="margin:0 auto;display:block;"class="control-label">&nbsp Select beacons to generate code snippet for:</label>
+    					<div class="col-xs-9" style="margin:10px"id="beaconlist"></div>
+    				
+    					<div class="col-xs-9 col-centered row-centered" style="margin: 0 auto;display: block;">
+    						<button data-toggle="modal" data-target="#code-modal" id="generate_snippet_btn" class="btn btn-primary full">Generate Snippet</button>
+    					</div>
+				</div>	
+        	</div>
+        </div>	
+        
+		<!-- Code Modal -->
+		<div class="modal fade" id="code-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		      	<div style="float:right">
+  					<button type="button" class="btn btn-primary" data-dismiss="modal" id="copy-button" data-clipboard-target="code-to-copy">Copy snippet</button>
+  					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				</div>	      
+		       <h4 class="modal-title" id="myModalLabel">Widget code snippet</h4>
+		      </div>
+		      <div class="modal-body" id="code-to-copy" ></div>
+		    </div>
+		  </div>
+		</div>
+				
+		<div id="footer"></div>
+
+        <script>
+        	var currentView = "generate-snippet"; 
+       		getBeacons(currentView);
+        	jQuery("#generate_snippet_btn").click(function(){
+                getCodeSnippet();
+            });
+        	
+        	jQuery("#copy-button").click(function(){
+       			$('.selectpicker').selectpicker('refresh');
+        	});
+        	
+        	$(document).ready(function() {
+        		  var clip = new ZeroClipboard($("#copy-button"), {
+        		      moviePath: "js/ZeroClipboard.swf"
+        		    });     
+        		});
+        	
+        </script>
+    </body>
+</html>
