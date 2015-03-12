@@ -3,7 +3,7 @@ var beaconsHash;
 function activateSelectPicker(resultTable, beaconsInfo) {
 	
 	document.getElementById("beaconlist").innerHTML = resultTable; 
-	$('.selectpicker').selectpicker({ width: 'auto'});
+	$('.selectpicker').selectpicker({ width: '100%'});
 	beaconsHash = beaconsInfo;
 }
 
@@ -37,7 +37,8 @@ function getCodeSnippet() {
 		snippet += "\"" + beaconIds[i] + "\",";
 	}
 	
-	snippet += "\"" + beaconIds[arrayLength-1] + "\"" + "]; /* writeIframe(chromosome, position, allele, genome, beacons);*/ })(); </script>";
+	snippet += "\"" + beaconIds[arrayLength-1] + "\"" + "]; /*TODO: set these variables as per: https://github.com/ga4gh/schemas/blob/master/src/main/resources/avro/beacon.avdl */ var chromosome=1;var allele=\"A\";var position=1;var genome=\"hg19\"; writeIFrame(chromosome, position, allele, genome, beacons);})(); <\/script>";        
+
 	jQuery("#code-to-copy").text(snippet);
 }
 
