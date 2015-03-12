@@ -28,9 +28,12 @@ function getCodeSnippet() {
 	
 	var beaconIds = getBeaconsToQueryIds();
 	var snippet = "";
+	var url = "http://dnastack.com/ga4gh/bob/";
 	
-	//modify script src to js address
-	snippet += "<script src=\"http://localhost:8080/bob-js-client/js/bobby.js\"></script>" + "<script>(function() { var beacons =["; 
+	// TODO: change the path accordingly
+	var filePath = "js/bobby.js";
+	var src = url + filePath;
+	snippet += "<script src=\"" + src + "\"></script>" + "<script>(function() { var beacons =[";
 	
 	var arrayLength = beaconIds.length
 	for(var i = 0 ; i< arrayLength-1; i ++) {
