@@ -53,7 +53,7 @@ import static org.junit.Assert.assertTrue;
 @RunAsClient
 public class CafeVariomeResponseTest extends AbstractResponseTest {
 
-    private static final String BEACON = "cafe-variome";
+    private static final String BEACON = "cafe-central";
 
     @Override
     @Test
@@ -67,29 +67,29 @@ public class CafeVariomeResponseTest extends AbstractResponseTest {
         assertTrue(br.getResponse());
     }
 
-    @Test
-    public void testFoundCafeCardioKit(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String b = "cafe-cardiokit";
-        String[] query = {"2", "179393691", "T", null};
-        BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(b, query));
+//    @Test
+//    public void testFoundCafeCardioKit(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
+//        String b = "cafe-cardiokit";
+//        String[] query = {"2", "179393691", "T", null};
+//        BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(b, query));
+//
+//        assertNotNull(br);
+//        assertTrue(beaconsMatch(br.getBeacon(), b));
+//        assertTrue(queriesMatch(br.getQuery(), query));
+//        assertTrue(br.getResponse());
+//    }
 
-        assertNotNull(br);
-        assertTrue(beaconsMatch(br.getBeacon(), b));
-        assertTrue(queriesMatch(br.getQuery(), query));
-        assertTrue(br.getResponse());
-    }
-
-    @Test
-    public void testFoundCafeCentral(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String b = "cafe-central";
-        String[] query = {"2", "179612321", "T", null};
-        BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(b, query));
-
-        assertNotNull(br);
-        assertTrue(beaconsMatch(br.getBeacon(), b));
-        assertTrue(queriesMatch(br.getQuery(), query));
-        assertTrue(br.getResponse());
-    }
+//    @Test
+//    public void testFoundCafeCentral(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
+//        String b = "cafe-central";
+//        String[] query = {"2", "179612321", "T", null};
+//        BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(b, query));
+//
+//        assertNotNull(br);
+//        assertTrue(beaconsMatch(br.getBeacon(), b));
+//        assertTrue(queriesMatch(br.getQuery(), query));
+//        assertTrue(br.getResponse());
+//    }
 
     @Test
     @Override

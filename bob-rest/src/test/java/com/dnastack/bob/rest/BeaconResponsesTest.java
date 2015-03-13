@@ -58,7 +58,7 @@ public class BeaconResponsesTest extends BasicTest {
     public static final String QUERY_BEACON_WITH_REF_TEMPLATE = "rest/responses?beacon=%s&chrom=%s&pos=%s&allele=%s&ref=%s";
     public static final String QUERY_TEMPLATE = "rest/responses?chrom=%s&pos=%s&allele=%s";
     public static final String QUERY_WITH_REF_TEMPLATE = "rest/responses?chrom=%s&pos=%s&allele=%s&ref=%s";
-    private static final Set<String> BEACON_IDS = ImmutableSet.of("clinvar", "uniprot", "lovd", "ebi", "ncbi", "wtsi", "amplab", "kaviar", "broad", "icgc", "bob");
+    private static final Set<String> BEACON_IDS = ImmutableSet.of("clinvar", "uniprot", "lovd", "ebi", "ncbi", "wtsi", "amplab", "kaviar", "broad", "icgc", "cafe-central", "bob");
 
     protected static String getUrl(String b, String[] params) {
         String res = null;
@@ -241,7 +241,7 @@ public class BeaconResponsesTest extends BasicTest {
 
     @Test
     public void testResponsesFilteredForCafeVariome(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String b = "cafe-variome";
+        String b = "cafe-central";
         String[] q = {"2", "179612321", "T", null};
         BeaconResponseTo br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
@@ -307,8 +307,8 @@ public class BeaconResponsesTest extends BasicTest {
     @Test
     public void testMultipleResponsesOfAggregatorsFiltered(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String id1 = "bob";
-        String id2 = "cafe-variome";
-        String[] q = {"2", "179393691", "T", null};
+        String id2 = "google";
+        String[] q = {"2", "179612321", "T", null};
         List<BeaconResponseTo> brs = readResponses(url.toExternalForm() + getUrl("[" + id1 + "," + id2 + "]", q));
 
         assertNotNull(brs);

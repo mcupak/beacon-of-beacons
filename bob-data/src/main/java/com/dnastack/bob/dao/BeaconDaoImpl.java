@@ -125,8 +125,9 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
         Beacon curoverse = new Beacon("curoverse", "PGP", integerBeaconizerService, true, "Curoverse");
         Beacon curoverseRef = new Beacon("curoverse-ref", "GA4GH Example Data", integerBeaconizerService, true, "Curoverse");
 
-        Beacon cafeVariomeCentral = new Beacon("cafe-central", "Cafe Variome Central", cafeVariomeService, true, "University of Leicester");
-        Beacon cafeCardioKit = new Beacon("cafe-cardiokit", "Cafe CardioKit", cafeVariomeService, true, "University of Leicester");
+//        Beacon cafeVariome = new Beacon("cafe-variome", "Cafe Variome", cafeVariomeService, true, "University of Leicester");
+        Beacon cafeVariomeCentral = new Beacon("cafe-central", "Cafe Variome", cafeVariomeService, true, "University of Leicester");
+//        Beacon cafeCardioKit = new Beacon("cafe-cardiokit", "Cafe CardioKit", cafeVariomeService, true, "University of Leicester");
 
         // set up aggregators
         Beacon google = new Beacon("google", "Google Genomics Public Data", null, true, "Google");
@@ -134,9 +135,9 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
         thousandGenomes.addAggregator(google);
         thousandGenomesPhase3.addAggregator(google);
 
-        Beacon cafeVariome = new Beacon("cafe-variome", "Cafe Variome", null, true, "University of Leicester");
-        cafeVariomeCentral.addAggregator(cafeVariome);
-        cafeCardioKit.addAggregator(cafeVariome);
+//        Beacon cafeVariome = new Beacon("cafe-variome", "Cafe Variome", null, true, "University of Leicester");
+//        cafeVariomeCentral.addAggregator(cafeVariome);
+//        cafeCardioKit.addAggregator(cafeVariome);
 
         Beacon broad = new Beacon("broad", "Broad Institute", broadInstituteService, true, "Broad Institute");
 
@@ -162,9 +163,9 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
         beacons.add(curoverse);
         beacons.add(curoverseRef);
 
-        beacons.add(cafeVariome);
+//        beacons.add(cafeVariome);
         beacons.add(cafeVariomeCentral);
-        beacons.add(cafeCardioKit);
+//        beacons.add(cafeCardioKit);
 
         beacons.add(broad);
 
