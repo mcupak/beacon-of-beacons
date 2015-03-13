@@ -28,14 +28,80 @@ from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
-# beacon details
+#--------------- Information endpont (start) --------------------#
+
 # TODO: override with the details of your beacon
+
+########### DataSetResource for beacon details ############
+
+# required field(s): name
+DataUseRequirementResource = {
+    'name': u'string',
+    'description': u'string'
+}
+
+# required field(s): variants
+DataSizeResource = {
+    'variants': 1, # integer
+    'samples': 1 # integer
+}
+
+#required field(s): category
+DataUseResource = {
+    'category': u'string',
+    'description': u'string',
+    'requirements': [
+        DataUseRequirementResource
+    ]
+}
+
+# required field(s): id
+DataSetResource = {
+    'id': u'string',
+    'description': u'string',
+    'reference': u'string',
+    'size': DataSizeResource,  # Dimensions of the data set (required if the beacon reports allele frequencies)
+    'multiple': False,
+    'datasets': [
+        u'string'
+    ],
+    'data_uses': [
+        DataUseResource # Data use limitations
+    ]
+}
+
+########### QueryResource for beacon details ###############
+
+# required field(s): allele, chromosome, position, reference
+QueryResource = {
+    'allele': u'string',
+    'chromosome': u'string',
+    'position': 1, # integer
+    'reference': u'string',
+    'dataset_id': u'string'
+}
+
+################### Beacon details #########################
+
+# required field(s): id, name, organization, api
 beacon = {
     'id': u'foo',
     'name': u'bar',
-    'organization': u'org', 
-    'description': u'sample beacon'
+    'organization': u'org',
+    'api': u'0.1/0.2',
+    'description': u'sample beacon',
+    'datasets': [
+        DataSetResource  # Datasets served by the beacon
+    ],
+    'homepage': u'http://dnastack.com/ga4gh/bob/',
+    'email': u'beacon@dnastack.com',
+    'auth': u'string',  # OAUTH2, defaults to none
+    'queries': [
+        QueryResource  # Examples of interesting queries
+    ]
 }
+
+#--------------- Information endpoint (end) ----------------------#
 
 # info function
 @app.route('/beacon-python/rest/info', methods=['GET'])
@@ -51,11 +117,44 @@ def query():
     position = long(request.args.get('pos'))
     allele = request.args.get('allele')
     reference = request.args.get('ref')
+    dataset = request.args.get('dataset') if 'dataset' in request.args else beacon['datasets'][0]['id']
 
+    
+#---- TODO: override with the necessary response details  ----#
+
+############## AlleleResource for response ###############
+
+    # required field(s): allele
+    AlleleResource = {
+        'allele': u'string',
+        'frequency': 0.5 # double between 0 & 1
+    }
+
+############# ErrorResource for response #################
+
+    # required field(s): name
+    ErrorResource = {
+        'name': u'string',
+        'description': u'string'
+    }
+
+################### Response object #########################
+    
     # generate response
-    response = True
+    # required field(s): exists
+    response = {
+        'exists': True,
+        'observed': '0',  # min 0
+        'alleles': [
+            AlleleResource
+        ],
+        'info': u'string',                
+        'error': ErrorResource
+    }
 
-    return jsonify({ "beacon" : beacon, "query" : { 'chromosome' : chromosome, 'position' : position, 'allele' : allele, 'reference' : reference }, 'response' : response })
+#--------------------------------------------------------------#
+    
+    return jsonify({ "beacon" : beacon, "query" : { 'chromosome' : chromosome, 'position' : position, 'allele' : allele, 'reference' : reference, 'dataset_id': dataset }, 'response' : response })
 
 # errors in JSON
 @app.errorhandler(404)
@@ -64,3 +163,4 @@ def not_found(error):
 
 if __name__ == '__main__':
     app.run()
+
