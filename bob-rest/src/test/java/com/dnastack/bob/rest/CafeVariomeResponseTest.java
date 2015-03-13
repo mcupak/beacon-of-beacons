@@ -152,7 +152,7 @@ public class CafeVariomeResponseTest extends AbstractResponseTest {
         assertTrue(queriesMatch(br.getQuery(), query));
 
         // unsupported
-        assertFalse(br.getResponse());
+        assertNull(br.getResponse());
     }
 
     @Test
@@ -166,7 +166,7 @@ public class CafeVariomeResponseTest extends AbstractResponseTest {
         assertTrue(queriesMatch(br.getQuery(), query));
 
         // unsupported
-        assertFalse(br.getResponse());
+        assertNull(br.getResponse());
     }
 
     @Test
@@ -180,7 +180,7 @@ public class CafeVariomeResponseTest extends AbstractResponseTest {
         assertTrue(queriesMatch(br.getQuery(), query));
 
         // unsupported
-        assertFalse(br.getResponse());
+        assertNull(br.getResponse());
     }
 
     @Test
@@ -269,7 +269,7 @@ public class CafeVariomeResponseTest extends AbstractResponseTest {
         assertTrue(queriesMatch(br.getQuery(), query));
 
         // unsupported
-        assertFalse(br.getResponse());
+        assertNull(br.getResponse());
     }
 
     @Override
