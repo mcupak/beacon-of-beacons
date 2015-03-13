@@ -21,9 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.dao;
+package com.dnastack.bob.persistence.impl;
 
-import com.dnastack.bob.entity.Beacon;
+import com.dnastack.bob.persistence.api.BeaconDao;
+import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.processor.AmpLab;
 import com.dnastack.bob.processor.BeaconProcessor;
 import com.dnastack.bob.processor.Broad;
@@ -103,79 +104,79 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
     private BeaconProcessor icgcService;
 
     private void setUpBeacons() {
-        this.beacons = new HashSet<>();
-
-        // set up bob
-        Beacon bob = new Beacon("bob", "Beacon of Beacons", null, true, "Global Alliance for Genomics and Health");
-
-        // set up regular beacons
-        Beacon clinvar = new Beacon("clinvar", "ClinVar", ucscService, true, "UCSC");
-        Beacon uniprot = new Beacon("uniprot", "UniProt", ucscService, true, "UCSC");
-        Beacon lovd = new Beacon("lovd", "Leiden Open Variation", ucscService, true, "UCSC");
-        Beacon ebi = new Beacon("ebi", "EMBL-EBI", ebiService, true, "EBI");
-        Beacon ncbi = new Beacon("ncbi", "NCBI", ncbiService, true, "NCBI");
-        Beacon wtsi = new Beacon("wtsi", "Wellcome Trust Sanger Institute", wtsiService, true, "WTSI");
-        Beacon amplab = new Beacon("amplab", "AMPLab", ampLabService, true, "AMPLab, University of California");
-        Beacon kaviar = new Beacon("kaviar", "Known VARiants", kaviarService, true, "Institute for Systems Biology");
-
-        Beacon platinum = new Beacon("platinum", "Illumina Platinum Genomes", stringBeaconizerService, true, "Google");
-        Beacon thousandGenomes = new Beacon("thousandgenomes", "1000 Genomes Project", integerBeaconizerService, true, "Google");
-        Beacon thousandGenomesPhase3 = new Beacon("thousandgenomes-phase3", "1000 Genomes Project - Phase 3", integerBeaconizerService, true, "Google");
-
-        Beacon curoverse = new Beacon("curoverse", "PGP", integerBeaconizerService, true, "Curoverse");
-        Beacon curoverseRef = new Beacon("curoverse-ref", "GA4GH Example Data", integerBeaconizerService, true, "Curoverse");
-
-        Beacon cafeVariomeCentral = new Beacon("cafe-central", "Cafe Variome Central", cafeVariomeService, true, "University of Leicester");
-        Beacon cafeCardioKit = new Beacon("cafe-cardiokit", "Cafe CardioKit", cafeVariomeService, true, "University of Leicester");
-
-        // set up aggregators
-        Beacon google = new Beacon("google", "Google Genomics Public Data", null, true, "Google");
-        platinum.addAggregator(google);
-        thousandGenomes.addAggregator(google);
-        thousandGenomesPhase3.addAggregator(google);
-
-        Beacon cafeVariome = new Beacon("cafe-variome", "Cafe Variome", null, true, "University of Leicester");
-        cafeVariomeCentral.addAggregator(cafeVariome);
-        cafeCardioKit.addAggregator(cafeVariome);
-
-        Beacon broad = new Beacon("broad", "Broad Institute", broadInstituteService, true, "Broad Institute");
-
-        Beacon icgc = new Beacon("icgc", "ICGC", icgcService, true, "Ontario Institute for Cancer Research");
-
-        // add beacons ot collection
-        beacons.add(bob);
-
-        beacons.add(clinvar);
-        beacons.add(uniprot);
-        beacons.add(lovd);
-        beacons.add(ebi);
-        beacons.add(ncbi);
-        beacons.add(wtsi);
-        beacons.add(amplab);
-        beacons.add(kaviar);
-
-        beacons.add(google);
-        beacons.add(platinum);
-        beacons.add(thousandGenomes);
-        beacons.add(thousandGenomesPhase3);
-
-        beacons.add(curoverse);
-        beacons.add(curoverseRef);
-
-        beacons.add(cafeVariome);
-        beacons.add(cafeVariomeCentral);
-        beacons.add(cafeCardioKit);
-
-        beacons.add(broad);
-
-        beacons.add(icgc);
-
-        // point all regular beacons to bob
-        for (Beacon b : beacons) {
-            if (b.getProcessor() != null) {
-                b.addAggregator(bob);
-            }
-        }
+//        this.beacons = new HashSet<>();
+//
+//        // set up bob
+//        Beacon bob = new Beacon("bob", "Beacon of Beacons", null, true, "Global Alliance for Genomics and Health");
+//
+//        // set up regular beacons
+//        Beacon clinvar = new Beacon("clinvar", "ClinVar", ucscService, true, "UCSC");
+//        Beacon uniprot = new Beacon("uniprot", "UniProt", ucscService, true, "UCSC");
+//        Beacon lovd = new Beacon("lovd", "Leiden Open Variation", ucscService, true, "UCSC");
+//        Beacon ebi = new Beacon("ebi", "EMBL-EBI", ebiService, true, "EBI");
+//        Beacon ncbi = new Beacon("ncbi", "NCBI", ncbiService, true, "NCBI");
+//        Beacon wtsi = new Beacon("wtsi", "Wellcome Trust Sanger Institute", wtsiService, true, "WTSI");
+//        Beacon amplab = new Beacon("amplab", "AMPLab", ampLabService, true, "AMPLab, University of California");
+//        Beacon kaviar = new Beacon("kaviar", "Known VARiants", kaviarService, true, "Institute for Systems Biology");
+//
+//        Beacon platinum = new Beacon("platinum", "Illumina Platinum Genomes", stringBeaconizerService, true, "Google");
+//        Beacon thousandGenomes = new Beacon("thousandgenomes", "1000 Genomes Project", integerBeaconizerService, true, "Google");
+//        Beacon thousandGenomesPhase3 = new Beacon("thousandgenomes-phase3", "1000 Genomes Project - Phase 3", integerBeaconizerService, true, "Google");
+//
+//        Beacon curoverse = new Beacon("curoverse", "PGP", integerBeaconizerService, true, "Curoverse");
+//        Beacon curoverseRef = new Beacon("curoverse-ref", "GA4GH Example Data", integerBeaconizerService, true, "Curoverse");
+//
+//        Beacon cafeVariomeCentral = new Beacon("cafe-central", "Cafe Variome Central", cafeVariomeService, true, "University of Leicester");
+//        Beacon cafeCardioKit = new Beacon("cafe-cardiokit", "Cafe CardioKit", cafeVariomeService, true, "University of Leicester");
+//
+//        // set up aggregators
+//        Beacon google = new Beacon("google", "Google Genomics Public Data", null, true, "Google");
+//        platinum.addAggregator(google);
+//        thousandGenomes.addAggregator(google);
+//        thousandGenomesPhase3.addAggregator(google);
+//
+//        Beacon cafeVariome = new Beacon("cafe-variome", "Cafe Variome", null, true, "University of Leicester");
+//        cafeVariomeCentral.addAggregator(cafeVariome);
+//        cafeCardioKit.addAggregator(cafeVariome);
+//
+//        Beacon broad = new Beacon("broad", "Broad Institute", broadInstituteService, true, "Broad Institute");
+//
+//        Beacon icgc = new Beacon("icgc", "ICGC", icgcService, true, "Ontario Institute for Cancer Research");
+//
+//        // add beacons ot collection
+//        beacons.add(bob);
+//
+//        beacons.add(clinvar);
+//        beacons.add(uniprot);
+//        beacons.add(lovd);
+//        beacons.add(ebi);
+//        beacons.add(ncbi);
+//        beacons.add(wtsi);
+//        beacons.add(amplab);
+//        beacons.add(kaviar);
+//
+//        beacons.add(google);
+//        beacons.add(platinum);
+//        beacons.add(thousandGenomes);
+//        beacons.add(thousandGenomesPhase3);
+//
+//        beacons.add(curoverse);
+//        beacons.add(curoverseRef);
+//
+//        beacons.add(cafeVariome);
+//        beacons.add(cafeVariomeCentral);
+//        beacons.add(cafeCardioKit);
+//
+//        beacons.add(broad);
+//
+//        beacons.add(icgc);
+//
+//        // point all regular beacons to bob
+//        for (Beacon b : beacons) {
+//            if (b.getProcessor() != null) {
+//                b.addAggregator(bob);
+//            }
+//        }
     }
 
     @PostConstruct

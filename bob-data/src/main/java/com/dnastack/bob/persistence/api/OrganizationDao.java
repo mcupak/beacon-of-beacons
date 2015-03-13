@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
+ * Copyright 2015 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,50 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service;
-
-import com.dnastack.bob.persistence.api.BeaconDao;
-import com.dnastack.bob.dto.BeaconTo;
-import com.dnastack.bob.util.Entity2ToConvertor;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
+package com.dnastack.bob.persistence.api;
 
 /**
- * Implementation of a service managing beacons.
+ * Organization DAO.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@RequestScoped
-public class BeaconServiceImpl implements BeaconService {
-
-    @Inject
-    private BeaconDao beaconDao;
-
-    @Override
-    public BeaconTo getBeacon(String beaconId) {
-        return Entity2ToConvertor.getBeaconTo(beaconDao.getVisibleBeacon(beaconId));
-    }
-
-    @Override
-    public Collection<BeaconTo> getBeacons(Collection<String> beaconIds) {
-        List<BeaconTo> res = new ArrayList<>();
-        for (String id : beaconIds) {
-            BeaconTo b = getBeacon(id);
-            if (b != null) {
-                res.add(b);
-            }
-        }
-
-        return res;
-    }
-
-    @Override
-    public Collection<BeaconTo> getAll() {
-        return Entity2ToConvertor.getBeaconTos(beaconDao.getVisibleBeacons());
-    }
+public interface OrganizationDao {
 
 }

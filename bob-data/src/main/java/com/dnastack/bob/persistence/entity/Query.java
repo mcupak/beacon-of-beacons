@@ -21,10 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.entity;
+package com.dnastack.bob.persistence.entity;
 
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -36,10 +41,14 @@ import javax.validation.constraints.Pattern;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
+@Entity
 public class Query implements Serializable {
 
-    private static final long serialVersionUID = 3L;
+    private static final long serialVersionUID = -4843153796455403263L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Integer id;
     @NotNull
     private Chromosome chromosome;
     @NotNull
@@ -50,12 +59,25 @@ public class Query implements Serializable {
     @Pattern(regexp = "([D,I])|([A,C,T,G]+)")
     private String allele;
     private Reference reference;
+    @ManyToOne
+    private DataSet dataSet;
+
+    public Query() {
+    }
 
     public Query(Chromosome chromosome, Long position, String allele, Reference reference) {
         this.chromosome = chromosome;
         this.position = position;
         this.allele = allele;
         this.reference = reference;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Chromosome getChromosome() {

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
+ * Copyright 2015 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,50 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service;
+package com.dnastack.bob.persistence.entity;
 
-import com.dnastack.bob.persistence.api.BeaconDao;
-import com.dnastack.bob.dto.BeaconTo;
-import com.dnastack.bob.util.Entity2ToConvertor;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.io.Serializable;
 import java.util.List;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
+import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 /**
- * Implementation of a service managing beacons.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@RequestScoped
-public class BeaconServiceImpl implements BeaconService {
+@Entity
+public class DataSet implements Serializable {
 
-    @Inject
-    private BeaconDao beaconDao;
 
-    @Override
-    public BeaconTo getBeacon(String beaconId) {
-        return Entity2ToConvertor.getBeaconTo(beaconDao.getVisibleBeacon(beaconId));
-    }
+    private static final long serialVersionUID = 469349231640573964L;
 
-    @Override
-    public Collection<BeaconTo> getBeacons(Collection<String> beaconIds) {
-        List<BeaconTo> res = new ArrayList<>();
-        for (String id : beaconIds) {
-            BeaconTo b = getBeacon(id);
-            if (b != null) {
-                res.add(b);
-            }
-        }
-
-        return res;
-    }
-
-    @Override
-    public Collection<BeaconTo> getAll() {
-        return Entity2ToConvertor.getBeaconTos(beaconDao.getVisibleBeacons());
-    }
-
+    @Id
+    @Column(name = "id", nullable = false, unique = true)
+    private String id;
+    private String description;
+    @NotNull
+    @Enumerated
+    private Reference reference;
+    @Embedded
+    private DataSize size;
+    @ManyToMany
+    private Set<DataUse> dataUses;
+    @OneToMany(mappedBy = "dataSet")
+    private List<Query> queries;
 }

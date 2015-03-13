@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.entity;
+package com.dnastack.bob.persistence.entity;
 
 import com.dnastack.bob.processor.BeaconProcessor;
 import java.io.Serializable;
@@ -29,6 +29,10 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -38,21 +42,37 @@ import javax.validation.constraints.Size;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
+@Entity
 public class Beacon implements Serializable {
 
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = -1451238811291388547L;
 
+    @Id
     @NotNull
+    @Column(nullable = false, unique = true)
     @Size(min = 1)
     private String id;
     @NotNull
+    @Column(nullable = false)
     @Size(min = 1)
     private String name;
-    private String organization;
+    @ManyToOne
+    @NotNull
+    private Organization organization;
+    private String description;
+    private String api;
+    private String homePage;
+    private String email;
+    private String auth;
     private BeaconProcessor processor;
-    private boolean visible;
+    @NotNull
+    @Column(nullable = false)
+    private Boolean visible;
     @NotNull
     private Set<Beacon> aggregators;
+
+    public Beacon() {
+    }
 
     public Beacon(String id, String name) {
         this.id = id;
@@ -78,7 +98,7 @@ public class Beacon implements Serializable {
         this.aggregators = new HashSet<>();
     }
 
-    public Beacon(String id, String name, BeaconProcessor processor, boolean visible, String organization) {
+    public Beacon(String id, String name, BeaconProcessor processor, boolean visible, Organization organization) {
         this.id = id;
         this.name = name;
         this.processor = processor;
@@ -146,23 +166,66 @@ public class Beacon implements Serializable {
         }
     }
 
-    public String getOrganization() {
+    public Organization getOrganization() {
         return organization;
     }
 
-    public void setOrganization(String organization) {
+    public void setOrganization(Organization organization) {
         this.organization = organization;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getApi() {
+        return api;
+    }
+
+    public void setApi(String api) {
+        this.api = api;
+    }
+
+    public String getHomePage() {
+        return homePage;
+    }
+
+    public void setHomePage(String homePage) {
+        this.homePage = homePage;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getAuth() {
+        return auth;
+    }
+
+    public void setAuth(String auth) {
+        this.auth = auth;
+    }
+
+    public Boolean getVisible() {
+        return visible;
+    }
+
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 53 * hash + Objects.hashCode(this.id);
-        hash = 53 * hash + Objects.hashCode(this.name);
-        hash = 53 * hash + Objects.hashCode(this.organization);
-        hash = 53 * hash + Objects.hashCode(this.processor);
-        hash = 53 * hash + (this.visible ? 1 : 0);
-        hash = 53 * hash + Objects.hashCode(this.aggregators);
+        int hash = 5;
+        hash = 97 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -178,27 +241,12 @@ public class Beacon implements Serializable {
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
-        if (!Objects.equals(this.name, other.name)) {
-            return false;
-        }
-        if (!Objects.equals(this.organization, other.organization)) {
-            return false;
-        }
-        if (!Objects.equals(this.processor, other.processor)) {
-            return false;
-        }
-        if (this.visible != other.visible) {
-            return false;
-        }
-        if (!Objects.equals(this.aggregators, other.aggregators)) {
-            return false;
-        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "Beacon{" + "id=" + id + ", name=" + name + ", organization=" + organization + '}';
+        return "Beacon{" + "id=" + id + ", name=" + name + ", organization=" + organization + ", description=" + description + ", api=" + api + ", homePage=" + homePage + ", email=" + email + ", auth=" + auth + ", processor=" + processor + ", visible=" + visible + ", aggregators=" + aggregators + '}';
     }
 
 }

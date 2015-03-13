@@ -21,31 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.dao;
-
-import com.dnastack.bob.entity.Chromosome;
-import com.dnastack.bob.entity.Query;
-import com.dnastack.bob.entity.Reference;
-import com.dnastack.bob.util.QueryUtils;
-import java.io.Serializable;
-import javax.enterprise.context.ApplicationScoped;
+package com.dnastack.bob.persistence.entity;
 
 /**
- * Basic provider of queries.
+ * Canonical chromosome representation.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@ApplicationScoped
-public class QueryDaoImpl implements QueryDao, Serializable {
+public enum Chromosome {
 
-    private static final long serialVersionUID = 35L;
+    // order is important!
+    CHR22("22"), CHR21("21"), CHR20("20"), CHR19("19"), CHR18("18"), CHR17("17"), CHR16("16"), CHR15("15"), CHR14("14"), CHR13("13"), CHR12("12"), CHR11("11"), CHR10("10"), CHR9("9"), CHR8("8"), CHR7("7"), CHR6("6"), CHR5("5"), CHR4("4"), CHR3("3"), CHR2("2"), CHR1("1"), CHRX("X"), CHRY("Y"), CHRMT("MT");
+
+    private final String chrom;
+
+    private Chromosome(String chrom) {
+        this.chrom = chrom;
+    }
+
+    public static Chromosome fromString(String text) {
+        if (text != null) {
+            for (Chromosome b : Chromosome.values()) {
+                if (text.equalsIgnoreCase(b.toString())) {
+                    return b;
+                }
+            }
+        }
+        return null;
+    }
 
     @Override
-    public Query getQuery(String chrom, Long pos, String allele, String ref) {
-        Chromosome c = QueryUtils.normalizeChromosome(chrom);
-        Reference r = QueryUtils.normalizeReference(ref);
-
-        return new Query(c == null ? null : c, pos, QueryUtils.normalizeAllele(allele), r == null ? null : r);
+    public String toString() {
+        return chrom;
     }
 }

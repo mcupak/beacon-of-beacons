@@ -23,8 +23,8 @@
  */
 package com.dnastack.bob.util;
 
-import com.dnastack.bob.dao.BeaconDao;
-import com.dnastack.bob.entity.Beacon;
+import com.dnastack.bob.persistence.api.BeaconDao;
+import com.dnastack.bob.persistence.entity.Beacon;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import java.io.Serializable;

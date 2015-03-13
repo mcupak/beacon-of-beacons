@@ -28,11 +28,11 @@ import com.dnastack.bob.dto.BeaconTo;
 import com.dnastack.bob.dto.ChromosomeTo;
 import com.dnastack.bob.dto.QueryTo;
 import com.dnastack.bob.dto.ReferenceTo;
-import com.dnastack.bob.entity.Beacon;
-import com.dnastack.bob.entity.BeaconResponse;
-import com.dnastack.bob.entity.Chromosome;
-import com.dnastack.bob.entity.Query;
-import com.dnastack.bob.entity.Reference;
+import com.dnastack.bob.persistence.entity.Beacon;
+import com.dnastack.bob.persistence.entity.BeaconResponse;
+import com.dnastack.bob.persistence.entity.Chromosome;
+import com.dnastack.bob.persistence.entity.Query;
+import com.dnastack.bob.persistence.entity.Reference;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -53,7 +53,7 @@ public class Entity2ToConvertor {
      * @return beacon TO
      */
     public static BeaconTo getBeaconTo(Beacon b) {
-        return (b == null) ? null : new BeaconTo(b.getId(), b.getName(), b.getOrganization(), b.isAggregator());
+        return (b == null) ? null : new BeaconTo(b.getId(), b.getName(), b.getOrganization().getName(), b.isAggregator());
     }
 
     /**

@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.dao;
+package com.dnastack.bob.persistence.api;
 
-import com.dnastack.bob.entity.Query;
+import com.dnastack.bob.persistence.entity.Query;
 
 /**
  * Provider of queries.

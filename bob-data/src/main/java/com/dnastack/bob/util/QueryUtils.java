@@ -23,8 +23,8 @@
  */
 package com.dnastack.bob.util;
 
-import com.dnastack.bob.entity.Chromosome;
-import com.dnastack.bob.entity.Reference;
+import com.dnastack.bob.persistence.entity.Chromosome;
+import com.dnastack.bob.persistence.entity.Reference;
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 import java.util.Map.Entry;
