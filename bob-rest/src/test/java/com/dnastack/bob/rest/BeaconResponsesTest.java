@@ -58,7 +58,7 @@ public class BeaconResponsesTest extends BasicTest {
     public static final String QUERY_BEACON_WITH_REF_TEMPLATE = "rest/responses?beacon=%s&chrom=%s&pos=%s&allele=%s&ref=%s";
     public static final String QUERY_TEMPLATE = "rest/responses?chrom=%s&pos=%s&allele=%s";
     public static final String QUERY_WITH_REF_TEMPLATE = "rest/responses?chrom=%s&pos=%s&allele=%s&ref=%s";
-    private static final Set<String> BEACON_IDS = ImmutableSet.of("clinvar", "uniprot", "lovd", "ebi", "ncbi", "wtsi", "amplab", "kaviar", "broad", "icgc", "cafe-variome", "bob");
+    private static final Set<String> BEACON_IDS = ImmutableSet.of("clinvar", "uniprot", "lovd", "ebi", "ncbi", "wtsi", "amplab", "kaviar", "broad", "icgc", "cafe-variome", "google", "thousandgenomes", "thousandgenomes-phase3", "platinum", "bob");
 
     protected static String getUrl(String b, String[] params) {
         String res = null;
@@ -279,6 +279,54 @@ public class BeaconResponsesTest extends BasicTest {
     public void testResponsesFilteredForBob(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String b = "bob";
         String[] q = {"13", "32888799", "G", null};
+        BeaconResponseTo br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
+
+        assertNotNull(br);
+        assertTrue(beaconsMatch(br.getBeacon(), b));
+        assertTrue(queriesMatch(br.getQuery(), q));
+        assertTrue(br.getResponse());
+    }
+
+    @Test
+    public void testResponsesFilteredForGoogle(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
+        String b = "google";
+        String[] q = {"9", "1795573", "G", null};
+        BeaconResponseTo br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
+
+        assertNotNull(br);
+        assertTrue(beaconsMatch(br.getBeacon(), b));
+        assertTrue(queriesMatch(br.getQuery(), q));
+        assertTrue(br.getResponse());
+    }
+
+    @Test
+    public void testResponsesFilteredForThousandGenomes(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
+        String b = "thousandgenomes";
+        String[] q = {"9", "1795573", "G", null};
+        BeaconResponseTo br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
+
+        assertNotNull(br);
+        assertTrue(beaconsMatch(br.getBeacon(), b));
+        assertTrue(queriesMatch(br.getQuery(), q));
+        assertTrue(br.getResponse());
+    }
+
+    @Test
+    public void testResponsesFilteredForThousandGenomesPhase3(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
+        String b = "thousandgenomes-phase3";
+        String[] q = {"16", "59180320", "G", null};
+        BeaconResponseTo br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
+
+        assertNotNull(br);
+        assertTrue(beaconsMatch(br.getBeacon(), b));
+        assertTrue(queriesMatch(br.getQuery(), q));
+        assertTrue(br.getResponse());
+    }
+
+    @Test
+    public void testResponsesFilteredForPlatinum(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
+        String b = "platinum";
+        String[] q = {"5", "145125627", "G", null};
         BeaconResponseTo br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
