@@ -36,8 +36,8 @@ app = Flask(__name__)
 
 # required field(s): name
 DataUseRequirementResource = {
-    'name': u'string',
-    'description': u'string'
+    'name': u'example name',
+    'description': u'example description'
 }
 
 # required field(s): variants
@@ -46,10 +46,10 @@ DataSizeResource = {
     'samples': 1 # integer
 }
 
-#required field(s): category
+# required field(s): category
 DataUseResource = {
-    'category': u'string',
-    'description': u'string',
+    'category': u'example use category',
+    'description': u'example description',
     'requirements': [
         DataUseRequirementResource
     ]
@@ -57,14 +57,10 @@ DataUseResource = {
 
 # required field(s): id
 DataSetResource = {
-    'id': u'string',
-    'description': u'string',
-    'reference': u'string',
+    'id': u'example Id',
+    'description': u'dataset description',
+    'reference': u'reference genome',
     'size': DataSizeResource,  # Dimensions of the data set (required if the beacon reports allele frequencies)
-    'multiple': False,
-    'datasets': [
-        u'string'
-    ],
     'data_uses': [
         DataUseResource # Data use limitations
     ]
@@ -74,11 +70,11 @@ DataSetResource = {
 
 # required field(s): allele, chromosome, position, reference
 QueryResource = {
-    'allele': u'string',
-    'chromosome': u'string',
+    'allele': u'allele string',
+    'chromosome': u'chromosome Id',
     'position': 1, # integer
-    'reference': u'string',
-    'dataset_id': u'string'
+    'reference': u'genome Id',
+    'dataset_id': u'dataset Id'
 }
 
 ################### Beacon details #########################
@@ -89,13 +85,13 @@ beacon = {
     'name': u'bar',
     'organization': u'org',
     'api': u'0.1/0.2',
-    'description': u'sample beacon',
+    'description': u'beacon description',
     'datasets': [
         DataSetResource  # Datasets served by the beacon
     ],
     'homepage': u'http://dnastack.com/ga4gh/bob/',
     'email': u'beacon@dnastack.com',
-    'auth': u'string',  # OAUTH2, defaults to none
+    'auth': u'oauth2',  # OAUTH2, defaults to none
     'queries': [
         QueryResource  # Examples of interesting queries
     ]
@@ -104,13 +100,13 @@ beacon = {
 #--------------- Information endpoint (end) ----------------------#
 
 # info function
-@app.route('/beacon-python/rest/info', methods=['GET'])
+@app.route('/beacon-python/info', methods=['GET'])
 def info():
     return jsonify(beacon)
 
 # query function
 # TODO: plug in the functionality of your beacon
-@app.route('/beacon-python/rest/query', methods=['GET'])
+@app.route('/beacon-python/query', methods=['GET'])
 def query():
     # parse query
     chromosome = request.args.get('chrom')
@@ -126,7 +122,7 @@ def query():
 
     # required field(s): allele
     AlleleResource = {
-        'allele': u'string',
+        'allele': allele,
         'frequency': 0.5 # double between 0 & 1
     }
 
@@ -134,8 +130,8 @@ def query():
 
     # required field(s): name
     ErrorResource = {
-        'name': u'string',
-        'description': u'string'
+        'name': u'error name/code',
+        'description': u'error message'
     }
 
 ################### Response object #########################
@@ -144,22 +140,27 @@ def query():
     # required field(s): exists
     response = {
         'exists': True,
-        'observed': '0',  # min 0
+        'observed': 0,  # integer, min 0
         'alleles': [
             AlleleResource
         ],
-        'info': u'string',                
+        'info': u'response information', 
         'error': ErrorResource
     }
 
 #--------------------------------------------------------------#
     
-    return jsonify({ "beacon" : beacon, "query" : { 'chromosome' : chromosome, 'position' : position, 'allele' : allele, 'reference' : reference, 'dataset_id': dataset }, 'response' : response })
+    return jsonify({ "beacon" : beacon['id'], "query" : { 'chromosome' : chromosome, 'position' : position, 'allele' : allele, 'reference' : reference, 'dataset_id': dataset }, 'response' : response })
 
-# errors in JSON
+# info function
+@app.route('/beacon-python', methods=['GET'])
+def welcome():
+    return 'WELCOME!!! Beacon of Beacons Project (BoB) provides a unified REST API to publicly available GA4GH Beacons. BoB standardizes the way beacons are accessed and aggregates their results, thus addressing one of the missing parts of the Beacon project itself. BoB was designed with ease of programmatic access in mind. It provides XML, JSON and plaintext responses to accommodate needs of all the clients across all the programming languages. The API to use is determined using the header supplied by the client in its GET request, e.g.: "Accept: application/json".'
+
+# page not found
 @app.errorhandler(404)
 def not_found(error):
-    return make_response(jsonify({'error': 'Not found'}), 404)
+    return 'Page not found (Bad URL)', 404
 
 if __name__ == '__main__':
     app.run()
