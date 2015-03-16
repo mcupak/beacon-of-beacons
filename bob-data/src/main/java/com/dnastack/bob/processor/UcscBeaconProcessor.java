@@ -26,9 +26,6 @@ package com.dnastack.bob.processor;
 import com.dnastack.bob.entity.Beacon;
 import com.dnastack.bob.entity.Query;
 import com.dnastack.bob.entity.Reference;
-import com.dnastack.bob.util.HttpUtils;
-import com.dnastack.bob.util.ParsingUtils;
-import com.dnastack.bob.util.QueryUtils;
 import com.google.common.collect.ImmutableSet;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -36,6 +33,11 @@ import java.util.Set;
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
+
+import static com.dnastack.bob.util.HttpUtils.createRequest;
+import static com.dnastack.bob.util.HttpUtils.executeRequest;
+import static com.dnastack.bob.util.ParsingUtils.parseYesNoCaseInsensitive;
+import static com.dnastack.bob.util.QueryUtils.denormalizeChromosome;
 
 /**
  * A Genomics Alliance beacon service at UCSC.
@@ -64,7 +66,7 @@ public class UcscBeaconProcessor extends AbstractBeaconProcessor {
     public Future<String> getQueryResponse(Beacon beacon, Query query) {
         String res = null;
         try {
-            res = HttpUtils.executeRequest(HttpUtils.createRequest(getQueryUrl(beacon.getId(), QueryUtils.denormalizeChromosome(CHROM_TEMPLATE, query.getChromosome()), QueryUtils.denormalizePosition(query.getPosition()), query.getAllele()), false, null));
+            res = executeRequest(createRequest(getQueryUrl(beacon.getId(), denormalizeChromosome(CHROM_TEMPLATE, query.getChromosome()), query.getPosition(), query.getAllele()), false, null));
         } catch (MalformedURLException | UnsupportedEncodingException ex) {
             // ignore, already null
         }
@@ -75,7 +77,7 @@ public class UcscBeaconProcessor extends AbstractBeaconProcessor {
     @Override
     @Asynchronous
     public Future<Boolean> parseQueryResponse(Beacon b, String response) {
-        Boolean res = ParsingUtils.parseYesNoCaseInsensitive(response);
+        Boolean res = parseYesNoCaseInsensitive(response);
 
         return new AsyncResult<>(res);
     }

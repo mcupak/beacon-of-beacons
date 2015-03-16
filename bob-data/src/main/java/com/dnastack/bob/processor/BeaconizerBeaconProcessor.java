@@ -26,9 +26,6 @@ package com.dnastack.bob.processor;
 import com.dnastack.bob.entity.Beacon;
 import com.dnastack.bob.entity.Query;
 import com.dnastack.bob.entity.Reference;
-import com.dnastack.bob.util.HttpUtils;
-import com.dnastack.bob.util.ParsingUtils;
-import com.dnastack.bob.util.QueryUtils;
 import com.google.common.collect.ImmutableSet;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -37,6 +34,10 @@ import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
 import org.apache.http.client.methods.HttpRequestBase;
+
+import static com.dnastack.bob.util.HttpUtils.createRequest;
+import static com.dnastack.bob.util.HttpUtils.executeRequest;
+import static com.dnastack.bob.util.ParsingUtils.parseBooleanFromJson;
 
 /**
  * Beaconizer beacon service.
@@ -66,9 +67,9 @@ public abstract class BeaconizerBeaconProcessor extends AbstractBeaconProcessor 
 
         // should be POST, but the server accepts GET as well
         try {
-            HttpRequestBase request = HttpUtils.createRequest(getQueryUrl(beacon.getId(), query.getChromosome().toString(), QueryUtils.denormalizePosition(query.getPosition()), query.getAllele()), false, null);
+            HttpRequestBase request = createRequest(getQueryUrl(beacon.getId(), query.getChromosome().toString(), query.getPosition(), query.getAllele()), false, null);
             request.setHeader("Accept", "application/json");
-            res = HttpUtils.executeRequest(request);
+            res = executeRequest(request);
         } catch (MalformedURLException | UnsupportedEncodingException ex) {
             // ignore, already null
         }
@@ -79,7 +80,7 @@ public abstract class BeaconizerBeaconProcessor extends AbstractBeaconProcessor 
     @Override
     @Asynchronous
     public Future<Boolean> parseQueryResponse(Beacon b, String response) {
-        Boolean res = ParsingUtils.parseBooleanFromJson(response, "exists");
+        Boolean res = parseBooleanFromJson(response, "exists");
 
         return new AsyncResult<>(res);
     }

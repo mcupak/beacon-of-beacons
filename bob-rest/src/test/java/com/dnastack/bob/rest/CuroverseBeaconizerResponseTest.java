@@ -58,7 +58,7 @@ public class CuroverseBeaconizerResponseTest extends AbstractResponseTest {
     @Override
     @Test
     public void testAllRefsFound(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String[] query = {"13", "19020071", "T", null};
+        String[] query = {"13", "19020070", "T", null};
         BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
@@ -70,7 +70,7 @@ public class CuroverseBeaconizerResponseTest extends AbstractResponseTest {
     @Test
     public void testFoundCuroverseRef(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String b = "curoverse-ref";
-        String[] query = {"1", "14931", "G", null};
+        String[] query = {"1", "14930", "G", null};
         BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(b, query));
 
         assertNotNull(br);
@@ -82,7 +82,7 @@ public class CuroverseBeaconizerResponseTest extends AbstractResponseTest {
     @Test
     @Override
     public void testSpecificRefFound(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String[] query = {"13", "19020071", "T", "hg19"};
+        String[] query = {"13", "19020070", "T", "hg19"};
         BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
@@ -186,7 +186,7 @@ public class CuroverseBeaconizerResponseTest extends AbstractResponseTest {
     @Test
     @Override
     public void testInvalidAllele(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String[] query = {"17", "41197712", "DC", null};
+        String[] query = {"17", "41197711", "DC", null};
         BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
@@ -212,7 +212,7 @@ public class CuroverseBeaconizerResponseTest extends AbstractResponseTest {
     @Test
     @Override
     public void testChromConversion(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String[] query = {"chrom17", "41197712", "G", null};
+        String[] query = {"chrom17", "41197711", "G", null};
         BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
@@ -237,7 +237,7 @@ public class CuroverseBeaconizerResponseTest extends AbstractResponseTest {
     @Test
     @Override
     public void testChromX(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String[] query = {"X", "31224684", "C", null};
+        String[] query = {"X", "31224683", "C", null};
         BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);

@@ -26,9 +26,6 @@ package com.dnastack.bob.processor;
 import com.dnastack.bob.entity.Beacon;
 import com.dnastack.bob.entity.Query;
 import com.dnastack.bob.entity.Reference;
-import com.dnastack.bob.util.HttpUtils;
-import com.dnastack.bob.util.ParsingUtils;
-import com.dnastack.bob.util.QueryUtils;
 import com.google.common.collect.ImmutableSet;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -39,6 +36,12 @@ import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+
+import static com.dnastack.bob.util.HttpUtils.createRequest;
+import static com.dnastack.bob.util.HttpUtils.executeRequest;
+import static com.dnastack.bob.util.ParsingUtils.parseContainsStringCaseInsensitive;
+import static com.dnastack.bob.util.QueryUtils.denormalizeAllele;
+import static com.dnastack.bob.util.QueryUtils.denormalizeChromosome;
 
 /**
  * AMPLab beacon service.
@@ -72,7 +75,7 @@ public class AmpLabBeaconProcessor extends AbstractBeaconProcessor {
     public Future<String> getQueryResponse(Beacon beacon, Query query) {
         String res = null;
         try {
-            res = HttpUtils.executeRequest(HttpUtils.createRequest(BASE_URL, true, getQueryData(query.getReference().toString(), QueryUtils.denormalizeChromosome(CHROM_TEMPLATE, query.getChromosome()), QueryUtils.denormalizePosition(query.getPosition()), QueryUtils.denormalizeAllele(query.getAllele()))));
+            res = executeRequest(createRequest(BASE_URL, true, getQueryData(query.getReference().toString(), denormalizeChromosome(CHROM_TEMPLATE, query.getChromosome()), query.getPosition(), denormalizeAllele(query.getAllele()))));
         } catch (UnsupportedEncodingException ex) {
             // ignore, already null
         }
@@ -83,7 +86,7 @@ public class AmpLabBeaconProcessor extends AbstractBeaconProcessor {
     @Override
     @Asynchronous
     public Future<Boolean> parseQueryResponse(Beacon b, String response) {
-        Boolean res = ParsingUtils.parseContainsStringCaseInsensitive(response, "beacon found", "beacon cannot find");
+        Boolean res = parseContainsStringCaseInsensitive(response, "beacon found", "beacon cannot find");
 
         return new AsyncResult<>(res);
     }
