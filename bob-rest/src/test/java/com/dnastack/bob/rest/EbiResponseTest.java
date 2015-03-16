@@ -58,7 +58,7 @@ public class EbiResponseTest extends AbstractResponseTest {
     @Test
     @Override
     public void testAllRefsFound(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String[] query = {"13", "32888799", "G", null};
+        String[] query = {"13", "32888798", "G", null};
         BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
         System.out.println(br);
         assertNotNull(br);
@@ -70,7 +70,7 @@ public class EbiResponseTest extends AbstractResponseTest {
     @Test
     @Override
     public void testSpecificRefFound(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String[] query = {"13", "32888799", "G", "hg19"};
+        String[] query = {"13", "32888798", "G", "hg19"};
         BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
@@ -82,7 +82,7 @@ public class EbiResponseTest extends AbstractResponseTest {
     @Test
     @Override
     public void testSpecificRefNotFound(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String[] query = {"13", "32888799", "G", "hg38"};
+        String[] query = {"13", "32888798", "G", "hg38"};
         BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
@@ -94,7 +94,7 @@ public class EbiResponseTest extends AbstractResponseTest {
     @Test
     @Override
     public void testInvalidRef(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String[] query = {"13", "32888799", "G", "hg100"};
+        String[] query = {"13", "32888798", "G", "hg100"};
         BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
@@ -107,7 +107,7 @@ public class EbiResponseTest extends AbstractResponseTest {
     @Test
     @Override
     public void testRefConversion(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String[] query = {"13", "32888799", "G", "grch37"};
+        String[] query = {"13", "32888798", "G", "grch37"};
         BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
@@ -120,7 +120,7 @@ public class EbiResponseTest extends AbstractResponseTest {
     @Test
     @Override
     public void testStringAllele(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String[] query = {"1", "46403", "TGT", null};
+        String[] query = {"1", "46402", "TGT", null};
         BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
@@ -132,7 +132,7 @@ public class EbiResponseTest extends AbstractResponseTest {
     @Test
     @Override
     public void testDel(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String[] query = {"1", "73976148", "D", null};
+        String[] query = {"1", "73976147", "D", null};
         BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
@@ -144,7 +144,7 @@ public class EbiResponseTest extends AbstractResponseTest {
     @Test
     @Override
     public void testIns(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String[] query = {"1", "46403", "I", null};
+        String[] query = {"1", "46402", "I", null};
         BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);

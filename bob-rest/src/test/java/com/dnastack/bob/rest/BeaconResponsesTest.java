@@ -95,7 +95,7 @@ public class BeaconResponsesTest extends BasicTest {
 
     @Test
     public void testAllResponses(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String[] q = {"13", "32888799", "G", null};
+        String[] q = {"13", "32888798", "G", null};
         List<BeaconResponseTo> brs = readResponses(url.toExternalForm() + getUrl(q));
 
         Set<String> ids = new HashSet<>();
@@ -114,7 +114,7 @@ public class BeaconResponsesTest extends BasicTest {
 
     @Test
     public void testAllResponsesWithSpecificRef(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String[] q = {"13", "32888799", "G", "hg19"};
+        String[] q = {"13", "32888798", "G", "hg19"};
         List<BeaconResponseTo> brs = readResponses(url.toExternalForm() + getUrl(q));
 
         Set<String> ids = new HashSet<>();
@@ -134,7 +134,7 @@ public class BeaconResponsesTest extends BasicTest {
     @Test
     public void testSpecificResponseWithSpecificRef(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String b = "lovd";
-        String[] q = {"1", "808922", "A", "hg19"};
+        String[] q = {"1", "808921", "A", "hg19"};
         BeaconResponseTo br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
@@ -146,7 +146,7 @@ public class BeaconResponsesTest extends BasicTest {
     @Test
     public void testResponsesFilteredForClinvar(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String b = "clinvar";
-        String[] q = {"1", "10042538", "T", null};
+        String[] q = {"1", "10042537", "T", null};
         BeaconResponseTo br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
@@ -158,7 +158,7 @@ public class BeaconResponsesTest extends BasicTest {
     @Test
     public void testResponsesFilteredForUniprot(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String b = "uniprot";
-        String[] q = {"1", "977028", "T", null};
+        String[] q = {"1", "977027", "T", null};
         BeaconResponseTo br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
@@ -170,7 +170,7 @@ public class BeaconResponsesTest extends BasicTest {
     @Test
     public void testResponsesFilteredForLovd(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String b = "lovd";
-        String[] q = {"1", "808922", "A", null};
+        String[] q = {"1", "808921", "A", null};
         BeaconResponseTo br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
@@ -182,7 +182,7 @@ public class BeaconResponsesTest extends BasicTest {
     @Test
     public void testResponsesFilteredForAmplab(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String b = "amplab";
-        String[] q = {"15", "41087870", "A", null};
+        String[] q = {"15", "41087869", "A", null};
         BeaconResponseTo br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
@@ -194,7 +194,7 @@ public class BeaconResponsesTest extends BasicTest {
     @Test
     public void testResponsesFilteredForKaviar(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String b = "kaviar";
-        String[] q = {"1", "808922", "A", null};
+        String[] q = {"1", "808921", "A", null};
         BeaconResponseTo br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
@@ -206,7 +206,7 @@ public class BeaconResponsesTest extends BasicTest {
     @Test
     public void testResponsesFilteredForNcbi(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String b = "ncbi";
-        String[] q = {"22", "17213590", "TGTTA", null};
+        String[] q = {"22", "17213589", "TGTTA", null};
         BeaconResponseTo br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
@@ -218,7 +218,7 @@ public class BeaconResponsesTest extends BasicTest {
     @Test
     public void testResponsesFilteredForEbi(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String b = "ebi";
-        String[] q = {"13", "32888799", "G", null};
+        String[] q = {"13", "32888798", "G", null};
         BeaconResponseTo br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
@@ -230,7 +230,7 @@ public class BeaconResponsesTest extends BasicTest {
     @Test
     public void testResponsesFilteredForWtsi(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String b = "wtsi";
-        String[] q = {"1", "808922", "A", null};
+        String[] q = {"1", "808921", "A", null};
         BeaconResponseTo br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
@@ -242,7 +242,7 @@ public class BeaconResponsesTest extends BasicTest {
     @Test
     public void testResponsesFilteredForCafeVariome(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String b = "cafe-central";
-        String[] q = {"2", "179612321", "T", null};
+        String[] q = {"2", "179612320", "T", null};
         BeaconResponseTo br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
@@ -254,7 +254,7 @@ public class BeaconResponsesTest extends BasicTest {
     @Test
     public void testResponsesFilteredForBroad(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String b = "broad";
-        String[] q = {"1", "13417", "CGAGA", null};
+        String[] q = {"1", "13416", "CGAGA", null};
         BeaconResponseTo br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
@@ -266,7 +266,7 @@ public class BeaconResponsesTest extends BasicTest {
     @Test
     public void testResponsesFilteredForIcgc(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String b = "icgc";
-        String[] q = {"17", "7577120", "T", null};
+        String[] q = {"17", "7577119", "T", null};
         BeaconResponseTo br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
@@ -278,7 +278,7 @@ public class BeaconResponsesTest extends BasicTest {
     @Test
     public void testResponsesFilteredForBob(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String b = "bob";
-        String[] q = {"13", "32888799", "G", null};
+        String[] q = {"13", "32888798", "G", null};
         BeaconResponseTo br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
@@ -290,7 +290,7 @@ public class BeaconResponsesTest extends BasicTest {
     @Test
     public void testResponsesFilteredForGoogle(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String b = "google";
-        String[] q = {"9", "1795573", "G", null};
+        String[] q = {"9", "1795572", "G", null};
         BeaconResponseTo br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
@@ -302,7 +302,7 @@ public class BeaconResponsesTest extends BasicTest {
     @Test
     public void testResponsesFilteredForThousandGenomes(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String b = "thousandgenomes";
-        String[] q = {"9", "1795573", "G", null};
+        String[] q = {"9", "1795572", "G", null};
         BeaconResponseTo br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
@@ -314,7 +314,7 @@ public class BeaconResponsesTest extends BasicTest {
     @Test
     public void testResponsesFilteredForThousandGenomesPhase3(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String b = "thousandgenomes-phase3";
-        String[] q = {"16", "59180320", "G", null};
+        String[] q = {"16", "59180319", "G", null};
         BeaconResponseTo br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
@@ -326,7 +326,7 @@ public class BeaconResponsesTest extends BasicTest {
     @Test
     public void testResponsesFilteredForPlatinum(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String b = "platinum";
-        String[] q = {"5", "145125627", "G", null};
+        String[] q = {"5", "145125626", "G", null};
         BeaconResponseTo br = readResponses(url.toExternalForm() + getUrl(b, q)).get(0);
 
         assertNotNull(br);
@@ -339,7 +339,7 @@ public class BeaconResponsesTest extends BasicTest {
     public void testMultipleResponsesFiltered(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String id1 = "amplab";
         String id2 = "clinvar";
-        String[] q = {"13", "32888799", "G", null};
+        String[] q = {"13", "32888798", "G", null};
         List<BeaconResponseTo> brs = readResponses(url.toExternalForm() + getUrl("[" + id1 + "," + id2 + "]", q));
 
         assertNotNull(brs);
@@ -356,7 +356,7 @@ public class BeaconResponsesTest extends BasicTest {
     public void testMultipleResponsesOfAggregatorsFiltered(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String id1 = "bob";
         String id2 = "google";
-        String[] q = {"2", "179612321", "T", null};
+        String[] q = {"2", "179612320", "T", null};
         List<BeaconResponseTo> brs = readResponses(url.toExternalForm() + getUrl("[" + id1 + "," + id2 + "]", q));
 
         assertNotNull(brs);

@@ -26,9 +26,6 @@ package com.dnastack.bob.processor;
 import com.dnastack.bob.entity.Beacon;
 import com.dnastack.bob.entity.Query;
 import com.dnastack.bob.entity.Reference;
-import com.dnastack.bob.util.HttpUtils;
-import com.dnastack.bob.util.ParsingUtils;
-import com.dnastack.bob.util.QueryUtils;
 import com.google.common.collect.ImmutableSet;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -36,6 +33,13 @@ import java.util.Set;
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
+
+import static com.dnastack.bob.util.HttpUtils.createRequest;
+import static com.dnastack.bob.util.HttpUtils.executeRequest;
+import static com.dnastack.bob.util.ParsingUtils.parseBooleanFromJson;
+import static com.dnastack.bob.util.ParsingUtils.parseStringFromJson;
+import static com.dnastack.bob.util.QueryUtils.denormalizePosition;
+import static com.dnastack.bob.util.QueryUtils.denormalizeReference;
 
 /**
  * ICGC beacon service. Preliminary 0.2 spec.
@@ -64,7 +68,7 @@ public class IcgcBeaconProcessor extends AbstractBeaconProcessor {
         String res = null;
 
         try {
-            res = HttpUtils.executeRequest(HttpUtils.createRequest(getQueryUrl(QueryUtils.denormalizeReference(query.getReference()), query.getChromosome().toString(), query.getPosition(), query.getAllele()), false, null));
+            res = executeRequest(createRequest(getQueryUrl(denormalizeReference(query.getReference()), query.getChromosome().toString(), denormalizePosition(query.getPosition()), query.getAllele()), false, null));
         } catch (MalformedURLException | UnsupportedEncodingException ex) {
             // ignore, already null
         }
@@ -75,11 +79,11 @@ public class IcgcBeaconProcessor extends AbstractBeaconProcessor {
     @Override
     @Asynchronous
     public Future<Boolean> parseQueryResponse(Beacon b, String response) {
-        Boolean res = ParsingUtils.parseBooleanFromJson(response, "response", "exists");
+        Boolean res = parseBooleanFromJson(response, "response", "exists");
 
         // the beacon uses null as false, convert
         if (res == null) {
-            String s = ParsingUtils.parseStringFromJson(response, "response", "exists");
+            String s = parseStringFromJson(response, "response", "exists");
             if ("null".equals(s)) {
                 res = false;
             }

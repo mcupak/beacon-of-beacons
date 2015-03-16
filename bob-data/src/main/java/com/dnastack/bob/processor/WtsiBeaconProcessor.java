@@ -26,9 +26,6 @@ package com.dnastack.bob.processor;
 import com.dnastack.bob.entity.Beacon;
 import com.dnastack.bob.entity.Query;
 import com.dnastack.bob.entity.Reference;
-import com.dnastack.bob.util.HttpUtils;
-import com.dnastack.bob.util.ParsingUtils;
-import com.dnastack.bob.util.QueryUtils;
 import com.google.common.collect.ImmutableSet;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -36,6 +33,13 @@ import java.util.Set;
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
+
+import static com.dnastack.bob.util.HttpUtils.createRequest;
+import static com.dnastack.bob.util.HttpUtils.executeRequest;
+import static com.dnastack.bob.util.ParsingUtils.parseRef;
+import static com.dnastack.bob.util.ParsingUtils.parseYesNoCaseInsensitive;
+import static com.dnastack.bob.util.QueryUtils.denormalizePosition;
+import static com.dnastack.bob.util.QueryUtils.denormalizeReference;
 
 /**
  * WTSI beacon service.
@@ -69,7 +73,7 @@ public class WtsiBeaconProcessor extends AbstractBeaconProcessor {
     public Future<String> getQueryResponse(Beacon beacon, Query query) {
         String res = null;
         try {
-            res = HttpUtils.executeRequest(HttpUtils.createRequest(getQueryUrl(QueryUtils.denormalizeReference(query.getReference()), query.getChromosome().toString(), query.getPosition(), query.getAllele()), false, null));
+            res = executeRequest(createRequest(getQueryUrl(denormalizeReference(query.getReference()), query.getChromosome().toString(), denormalizePosition(query.getPosition()), query.getAllele()), false, null));
         } catch (MalformedURLException | UnsupportedEncodingException ex) {
             // ignore, already null
         }
@@ -80,10 +84,10 @@ public class WtsiBeaconProcessor extends AbstractBeaconProcessor {
     @Override
     @Asynchronous
     public Future<Boolean> parseQueryResponse(Beacon b, String response) {
-        Boolean res = ParsingUtils.parseYesNoCaseInsensitive(response);
+        Boolean res = parseYesNoCaseInsensitive(response);
         if (res == null) {
             // ref response is treated as false
-            Boolean isRef = ParsingUtils.parseRef(response);
+            Boolean isRef = parseRef(response);
             if (isRef != null && isRef) {
                 res = false;
             }
