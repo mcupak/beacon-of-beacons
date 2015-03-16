@@ -33,6 +33,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -64,11 +65,12 @@ public class Beacon implements Serializable {
     private String homePage;
     private String email;
     private String auth;
-    private BeaconProcessor processor;
+    private String processor;
     @NotNull
     @Column(nullable = false)
     private Boolean visible;
     @NotNull
+    @OneToMany
     private Set<Beacon> aggregators;
 
     public Beacon() {
@@ -85,7 +87,7 @@ public class Beacon implements Serializable {
     public Beacon(String id, String name, BeaconProcessor processor) {
         this.id = id;
         this.name = name;
-        this.processor = processor;
+        this.processor = processor.getClass().getCanonicalName();
         this.visible = true;
         this.aggregators = new HashSet<>();
     }
@@ -93,7 +95,7 @@ public class Beacon implements Serializable {
     public Beacon(String id, String name, BeaconProcessor processor, boolean visible) {
         this.id = id;
         this.name = name;
-        this.processor = processor;
+        this.processor = processor.getClass().getCanonicalName();
         this.visible = visible;
         this.aggregators = new HashSet<>();
     }
@@ -101,7 +103,7 @@ public class Beacon implements Serializable {
     public Beacon(String id, String name, BeaconProcessor processor, boolean visible, Organization organization) {
         this.id = id;
         this.name = name;
-        this.processor = processor;
+        this.processor = processor.getClass().getCanonicalName();
         this.visible = visible;
         this.organization = organization;
         this.aggregators = new HashSet<>();
@@ -123,16 +125,16 @@ public class Beacon implements Serializable {
         this.name = name;
     }
 
-    public BeaconProcessor getProcessor() {
+    public String getProcessor() {
         return processor;
+    }
+
+    public void setProcessor(String processor) {
+        this.processor = processor;
     }
 
     public boolean isAggregator() {
         return getProcessor() == null;
-    }
-
-    public void setProcessor(BeaconProcessor processor) {
-        this.processor = processor;
     }
 
     public boolean isVisible() {

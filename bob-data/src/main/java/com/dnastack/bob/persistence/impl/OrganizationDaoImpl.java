@@ -24,7 +24,11 @@
 package com.dnastack.bob.persistence.impl;
 
 import com.dnastack.bob.persistence.api.OrganizationDao;
+import com.dnastack.bob.persistence.entity.Organization;
+import java.util.List;
 import javax.enterprise.context.RequestScoped;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  * JPA-based implementation of organization DAO.
@@ -34,5 +38,45 @@ import javax.enterprise.context.RequestScoped;
  */
 @RequestScoped
 public class OrganizationDaoImpl implements OrganizationDao {
+
+    @PersistenceContext
+    private EntityManager em;
+
+    @Override
+    public Organization save(Organization o) {
+        em.persist(o);
+
+        return o;
+    }
+
+    @Override
+    public Organization update(Organization o) {
+        return em.merge(o);
+    }
+
+    @Override
+    public Organization findById(String id) {
+        return em.find(Organization.class, id);
+    }
+
+    @Override
+    public void remove(String id) {
+        em.remove(em.getReference(Organization.class, id));
+    }
+
+    @Override
+    public void flush() {
+        em.flush();
+    }
+
+    @Override
+    public long countAll() {
+        return em.createQuery(String.format("SELECT COUNT(e.id) FROM %s e", Organization.class.getSimpleName()), Long.class).getSingleResult();
+    }
+
+    @Override
+    public List<Organization> findAll() {
+        return em.createQuery(String.format("SELECT e FROM %s e", Organization.class.getSimpleName()), Organization.class).getResultList();
+    }
 
 }

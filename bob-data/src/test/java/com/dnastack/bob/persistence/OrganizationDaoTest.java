@@ -21,30 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.persistence.api;
+package com.dnastack.bob.persistence;
 
+import com.dnastack.bob.persistence.api.OrganizationDao;
 import com.dnastack.bob.persistence.entity.Organization;
-import java.util.List;
+import javax.inject.Inject;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.persistence.Cleanup;
+import org.jboss.arquillian.persistence.CleanupStrategy;
+import org.jboss.arquillian.persistence.UsingDataSet;
+import org.jboss.arquillian.transaction.api.annotation.Transactional;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
- * Organization DAO.
+ * Organization DAO test.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public interface OrganizationDao {
+@RunWith(Arquillian.class)
+@Transactional
+@UsingDataSet("organization_init.json")
+@Cleanup(strategy = CleanupStrategy.USED_TABLES_ONLY) // this is important in order to prevent foreign-key violations
+public class OrganizationDaoTest extends BasicDaoTest {
 
-    Organization save(Organization o);
+    @Inject
+    private OrganizationDao dao;
 
-    Organization update(Organization o);
+    private Organization getNewData() {
+        return null;
+    }
 
-    Organization findById(String id);
-
-    void remove(String id);
-
-    void flush();
-
-    long countAll();
-
-    List<Organization> findAll();
+    @Test
+    public void testCountAll() {
+        assertThat(1L, equalTo(dao.countAll()));
+    }
 }

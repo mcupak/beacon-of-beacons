@@ -25,18 +25,6 @@ package com.dnastack.bob.persistence.impl;
 
 import com.dnastack.bob.persistence.api.BeaconDao;
 import com.dnastack.bob.persistence.entity.Beacon;
-import com.dnastack.bob.processor.AmpLab;
-import com.dnastack.bob.processor.BeaconProcessor;
-import com.dnastack.bob.processor.Broad;
-import com.dnastack.bob.processor.CafeVariome;
-import com.dnastack.bob.processor.Ebi;
-import com.dnastack.bob.processor.Icgc;
-import com.dnastack.bob.processor.IntegerChromosomeBeaconizer;
-import com.dnastack.bob.processor.Kaviar;
-import com.dnastack.bob.processor.Ncbi;
-import com.dnastack.bob.processor.StringChromosomeBeaconizer;
-import com.dnastack.bob.processor.Ucsc;
-import com.dnastack.bob.processor.Wtsi;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
@@ -44,7 +32,6 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 /**
  * Basic static mapper and holder of beacons and services.
@@ -59,49 +46,49 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
 
     private Set<Beacon> beacons;
 
-    @Inject
-    @Ucsc
-    private BeaconProcessor ucscService;
-
-    @Inject
-    @Ebi
-    private BeaconProcessor ebiService;
-
-    @Inject
-    @Ncbi
-    private BeaconProcessor ncbiService;
-
-    @Inject
-    @Wtsi
-    private BeaconProcessor wtsiService;
-
-    @Inject
-    @AmpLab
-    private BeaconProcessor ampLabService;
-
-    @Inject
-    @Kaviar
-    private BeaconProcessor kaviarService;
-
-    @Inject
-    @IntegerChromosomeBeaconizer
-    private BeaconProcessor integerBeaconizerService;
-
-    @Inject
-    @StringChromosomeBeaconizer
-    private BeaconProcessor stringBeaconizerService;
-
-    @Inject
-    @CafeVariome
-    private BeaconProcessor cafeVariomeService;
-
-    @Inject
-    @Broad
-    private BeaconProcessor broadInstituteService;
-
-    @Inject
-    @Icgc
-    private BeaconProcessor icgcService;
+//    @Inject
+//    @Ucsc
+//    private BeaconProcessor ucscService;
+//
+//    @Inject
+//    @Ebi
+//    private BeaconProcessor ebiService;
+//
+//    @Inject
+//    @Ncbi
+//    private BeaconProcessor ncbiService;
+//
+//    @Inject
+//    @Wtsi
+//    private BeaconProcessor wtsiService;
+//
+//    @Inject
+//    @AmpLab
+//    private BeaconProcessor ampLabService;
+//
+//    @Inject
+//    @Kaviar
+//    private BeaconProcessor kaviarService;
+//
+//    @Inject
+//    @IntegerChromosomeBeaconizer
+//    private BeaconProcessor integerBeaconizerService;
+//
+//    @Inject
+//    @StringChromosomeBeaconizer
+//    private BeaconProcessor stringBeaconizerService;
+//
+//    @Inject
+//    @CafeVariome
+//    private BeaconProcessor cafeVariomeService;
+//
+//    @Inject
+//    @Broad
+//    private BeaconProcessor broadInstituteService;
+//
+//    @Inject
+//    @Icgc
+//    private BeaconProcessor icgcService;
 
     private void setUpBeacons() {
 //        this.beacons = new HashSet<>();

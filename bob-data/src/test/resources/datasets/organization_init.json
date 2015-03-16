@@ -1,38 +1,10 @@
 {
-    "userEntity":
+    "organization":
             [
                 {
-                    "id": 1,
-                    "extId": "1",
-                    "creationDate": "2015-01-01 00:00:00",
-                    "modificationDate": "2015-01-01 00:00:00"
-                },
-                {
-                    "id": 2,
-                    "extId": "2",
-                    "creationDate": "2015-01-01 00:00:00",
-                    "modificationDate": "2015-01-01 00:00:00"
-                }
-            ],
-    "organizationEntity":
-            [
-                {
-                    "id": 5,
-                    "accessLevel": "OPEN",
-                    "creationDate": "2015-01-01 00:00:00",
-                    "modificationDate": "2015-01-01 00:00:00",
+                    "id": "test",
                     "name": "test",
-                    "admin_id": 2
-                }
-            ],
-    "beaconEntity":
-            [
-                {
-                    "id": 5,
-                    "creationDate": "2015-01-01 00:00:00",
-                    "modificationDate": "2015-01-01 00:00:00",
-                    "name": "test",
-                    "organization_id": 5
+                    "description": "test"
                 }
             ]
 }

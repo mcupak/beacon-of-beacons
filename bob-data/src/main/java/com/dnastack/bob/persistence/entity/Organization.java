@@ -109,6 +109,14 @@ public class Organization implements Serializable {
         this.address = address;
     }
 
+    public List<Beacon> getBeacons() {
+        return beacons;
+    }
+
+    public void setBeacons(List<Beacon> beacons) {
+        this.beacons = beacons;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
