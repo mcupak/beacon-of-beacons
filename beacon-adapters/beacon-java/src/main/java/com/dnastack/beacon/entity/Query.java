@@ -42,16 +42,18 @@ public class Query implements Serializable {
     private Long position;
     private String allele;
     private Reference reference;
+    private String dataset;
 
     public Query() {
         // needed for JAXB
     }
 
-    public Query(Chromosome chromosome, Long position, String allele, Reference reference) {
+    public Query(Chromosome chromosome, Long position, String allele, Reference reference, String dataset) {
         this.chromosome = chromosome;
         this.position = position;
         this.allele = allele;
         this.reference = reference;
+        this.dataset = dataset;
     }
 
     public Chromosome getChromosome() {
@@ -86,13 +88,22 @@ public class Query implements Serializable {
         this.reference = reference;
     }
 
-    @Override
+    public String getDataset() {
+		return dataset;
+	}
+
+	public void setDataset(String dataset) {
+		this.dataset = dataset;
+	}
+
+	@Override
     public int hashCode() {
         int hash = 3;
         hash = 89 * hash + Objects.hashCode(this.chromosome);
         hash = 89 * hash + Objects.hashCode(this.position);
         hash = 89 * hash + Objects.hashCode(this.allele);
         hash = 89 * hash + Objects.hashCode(this.reference);
+        hash = 89 * hash + Objects.hashCode(this.dataset);
         return hash;
     }
 
@@ -117,12 +128,15 @@ public class Query implements Serializable {
         if (this.reference != other.reference) {
             return false;
         }
+        if (this.dataset != other.dataset) {
+            return false;
+        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "Query{" + "chromosome=" + chromosome + ", position=" + position + ", allele=" + allele + ", reference=" + reference + '}';
+        return "Query{" + "chromosome=" + chromosome + ", position=" + position + ", allele=" + allele + ", reference=" + reference + ", dataset=" + dataset + '}';
     }
 
 }

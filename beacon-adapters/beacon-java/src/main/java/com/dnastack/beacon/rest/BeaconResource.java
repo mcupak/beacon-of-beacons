@@ -46,7 +46,7 @@ public class BeaconResource {
     private BeaconService service;
 
     @GET
-    public BeaconResponse query(@QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele, @QueryParam("ref") String ref) {
-        return service.query(chrom, pos, allele, ref);
+    public BeaconResponse query(@QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele, @QueryParam("ref") String ref, @QueryParam("dataset") String dataset) {
+        return service.query(chrom, pos, allele, ref, dataset);
     }
 }
