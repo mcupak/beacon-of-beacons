@@ -28,8 +28,8 @@ In order to implement a beacon, simply override beacon details and query functio
 
 The API takes care of the rest and provides the following endpoints when you start your beacon:
 
-    http://localhost:8080/beacon-nodejs/rest/info - information about your beacon
-    http://localhost:8080/beacon-nodejs/rest/query - access to query service
+    http://localhost:8080/beacon-nodejs/info - information about your beacon
+    http://localhost:8080/beacon-nodejs/query - access to query service
 
 Query example:
 

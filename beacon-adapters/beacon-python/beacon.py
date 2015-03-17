@@ -26,7 +26,28 @@ THE SOFTWARE.
 
 from flask import Flask, jsonify, request
 
+class IncompleteQuery(Exception):
+    status_code = 400
+
+    def __init__(self, message, status_code=None, payload=None, ErrorResource=None, query=None, beacon_id=None):
+        Exception.__init__(self)
+        self.message = message
+        if status_code is not None:
+            self.status_code = status_code
+        self.payload = payload
+        self.ErrorResource = ErrorResource
+        self.query = query
+        self.beacon_id = beacon_id
+
+    def to_dict(self):
+        rv = dict(self.payload or ())
+        rv["beacon"] =  self.beacon_id
+        rv["query"] = self.query
+        rv['error'] = self.ErrorResource
+        return rv
+
 app = Flask(__name__)
+
 
 #--------------- Information endpont (start) --------------------#
 
@@ -145,17 +166,36 @@ def query():
             AlleleResource
         ],
         'info': u'response information', 
-        'error': ErrorResource
     }
+
+    query = {
+        'chromosome' : chromosome,
+        'position' : position,
+        'allele' : allele,
+        'reference' : reference,
+        'dataset_id': dataset
+    }
+
+    if query['chromosome'] is None or query['position'] is None or query['allele'] is None or query['reference'] is None:
+        ErrorResource['description'] = 'Required parameters are missing'
+        ErrorResource['name'] = 'Incomplete Query'
+        raise IncompleteQuery('IncompleteQuery', status_code=410, ErrorResource=ErrorResource, query=query, beacon_id=beacon["id"])
+
 
 #--------------------------------------------------------------#
     
-    return jsonify({ "beacon" : beacon['id'], "query" : { 'chromosome' : chromosome, 'position' : position, 'allele' : allele, 'reference' : reference, 'dataset_id': dataset }, 'response' : response })
+    return jsonify({ "beacon" : beacon['id'], "query" : query, "response" : response })
 
 # info function
-@app.route('/beacon-python', methods=['GET'])
+@app.route('/beacon-python/', methods=['GET'])
 def welcome():
     return 'WELCOME!!! Beacon of Beacons Project (BoB) provides a unified REST API to publicly available GA4GH Beacons. BoB standardizes the way beacons are accessed and aggregates their results, thus addressing one of the missing parts of the Beacon project itself. BoB was designed with ease of programmatic access in mind. It provides XML, JSON and plaintext responses to accommodate needs of all the clients across all the programming languages. The API to use is determined using the header supplied by the client in its GET request, e.g.: "Accept: application/json".'
+
+# required parameters missing
+@app.errorhandler(IncompleteQuery)
+def handle_invalid_usage(error):
+    response = jsonify(error.to_dict())
+    return response
 
 # page not found
 @app.errorhandler(404)
@@ -164,4 +204,3 @@ def not_found(error):
 
 if __name__ == '__main__':
     app.run()
-

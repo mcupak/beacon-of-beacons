@@ -24,7 +24,9 @@
 package com.dnastack.beacon.rest;
 
 import com.dnastack.beacon.entity.BeaconResponse;
+import com.dnastack.beacon.entity.resources.ResponseResource;
 import com.dnastack.beacon.service.BeaconService;
+
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -47,6 +49,8 @@ public class BeaconResource {
 
     @GET
     public BeaconResponse query(@QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele, @QueryParam("ref") String ref, @QueryParam("dataset") String dataset) {
-        return service.query(chrom, pos, allele, ref, dataset);
+
+    return service.query(chrom, pos, allele, ref, dataset);
+
     }
 }

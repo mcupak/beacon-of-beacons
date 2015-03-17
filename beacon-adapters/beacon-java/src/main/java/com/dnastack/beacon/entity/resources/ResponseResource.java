@@ -4,7 +4,7 @@ import java.util.List;
 
 public class ResponseResource {
 	
-	private String exists;
+	private Boolean exists;
 	private Integer observed;
 	private List<AlleleResource> alleles;
 	private String info;
@@ -14,7 +14,7 @@ public class ResponseResource {
 	 * required field(s): exists
 	 * observed is an Integer with min value 0
 	 */
-	public ResponseResource(String exists, Integer observed, List<AlleleResource> alleles, String info, ErrorResource error) {
+	public ResponseResource(Boolean exists, Integer observed, List<AlleleResource> alleles, String info, ErrorResource error) {
 		this.exists = exists;
 		this.observed = observed;
 		this.alleles = alleles;
@@ -26,11 +26,11 @@ public class ResponseResource {
         // needed for JAXB
 	}	
 	
-	public String getExists() {
+	public Boolean getExists() {
 		return exists;
 	}
 
-	public void setExists(String exists) {
+	public void setExists(Boolean exists) {
 		this.exists = exists;
 	}
 

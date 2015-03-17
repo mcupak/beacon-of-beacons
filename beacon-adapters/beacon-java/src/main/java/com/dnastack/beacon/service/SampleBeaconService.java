@@ -29,6 +29,7 @@ import java.util.List;
 import com.dnastack.beacon.entity.Beacon;
 import com.dnastack.beacon.entity.BeaconResponse;
 import com.dnastack.beacon.entity.resources.DataSetResource;
+import com.dnastack.beacon.entity.resources.ErrorResource;
 import com.dnastack.beacon.entity.resources.QueryResource;
 import com.dnastack.beacon.entity.resources.ResponseResource;
 import com.dnastack.beacon.util.QueryUtils;
@@ -53,8 +54,18 @@ public class SampleBeaconService implements BeaconService {
     
     @Override
     public BeaconResponse query(String chrom, Long pos, String allele, String ref, String dataset) {
+
+    	// required parameters are missing
+    	if (chrom == null || pos == null || allele == null || ref == null) {
+    		ErrorResource errorResource = new ErrorResource("Incomplete Query", "Required parameters are missing");
+    		ResponseResource responseResource = new ResponseResource(null, null, null, null, errorResource);
+    		BeaconResponse response = new BeaconResponse(beacon.getId(), QueryUtils.getQuery(chrom, pos, allele, ref, dataset), responseResource);
+    		return response;
+    	}
+
     	BeaconResponse response = new BeaconResponse(beacon.getId(), QueryUtils.getQuery(chrom, pos, allele, ref, dataset), null);
-        ResponseResource responseResource = new ResponseResource("true", 0, null, "bla", null);
+        ResponseResource responseResource = new ResponseResource(true, 0, null, "bla", null);
+
         // generate a sample response
         if (pos % 2 == 0) {
             response.setResponse(responseResource);

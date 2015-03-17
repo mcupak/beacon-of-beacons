@@ -138,20 +138,37 @@ function query(req, res, next) {
     // generate response
     // required field(s): exists
     var response = {
-        'exists': 'True',
+        'exists': true,
         'observed': 0,  // integer, min 0
         'alleles': [
             AlleleResource
         ],
         'info': 'response information', 
-        'error': ErrorResource
     };
 
 //--------------------------------------------------------------//
 
-    var query = {'chromosome': chromosome, 'position': position, 'allele': allele, 'reference': reference, 'dataset': dataset};
+    var query = {
+        'chromosome': chromosome,
+        'position': position,
+        'allele': allele,
+        'reference': reference,
+        'dataset': dataset
+    };
 
-    res.send({"beacon": beacon, "query": query, 'response': response});
+    if (query['chromosome'] == undefined || query['position'] == undefined || query['allele'] == undefined || query['reference'] == undefined) {
+
+        ErrorResource['name'] = 'Incomplete Query';
+        ErrorResource['description'] = 'Required parameters are misssing';
+
+        response = {
+            'exists': null,
+            'error': ErrorResource
+        };
+
+    }
+
+    res.send({"beacon": beacon["id"], "query": query, 'response': response});
     next();
 }
 
@@ -167,7 +184,7 @@ server.get('/beacon-nodejs/info', info);
 server.head('/beacon-nodejs/info', info);
 server.get('/beacon-nodejs/query', query);
 server.head('/beacon-nodejs/query', query);
-server.get('/beacon-nodejs', welcome);
+server.get('/beacon-nodejs/', welcome);
 
 server.listen(8080, function () {
     console.log('%s listening at %s', server.name, server.url);
