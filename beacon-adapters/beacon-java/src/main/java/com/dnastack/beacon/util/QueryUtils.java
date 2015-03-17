@@ -137,10 +137,10 @@ public class QueryUtils {
     /**
      * Obtains a canonical query object.
      *
-     * @param chrom  chromosome
-     * @param pos    position
-     * @param allele allele
-     * @param ref    genome
+     * @param chrom   chromosome
+     * @param pos     position
+     * @param allele  allele
+     * @param ref     genome
      * @param dataset dataset
      *
      * @return normalized query
@@ -149,7 +149,7 @@ public class QueryUtils {
         Chromosome c = normalizeChromosome(chrom);
         Reference r = normalizeReference(ref);
 
-        return new Query(c == null ? null : c, pos, normalizeAllele(allele), r == null ? null : r, dataset);
+        return new Query(normalizeAllele(allele), c == null ? null : c, pos, r == null ? null : r, dataset);
     }
 
 }

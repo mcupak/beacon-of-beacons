@@ -23,72 +23,74 @@
  */
 package com.dnastack.beacon.entity;
 
+import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Query.
+ * Response.
  */
-@XmlRootElement(name = "query")
-public class Query {
+@XmlRootElement(name = "response")
+public class Response {
 
-    private String allele;
-    private Chromosome chromosome;
-    private Long position;
-    private Reference reference;
-    private String dataset_id;
+    private Boolean exists;
+    private Integer observed;
+    private List<Allele> alleles;
+    private String info;
+    private Error error;
 
     /*
-     * required field(s): allele, chromosome, position, reference
+     * required field(s): exists
+     * observed is an Integer with min value 0
      */
-    public Query(String allele, Chromosome chromosome, Long position, Reference reference, String dataset_id) {
-        this.allele = allele;
-        this.chromosome = chromosome;
-        this.position = position;
-        this.reference = reference;
-        this.dataset_id = dataset_id;
+    public Response(Boolean exists, Integer observed, List<Allele> alleles, String info, Error error) {
+        this.exists = exists;
+        this.observed = observed;
+        this.alleles = alleles;
+        this.info = info;
+        this.error = error;
     }
 
-    public Query() {
+    public Response() {
         // needed for JAXB
     }
 
-    public String getAllele() {
-        return allele;
+    public Boolean getExists() {
+        return exists;
     }
 
-    public void setAllele(String allele) {
-        this.allele = allele;
+    public void setExists(Boolean exists) {
+        this.exists = exists;
     }
 
-    public Chromosome getChromosome() {
-        return chromosome;
+    public Integer getObserved() {
+        return observed;
     }
 
-    public void setChromosome(Chromosome chromosome) {
-        this.chromosome = chromosome;
+    public void setObserved(Integer observed) {
+        this.observed = observed;
     }
 
-    public Reference getReference() {
-        return reference;
+    public List<Allele> getAlleles() {
+        return alleles;
     }
 
-    public void setReference(Reference reference) {
-        this.reference = reference;
+    public void setAlleles(List<Allele> alleles) {
+        this.alleles = alleles;
     }
 
-    public Long getPosition() {
-        return position;
+    public String getInfo() {
+        return info;
     }
 
-    public void setPosition(Long position) {
-        this.position = position;
+    public void setInfo(String info) {
+        this.info = info;
     }
 
-    public String getDataset_id() {
-        return dataset_id;
+    public Error getError() {
+        return error;
     }
 
-    public void setDataset_id(String dataset_id) {
-        this.dataset_id = dataset_id;
+    public void setError(Error error) {
+        this.error = error;
     }
 }

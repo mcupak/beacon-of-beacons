@@ -21,36 +21,56 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.rest;
+package com.dnastack.beacon.entity;
 
-import com.dnastack.beacon.entity.BeaconResponse;
-import com.dnastack.beacon.entity.Response;
-import com.dnastack.beacon.service.BeaconService;
-
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
+import java.util.List;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Beacon rest resource.
- *
- * @author Miroslav Cupak (mirocupak@gmail.com)
- * @version 1.0
+ * Data use limitations.
  */
-@Path("/query")
-@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN})
-public class BeaconResource {
+@XmlRootElement(name = "data-use")
+public class DataUse {
 
-    @Inject
-    private BeaconService service;
+    private String category;
+    private String description;
+    private List<DataUseRequirement> requirements;
 
-    @GET
-    public BeaconResponse query(@QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele, @QueryParam("ref") String ref, @QueryParam("dataset") String dataset) {
-
-    return service.query(chrom, pos, allele, ref, dataset);
-
+    public DataUse() {
+        // needed for JAXB
     }
+
+    /*
+     * required field(s): category
+     */
+    public DataUse(String category, String description, List<DataUseRequirement> requirements) {
+        this.category = category;
+        this.description = description;
+        this.requirements = requirements;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<DataUseRequirement> getRequirements() {
+        return requirements;
+    }
+
+    public void setRequirements(List<DataUseRequirement> requirements) {
+        this.requirements = requirements;
+    }
+
 }

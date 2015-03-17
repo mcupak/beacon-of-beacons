@@ -25,10 +25,7 @@ package com.dnastack.beacon.entity;
 
 import java.io.Serializable;
 import java.util.Objects;
-
 import javax.xml.bind.annotation.XmlRootElement;
-
-import com.dnastack.beacon.entity.resources.ResponseResource;
 
 /**
  * Beacon response.
@@ -43,27 +40,27 @@ public class BeaconResponse implements Serializable {
 
     private String beacon_id;
     private Query query;
-    private ResponseResource response = null;
+    private Response response = null;
 
     public BeaconResponse() {
         // needed for JAXB
     }
 
-    public BeaconResponse(String beacon_id, Query query, ResponseResource response) {
+    public BeaconResponse(String beacon_id, Query query, Response response) {
         this.beacon_id = beacon_id;
         this.query = query;
         this.response = response;
     }
 
     public String getBeacon_id() {
-		return beacon_id;
-	}
+        return beacon_id;
+    }
 
-	public void setBeacon_id(String beacon_id) {
-		this.beacon_id = beacon_id;
-	}
+    public void setBeacon_id(String beacon_id) {
+        this.beacon_id = beacon_id;
+    }
 
-	public Query getQuery() {
+    public Query getQuery() {
         return query;
     }
 
@@ -71,11 +68,11 @@ public class BeaconResponse implements Serializable {
         this.query = query;
     }
 
-    public ResponseResource getResponse() {
+    public Response getResponse() {
         return response;
     }
 
-    public void setResponse(ResponseResource response) {
+    public void setResponse(Response response) {
         this.response = response;
     }
 

@@ -23,64 +23,75 @@
  */
 package com.dnastack.beacon.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.dnastack.beacon.entity.Beacon;
 import com.dnastack.beacon.entity.BeaconResponse;
-import com.dnastack.beacon.entity.resources.DataSetResource;
-import com.dnastack.beacon.entity.resources.ErrorResource;
-import com.dnastack.beacon.entity.resources.QueryResource;
-import com.dnastack.beacon.entity.resources.ResponseResource;
+import com.dnastack.beacon.entity.Chromosome;
+import com.dnastack.beacon.entity.Dataset;
+import com.dnastack.beacon.entity.Error;
+import com.dnastack.beacon.entity.Query;
+import com.dnastack.beacon.entity.Reference;
+import com.dnastack.beacon.entity.Response;
 import com.dnastack.beacon.util.QueryUtils;
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
 
 /**
  * Sample implementation of a beacon service.
- * 
+ *
  * TODO: Replace this class with your actual beacon.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
+@RequestScoped
 public class SampleBeaconService implements BeaconService {
 
-	DataSetResource dataSetResource = new DataSetResource("id", "description", "reference", null, null);
-	List<DataSetResource> datasets = new ArrayList<DataSetResource>();
+    private Dataset dataset;
+    private List<Dataset> datasets;
 
-	QueryResource queryResource = new QueryResource("allele string", "chromosome id", 1, "genome Id", "dataset Id");
-	List<QueryResource> queries = new ArrayList<QueryResource>();
+    private Query query;
+    private List<Query> queries;
 
-	private final Beacon beacon = new Beacon("foo", "bar", "org", "sample beacon", "0.1/0.2", "http://dnastack.com/ga4gh/bob/", "beacon@dnastack.com", "oauth2", datasets, queries);
-    
+    private Beacon beacon;
+
+    @PostConstruct
+    public void init() {
+        this.dataset = new Dataset("id", "description", "reference", null, null);
+        this.query = new Query("allele string", Chromosome.CHR1, 1L, Reference.HG19, "dataset Id");
+
+        this.queries = new ArrayList<>();
+        this.queries.add(query);
+        this.datasets = new ArrayList<>();
+        this.datasets.add(dataset);
+
+        this.beacon = new Beacon("foo", "bar", "org", "sample beacon", "0.1/0.2", "http://dnastack.com/ga4gh/bob/", "beacon@dnastack.com", "oauth2", datasets, queries);
+    }
+
     @Override
     public BeaconResponse query(String chrom, Long pos, String allele, String ref, String dataset) {
 
-    	// required parameters are missing
-    	if (chrom == null || pos == null || allele == null || ref == null) {
-    		ErrorResource errorResource = new ErrorResource("Incomplete Query", "Required parameters are missing");
-    		ResponseResource responseResource = new ResponseResource(null, null, null, null, errorResource);
-    		BeaconResponse response = new BeaconResponse(beacon.getId(), QueryUtils.getQuery(chrom, pos, allele, ref, dataset), responseResource);
-    		return response;
-    	}
+        // required parameters are missing
+        if (chrom == null || pos == null || allele == null || ref == null) {
+            Error errorResource = new Error("Incomplete Query", "Required parameters are missing");
+            Response responseResource = new Response(null, null, null, null, errorResource);
+            BeaconResponse response = new BeaconResponse(beacon.getId(), QueryUtils.getQuery(chrom, pos, allele, ref, dataset), responseResource);
+            return response;
+        }
 
-    	BeaconResponse response = new BeaconResponse(beacon.getId(), QueryUtils.getQuery(chrom, pos, allele, ref, dataset), null);
-        ResponseResource responseResource = new ResponseResource(true, 0, null, "bla", null);
+        BeaconResponse response = new BeaconResponse(beacon.getId(), QueryUtils.getQuery(chrom, pos, allele, ref, dataset), null);
+        Response responseResource = new Response(true, 0, null, "bla", null);
 
         // generate a sample response
-        if (pos % 2 == 0) {
-            response.setResponse(responseResource);
-        } else {
-            response.setResponse(responseResource);
-        }
+        response.setResponse(responseResource);
 
         return response;
     }
 
     @Override
     public Beacon info() {
-    	queries.add(queryResource);
-    	datasets.add(dataSetResource);
-    	return beacon;
+        return beacon;
     }
 
 }

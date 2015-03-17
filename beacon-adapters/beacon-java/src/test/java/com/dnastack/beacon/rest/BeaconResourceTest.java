@@ -24,17 +24,14 @@
 package com.dnastack.beacon.rest;
 
 import com.dnastack.beacon.entity.BeaconResponse;
-import com.dnastack.beacon.entity.resources.ResponseResource;
-
+import com.dnastack.beacon.entity.Response;
 import java.net.MalformedURLException;
 import java.net.URL;
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
-
 import org.eclipse.persistence.jaxb.JAXBContextProperties;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
@@ -50,7 +47,6 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -64,7 +60,7 @@ import static org.junit.Assert.assertTrue;
 public class BeaconResourceTest {
 
     private static final String BEACON = "foo";
-    public static final String QUERY_BEACON_TEMPLATE = "rest/query?chrom=%s&pos=%s&allele=%s&ref=%s";
+    public static final String QUERY_BEACON_TEMPLATE = "query?chrom=%s&pos=%s&allele=%s&ref=%s";
 
     protected static String getUrl(String beacon, String[] params) {
         String res = null;
@@ -114,17 +110,7 @@ public class BeaconResourceTest {
         BeaconResponse br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
-        ResponseResource response = br.getResponse();
-        assertTrue(response.getExists());
-    }
-
-    @Test
-    public void testFalseQuery(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String[] query = {"1", "808921", "A", null};
-        BeaconResponse br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
-
-        assertNotNull(br);
-        ResponseResource response = br.getResponse();
+        Response response = br.getResponse();
         assertTrue(response.getExists());
     }
 

@@ -24,15 +24,9 @@
 package com.dnastack.beacon.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-
 import javax.xml.bind.annotation.XmlRootElement;
-
-import com.dnastack.beacon.entity.resources.DataSetResource;
-import com.dnastack.beacon.entity.resources.QueryResource;
 
 /**
  * Beacon.
@@ -49,20 +43,20 @@ public class Beacon implements Serializable {
     private String name;
     private String organization;
     private String description;
-	private String api;
+    private String api;
     private String homepage;
     private String email;
     private String auth = null;
 
-    private List<DataSetResource> queries;
-    private List<QueryResource> datasets;
+    private List<Dataset> datasets;
+    private List<Query> queries;
 
     public Beacon() {
         // needed for JAXB
     }
 
-    public Beacon(String id, String name, String organization, String description, String api, String homepage, String email, String auth, List<DataSetResource> queries,  List<QueryResource> datasets) {
-    	this.id = id;
+    public Beacon(String id, String name, String organization, String description, String api, String homepage, String email, String auth, List<Dataset> datasets, List<Query> queries) {
+        this.id = id;
         this.name = name;
         this.organization = organization;
         this.description = description;
@@ -75,52 +69,52 @@ public class Beacon implements Serializable {
     }
 
     public String getApi() {
-		return api;
-	}
+        return api;
+    }
 
-	public void setApi(String api) {
-		this.api = api;
-	}
+    public void setApi(String api) {
+        this.api = api;
+    }
 
-	public String getHomepage() {
-		return homepage;
-	}
+    public String getHomepage() {
+        return homepage;
+    }
 
-	public void setHomepage(String homepage) {
-		this.homepage = homepage;
-	}
+    public void setHomepage(String homepage) {
+        this.homepage = homepage;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public String getAuth() {
-		return auth;
-	}
+    public String getAuth() {
+        return auth;
+    }
 
-	public void setAuth(String auth) {
-		this.auth = auth;
-	}
+    public void setAuth(String auth) {
+        this.auth = auth;
+    }
 
-    public List<DataSetResource> getQueries() {
-		return queries;
-	}
+    public List<Dataset> getDatasets() {
+        return datasets;
+    }
 
-	public void setQueries(List<DataSetResource> queries) {
-		this.queries = queries;
-	}
+    public void setDatasets(List<Dataset> datasets) {
+        this.datasets = datasets;
+    }
 
-	public List<QueryResource> getDatasets() {
-		return datasets;
-	}
+    public List<Query> getQueries() {
+        return queries;
+    }
 
-	public void setDatasets(List<QueryResource> datasets) {
-		this.datasets = datasets;
-	}
+    public void setQueries(List<Query> queries) {
+        this.queries = queries;
+    }
 
     public String getId() {
         return id;
@@ -214,7 +208,7 @@ public class Beacon implements Serializable {
 
     @Override
     public String toString() {
-        return "Beacon{" + "id=" + id + ", name=" + name + ", organization=" + organization + ", description=" + description + ", api=" + api + ", homepage=" + ", email=" + email +  ", auth=" + auth + " + " + ", queries=" + queries + ", datasets=" + datasets + "}";
+        return "Beacon{" + "id=" + id + ", name=" + name + ", organization=" + organization + ", description=" + description + ", api=" + api + ", homepage=" + ", email=" + email + ", auth=" + auth + " + " + ", queries=" + queries + ", datasets=" + datasets + "}";
     }
 
 }

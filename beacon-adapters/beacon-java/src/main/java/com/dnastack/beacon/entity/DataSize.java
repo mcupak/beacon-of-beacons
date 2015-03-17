@@ -21,36 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.beacon.rest;
+package com.dnastack.beacon.entity;
 
-import com.dnastack.beacon.entity.BeaconResponse;
-import com.dnastack.beacon.entity.Response;
-import com.dnastack.beacon.service.BeaconService;
+import javax.xml.bind.annotation.XmlRootElement;
 
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-
-/**
- * Beacon rest resource.
- *
- * @author Miroslav Cupak (mirocupak@gmail.com)
- * @version 1.0
+/*
+ * Dimensions of the data set (required if the beacon reports allele frequencies)
  */
-@Path("/query")
-@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN})
-public class BeaconResource {
+@XmlRootElement(name = "data-size")
+public class DataSize {
 
-    @Inject
-    private BeaconService service;
+    private Integer variants;
+    private Integer samples;
 
-    @GET
-    public BeaconResponse query(@QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele, @QueryParam("ref") String ref, @QueryParam("dataset") String dataset) {
-
-    return service.query(chrom, pos, allele, ref, dataset);
-
+    public DataSize() {
+        // needed for JAXB
     }
+
+    /*
+     * required field(s): variants
+     */
+    public DataSize(Integer variants, Integer samples) {
+        this.variants = variants;
+        this.samples = samples;
+    }
+
+    public Integer getVariants() {
+        return variants;
+    }
+
+    public void setVariants(Integer variants) {
+        this.variants = variants;
+    }
+
+    public Integer getSamples() {
+        return samples;
+    }
+
+    public void setSamples(Integer samples) {
+        this.samples = samples;
+    }
+
 }

@@ -23,72 +23,73 @@
  */
 package com.dnastack.beacon.entity;
 
+import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Query.
+ * Data set.
  */
-@XmlRootElement(name = "query")
-public class Query {
+@XmlRootElement(name = "dataset")
+public class Dataset {
 
-    private String allele;
-    private Chromosome chromosome;
-    private Long position;
-    private Reference reference;
-    private String dataset_id;
+    private String id;
+    private String description;
+    private String reference;
+    private DataSize size;
+    private List<DataUse> data_uses;
 
-    /*
-     * required field(s): allele, chromosome, position, reference
-     */
-    public Query(String allele, Chromosome chromosome, Long position, Reference reference, String dataset_id) {
-        this.allele = allele;
-        this.chromosome = chromosome;
-        this.position = position;
-        this.reference = reference;
-        this.dataset_id = dataset_id;
-    }
-
-    public Query() {
+    public Dataset() {
         // needed for JAXB
     }
 
-    public String getAllele() {
-        return allele;
+    /*
+     * required field(s): id
+     */
+    public Dataset(String id, String description, String reference, DataSize size, List<DataUse> data_uses) {
+        this.id = id;
+        this.description = description;
+        this.reference = reference;
+        this.size = size;
+        this.data_uses = data_uses;
     }
 
-    public void setAllele(String allele) {
-        this.allele = allele;
+    public String getId() {
+        return id;
     }
 
-    public Chromosome getChromosome() {
-        return chromosome;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setChromosome(Chromosome chromosome) {
-        this.chromosome = chromosome;
+    public String getDescription() {
+        return description;
     }
 
-    public Reference getReference() {
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getReference() {
         return reference;
     }
 
-    public void setReference(Reference reference) {
+    public void setReference(String reference) {
         this.reference = reference;
     }
 
-    public Long getPosition() {
-        return position;
+    public DataSize getSize() {
+        return size;
     }
 
-    public void setPosition(Long position) {
-        this.position = position;
+    public void setSize(DataSize size) {
+        this.size = size;
     }
 
-    public String getDataset_id() {
-        return dataset_id;
+    public List<DataUse> getData_uses() {
+        return data_uses;
     }
 
-    public void setDataset_id(String dataset_id) {
-        this.dataset_id = dataset_id;
+    public void setData_uses(List<DataUse> data_uses) {
+        this.data_uses = data_uses;
     }
 }

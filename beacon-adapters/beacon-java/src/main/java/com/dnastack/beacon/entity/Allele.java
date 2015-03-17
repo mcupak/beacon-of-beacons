@@ -25,31 +25,23 @@ package com.dnastack.beacon.entity;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-/**
- * Query.
- */
-@XmlRootElement(name = "query")
-public class Query {
+@XmlRootElement(name = "allele")
+public class Allele {
 
     private String allele;
-    private Chromosome chromosome;
-    private Long position;
-    private Reference reference;
-    private String dataset_id;
+    private Double frequency;
 
-    /*
-     * required field(s): allele, chromosome, position, reference
-     */
-    public Query(String allele, Chromosome chromosome, Long position, Reference reference, String dataset_id) {
-        this.allele = allele;
-        this.chromosome = chromosome;
-        this.position = position;
-        this.reference = reference;
-        this.dataset_id = dataset_id;
+    public Allele() {
+        // needed for JAXB
     }
 
-    public Query() {
-        // needed for JAXB
+    /*
+     * Required field(s): allele
+     * frequency is a double between 0 & 1
+     */
+    public Allele(String allele, Double frequency) {
+        this.allele = allele;
+        this.frequency = frequency;
     }
 
     public String getAllele() {
@@ -60,35 +52,11 @@ public class Query {
         this.allele = allele;
     }
 
-    public Chromosome getChromosome() {
-        return chromosome;
+    public Double getFrequency() {
+        return frequency;
     }
 
-    public void setChromosome(Chromosome chromosome) {
-        this.chromosome = chromosome;
-    }
-
-    public Reference getReference() {
-        return reference;
-    }
-
-    public void setReference(Reference reference) {
-        this.reference = reference;
-    }
-
-    public Long getPosition() {
-        return position;
-    }
-
-    public void setPosition(Long position) {
-        this.position = position;
-    }
-
-    public String getDataset_id() {
-        return dataset_id;
-    }
-
-    public void setDataset_id(String dataset_id) {
-        this.dataset_id = dataset_id;
+    public void setFrequency(Double frequency) {
+        this.frequency = frequency;
     }
 }
