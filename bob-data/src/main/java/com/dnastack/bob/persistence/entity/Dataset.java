@@ -23,68 +23,58 @@
  */
 package com.dnastack.bob.persistence.entity;
 
+import com.dnastack.bob.persistence.enumerated.Reference;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 /**
+ * Beacon's data set.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
 @Entity
-public class DataUseRequirement implements BasicEntity {
+public class Dataset implements BasicEntity {
 
-    private static final long serialVersionUID = -7884494012832606419L;
+    private static final long serialVersionUID = 469349231640573964L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(nullable = false, unique = true)
-    private Long id;
-
-    @NotNull
-    @Column(nullable = false)
-    private String name;
+    @Column(name = "id", nullable = false, unique = true)
+    private String id;
     private String description;
-    @ManyToMany(mappedBy = "requirements")
-    private List<DataUse> dataUses;
+    @NotNull
+    @Enumerated
+    private Reference reference;
+    @Embedded
+    private DataSize size;
+    @ManyToMany
+    private Set<DataUse> dataUses;
+    @OneToMany(mappedBy = "dataSet")
+    private List<Query> queries;
 
-    public DataUseRequirement() {
+    public Dataset() {
     }
 
-    public DataUseRequirement(String name, String description) {
-        this.name = name;
+    public Dataset(String id, String description) {
+        this.id = id;
         this.description = description;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
-    }
-
-    public List<DataUse> getDataUses() {
-        return dataUses;
-    }
-
-    public void setDataUses(List<DataUse> dataUses) {
-        this.dataUses = dataUses;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getDescription() {
@@ -95,10 +85,42 @@ public class DataUseRequirement implements BasicEntity {
         this.description = description;
     }
 
+    public Reference getReference() {
+        return reference;
+    }
+
+    public void setReference(Reference reference) {
+        this.reference = reference;
+    }
+
+    public DataSize getSize() {
+        return size;
+    }
+
+    public void setSize(DataSize size) {
+        this.size = size;
+    }
+
+    public Set<DataUse> getDataUses() {
+        return dataUses;
+    }
+
+    public void setDataUses(Set<DataUse> dataUses) {
+        this.dataUses = dataUses;
+    }
+
+    public List<Query> getQueries() {
+        return queries;
+    }
+
+    public void setQueries(List<Query> queries) {
+        this.queries = queries;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 71 * hash + Objects.hashCode(this.id);
+        int hash = 7;
+        hash = 47 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -110,7 +132,7 @@ public class DataUseRequirement implements BasicEntity {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final DataUseRequirement other = (DataUseRequirement) obj;
+        final Dataset other = (Dataset) obj;
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
@@ -119,7 +141,7 @@ public class DataUseRequirement implements BasicEntity {
 
     @Override
     public String toString() {
-        return "DataUseRequirement{" + "id=" + id + ", name=" + name + ", description=" + description + '}';
+        return "Dataset{" + "id=" + id + ", description=" + description + ", reference=" + reference + ", size=" + size + '}';
     }
 
 }

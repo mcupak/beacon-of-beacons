@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 DNAstack.
+ * Copyright 2015 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,48 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.lrg;
+package com.dnastack.bob.persistence.api;
 
-import com.dnastack.bob.persistence.enumerated.Chromosome;
-import com.dnastack.bob.persistence.enumerated.Reference;
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
+import com.dnastack.bob.persistence.entity.DataUseRequirement;
 
 /**
- * BRCA convertor.
- * 
+ * DataUseRequirement DAO.
+ *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@ApplicationScoped
-@Named
-@Brca
-public class BrcaLrgConvertor implements LrgConvertor {
+public interface DataUseRequirementDao extends EntityWithLongIdDao<DataUseRequirement> {
 
-    private LrgMapping mapping;
-
-    @PostConstruct
-    private void init() {
-        mapping = LrgMappingProvider.getMapping(LrgLocus.LRG_292.toString(), "GRCh37.p13");
-    }
-
-    @Override
-    public Chromosome getChromosome() {
-        return Chromosome.CHR17;
-    }
-
-    @Override
-    public Reference getReference() {
-        return Reference.HG19;
-    }
-
-    @Override
-    public Long getPosition(long pos) {
-        LrgCoordinates from = new LrgCoordinates(LrgReference.LRG.toString().toLowerCase(), LrgLocus.LRG_292.toString(), pos, pos, false);
-        System.out.println(from);
-        System.out.println(mapping);
-
-        return mapping.mapForward(from).getStart();
-    }
 }

@@ -23,8 +23,8 @@
  */
 package com.dnastack.bob.lrg;
 
-import com.dnastack.bob.persistence.entity.Chromosome;
-import com.dnastack.bob.persistence.entity.Reference;
+import com.dnastack.bob.persistence.enumerated.Chromosome;
+import com.dnastack.bob.persistence.enumerated.Reference;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;

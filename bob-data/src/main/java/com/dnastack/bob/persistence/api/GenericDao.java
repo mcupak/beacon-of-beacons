@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 DNAstack.
+ * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,42 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.persistence.entity;
+package com.dnastack.bob.persistence.api;
 
-import java.io.Serializable;
+import com.dnastack.bob.persistence.entity.BasicEntity;
 import java.util.List;
-import java.util.Set;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
 
 /**
+ * DAO for generic entities.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
+ * @param <T> entity
  */
-@Entity
-public class DataSet implements Serializable {
+public interface GenericDao<T extends BasicEntity> {
 
+    long countAll();
 
-    private static final long serialVersionUID = 469349231640573964L;
+    T save(T entity);
 
-    @Id
-    @Column(name = "id", nullable = false, unique = true)
-    private String id;
-    private String description;
-    @NotNull
-    @Enumerated
-    private Reference reference;
-    @Embedded
-    private DataSize size;
-    @ManyToMany
-    private Set<DataUse> dataUses;
-    @OneToMany(mappedBy = "dataSet")
-    private List<Query> queries;
+    T update(T entity);
+
+    List<T> findAll();
+
+    void flush();
+
 }

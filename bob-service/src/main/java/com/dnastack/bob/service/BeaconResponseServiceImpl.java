@@ -27,7 +27,7 @@ import com.dnastack.bob.persistence.api.BeaconDao;
 import com.dnastack.bob.persistence.api.QueryDao;
 import com.dnastack.bob.dto.BeaconResponseTo;
 import com.dnastack.bob.persistence.entity.Beacon;
-import com.dnastack.bob.persistence.entity.BeaconResponse;
+import com.dnastack.bob.processor.BeaconResponse;
 import com.dnastack.bob.persistence.entity.Query;
 import com.dnastack.bob.lrg.Brca;
 import com.dnastack.bob.lrg.Brca2;

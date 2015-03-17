@@ -23,19 +23,18 @@
  */
 package com.dnastack.bob.persistence.entity;
 
-import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 
 /**
- * DataSize entity.
+ * Data size.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
 @Embeddable
-public class DataSize implements Serializable {
+public class DataSize implements BasicEntity {
 
     private static final long serialVersionUID = -3358978751981821234L;
 

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 DNAstack.
+ * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,37 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.persistence.entity;
+package com.dnastack.bob.persistence.impl;
+
+import com.dnastack.bob.persistence.api.EntityWithStringIdDao;
+import com.dnastack.bob.persistence.entity.BasicEntity;
 
 /**
- * Canonical genome representation.
+ * Default DAO implementation for entities with String id.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
+ * @param <T> entity
  */
-public enum Reference {
+public abstract class AbstractEntityWithStringIdDaoImpl<T extends BasicEntity> extends AbstractGenericDaoImpl<T> implements EntityWithStringIdDao<T> {
 
-    HG38("hg38"), HG19("hg19"), HG18("hg18"), HG17("hg17"), HG16("hg16");
-
-    private final String ref;
-
-    private Reference(String ref) {
-        this.ref = ref;
-    }
-
-    public static Reference fromString(String text) {
-        if (text != null) {
-            for (Reference b : Reference.values()) {
-                if (text.equalsIgnoreCase(b.toString())) {
-                    return b;
-                }
-            }
-        }
-        return null;
+    @Override
+    public T findById(String id) {
+        return em.find(getEntityClass(), id);
     }
 
     @Override
-    public String toString() {
-        return ref;
+    public void delete(String id) {
+        em.remove(em.getReference(getEntityClass(), id));
     }
 }

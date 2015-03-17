@@ -23,7 +23,6 @@
  */
 package com.dnastack.bob.persistence.entity;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -36,18 +35,19 @@ import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
 
 /**
+ * Data use.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
 @Entity
-public class DataUse implements Serializable {
+public class DataUse implements BasicEntity {
 
     private static final long serialVersionUID = -1851160255605858159L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Integer id;
+    private Long id;
     @NotNull
     @Column(nullable = false, unique = true)
     private String category;
@@ -55,7 +55,7 @@ public class DataUse implements Serializable {
     @ManyToMany
     private Set<DataUseRequirement> requirements;
     @ManyToMany(mappedBy = "dataUses")
-    private List<DataSet> datasets;
+    private List<Dataset> datasets;
 
     public DataUse() {
     }
@@ -66,12 +66,20 @@ public class DataUse implements Serializable {
         this.requirements = requirements;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
+    }
+
+    public List<Dataset> getDatasets() {
+        return datasets;
+    }
+
+    public void setDatasets(List<Dataset> datasets) {
+        this.datasets = datasets;
     }
 
     public String getCategory() {

@@ -23,7 +23,6 @@
  */
 package com.dnastack.bob.persistence.entity;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -40,7 +39,7 @@ import javax.validation.constraints.Size;
  * @version 1.0
  */
 @Entity
-public class Organization implements Serializable {
+public class Organization implements BasicEntity {
 
     private static final long serialVersionUID = -2628422425515576512L;
 

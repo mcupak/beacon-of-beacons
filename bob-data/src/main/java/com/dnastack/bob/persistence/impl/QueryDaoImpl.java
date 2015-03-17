@@ -24,9 +24,9 @@
 package com.dnastack.bob.persistence.impl;
 
 import com.dnastack.bob.persistence.api.QueryDao;
-import com.dnastack.bob.persistence.entity.Chromosome;
+import com.dnastack.bob.persistence.enumerated.Chromosome;
 import com.dnastack.bob.persistence.entity.Query;
-import com.dnastack.bob.persistence.entity.Reference;
+import com.dnastack.bob.persistence.enumerated.Reference;
 import com.dnastack.bob.util.QueryUtils;
 import java.io.Serializable;
 import javax.enterprise.context.ApplicationScoped;

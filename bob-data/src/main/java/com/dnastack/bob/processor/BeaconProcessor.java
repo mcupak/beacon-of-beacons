@@ -25,7 +25,7 @@ package com.dnastack.bob.processor;
 
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.persistence.entity.Query;
-import com.dnastack.bob.persistence.entity.Reference;
+import com.dnastack.bob.persistence.enumerated.Reference;
 import java.util.Set;
 import java.util.concurrent.Future;
 

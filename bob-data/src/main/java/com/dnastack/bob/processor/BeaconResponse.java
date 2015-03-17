@@ -21,8 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.persistence.entity;
+package com.dnastack.bob.processor;
 
+import com.dnastack.bob.persistence.entity.Beacon;
+import com.dnastack.bob.persistence.entity.Query;
 import java.io.Serializable;
 
 /**

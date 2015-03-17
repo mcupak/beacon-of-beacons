@@ -24,7 +24,6 @@
 package com.dnastack.bob.persistence.api;
 
 import com.dnastack.bob.persistence.entity.Organization;
-import java.util.List;
 
 /**
  * Organization DAO.
@@ -32,19 +31,6 @@ import java.util.List;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public interface OrganizationDao {
+public interface OrganizationDao extends EntityWithStringIdDao<Organization> {
 
-    Organization save(Organization o);
-
-    Organization update(Organization o);
-
-    Organization findById(String id);
-
-    void remove(String id);
-
-    void flush();
-
-    long countAll();
-
-    List<Organization> findAll();
 }

@@ -24,7 +24,6 @@
 package com.dnastack.bob.persistence.entity;
 
 import com.dnastack.bob.processor.BeaconProcessor;
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
@@ -44,7 +43,7 @@ import javax.validation.constraints.Size;
  * @version 1.0
  */
 @Entity
-public class Beacon implements Serializable {
+public class Beacon implements BasicEntity {
 
     private static final long serialVersionUID = -1451238811291388547L;
 

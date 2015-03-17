@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 DNAstack.
+ * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,19 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.persistence.impl;
+package com.dnastack.bob.persistence.entity;
 
-import com.dnastack.bob.persistence.api.OrganizationDao;
-import com.dnastack.bob.persistence.entity.Organization;
-import javax.enterprise.context.RequestScoped;
+import java.io.Serializable;
 
 /**
- * JPA-based implementation of organization DAO.
+ * Parent of all the entities.
  *
- * @author Miroslav Cupak (mirocupak@gmail.com)
- * @version 1.0
+ * @author mcupak
  */
-@RequestScoped
-public class OrganizationDaoImpl extends AbstractEntityWithStringIdDaoImpl<Organization> implements OrganizationDao {
+public interface BasicEntity extends Serializable {
 
 }

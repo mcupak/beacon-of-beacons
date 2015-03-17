@@ -23,19 +23,19 @@
  */
 package com.dnastack.bob.persistence;
 
+import com.dnastack.bob.persistence.api.GenericDao;
 import com.dnastack.bob.persistence.api.OrganizationDao;
+import com.dnastack.bob.persistence.entity.BasicEntity;
 import com.dnastack.bob.persistence.entity.Organization;
+import java.util.ArrayList;
+import java.util.List;
 import javax.inject.Inject;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.Cleanup;
 import org.jboss.arquillian.persistence.CleanupStrategy;
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.jboss.arquillian.transaction.api.annotation.Transactional;
-import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Organization DAO test.
@@ -47,17 +47,29 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @Transactional
 @UsingDataSet("organization_init.json")
 @Cleanup(strategy = CleanupStrategy.USED_TABLES_ONLY) // this is important in order to prevent foreign-key violations
-public class OrganizationDaoTest extends BasicDaoTest {
+public class OrganizationDaoTest extends GenericDaoTest {
 
     @Inject
     private OrganizationDao dao;
 
-    private Organization getNewData() {
-        return null;
+    @Override
+    public GenericDao getDao() {
+        return dao;
     }
 
-    @Test
-    public void testCountAll() {
-        assertThat(1L, equalTo(dao.countAll()));
+    @Override
+    public Class<? extends BasicEntity> getEntityClass() {
+        return Organization.class;
     }
+
+    public List<Organization> getNewData() {
+        List<Organization> res = new ArrayList<>();
+        Organization o = new Organization();
+        o.setId("new");
+        o.setName("new");
+        res.add(o);
+
+        return res;
+    }
+
 }

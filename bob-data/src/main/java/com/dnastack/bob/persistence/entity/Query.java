@@ -23,6 +23,8 @@
  */
 package com.dnastack.bob.persistence.entity;
 
+import com.dnastack.bob.persistence.enumerated.Chromosome;
+import com.dnastack.bob.persistence.enumerated.Reference;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Entity;
@@ -60,7 +62,7 @@ public class Query implements Serializable {
     private String allele;
     private Reference reference;
     @ManyToOne
-    private DataSet dataSet;
+    private Dataset dataSet;
 
     public Query() {
     }
