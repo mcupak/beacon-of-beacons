@@ -31,12 +31,12 @@ In order to implement a beacon, simply override beacon details and query functio
 
 The API takes care of the rest and provides the following endpoints when you start your beacon:
 
-    http://127.0.0.1:5000/beacon-python/rest/info - information about your beacon
-    http://127.0.0.1:5000/beacon-python/rest/query - access to query service
+    http://127.0.0.1:5000/beacon-python/info - information about your beacon
+    http://127.0.0.1:5000/beacon-python/query - access to query service
 
 Query example:
 
-    GET http://127.0.0.1:5000/beacon-python/rest/query?chrom=15&pos=41087870&allele=A&ref=hg19
+    GET http://127.0.0.1:5000/beacon-python/query?chrom=15&pos=41087870&allele=A&ref=hg19
 
 ##Technologies
 Python, Flask.

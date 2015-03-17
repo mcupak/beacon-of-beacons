@@ -24,8 +24,15 @@
 package com.dnastack.beacon.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
+
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.dnastack.beacon.entity.resources.DataSetResource;
+import com.dnastack.beacon.entity.resources.QueryResource;
 
 /**
  * Beacon.
@@ -42,17 +49,78 @@ public class Beacon implements Serializable {
     private String name;
     private String organization;
     private String description;
+	private String api;
+    private String homepage;
+    private String email;
+    private String auth = null;
+
+    private List<DataSetResource> queries;
+    private List<QueryResource> datasets;
 
     public Beacon() {
         // needed for JAXB
     }
 
-    public Beacon(String id, String name, String organization, String description) {
-        this.id = id;
+    public Beacon(String id, String name, String organization, String description, String api, String homepage, String email, String auth, List<DataSetResource> queries,  List<QueryResource> datasets) {
+    	this.id = id;
         this.name = name;
         this.organization = organization;
         this.description = description;
+        this.api = api;
+        this.homepage = homepage;
+        this.email = email;
+        this.auth = auth;
+        this.queries = queries;
+        this.datasets = datasets;
     }
+
+    public String getApi() {
+		return api;
+	}
+
+	public void setApi(String api) {
+		this.api = api;
+	}
+
+	public String getHomepage() {
+		return homepage;
+	}
+
+	public void setHomepage(String homepage) {
+		this.homepage = homepage;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getAuth() {
+		return auth;
+	}
+
+	public void setAuth(String auth) {
+		this.auth = auth;
+	}
+
+    public List<DataSetResource> getQueries() {
+		return queries;
+	}
+
+	public void setQueries(List<DataSetResource> queries) {
+		this.queries = queries;
+	}
+
+	public List<QueryResource> getDatasets() {
+		return datasets;
+	}
+
+	public void setDatasets(List<QueryResource> datasets) {
+		this.datasets = datasets;
+	}
 
     public String getId() {
         return id;
@@ -93,6 +161,12 @@ public class Beacon implements Serializable {
         hash = 61 * hash + Objects.hashCode(this.name);
         hash = 61 * hash + Objects.hashCode(this.organization);
         hash = 61 * hash + Objects.hashCode(this.description);
+        hash = 61 * hash + Objects.hashCode(this.api);
+        hash = 61 * hash + Objects.hashCode(this.homepage);
+        hash = 61 * hash + Objects.hashCode(this.email);
+        hash = 61 * hash + Objects.hashCode(this.auth);
+        hash = 61 * hash + Objects.hashCode(this.queries);
+        hash = 61 * hash + Objects.hashCode(this.datasets);
         return hash;
     }
 
@@ -117,12 +191,30 @@ public class Beacon implements Serializable {
         if (!Objects.equals(this.description, other.description)) {
             return false;
         }
+        if (!Objects.equals(this.api, other.api)) {
+            return false;
+        }
+        if (!Objects.equals(this.homepage, other.homepage)) {
+            return false;
+        }
+        if (!Objects.equals(this.email, other.email)) {
+            return false;
+        }
+        if (!Objects.equals(this.auth, other.auth)) {
+            return false;
+        }
+        if (!Objects.equals(this.queries, other.queries)) {
+            return false;
+        }
+        if (!Objects.equals(this.datasets, other.datasets)) {
+            return false;
+        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "Beacon{" + "id=" + id + ", name=" + name + ", organization=" + organization + ", description=" + description + '}';
+        return "Beacon{" + "id=" + id + ", name=" + name + ", organization=" + organization + ", description=" + description + ", api=" + api + ", homepage=" + ", email=" + email +  ", auth=" + auth + " + " + ", queries=" + queries + ", datasets=" + datasets + "}";
     }
 
 }

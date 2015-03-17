@@ -35,7 +35,7 @@ import javax.ws.rs.core.Application;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@ApplicationPath("/rest")
+@ApplicationPath("/")
 public class BeaconApplication extends Application {
 
     @Override

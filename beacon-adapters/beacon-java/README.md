@@ -17,8 +17,8 @@ All you need to build this project is Java 7.0 (Java SDK 1.7) or later, Maven 3.
 ##How to run it
 Start the JBoss server:
 
-    For Linux:   JBOSS_HOME/bin/standalone.sh
-    For Windows: JBOSS_HOME\bin\standalone.bat
+    For Linux/Unix: JBOSS_HOME/bin/standalone.sh
+    For Windows: 	JBOSS_HOME\bin\standalone.bat
 
 Build and deploy the archive:
 
@@ -45,8 +45,8 @@ In order to create your own beacon, we suggest you do the following:
 
 The API takes care of the rest and provides the following endpoints upon deployment of your beacon:
 
-    http://localhost:8080/beacon-java/rest/info - information about your beacon
-    http://localhost:8080/beacon-java/rest/query - access to query service
+    http://localhost:8080/beacon-java/info - information about your beacon
+    http://localhost:8080/beacon-java/query - access to query service
 
 ##Technologies
 Java EE. CDI, JAX-RS, JAXB. Tested with Arquillian/ShrinkWrap.

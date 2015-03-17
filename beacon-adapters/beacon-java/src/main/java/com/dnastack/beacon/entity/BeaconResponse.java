@@ -24,7 +24,11 @@
 package com.dnastack.beacon.entity;
 
 import java.io.Serializable;
+import java.util.Objects;
+
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.dnastack.beacon.entity.resources.ResponseResource;
 
 /**
  * Beacon response.
@@ -37,29 +41,29 @@ public class BeaconResponse implements Serializable {
 
     private static final long serialVersionUID = 54L;
 
-    private Beacon beacon;
+    private String beacon_id;
     private Query query;
-    private Boolean response = null;
+    private ResponseResource response = null;
 
     public BeaconResponse() {
         // needed for JAXB
     }
 
-    public BeaconResponse(Beacon beacon, Query query, Boolean response) {
-        this.beacon = beacon;
+    public BeaconResponse(String beacon_id, Query query, ResponseResource response) {
+        this.beacon_id = beacon_id;
         this.query = query;
         this.response = response;
     }
 
-    public Beacon getBeacon() {
-        return beacon;
-    }
+    public String getBeacon_id() {
+		return beacon_id;
+	}
 
-    public void setBeacon(Beacon beacon) {
-        this.beacon = beacon;
-    }
+	public void setBeacon_id(String beacon_id) {
+		this.beacon_id = beacon_id;
+	}
 
-    public Query getQuery() {
+	public Query getQuery() {
         return query;
     }
 
@@ -67,18 +71,18 @@ public class BeaconResponse implements Serializable {
         this.query = query;
     }
 
-    public Boolean getResponse() {
+    public ResponseResource getResponse() {
         return response;
     }
 
-    public void setResponse(Boolean response) {
+    public void setResponse(ResponseResource response) {
         this.response = response;
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 41 * hash + (this.beacon != null ? this.beacon.hashCode() : 0);
+        hash = 41 * hash + Objects.hashCode(this.beacon_id);
         hash = 41 * hash + (this.query != null ? this.query.hashCode() : 0);
         hash = 41 * hash + (this.response != null ? this.response.hashCode() : 0);
         return hash;
@@ -93,7 +97,7 @@ public class BeaconResponse implements Serializable {
             return false;
         }
         final BeaconResponse other = (BeaconResponse) obj;
-        if (this.beacon != other.beacon && (this.beacon == null || !this.beacon.equals(other.beacon))) {
+        if (this.beacon_id != other.beacon_id && (this.beacon_id == null || !this.beacon_id.equals(other.beacon_id))) {
             return false;
         }
         if (this.query != other.query && (this.query == null || !this.query.equals(other.query))) {
@@ -107,7 +111,7 @@ public class BeaconResponse implements Serializable {
 
     @Override
     public String toString() {
-        return "Response of '" + beacon + "' to '" + query + "': '" + response + "'";
+        return "Response of '" + beacon_id + "' to '" + query + "': '" + response + "'";
     }
 
 }

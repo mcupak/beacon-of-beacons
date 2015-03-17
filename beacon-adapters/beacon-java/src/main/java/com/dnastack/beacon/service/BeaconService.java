@@ -41,10 +41,11 @@ public interface BeaconService {
      * @param pos    position
      * @param allele allele
      * @param ref    reference genome (optional)
+     * @param dataset dataset
      *
      * @return list of beacon responses
      */
-    BeaconResponse query(String chrom, Long pos, String allele, String ref);
+    BeaconResponse query(String chrom, Long pos, String allele, String ref, String dataset);
     
     /**
      * Obtains beacon information.

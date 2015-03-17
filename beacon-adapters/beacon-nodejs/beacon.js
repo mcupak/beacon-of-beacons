@@ -23,9 +23,76 @@
  */
 var restify = require('restify');
 
-// beacon details
+//--------------- Information endpont (start) --------------------//
+
 // TODO: override with the details of your beacon
-var beacon = {'description': 'sample beacon', 'id': 'foo', 'name': 'bar', 'organization': 'org'};
+
+//############# DataSetResource for beacon details ############//
+
+// required field(s): name
+var DataUseRequirementResource = {
+    'name': 'example name',
+    'description': 'example description'
+};
+
+// required field(s): variants
+var DataSizeResource = {
+    'variants': 1, // integer
+    'samples': 1 // integer
+};
+
+// required field(s): category
+var DataUseResource = {
+    'category': 'example use category',
+    'description': 'example description',
+    'requirements': [
+        DataUseRequirementResource
+    ]
+};
+
+// required field(s): id
+var DataSetResource = {
+    'id': 'example Id',
+    'description': 'dataset description',
+    'reference': 'reference genome',
+    'size': DataSizeResource,  // Dimensions of the data set (required if the beacon reports allele frequencies)
+    'data_uses': [
+        DataUseResource // Data use limitations
+    ]
+};
+
+//########## QueryResource for beacon details ###############//
+
+// required field(s): allele, chromosome, position, reference
+var QueryResource = {
+    'allele': 'allele string',
+    'chromosome': 'chromosome Id',
+    'position': 1, // integer
+    'reference': 'genome Id',
+    'dataset_id': 'dataset Id'
+};
+
+//################## Beacon details #########################//
+
+// required field(s): id, name, organization, api
+var beacon = {
+    'id': 'foo',
+    'name': 'bar',
+    'organization': 'org',
+    'api': '0.1/0.2',
+    'description': 'beacon description',
+    'datasets': [
+        DataSetResource  // Datasets served by the beacon
+    ],
+    'homepage': 'http://dnastack.com/ga4gh/bob/',
+    'email': 'beacon@dnastack.com',
+    'auth': 'oauth2',  // OAUTH2, defaults to none
+    'queries': [
+        QueryResource  // Examples of interesting queries
+    ]
+};
+
+//--------------- Information endpoint (end) ----------------------//
 
 // info function
 function info(req, res, next) {
@@ -36,26 +103,88 @@ function info(req, res, next) {
 // query function
 // TODO: plug in your data/functionality here
 function query(req, res, next) {
+    
     // parse query
-    chromosome = req.query.chrom;
-    position = parseInt(req.query.pos);
-    allele = req.query.allele;
-    reference = req.query.ref;
-    query = {'chromosome': chromosome, 'position': position, 'allele': allele, 'reference': reference};
+    var chromosome = req.query.chrom;
+    var position = parseInt(req.query.pos);
+    var allele = req.query.allele;
+    var reference = req.query.ref;
+    var dataset = req.query.dataset;
 
+    if (dataset == undefined) {
+        dataset = beacon['datasets'][0]['id'];
+    }
+
+//---- TODO: override with the necessary response details  ----//
+
+//############# AlleleResource for response ##############//
+
+    // required field(s): allele
+    var AlleleResource = {
+        'allele': allele,
+        'frequency': 0.5 // double between 0 & 1
+    };
+
+//############ ErrorResource for response #################//
+
+    // required field(s): name
+    var ErrorResource = {
+        'name': 'error name/code',
+        'description': 'error message'
+    };
+
+//################## Response object ########################//
+    
     // generate response
-    response = true;
+    // required field(s): exists
+    var response = {
+        'exists': true,
+        'observed': 0,  // integer, min 0
+        'alleles': [
+            AlleleResource
+        ],
+        'info': 'response information', 
+    };
 
-    res.send({"beacon": beacon, "query": query, 'response': response});
+//--------------------------------------------------------------//
+
+    var query = {
+        'chromosome': chromosome,
+        'position': position,
+        'allele': allele,
+        'reference': reference,
+        'dataset': dataset
+    };
+
+    if (query['chromosome'] == undefined || query['position'] == undefined || query['allele'] == undefined || query['reference'] == undefined) {
+
+        ErrorResource['name'] = 'Incomplete Query';
+        ErrorResource['description'] = 'Required parameters are misssing';
+
+        response = {
+            'exists': null,
+            'error': ErrorResource
+        };
+
+    }
+
+    res.send({"beacon": beacon["id"], "query": query, 'response': response});
+    next();
+}
+
+function welcome(req, res, next) {
+    var message = 'WELCOME!!! Beacon of Beacons Project (BoB) provides a unified REST API to publicly available GA4GH Beacons. BoB standardizes the way beacons are accessed and aggregates their results, thus addressing one of the missing parts of the Beacon project itself. BoB was designed with ease of programmatic access in mind. It provides XML, JSON and plaintext responses to accommodate needs of all the clients across all the programming languages. The API to use is determined using the header supplied by the client in its GET request, e.g.: "Accept: application/json".';
+    res.send(message);
     next();
 }
 
 var server = restify.createServer({name: 'beacon'});
 server.use(restify.queryParser());
-server.get('/beacon-nodejs/rest/info', info);
-server.head('/beacon-nodejs/rest/info', info);
-server.get('/beacon-nodejs/rest/query', query);
-server.head('/beacon-nodejs/rest/query', query);
+server.get('/beacon-nodejs/info', info);
+server.head('/beacon-nodejs/info', info);
+server.get('/beacon-nodejs/query', query);
+server.head('/beacon-nodejs/query', query);
+server.get('/beacon-nodejs/', welcome);
 
 server.listen(8080, function () {
     console.log('%s listening at %s', server.name, server.url);

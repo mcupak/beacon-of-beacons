@@ -24,13 +24,17 @@
 package com.dnastack.beacon.rest;
 
 import com.dnastack.beacon.entity.BeaconResponse;
+import com.dnastack.beacon.entity.resources.ResponseResource;
+
 import java.net.MalformedURLException;
 import java.net.URL;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
+
 import org.eclipse.persistence.jaxb.JAXBContextProperties;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
@@ -110,7 +114,8 @@ public class BeaconResourceTest {
         BeaconResponse br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
-        assertTrue(br.getResponse());
+        ResponseResource response = br.getResponse();
+        assertTrue(response.getExists());
     }
 
     @Test
@@ -119,7 +124,8 @@ public class BeaconResourceTest {
         BeaconResponse br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
 
         assertNotNull(br);
-        assertFalse(br.getResponse());
+        ResponseResource response = br.getResponse();
+        assertTrue(response.getExists());
     }
 
 }
