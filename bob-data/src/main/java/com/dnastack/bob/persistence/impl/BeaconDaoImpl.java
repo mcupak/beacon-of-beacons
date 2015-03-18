@@ -25,26 +25,21 @@ package com.dnastack.bob.persistence.impl;
 
 import com.dnastack.bob.persistence.api.BeaconDao;
 import com.dnastack.bob.persistence.entity.Beacon;
-import java.io.Serializable;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 
 /**
- * Basic static mapper and holder of beacons and services.
+ * Basic beacon DAO implementation..
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@ApplicationScoped
-public class BeaconDaoImpl implements BeaconDao, Serializable {
+@RequestScoped
+public class BeaconDaoImpl extends AbstractEntityWithStringIdDaoImpl<Beacon> implements BeaconDao {
 
-    private static final long serialVersionUID = 5L;
+    private static final long serialVersionUID = 7394221412609376503L;
 
-    private Set<Beacon> beacons;
+//    private Set<Beacon> beacons;
 
 //    @Inject
 //    @Ucsc
@@ -89,8 +84,7 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
 //    @Inject
 //    @Icgc
 //    private BeaconProcessor icgcService;
-
-    private void setUpBeacons() {
+//    private void setUpBeacons() {
 //        this.beacons = new HashSet<>();
 //
 //        // set up bob
@@ -164,94 +158,129 @@ public class BeaconDaoImpl implements BeaconDao, Serializable {
 //                b.addAggregator(bob);
 //            }
 //        }
-    }
+//    }
 
-    @PostConstruct
-    private void init() {
-        setUpBeacons();
-    }
-
-    private Beacon findBeacon(String beaconId) {
-        for (Beacon b : beacons) {
-            if (b.getId().equals(beaconId)) {
-                return b;
-            }
-        }
-
-        return null;
-    }
+//    @PostConstruct
+//    private void init() {
+//        setUpBeacons();
+//    }
+//
+//    private Beacon findBeacon(String beaconId) {
+//        for (Beacon b : beacons) {
+//            if (b.getId().equals(beaconId)) {
+//                return b;
+//            }
+//        }
+//
+//        return null;
+//    }
+//
+//    @Override
+//    public Collection<Beacon> getAllBeacons() {
+//        return Collections.unmodifiableCollection(beacons);
+//    }
+//
+//    @Override
+//    public Collection<Beacon> getAggregatingBeacons() {
+//        Set<Beacon> res = new HashSet<>();
+//        for (Beacon b : getAllBeacons()) {
+//            if (b.getProcessor() == null) {
+//                res.add(b);
+//            }
+//        }
+//
+//        return res;
+//    }
+//
+//    @Override
+//    public Collection<Beacon> getRegularBeacons() {
+//        Set<Beacon> res = new HashSet<>();
+//        for (Beacon b : getAllBeacons()) {
+//            if (b.getProcessor() != null) {
+//                res.add(b);
+//            }
+//        }
+//        return res;
+//    }
+//
+//    @Override
+//    public Collection<Beacon> getVisibleBeacons() {
+//        Set<Beacon> res = new HashSet<>();
+//        for (Beacon b : getAllBeacons()) {
+//            if (b.isVisible()) {
+//                res.add(b);
+//            }
+//        }
+//        return res;
+//    }
+//
+//    @Override
+//    public Collection<Beacon> getHiddenBeacons() {
+//        Set<Beacon> res = new HashSet<>();
+//        for (Beacon b : getAllBeacons()) {
+//            if (!b.isVisible()) {
+//                res.add(b);
+//            }
+//        }
+//        return res;
+//    }
+//
+//    @Override
+//    public Beacon getBeacon(String beaconId) {
+//        if (beaconId == null) {
+//            throw new NullPointerException("beaconId");
+//        }
+//
+//        return findBeacon(beaconId);
+//    }
+//
+//    @Override
+//    public Beacon getVisibleBeacon(String beaconId) {
+//        if (beaconId == null) {
+//            throw new NullPointerException("beaconId");
+//        }
+//
+//        Beacon b = findBeacon(beaconId);
+//        if (b == null) {
+//            return null;
+//        }
+//
+//        return b.isVisible() ? b : null;
+//    }
 
     @Override
     public Collection<Beacon> getAllBeacons() {
-        return Collections.unmodifiableCollection(beacons);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Collection<Beacon> getAggregatingBeacons() {
-        Set<Beacon> res = new HashSet<>();
-        for (Beacon b : getAllBeacons()) {
-            if (b.getProcessor() == null) {
-                res.add(b);
-            }
-        }
-
-        return res;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Collection<Beacon> getRegularBeacons() {
-        Set<Beacon> res = new HashSet<>();
-        for (Beacon b : getAllBeacons()) {
-            if (b.getProcessor() != null) {
-                res.add(b);
-            }
-        }
-        return res;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Collection<Beacon> getVisibleBeacons() {
-        Set<Beacon> res = new HashSet<>();
-        for (Beacon b : getAllBeacons()) {
-            if (b.isVisible()) {
-                res.add(b);
-            }
-        }
-        return res;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Collection<Beacon> getHiddenBeacons() {
-        Set<Beacon> res = new HashSet<>();
-        for (Beacon b : getAllBeacons()) {
-            if (!b.isVisible()) {
-                res.add(b);
-            }
-        }
-        return res;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Beacon getBeacon(String beaconId) {
-        if (beaconId == null) {
-            throw new NullPointerException("beaconId");
-        }
-
-        return findBeacon(beaconId);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Beacon getVisibleBeacon(String beaconId) {
-        if (beaconId == null) {
-            throw new NullPointerException("beaconId");
-        }
-
-        Beacon b = findBeacon(beaconId);
-        if (b == null) {
-            return null;
-        }
-
-        return b.isVisible() ? b : null;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

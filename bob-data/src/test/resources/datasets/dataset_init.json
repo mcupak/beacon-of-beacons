@@ -1,0 +1,11 @@
+{
+    "dataset":
+            [
+                {
+                    "id": "test",
+                    "name": "test",
+                    "description": "test",
+                    "reference": "HG19"
+                }
+            ]
+}

@@ -23,9 +23,10 @@
  */
 package com.dnastack.bob.persistence;
 
+import com.dnastack.bob.persistence.api.BeaconDao;
 import com.dnastack.bob.persistence.api.GenericDao;
-import com.dnastack.bob.persistence.api.OrganizationDao;
 import com.dnastack.bob.persistence.entity.BasicEntity;
+import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.persistence.entity.Organization;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,37 +46,42 @@ import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.junit.Assert.assertThat;
 
 /**
- * Organization DAO test.
+ * Beacon DAO test.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
 @RunWith(Arquillian.class)
 @Transactional
-@UsingDataSet("organization_init.json")
+@UsingDataSet("beacon_init.json")
 @Cleanup(strategy = CleanupStrategy.USED_TABLES_ONLY) // this is important in order to prevent foreign-key violations
-public class OrganizationDaoTest extends EntityWithStringIdDaoTest {
+public class BeaconDaoTest extends EntityWithStringIdDaoTest {
 
     @Inject
-    private OrganizationDao dao;
+    private BeaconDao dao;
 
     @Override
-    public GenericDao<Organization> getDao() {
+    public GenericDao<Beacon> getDao() {
         return dao;
     }
 
     @Override
     public Class<? extends BasicEntity> getEntityClass() {
-        return Organization.class;
+        return Beacon.class;
     }
 
     @Override
     public List<BasicEntity> getNewData() {
+        Organization o = (Organization) findOne(Organization.class);
+
         List<BasicEntity> res = new ArrayList<>();
-        Organization o = new Organization();
-        o.setId("new");
-        o.setName("new");
-        res.add(o);
+        Beacon b = new Beacon();
+        b.setId("new");
+        b.setName("new");
+        b.setDescription("new");
+        b.setVisible(true);
+        b.setOrganization(o);
+        res.add(b);
 
         return res;
     }
@@ -83,10 +89,10 @@ public class OrganizationDaoTest extends EntityWithStringIdDaoTest {
     @Override
     @Test
     public void testUpdate() {
-        Organization e = (Organization) findOne(getEntityClass());
+        Beacon e = (Beacon) findOne(getEntityClass());
         e.setName("updated");
 
-        Organization b = dao.update(e);
+        Beacon b = dao.update(e);
 
         assertThat(findAll(getEntityClass()), hasItem(samePropertyValuesAs(b)));
     }
@@ -94,7 +100,7 @@ public class OrganizationDaoTest extends EntityWithStringIdDaoTest {
     @Override
     @Test
     public void testDelete() {
-        Organization e = (Organization) findOne(getEntityClass());
+        Beacon e = (Beacon) findOne(getEntityClass());
         dao.delete(e.getId());
         assertThat(findAll(getEntityClass()), not(hasItem(e)));
     }
@@ -102,8 +108,8 @@ public class OrganizationDaoTest extends EntityWithStringIdDaoTest {
     @Override
     @Test
     public void testFindById() {
-        Organization e = (Organization) findOne(getEntityClass());
-        Organization e2 = dao.findById(e.getId());
+        Beacon e = (Beacon) findOne(getEntityClass());
+        Beacon e2 = dao.findById(e.getId());
         assertThat(e, equalTo(e2));
     }
 

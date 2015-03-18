@@ -24,6 +24,7 @@
 package com.dnastack.bob.persistence.api;
 
 import com.dnastack.bob.persistence.entity.BasicEntity;
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -33,7 +34,7 @@ import java.util.List;
  * @version 1.0
  * @param <T> entity
  */
-public interface GenericDao<T extends BasicEntity> {
+public interface GenericDao<T extends BasicEntity> extends Serializable {
 
     long countAll();
 

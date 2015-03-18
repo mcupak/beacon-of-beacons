@@ -68,7 +68,7 @@ public class Beacon implements BasicEntity {
     @NotNull
     @Column(nullable = false)
     private Boolean visible;
-    @NotNull
+//    @NotNull
     @OneToMany
     private Set<Beacon> aggregators;
 

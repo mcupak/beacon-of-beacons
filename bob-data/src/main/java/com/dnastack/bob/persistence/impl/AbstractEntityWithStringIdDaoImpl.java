@@ -35,6 +35,8 @@ import com.dnastack.bob.persistence.entity.BasicEntity;
  */
 public abstract class AbstractEntityWithStringIdDaoImpl<T extends BasicEntity> extends AbstractGenericDaoImpl<T> implements EntityWithStringIdDao<T> {
 
+    private static final long serialVersionUID = 7522554713522430557L;
+
     @Override
     public T findById(String id) {
         return em.find(getEntityClass(), id);

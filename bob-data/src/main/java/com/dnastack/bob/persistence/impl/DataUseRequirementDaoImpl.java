@@ -36,4 +36,6 @@ import javax.enterprise.context.RequestScoped;
 @RequestScoped
 public class DataUseRequirementDaoImpl extends AbstractEntityWithLongIdDaoImpl<DataUseRequirement> implements DataUseRequirementDao {
 
+    private static final long serialVersionUID = -3778073256988252581L;
+
 }

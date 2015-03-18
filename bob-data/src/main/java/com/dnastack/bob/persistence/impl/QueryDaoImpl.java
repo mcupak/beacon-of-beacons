@@ -24,12 +24,8 @@
 package com.dnastack.bob.persistence.impl;
 
 import com.dnastack.bob.persistence.api.QueryDao;
-import com.dnastack.bob.persistence.enumerated.Chromosome;
 import com.dnastack.bob.persistence.entity.Query;
-import com.dnastack.bob.persistence.enumerated.Reference;
-import com.dnastack.bob.util.QueryUtils;
-import java.io.Serializable;
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 
 /**
  * Basic provider of queries.
@@ -37,16 +33,9 @@ import javax.enterprise.context.ApplicationScoped;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@ApplicationScoped
-public class QueryDaoImpl implements QueryDao, Serializable {
+@RequestScoped
+public class QueryDaoImpl extends AbstractEntityWithLongIdDaoImpl<Query> implements QueryDao {
 
     private static final long serialVersionUID = 35L;
 
-    @Override
-    public Query getQuery(String chrom, Long pos, String allele, String ref) {
-        Chromosome c = QueryUtils.normalizeChromosome(chrom);
-        Reference r = QueryUtils.normalizeReference(ref);
-
-        return new Query(c == null ? null : c, pos, QueryUtils.normalizeAllele(allele), r == null ? null : r);
-    }
 }

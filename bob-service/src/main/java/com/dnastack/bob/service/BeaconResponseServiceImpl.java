@@ -23,19 +23,22 @@
  */
 package com.dnastack.bob.service;
 
-import com.dnastack.bob.persistence.api.BeaconDao;
-import com.dnastack.bob.persistence.api.QueryDao;
 import com.dnastack.bob.dto.BeaconResponseTo;
-import com.dnastack.bob.persistence.entity.Beacon;
-import com.dnastack.bob.processor.BeaconResponse;
-import com.dnastack.bob.persistence.entity.Query;
 import com.dnastack.bob.lrg.Brca;
 import com.dnastack.bob.lrg.Brca2;
 import com.dnastack.bob.lrg.LrgConvertor;
 import com.dnastack.bob.lrg.LrgLocus;
 import com.dnastack.bob.lrg.LrgReference;
+import com.dnastack.bob.persistence.api.BeaconDao;
+import com.dnastack.bob.persistence.api.QueryDao;
+import com.dnastack.bob.persistence.entity.Beacon;
+import com.dnastack.bob.persistence.entity.Query;
+import com.dnastack.bob.persistence.enumerated.Chromosome;
+import com.dnastack.bob.persistence.enumerated.Reference;
+import com.dnastack.bob.processor.BeaconResponse;
 import com.dnastack.bob.util.BeaconAggregationResolver;
 import com.dnastack.bob.util.Entity2ToConvertor;
+import com.dnastack.bob.util.QueryUtils;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import java.io.Serializable;
@@ -93,6 +96,23 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
     @Inject
     @Brca2
     private LrgConvertor brca2Convertor;
+
+    /**
+     * Obtains a canonical query object without persisting.
+     *
+     * @param chrom  chromosome
+     * @param pos    position
+     * @param allele allele
+     * @param ref    genome
+     *
+     * @return normalized query
+     */
+    private Query prepareQuery(String chrom, Long pos, String allele, String ref) {
+        Chromosome c = QueryUtils.normalizeChromosome(chrom);
+        Reference r = QueryUtils.normalizeReference(ref);
+
+        return new Query(c == null ? null : c, pos, QueryUtils.normalizeAllele(allele), r == null ? null : r);
+    }
 
     private boolean checkIfQuerySuccessfullyNormalizedAndValid(Query q, String ref) {
         return (!(ref == null || ref.isEmpty()) && q.getReference() == null) || !validator.validate(q).isEmpty();
@@ -207,7 +227,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
             }
         }
 
-        return queryDao.getQuery(c, p, a, r);
+        return queryDao.prepareQuery(c, p, a, r);
     }
 
     private Multimap<Beacon, Beacon> setUpChildrenMultimap(Collection<Beacon> beacons) {

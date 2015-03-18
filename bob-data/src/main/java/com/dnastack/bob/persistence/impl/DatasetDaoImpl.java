@@ -36,4 +36,6 @@ import javax.enterprise.context.RequestScoped;
 @RequestScoped
 public class DatasetDaoImpl extends AbstractEntityWithStringIdDaoImpl<Dataset> implements DatasetDao {
 
+    private static final long serialVersionUID = -8323072266125550572L;
+
 }

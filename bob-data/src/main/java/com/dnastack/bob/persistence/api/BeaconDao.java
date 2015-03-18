@@ -27,12 +27,12 @@ import com.dnastack.bob.persistence.entity.Beacon;
 import java.util.Collection;
 
 /**
- * Mapper and holder of beacons and services.
+ * Beacon DAO.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public interface BeaconDao {
+public interface BeaconDao extends EntityWithStringIdDao<Beacon> {
 
     /**
      * Retrieves all the beacons.

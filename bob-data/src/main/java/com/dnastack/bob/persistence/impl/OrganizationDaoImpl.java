@@ -36,4 +36,6 @@ import javax.enterprise.context.RequestScoped;
 @RequestScoped
 public class OrganizationDaoImpl extends AbstractEntityWithStringIdDaoImpl<Organization> implements OrganizationDao {
 
+    private static final long serialVersionUID = 2403615525311736080L;
+
 }

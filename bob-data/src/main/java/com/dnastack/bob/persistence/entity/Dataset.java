@@ -30,11 +30,13 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * Beacon's data set.
@@ -50,9 +52,12 @@ public class Dataset implements BasicEntity {
     @Id
     @Column(name = "id", nullable = false, unique = true)
     private String id;
+    @NotNull
+    @Size(min = 1)
+    private String name;
     private String description;
     @NotNull
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private Reference reference;
     @Embedded
     private DataSize size;
@@ -75,6 +80,14 @@ public class Dataset implements BasicEntity {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -141,7 +154,7 @@ public class Dataset implements BasicEntity {
 
     @Override
     public String toString() {
-        return "Dataset{" + "id=" + id + ", description=" + description + ", reference=" + reference + ", size=" + size + '}';
+        return "Dataset{" + "id=" + id + ", name=" + name + ", description=" + description + ", reference=" + reference + '}';
     }
 
 }

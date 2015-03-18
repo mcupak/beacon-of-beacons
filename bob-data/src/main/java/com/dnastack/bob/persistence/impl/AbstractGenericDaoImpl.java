@@ -41,6 +41,8 @@ import javax.persistence.PersistenceContext;
  */
 public abstract class AbstractGenericDaoImpl<T extends BasicEntity> implements GenericDao<T> {
 
+    private static final long serialVersionUID = 8059580643827478476L;
+
     @PersistenceContext
     protected EntityManager em;
 

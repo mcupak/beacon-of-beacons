@@ -24,9 +24,11 @@
 package com.dnastack.bob.persistence;
 
 import com.dnastack.bob.persistence.api.GenericDao;
-import com.dnastack.bob.persistence.api.OrganizationDao;
+import com.dnastack.bob.persistence.api.QueryDao;
 import com.dnastack.bob.persistence.entity.BasicEntity;
-import com.dnastack.bob.persistence.entity.Organization;
+import com.dnastack.bob.persistence.entity.Query;
+import com.dnastack.bob.persistence.enumerated.Chromosome;
+import com.dnastack.bob.persistence.enumerated.Reference;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -45,36 +47,38 @@ import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.junit.Assert.assertThat;
 
 /**
- * Organization DAO test.
+ * Query DAO test.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
 @RunWith(Arquillian.class)
 @Transactional
-@UsingDataSet("organization_init.json")
+@UsingDataSet("query_init.json")
 @Cleanup(strategy = CleanupStrategy.USED_TABLES_ONLY) // this is important in order to prevent foreign-key violations
-public class OrganizationDaoTest extends EntityWithStringIdDaoTest {
+public class QueryDaoTest extends EntityWithLongIdDaoTest {
 
     @Inject
-    private OrganizationDao dao;
+    private QueryDao dao;
 
     @Override
-    public GenericDao<Organization> getDao() {
+    public GenericDao<Query> getDao() {
         return dao;
     }
 
     @Override
     public Class<? extends BasicEntity> getEntityClass() {
-        return Organization.class;
+        return Query.class;
     }
 
     @Override
     public List<BasicEntity> getNewData() {
         List<BasicEntity> res = new ArrayList<>();
-        Organization o = new Organization();
-        o.setId("new");
-        o.setName("new");
+        Query o = new Query();
+        o.setAllele("G");
+        o.setChromosome(Chromosome.CHR22);
+        o.setReference(Reference.HG38);
+        o.setPosition(10L);
         res.add(o);
 
         return res;
@@ -83,10 +87,10 @@ public class OrganizationDaoTest extends EntityWithStringIdDaoTest {
     @Override
     @Test
     public void testUpdate() {
-        Organization e = (Organization) findOne(getEntityClass());
-        e.setName("updated");
+        Query e = (Query) findOne(getEntityClass());
+        e.setAllele("T");
 
-        Organization b = dao.update(e);
+        Query b = dao.update(e);
 
         assertThat(findAll(getEntityClass()), hasItem(samePropertyValuesAs(b)));
     }
@@ -94,7 +98,7 @@ public class OrganizationDaoTest extends EntityWithStringIdDaoTest {
     @Override
     @Test
     public void testDelete() {
-        Organization e = (Organization) findOne(getEntityClass());
+        Query e = (Query) findOne(getEntityClass());
         dao.delete(e.getId());
         assertThat(findAll(getEntityClass()), not(hasItem(e)));
     }
@@ -102,8 +106,8 @@ public class OrganizationDaoTest extends EntityWithStringIdDaoTest {
     @Override
     @Test
     public void testFindById() {
-        Organization e = (Organization) findOne(getEntityClass());
-        Organization e2 = dao.findById(e.getId());
+        Query e = (Query) findOne(getEntityClass());
+        Query e2 = dao.findById(e.getId());
         assertThat(e, equalTo(e2));
     }
 

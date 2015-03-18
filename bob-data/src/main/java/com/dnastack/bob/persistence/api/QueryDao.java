@@ -26,22 +26,11 @@ package com.dnastack.bob.persistence.api;
 import com.dnastack.bob.persistence.entity.Query;
 
 /**
- * Provider of queries.
+ * Query DAO.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public interface QueryDao {
-
-    /**
-     * Obtains a canonical query object.
-     *
-     * @param chrom  chromosome
-     * @param pos    position
-     * @param allele allele
-     * @param ref    genome
-     *
-     * @return normalized query
-     */
-    Query getQuery(String chrom, Long pos, String allele, String ref);
+public interface QueryDao extends EntityWithLongIdDao<Query> {
+    
 }

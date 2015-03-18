@@ -1,9 +1,9 @@
 {
-    "dataUse":
+    "dataUseRequirement":
             [
                 {
                     "id": 5,
-                    "category": "test",
+                    "name": "test",
                     "description": "test"
                 }
             ]

@@ -1,0 +1,20 @@
+{
+    "organization":
+            [
+                {
+                    "id": "test",
+                    "name": "test",
+                    "description": "test"
+                }
+            ],
+    "beacon":
+            [
+                {
+                    "id": "test",
+                    "name": "test",
+                    "description": "test",
+                    "visible": true,
+                    "organization_id": "test"
+                }
+            ]
+}

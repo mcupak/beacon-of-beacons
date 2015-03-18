@@ -25,9 +25,10 @@ package com.dnastack.bob.persistence.entity;
 
 import com.dnastack.bob.persistence.enumerated.Chromosome;
 import com.dnastack.bob.persistence.enumerated.Reference;
-import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -44,22 +45,23 @@ import javax.validation.constraints.Pattern;
  * @version 1.0
  */
 @Entity
-public class Query implements Serializable {
+public class Query implements BasicEntity {
 
     private static final long serialVersionUID = -4843153796455403263L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Integer id;
+    private Long id;
     @NotNull
+    @Enumerated(EnumType.STRING)
     private Chromosome chromosome;
     @NotNull
     @Min(0L)
     @Max(300000000L)
     private Long position;
-    @NotNull
     @Pattern(regexp = "([D,I])|([A,C,T,G]+)")
     private String allele;
+    @Enumerated(EnumType.STRING)
     private Reference reference;
     @ManyToOne
     private Dataset dataSet;
@@ -74,11 +76,11 @@ public class Query implements Serializable {
         this.reference = reference;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

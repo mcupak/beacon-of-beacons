@@ -23,10 +23,10 @@
  */
 package com.dnastack.bob.persistence;
 
+import com.dnastack.bob.persistence.api.DataUseDao;
 import com.dnastack.bob.persistence.api.GenericDao;
-import com.dnastack.bob.persistence.api.OrganizationDao;
 import com.dnastack.bob.persistence.entity.BasicEntity;
-import com.dnastack.bob.persistence.entity.Organization;
+import com.dnastack.bob.persistence.entity.DataUse;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -45,36 +45,36 @@ import static org.hamcrest.Matchers.samePropertyValuesAs;
 import static org.junit.Assert.assertThat;
 
 /**
- * Organization DAO test.
+ * Data use DAO test.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
 @RunWith(Arquillian.class)
 @Transactional
-@UsingDataSet("organization_init.json")
+@UsingDataSet("data_use_init.json")
 @Cleanup(strategy = CleanupStrategy.USED_TABLES_ONLY) // this is important in order to prevent foreign-key violations
-public class OrganizationDaoTest extends EntityWithStringIdDaoTest {
+public class DataUseDaoTest extends EntityWithLongIdDaoTest {
 
     @Inject
-    private OrganizationDao dao;
+    private DataUseDao dao;
 
     @Override
-    public GenericDao<Organization> getDao() {
+    public GenericDao<DataUse> getDao() {
         return dao;
     }
 
     @Override
     public Class<? extends BasicEntity> getEntityClass() {
-        return Organization.class;
+        return DataUse.class;
     }
 
     @Override
     public List<BasicEntity> getNewData() {
         List<BasicEntity> res = new ArrayList<>();
-        Organization o = new Organization();
-        o.setId("new");
-        o.setName("new");
+        DataUse o = new DataUse();
+        o.setCategory("new");
+        o.setDescription("new");
         res.add(o);
 
         return res;
@@ -83,10 +83,10 @@ public class OrganizationDaoTest extends EntityWithStringIdDaoTest {
     @Override
     @Test
     public void testUpdate() {
-        Organization e = (Organization) findOne(getEntityClass());
-        e.setName("updated");
+        DataUse e = (DataUse) findOne(getEntityClass());
+        e.setCategory("updated");
 
-        Organization b = dao.update(e);
+        DataUse b = dao.update(e);
 
         assertThat(findAll(getEntityClass()), hasItem(samePropertyValuesAs(b)));
     }
@@ -94,7 +94,7 @@ public class OrganizationDaoTest extends EntityWithStringIdDaoTest {
     @Override
     @Test
     public void testDelete() {
-        Organization e = (Organization) findOne(getEntityClass());
+        DataUse e = (DataUse) findOne(getEntityClass());
         dao.delete(e.getId());
         assertThat(findAll(getEntityClass()), not(hasItem(e)));
     }
@@ -102,8 +102,8 @@ public class OrganizationDaoTest extends EntityWithStringIdDaoTest {
     @Override
     @Test
     public void testFindById() {
-        Organization e = (Organization) findOne(getEntityClass());
-        Organization e2 = dao.findById(e.getId());
+        DataUse e = (DataUse) findOne(getEntityClass());
+        DataUse e2 = dao.findById(e.getId());
         assertThat(e, equalTo(e2));
     }
 
