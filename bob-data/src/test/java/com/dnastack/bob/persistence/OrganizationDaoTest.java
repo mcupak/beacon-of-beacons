@@ -35,7 +35,14 @@ import org.jboss.arquillian.persistence.Cleanup;
 import org.jboss.arquillian.persistence.CleanupStrategy;
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.jboss.arquillian.transaction.api.annotation.Transactional;
+import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.Matchers.samePropertyValuesAs;
+import static org.junit.Assert.assertThat;
 
 /**
  * Organization DAO test.
@@ -47,7 +54,7 @@ import org.junit.runner.RunWith;
 @Transactional
 @UsingDataSet("organization_init.json")
 @Cleanup(strategy = CleanupStrategy.USED_TABLES_ONLY) // this is important in order to prevent foreign-key violations
-public class OrganizationDaoTest extends GenericDaoTest {
+public class OrganizationDaoTest extends EntityWithStringIdDaoTest {
 
     @Inject
     private OrganizationDao dao;
@@ -62,14 +69,42 @@ public class OrganizationDaoTest extends GenericDaoTest {
         return Organization.class;
     }
 
-    public List<Organization> getNewData() {
-        List<Organization> res = new ArrayList<>();
+    @Override
+    public List<BasicEntity> getNewData() {
+        List<BasicEntity> res = new ArrayList<>();
         Organization o = new Organization();
         o.setId("new");
         o.setName("new");
         res.add(o);
 
         return res;
+    }
+
+    @Override
+    @Test
+    public void testUpdate() {
+        Organization e = (Organization) findOne(Organization.class);
+        e.setName("updated");
+
+        Organization b = dao.update(e);
+
+        assertThat(findAll(getEntityClass()), hasItem(samePropertyValuesAs(b)));
+    }
+
+    @Override
+    @Test
+    public void testDelete() {
+        Organization e = (Organization) findOne(Organization.class);
+        dao.delete(e.getId());
+        assertThat(findAll(getEntityClass()), not(hasItem(e)));
+    }
+
+    @Override
+    @Test
+    public void testFindById() {
+        Organization e = (Organization) findOne(Organization.class);
+        Organization e2 = dao.findById(e.getId());
+        assertThat(e, equalTo(e2));
     }
 
 }
