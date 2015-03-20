@@ -38,6 +38,7 @@ import com.dnastack.bob.persistence.enumerated.Reference;
 import com.dnastack.bob.processor.BeaconResponse;
 import com.dnastack.bob.util.BeaconAggregationResolver;
 import com.dnastack.bob.util.Entity2ToConvertor;
+import com.dnastack.bob.util.ProcessorResolver;
 import com.dnastack.bob.util.QueryUtils;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -84,6 +85,9 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
     private BeaconAggregationResolver aggregationResolver;
 
     @Inject
+    private ProcessorResolver pr;
+
+    @Inject
     private QueryDao queryDao;
 
     @Inject
@@ -119,7 +123,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
     }
 
     @Asynchronous
-    private Future<Boolean> queryBeacon(Beacon b, Query q) {
+    private Future<Boolean> queryBeacon(Beacon b, Query q) throws ClassNotFoundException {
         Boolean total = null;
 
         if (b.isAggregator()) {
@@ -128,7 +132,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
             // execute queries in parallel
             Map<Beacon, Future<Boolean>> futures = new HashMap<>();
             for (Beacon bt : aggregationResolver.getAtomicAggregatees(b)) {
-                futures.put(bt, bt.getProcessor().executeQuery(bt, q));
+                futures.put(bt, pr.getProcessor(bt.getProcessor()).executeQuery(bt, q));
             }
 
             // collect results
@@ -145,7 +149,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
             }
         } else {
             try {
-                total = b.getProcessor().executeQuery(b, q).get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
+                total = pr.getProcessor(b.getProcessor()).executeQuery(b, q).get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
             } catch (InterruptedException | ExecutionException | TimeoutException ex) {
                 // ignore
             }
@@ -169,13 +173,13 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
 
     private Map<Beacon, BeaconResponse> setUpBeaconResponseMapForIds(Collection<String> beaconIds, Query q) {
         if (beaconIds == null) {
-            return setUpBeaconResponseMapForBeacons(beaconDao.getVisibleBeacons(), q);
+            return setUpBeaconResponseMapForBeacons(beaconDao.findByVisibility(true), q);
         }
 
         Set<Beacon> bs = new HashSet<>();
         for (String id : beaconIds) {
-            Beacon b = beaconDao.getVisibleBeacon(id);
-            if (b != null) {
+            Beacon b = beaconDao.findById(id);
+            if (b != null && b.getVisible()) {
                 bs.add(b);
             }
         }
@@ -183,7 +187,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
         return setUpBeaconResponseMapForBeacons(bs, q);
     }
 
-    private Map<Beacon, BeaconResponse> fillBeaconResponseMap(Map<Beacon, BeaconResponse> brs, Query q) {
+    private Map<Beacon, BeaconResponse> fillBeaconResponseMap(Map<Beacon, BeaconResponse> brs, Query q) throws ClassNotFoundException {
         // execute queries in parallel
         Map<Beacon, Future<Boolean>> futures = new HashMap<>();
         for (Beacon b : brs.keySet()) {
@@ -227,7 +231,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
             }
         }
 
-        return queryDao.prepareQuery(c, p, a, r);
+        return prepareQuery(c, p, a, r);
     }
 
     private Multimap<Beacon, Beacon> setUpChildrenMultimap(Collection<Beacon> beacons) {
@@ -273,7 +277,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
         return res;
     }
 
-    private Collection<BeaconResponse> queryMultipleBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref) {
+    private Collection<BeaconResponse> queryMultipleBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref) throws ClassNotFoundException {
         Query q = getQuery(chrom, pos, allele, ref);
 
         // init to create a response for each beacon even if the query is invalid
@@ -294,13 +298,13 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
     }
 
     @Override
-    public BeaconResponseTo queryBeacon(String beaconId, String chrom, Long pos, String allele, String ref) {
+    public BeaconResponseTo queryBeacon(String beaconId, String chrom, Long pos, String allele, String ref) throws ClassNotFoundException {
         Query q = getQuery(chrom, pos, allele, ref);
 
-        Beacon b = beaconDao.getVisibleBeacon(beaconId);
-        if (b == null) {
+        Beacon b = beaconDao.findById(beaconId);
+        if (b == null || !b.getVisible()) {
             // nonexisting beaconId param specified
-            return Entity2ToConvertor.getBeaconResponseTo(new BeaconResponse(new Beacon(null, "invalid beacon"), q, null));
+            return Entity2ToConvertor.getBeaconResponseTo(new BeaconResponse(new Beacon(null, "invalid beacon", null, null, true), q, null));
         }
 
         BeaconResponse br = new BeaconResponse(b, q, null);
@@ -318,7 +322,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
     }
 
     @Override
-    public Collection<BeaconResponseTo> queryBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref) {
+    public Collection<BeaconResponseTo> queryBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref) throws ClassNotFoundException {
         if (beaconIds == null) {
             return new HashSet<>();
         }
@@ -327,7 +331,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
     }
 
     @Override
-    public Collection<BeaconResponseTo> queryAll(String chrom, Long pos, String allele, String ref) {
+    public Collection<BeaconResponseTo> queryAll(String chrom, Long pos, String allele, String ref) throws ClassNotFoundException {
         return Entity2ToConvertor.getBeaconResponseTos(queryMultipleBeacons(null, chrom, pos, allele, ref));
     }
 

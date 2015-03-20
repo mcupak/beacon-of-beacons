@@ -23,8 +23,9 @@
  */
 package com.dnastack.bob.service;
 
-import com.dnastack.bob.persistence.api.BeaconDao;
 import com.dnastack.bob.dto.BeaconTo;
+import com.dnastack.bob.persistence.api.BeaconDao;
+import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.util.Entity2ToConvertor;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,15 +41,16 @@ import javax.inject.Inject;
  */
 @RequestScoped
 public class BeaconServiceImpl implements BeaconService {
-
+    
     @Inject
     private BeaconDao beaconDao;
-
+    
     @Override
     public BeaconTo getBeacon(String beaconId) {
-        return Entity2ToConvertor.getBeaconTo(beaconDao.getVisibleBeacon(beaconId));
+        Beacon b = beaconDao.findById(beaconId);
+        return Entity2ToConvertor.getBeaconTo((b == null || !b.getVisible()) ? null : b);
     }
-
+    
     @Override
     public Collection<BeaconTo> getBeacons(Collection<String> beaconIds) {
         List<BeaconTo> res = new ArrayList<>();
@@ -58,13 +60,13 @@ public class BeaconServiceImpl implements BeaconService {
                 res.add(b);
             }
         }
-
+        
         return res;
     }
-
+    
     @Override
     public Collection<BeaconTo> getAll() {
-        return Entity2ToConvertor.getBeaconTos(beaconDao.getVisibleBeacons());
+        return Entity2ToConvertor.getBeaconTos(beaconDao.findByVisibility(true));
     }
-
+    
 }

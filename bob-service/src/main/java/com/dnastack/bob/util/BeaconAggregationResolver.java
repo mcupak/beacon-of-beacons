@@ -59,7 +59,7 @@ public class BeaconAggregationResolver implements Serializable {
         aggregations = HashMultimap.create();
 
         // first pass
-        Collection<Beacon> all = beaconDao.getAllBeacons();
+        Collection<Beacon> all = beaconDao.findAll();
         for (Beacon b : all) {
             for (Beacon parent : b.getAggregators()) {
                 if (parent.getProcessor() == null) {
@@ -69,7 +69,7 @@ public class BeaconAggregationResolver implements Serializable {
         }
 
         // multiple passes to balance
-        Collection<Beacon> aggs = beaconDao.getAggregatingBeacons();
+        Collection<Beacon> aggs = beaconDao.findByAggregation(true);
         boolean changed;
         do {
             changed = false;
@@ -96,7 +96,7 @@ public class BeaconAggregationResolver implements Serializable {
     public Collection<Beacon> getAggregatees(Beacon b) {
         Set<Beacon> aggs = new HashSet<>();
         if (b.isAggregator()) {
-            Collection<Beacon> bs = beaconDao.getAllBeacons();
+            Collection<Beacon> bs = beaconDao.findAll();
             for (Beacon c : bs) {
                 if (c.getAggregators().contains(b)) {
                     aggs.add(c);

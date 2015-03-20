@@ -24,7 +24,7 @@
 package com.dnastack.bob.persistence.api;
 
 import com.dnastack.bob.persistence.entity.Beacon;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Beacon DAO.
@@ -35,55 +35,21 @@ import java.util.Collection;
 public interface BeaconDao extends EntityWithStringIdDao<Beacon> {
 
     /**
-     * Retrieves all the beacons.
+     * Retrieves beacons by aggregation flag.
+     *
+     * @param aggregator true if looking for aggregating beacons, false if looking for regular beacons
      *
      * @return collection of beacons
      */
-    Collection<Beacon> getAllBeacons();
+    List<Beacon> findByAggregation(boolean aggregator);
 
     /**
-     * Retrieves all aggregating beacons.
+     * Retrieves beacons by visibility.
+     *
+     * @param visible true if looking for visible beacons, false if looking for invisible/anonymous beacons
      *
      * @return collection of beacons
      */
-    Collection<Beacon> getAggregatingBeacons();
+    List<Beacon> findByVisibility(boolean visible);
 
-    /**
-     * Retrieves all non-aggregating beacons.
-     *
-     * @return collection of beacons
-     */
-    Collection<Beacon> getRegularBeacons();
-
-    /**
-     * Retrieves all visible beacons.
-     *
-     * @return collection of beacons
-     */
-    Collection<Beacon> getVisibleBeacons();
-
-    /**
-     * Retrieves all invisible (anonymous) beacons.
-     *
-     * @return collection of beacons
-     */
-    Collection<Beacon> getHiddenBeacons();
-
-    /**
-     * Finds beacon by its ID.
-     *
-     * @param beaconId beacon ID
-     *
-     * @return beacon with the given ID
-     */
-    Beacon getBeacon(String beaconId);
-
-    /**
-     * Finds a visible beacon by its ID.
-     *
-     * @param beaconId beacon ID
-     *
-     * @return beacon with the given ID or null if the beacon is invisible/does not exist
-     */
-    Beacon getVisibleBeacon(String beaconId);
 }

@@ -23,7 +23,6 @@
  */
 package com.dnastack.bob.persistence.entity;
 
-import com.dnastack.bob.processor.BeaconProcessor;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
@@ -32,6 +31,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -43,6 +44,11 @@ import javax.validation.constraints.Size;
  * @version 1.0
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "findAggregatingBeacons", query = "SELECT b FROM Beacon b WHERE b.processor IS NULL"),
+    @NamedQuery(name = "findRegularBeacons", query = "SELECT b FROM Beacon b WHERE b.processor IS NOT NULL"),
+    @NamedQuery(name = "findBeaconsByVisibility", query = "SELECT b FROM Beacon b WHERE b.visible=:visible")
+})
 public class Beacon implements BasicEntity {
 
     private static final long serialVersionUID = -1451238811291388547L;
@@ -68,44 +74,18 @@ public class Beacon implements BasicEntity {
     @NotNull
     @Column(nullable = false)
     private Boolean visible;
-//    @NotNull
     @OneToMany
     private Set<Beacon> aggregators;
 
     public Beacon() {
     }
 
-    public Beacon(String id, String name) {
+    public Beacon(String id, String name, Organization organization, String processor, Boolean visible) {
         this.id = id;
         this.name = name;
-        this.processor = null;
-        this.visible = true;
-        this.aggregators = new HashSet<>();
-    }
-
-    public Beacon(String id, String name, BeaconProcessor processor) {
-        this.id = id;
-        this.name = name;
-        this.processor = processor.getClass().getCanonicalName();
-        this.visible = true;
-        this.aggregators = new HashSet<>();
-    }
-
-    public Beacon(String id, String name, BeaconProcessor processor, boolean visible) {
-        this.id = id;
-        this.name = name;
-        this.processor = processor.getClass().getCanonicalName();
-        this.visible = visible;
-        this.aggregators = new HashSet<>();
-    }
-
-    public Beacon(String id, String name, BeaconProcessor processor, boolean visible, Organization organization) {
-        this.id = id;
-        this.name = name;
-        this.processor = processor.getClass().getCanonicalName();
-        this.visible = visible;
         this.organization = organization;
-        this.aggregators = new HashSet<>();
+        this.processor = processor;
+        this.visible = visible;
     }
 
     public String getId() {
@@ -134,14 +114,6 @@ public class Beacon implements BasicEntity {
 
     public boolean isAggregator() {
         return getProcessor() == null;
-    }
-
-    public boolean isVisible() {
-        return visible;
-    }
-
-    public void setVisible(boolean visible) {
-        this.visible = visible;
     }
 
     public Set<Beacon> getAggregators() {

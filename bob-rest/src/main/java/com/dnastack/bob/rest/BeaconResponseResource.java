@@ -71,7 +71,7 @@ public class BeaconResponseResource {
      */
     @GET
     @Path("/{beaconId}")
-    public BeaconResponseTo queryBeacon(@PathParam("beaconId") String beaconId, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele, @QueryParam("ref") String ref) {
+    public BeaconResponseTo queryBeacon(@PathParam("beaconId") String beaconId, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele, @QueryParam("ref") String ref) throws ClassNotFoundException {
         return beaconResponseService.queryBeacon(beaconId, chrom, pos, allele, ref);
     }
 
@@ -85,9 +85,11 @@ public class BeaconResponseResource {
      * @param ref       reference genome (optional)
      *
      * @return list of beacon responses
+     *
+     * @throws java.lang.ClassNotFoundException
      */
     @GET
-    public Collection<BeaconResponseTo> query(@QueryParam("beacon") String beaconIds, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele, @QueryParam("ref") String ref) {
+    public Collection<BeaconResponseTo> query(@QueryParam("beacon") String beaconIds, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele, @QueryParam("ref") String ref) throws ClassNotFoundException {
         Set<BeaconResponseTo> brs = new TreeSet<>(beaconResponseComparator);
         if (beaconIds == null) {
             brs.addAll(beaconResponseService.queryAll(chrom, pos, allele, ref));

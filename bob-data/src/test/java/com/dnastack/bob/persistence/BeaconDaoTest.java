@@ -31,6 +31,7 @@ import com.dnastack.bob.persistence.entity.Organization;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import org.hamcrest.Matchers;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.Cleanup;
 import org.jboss.arquillian.persistence.CleanupStrategy;
@@ -40,10 +41,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.everyItem;
 import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
-import static org.junit.Assert.assertThat;
 
 /**
  * Beacon DAO test.
@@ -111,6 +115,35 @@ public class BeaconDaoTest extends EntityWithStringIdDaoTest {
         Beacon e = (Beacon) findOne(getEntityClass());
         Beacon e2 = dao.findById(e.getId());
         assertThat(e, equalTo(e2));
+    }
+
+    @Test
+    public void testFindByVisibility() {
+        Long count = countAll(getEntityClass());
+
+        List<Beacon> visible = dao.findByVisibility(true);
+        count -= visible.size();
+        assertThat(visible, everyItem(Matchers.<Beacon>hasProperty("visible", equalTo(true))));
+        List<Beacon> inVisible = dao.findByVisibility(false);
+        count -= inVisible.size();
+        assertThat(inVisible, everyItem(Matchers.<Beacon>hasProperty("visible", equalTo(false))));
+
+        assertThat(count, equalTo(0L));
+    }
+
+    @Test
+    public void testFindByAggregation() {
+        Long count = countAll(getEntityClass());
+
+        List<Beacon> aggregators = dao.findByAggregation(true);
+        count -= aggregators.size();
+        assertThat(aggregators, everyItem(Matchers.<Beacon>hasProperty("processor", nullValue())));
+
+        List<Beacon> regulars = dao.findByAggregation(false);
+        count -= regulars.size();
+        assertThat(regulars, everyItem(Matchers.<Beacon>hasProperty("visible", notNullValue())));
+
+        assertThat(count, equalTo(0L));
     }
 
 }
