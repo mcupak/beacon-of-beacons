@@ -25,7 +25,11 @@ package com.dnastack.bob.persistence.impl;
 
 import com.dnastack.bob.persistence.api.BeaconDao;
 import com.dnastack.bob.persistence.entity.Beacon;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Queue;
+import java.util.Set;
+import java.util.concurrent.LinkedBlockingQueue;
 import javax.enterprise.context.RequestScoped;
 
 /**
@@ -47,6 +51,49 @@ public class BeaconDaoImpl extends AbstractEntityWithStringIdDaoImpl<Beacon> imp
     @Override
     public List<Beacon> findByVisibility(boolean visible) {
         return em.createNamedQuery("findBeaconsByVisibility", Beacon.class).setParameter("visible", visible).getResultList();
+    }
+
+    @Override
+    public boolean addRelationship(Beacon child, Beacon parent) {
+        Set<Beacon> parents = child.getParents();
+        if (parents == null) {
+            child.setParents(new HashSet<Beacon>());
+        }
+        boolean res = child.getParents().add(parent);
+
+        em.merge(child);
+        return res;
+    }
+
+    @Override
+    public boolean removeRelationship(Beacon child, Beacon parent) {
+        Set<Beacon> parents = child.getParents();
+        if (parents == null) {
+            return false;
+        }
+        boolean res = child.getParents().remove(parent);
+
+        em.merge(child);
+        return res;
+    }
+
+    @Override
+    public Set<Beacon> getRegularDescendants(Beacon parent) {
+        Set<Beacon> desc = new HashSet<>();
+
+        Queue<Beacon> buffer = new LinkedBlockingQueue<>();
+        Beacon b = parent;
+        while (b != null) {
+            if (b.isAggregator()) {
+                buffer.addAll(b.getChildren());
+            } else {
+                desc.add(b);
+            }
+
+            b = buffer.poll();
+        }
+
+        return desc;
     }
 
 }

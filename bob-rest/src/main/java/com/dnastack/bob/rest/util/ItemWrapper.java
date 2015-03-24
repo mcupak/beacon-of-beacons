@@ -23,8 +23,8 @@
  */
 package com.dnastack.bob.rest.util;
 
-import com.dnastack.bob.dto.ChromosomeTo;
-import com.dnastack.bob.dto.ReferenceTo;
+import com.dnastack.bob.service.dto.ChromosomeTo;
+import com.dnastack.bob.service.dto.ReferenceTo;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;

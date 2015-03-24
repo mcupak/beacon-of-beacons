@@ -23,17 +23,17 @@
  */
 package com.dnastack.bob.persistence.entity;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -62,6 +62,7 @@ public class Beacon implements BasicEntity {
     @Column(nullable = false)
     @Size(min = 1)
     private String name;
+    private String url;
     @ManyToOne
     @NotNull
     private Organization organization;
@@ -74,18 +75,33 @@ public class Beacon implements BasicEntity {
     @NotNull
     @Column(nullable = false)
     private Boolean visible;
-    @OneToMany
-    private Set<Beacon> aggregators;
+    @NotNull
+    @Column(nullable = false)
+    private Boolean enabled;
+    @ManyToMany
+    @JoinTable(name = "BeaconRelationships", joinColumns = {
+        @JoinColumn(name = "parent", referencedColumnName = "id", nullable = false)},
+            inverseJoinColumns = {
+                @JoinColumn(name = "child", referencedColumnName = "id", nullable = false)
+            }
+    )
+    private Set<Beacon> parents;
+    @ManyToMany(mappedBy = "parents")
+    private Set<Beacon> children;
 
     public Beacon() {
+        visible = true;
+        enabled = true;
     }
 
-    public Beacon(String id, String name, Organization organization, String processor, Boolean visible) {
+    public Beacon(String id, String name, String url, Organization organization, String processor, Boolean visible, Boolean enabled) {
         this.id = id;
         this.name = name;
+        this.url = url;
         this.organization = organization;
         this.processor = processor;
         this.visible = visible;
+        this.enabled = enabled;
     }
 
     public String getId() {
@@ -113,30 +129,23 @@ public class Beacon implements BasicEntity {
     }
 
     public boolean isAggregator() {
-        return getProcessor() == null;
+        return processor == null || processor.isEmpty();
     }
 
-    public Set<Beacon> getAggregators() {
-        return Collections.unmodifiableSet(aggregators);
+    public Set<Beacon> getParents() {
+        return parents;
     }
 
-    public void addAggregator(Beacon beacon) {
-        if (beacon == null) {
-            throw new NullPointerException("beacon");
-        }
-        if (aggregators == null) {
-            aggregators = new HashSet<>();
-        }
-        aggregators.add(beacon);
+    public void setParents(Set<Beacon> parents) {
+        this.parents = parents;
     }
 
-    public void removeAggregator(Beacon beacon) {
-        if (beacon == null) {
-            throw new NullPointerException("beacon");
-        }
-        if (aggregators != null) {
-            aggregators.remove(beacon);
-        }
+    public Set<Beacon> getChildren() {
+        return children;
+    }
+
+    public void setChildren(Set<Beacon> children) {
+        this.children = children;
     }
 
     public Organization getOrganization() {
@@ -195,6 +204,22 @@ public class Beacon implements BasicEntity {
         this.visible = visible;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -219,7 +244,7 @@ public class Beacon implements BasicEntity {
 
     @Override
     public String toString() {
-        return "Beacon{" + "id=" + id + ", name=" + name + ", organization=" + organization + ", description=" + description + ", api=" + api + ", homePage=" + homePage + ", email=" + email + ", auth=" + auth + ", processor=" + processor + ", visible=" + visible + ", aggregators=" + aggregators + '}';
+        return "Beacon{" + "id=" + id + ", name=" + name + ", url=" + url + ", description=" + description + ", api=" + api + ", homePage=" + homePage + ", email=" + email + ", auth=" + auth + ", processor=" + processor + ", visible=" + visible + ", enabled=" + enabled + '}';
     }
 
 }

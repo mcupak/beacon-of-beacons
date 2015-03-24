@@ -23,8 +23,8 @@
  */
 package com.dnastack.bob.rest.util;
 
-import com.dnastack.bob.dto.BeaconTo;
-import com.dnastack.bob.dto.QueryTo;
+import com.dnastack.bob.service.dto.BeaconTo;
+import com.dnastack.bob.service.dto.QueryTo;
 import java.util.HashSet;
 import java.util.Set;
 

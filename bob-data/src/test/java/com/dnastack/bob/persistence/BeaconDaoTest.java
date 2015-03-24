@@ -84,6 +84,7 @@ public class BeaconDaoTest extends EntityWithStringIdDaoTest {
         b.setName("new");
         b.setDescription("new");
         b.setVisible(true);
+        b.setEnabled(true);
         b.setOrganization(o);
         res.add(b);
 

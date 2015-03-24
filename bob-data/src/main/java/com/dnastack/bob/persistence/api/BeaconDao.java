@@ -25,6 +25,7 @@ package com.dnastack.bob.persistence.api;
 
 import com.dnastack.bob.persistence.entity.Beacon;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Beacon DAO.
@@ -51,5 +52,34 @@ public interface BeaconDao extends EntityWithStringIdDao<Beacon> {
      * @return collection of beacons
      */
     List<Beacon> findByVisibility(boolean visible);
+
+    /**
+     * Creates parent-child association.
+     *
+     * @param parent parent
+     * @param child  child
+     *
+     * @return true if the child did not have that parent already, false otherwise
+     */
+    boolean addRelationship(Beacon child, Beacon parent);
+
+    /**
+     * Removes parent-child association.
+     *
+     * @param parent parent
+     * @param child  child
+     *
+     * @return true if the child had that parent already, false otherwise
+     */
+    boolean removeRelationship(Beacon child, Beacon parent);
+
+    /**
+     * Computes a set of all the regular (non-aggregating) nodes covered by a specific node transitively.
+     *
+     * @param parent node
+     *
+     * @return set of nodes
+     */
+    Set<Beacon> getRegularDescendants(Beacon parent);
 
 }

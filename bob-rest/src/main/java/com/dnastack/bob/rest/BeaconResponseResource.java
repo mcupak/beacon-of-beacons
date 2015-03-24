@@ -23,9 +23,9 @@
  */
 package com.dnastack.bob.rest;
 
-import com.dnastack.bob.dto.BeaconResponseTo;
+import com.dnastack.bob.service.dto.BeaconResponseTo;
 import com.dnastack.bob.rest.util.BeaconResponseToComparator;
-import com.dnastack.bob.service.BeaconResponseServiceImpl;
+import com.dnastack.bob.service.impl.BeaconResponseServiceImpl;
 import com.dnastack.bob.util.ParsingUtils;
 import java.util.Collection;
 import java.util.Set;

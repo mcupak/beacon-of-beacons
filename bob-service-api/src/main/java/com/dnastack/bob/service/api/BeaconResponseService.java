@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service;
+package com.dnastack.bob.service.api;
 
-import com.dnastack.bob.dto.BeaconResponseTo;
+import com.dnastack.bob.service.dto.BeaconResponseTo;
 import java.util.Collection;
 
 /**

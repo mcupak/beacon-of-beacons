@@ -23,7 +23,7 @@
  */
 package com.dnastack.bob.rest.util;
 
-import com.dnastack.bob.dto.BeaconTo;
+import com.dnastack.bob.service.dto.BeaconTo;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 

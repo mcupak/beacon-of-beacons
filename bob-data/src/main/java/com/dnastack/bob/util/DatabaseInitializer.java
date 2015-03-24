@@ -30,18 +30,22 @@ import com.dnastack.bob.persistence.entity.Organization;
 import com.dnastack.bob.processor.AmpLabBeaconProcessor;
 import com.dnastack.bob.processor.BeaconizerIntegerChromosomeBeaconProcessor;
 import com.dnastack.bob.processor.BeaconizerStringChromosomeBeaconProcessor;
+import com.dnastack.bob.processor.BroadInstituteBeaconProcessor;
 import com.dnastack.bob.processor.CafeVariomeBeaconProcessor;
 import com.dnastack.bob.processor.EbiBeaconProcessor;
+import com.dnastack.bob.processor.IcgcBeaconProcessor;
 import com.dnastack.bob.processor.KaviarBeaconProcessor;
 import com.dnastack.bob.processor.NcbiBeaconProcessor;
 import com.dnastack.bob.processor.UcscBeaconProcessor;
 import com.dnastack.bob.processor.WtsiBeaconProcessor;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
+import org.jboss.logging.Logger;
 
 /**
  *
@@ -50,6 +54,7 @@ import javax.inject.Inject;
  */
 @Singleton
 @Startup
+@Transactional
 public class DatabaseInitializer {
 
     @Inject
@@ -61,17 +66,53 @@ public class DatabaseInitializer {
     @Inject
     private ProcessorResolver pr;
 
-    @PostConstruct
-    public void init() {
-        if (beaconDao.countAll() == 0) {
-            Set<Beacon> beacons = new HashSet<>();
+    @Inject
+    private Logger logger;
 
+    // TODO: remove this methods as it is dangerous and does tnot handle foreign keys well
+    private void clean() {
+        logger.debug("Cleaning DB...");
+        List<Beacon> beacons = new ArrayList<>();
+        do {
+            beacons = beaconDao.findAll();
+            for (Beacon b : beacons) {
+                try {
+                    beaconDao.delete(b.getId());
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        } while (!beacons.isEmpty());
+
+        List<Organization> orgs = new ArrayList<>();
+        do {
+            orgs = organizationDao.findAll();
+            for (Organization b : orgs) {
+                try {
+                    organizationDao.delete(b.getId());
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        } while (!orgs.isEmpty());
+    }
+
+    private void insertInitialData() {
+        logger.debug("Initializing DB...");
+        try {
             // set up bob
             Organization ga4gh = new Organization();
             ga4gh.setId("ga4gh");
             ga4gh.setName("Global Alliance for Genomics and Health");
             organizationDao.save(ga4gh);
-            Beacon bob = new Beacon("bob", "Beacon of Beacons", ga4gh, null, true);
+            Beacon bob = new Beacon();
+            bob.setId("bob");
+            bob.setName("Beacon of Beacons");
+            bob.setOrganization(ga4gh);
+            bob.setVisible(true);
+            bob.setProcessor(null);
+            bob.setEnabled(true);
+            bob.setUrl("http://beacon-dnastack.rhcloud.com/");
             beaconDao.save(bob);
 
             // set up regular beacons
@@ -79,125 +120,257 @@ public class DatabaseInitializer {
             ucsc.setId("ucsc");
             ucsc.setName("UCSC");
             organizationDao.save(ucsc);
-            Beacon clinvarBeacon = new Beacon("clinvar", "ClinVar", ucsc, pr.getProcessorId(UcscBeaconProcessor.class), true);
+            Beacon clinvarBeacon = new Beacon();
+            clinvarBeacon.setId("clinvar");
+            clinvarBeacon.setName("ClinVar");
+            clinvarBeacon.setOrganization(ucsc);
+            clinvarBeacon.setVisible(true);
+            clinvarBeacon.setProcessor(pr.getProcessorId(UcscBeaconProcessor.class));
+            clinvarBeacon.setEnabled(true);
+            clinvarBeacon.setUrl("http://hgwdev-max.cse.ucsc.edu/cgi-bin/beacon/query");
             beaconDao.save(clinvarBeacon);
-            Beacon uniprotBeacon = new Beacon("uniprot", "UniProt", ucsc, pr.getProcessorId(UcscBeaconProcessor.class), true);
+            Beacon uniprotBeacon = new Beacon();
+            uniprotBeacon.setId("uniprot");
+            uniprotBeacon.setName("UniProt");
+            uniprotBeacon.setOrganization(ucsc);
+            uniprotBeacon.setVisible(true);
+            uniprotBeacon.setProcessor(pr.getProcessorId(UcscBeaconProcessor.class));
+            uniprotBeacon.setEnabled(true);
+            uniprotBeacon.setUrl("http://hgwdev-max.cse.ucsc.edu/cgi-bin/beacon/query");
             beaconDao.save(uniprotBeacon);
-            Beacon lovdBeacon = new Beacon("lovd", "Leiden Open Variation", ucsc, pr.getProcessorId(UcscBeaconProcessor.class), true);
+            Beacon lovdBeacon = new Beacon();
+            lovdBeacon.setId("lovd");
+            lovdBeacon.setName("Leiden Open Variation");
+            lovdBeacon.setOrganization(ucsc);
+            lovdBeacon.setVisible(true);
+            lovdBeacon.setProcessor(pr.getProcessorId(UcscBeaconProcessor.class));
+            lovdBeacon.setEnabled(true);
+            lovdBeacon.setUrl("http://hgwdev-max.cse.ucsc.edu/cgi-bin/beacon/query");
             beaconDao.save(lovdBeacon);
 
             Organization ebi = new Organization();
             ebi.setId("ebi");
             ebi.setName("EBI");
             organizationDao.save(ebi);
-            Beacon ebiBeacon = new Beacon("ebi", "EMBL-EBI", ebi, pr.getProcessorId(EbiBeaconProcessor.class), true);
+            Beacon ebiBeacon = new Beacon();
+            ebiBeacon.setId("ebi");
+            ebiBeacon.setName("EMBL-EBI");
+            ebiBeacon.setOrganization(ebi);
+            ebiBeacon.setVisible(true);
+            ebiBeacon.setProcessor(pr.getProcessorId(EbiBeaconProcessor.class));
+            ebiBeacon.setEnabled(true);
+            ebiBeacon.setUrl("http://wwwdev.ebi.ac.uk/eva/webservices/rest/v1/ga4gh/beacon");
             beaconDao.save(ebiBeacon);
 
             Organization ncbi = new Organization();
             ncbi.setId("ncbi");
             ncbi.setName("NCBI");
             organizationDao.save(ncbi);
-            Beacon ncbiBeacon = new Beacon("ncbi", "NCBI", ncbi, pr.getProcessorId(NcbiBeaconProcessor.class), true);
+            Beacon ncbiBeacon = new Beacon();
+            ncbiBeacon.setId("ncbi");
+            ncbiBeacon.setName("NCBI");
+            ncbiBeacon.setOrganization(ncbi);
+            ncbiBeacon.setVisible(true);
+            ncbiBeacon.setProcessor(pr.getProcessorId(NcbiBeaconProcessor.class));
+            ncbiBeacon.setEnabled(true);
+            ncbiBeacon.setUrl("http://www.ncbi.nlm.nih.gov/projects/genome/beacon/beacon.cgi");
             beaconDao.save(ncbiBeacon);
 
             Organization wtsi = new Organization();
             wtsi.setId("wtsi");
             wtsi.setName("WTSI");
             organizationDao.save(wtsi);
-            Beacon wtsiBeacon = new Beacon("wtsi", "Wellcome Trust Sanger Institute", wtsi, pr.getProcessorId(WtsiBeaconProcessor.class), true);
+            Beacon wtsiBeacon = new Beacon();
+            wtsiBeacon.setId("wtsi");
+            wtsiBeacon.setName("Wellcome Trust Sanger Institute");
+            wtsiBeacon.setOrganization(wtsi);
+            wtsiBeacon.setVisible(true);
+            wtsiBeacon.setProcessor(pr.getProcessorId(WtsiBeaconProcessor.class));
+            wtsiBeacon.setEnabled(true);
+            wtsiBeacon.setUrl("http://www.sanger.ac.uk/sanger/GA4GH_Beacon");
             beaconDao.save(wtsiBeacon);
 
             Organization amplab = new Organization();
             amplab.setId("amplab");
             amplab.setName("AMPLab, University of California");
             organizationDao.save(amplab);
-            Beacon amplabBeacon = new Beacon("amplab", "AMPLab", amplab, pr.getProcessorId(AmpLabBeaconProcessor.class), true);
+            Beacon amplabBeacon = new Beacon();
+            amplabBeacon.setId("amplab");
+            amplabBeacon.setName("AMPLab");
+            amplabBeacon.setOrganization(amplab);
+            amplabBeacon.setVisible(true);
+            amplabBeacon.setProcessor(pr.getProcessorId(AmpLabBeaconProcessor.class));
+            amplabBeacon.setEnabled(true);
+            amplabBeacon.setUrl("http://beacon.eecs.berkeley.edu/beacon.php");
             beaconDao.save(amplabBeacon);
 
             Organization isb = new Organization();
             isb.setId("isb");
             isb.setName("Institute for Systems Biology");
             organizationDao.save(isb);
-            Beacon kaviar = new Beacon("kaviar", "Known VARiants", isb, pr.getProcessorId(KaviarBeaconProcessor.class), true);
+            Beacon kaviar = new Beacon();
+            kaviar.setId("kaviar");
+            kaviar.setName("Known VARiants");
+            kaviar.setOrganization(isb);
+            kaviar.setVisible(true);
+            kaviar.setProcessor(pr.getProcessorId(KaviarBeaconProcessor.class));
+            kaviar.setEnabled(true);
+            kaviar.setUrl("http://db.systemsbiology.net/kaviar/cgi-pub/beacon");
             beaconDao.save(kaviar);
 
             Organization google = new Organization();
             google.setId("google");
             google.setName("Google");
             organizationDao.save(google);
-            Beacon platinum = new Beacon("platinum", "Illumina Platinum Genomes", google, pr.getProcessorId(BeaconizerStringChromosomeBeaconProcessor.class), true);
+            Beacon platinum = new Beacon();
+            platinum.setId("platinum");
+            platinum.setName("Illumina Platinum Genomes");
+            platinum.setOrganization(google);
+            platinum.setVisible(true);
+            platinum.setProcessor(pr.getProcessorId(BeaconizerStringChromosomeBeaconProcessor.class));
+            platinum.setEnabled(true);
+            platinum.setUrl("http://dnastack.com/p/beacon/");
             beaconDao.save(platinum);
-            Beacon thousandGenomes = new Beacon("thousandgenomes", "1000 Genomes Project", google, pr.getProcessorId(BeaconizerIntegerChromosomeBeaconProcessor.class), true);
+            Beacon thousandGenomes = new Beacon();
+            thousandGenomes.setId("thousandgenomes");
+            thousandGenomes.setName("1000 Genomes Project");
+            thousandGenomes.setOrganization(google);
+            thousandGenomes.setVisible(true);
+            thousandGenomes.setProcessor(pr.getProcessorId(BeaconizerIntegerChromosomeBeaconProcessor.class));
+            thousandGenomes.setEnabled(true);
+            thousandGenomes.setUrl("http://dnastack.com/p/beacon/");
             beaconDao.save(thousandGenomes);
-            Beacon thousandGenomesPhase3 = new Beacon("thousandgenomes-phase3", "1000 Genomes Project - Phase 3", google, pr.getProcessorId(BeaconizerIntegerChromosomeBeaconProcessor.class), true);
+            Beacon thousandGenomesPhase3 = new Beacon();
+            thousandGenomesPhase3.setId("thousandgenomes-phase3");
+            thousandGenomesPhase3.setName("1000 Genomes Project - Phase 3");
+            thousandGenomesPhase3.setOrganization(google);
+            thousandGenomesPhase3.setVisible(true);
+            thousandGenomesPhase3.setProcessor(pr.getProcessorId(BeaconizerIntegerChromosomeBeaconProcessor.class));
+            thousandGenomesPhase3.setEnabled(true);
+            thousandGenomesPhase3.setUrl("http://dnastack.com/p/beacon/");
             beaconDao.save(thousandGenomesPhase3);
 
             Organization curoverse = new Organization();
             curoverse.setId("curoverse");
             curoverse.setName("Curoverse");
             organizationDao.save(curoverse);
-            Beacon curoverseBeacon = new Beacon("curoverse", "PGP", curoverse, pr.getProcessorId(BeaconizerIntegerChromosomeBeaconProcessor.class), true);
+            Beacon curoverseBeacon = new Beacon();
+            curoverseBeacon.setId("curoverse");
+            curoverseBeacon.setName("PGP");
+            curoverseBeacon.setOrganization(curoverse);
+            curoverseBeacon.setVisible(true);
+            curoverseBeacon.setProcessor(pr.getProcessorId(BeaconizerIntegerChromosomeBeaconProcessor.class));
+            curoverseBeacon.setEnabled(true);
+            curoverseBeacon.setUrl(null);
             beaconDao.save(curoverseBeacon);
-            Beacon curoverseRefBeacon = new Beacon("curoverse-ref", "GA4GH Example Data", curoverse, pr.getProcessorId(BeaconizerIntegerChromosomeBeaconProcessor.class), true);
+            Beacon curoverseRefBeacon = new Beacon();
+            curoverseRefBeacon.setId("curoverse-ref");
+            curoverseRefBeacon.setName("GA4GH Example Data");
+            curoverseRefBeacon.setOrganization(curoverse);
+            curoverseRefBeacon.setVisible(true);
+            curoverseRefBeacon.setProcessor(pr.getProcessorId(BeaconizerIntegerChromosomeBeaconProcessor.class));
+            curoverseRefBeacon.setEnabled(true);
+            curoverseRefBeacon.setUrl("http://dnastack.com/p/beacon/");
             beaconDao.save(curoverseRefBeacon);
 
             Organization leicester = new Organization();
             leicester.setId("leicester");
             leicester.setName("University of Leicester");
             organizationDao.save(leicester);
-            Beacon cafeVariomeCentral = new Beacon("cafe-central", "Cafe Variome Central", leicester, pr.getProcessorId(CafeVariomeBeaconProcessor.class), true);
+            Beacon cafeVariomeCentral = new Beacon();
+            cafeVariomeCentral.setId("cafe-central");
+            cafeVariomeCentral.setName("Cafe Variome Central");
+            cafeVariomeCentral.setOrganization(leicester);
+            cafeVariomeCentral.setVisible(true);
+            cafeVariomeCentral.setProcessor(pr.getProcessorId(CafeVariomeBeaconProcessor.class));
+            cafeVariomeCentral.setEnabled(true);
+            cafeVariomeCentral.setUrl("http://beacon.cafevariome.org/query");
             beaconDao.save(cafeVariomeCentral);
-            Beacon cafeCardioKit = new Beacon("cafe-cardiokit", "Cafe CardioKit", leicester, pr.getProcessorId(CafeVariomeBeaconProcessor.class), true);
+            Beacon cafeCardioKit = new Beacon();
+            cafeCardioKit.setId("cafe-cardiokit");
+            cafeCardioKit.setName("Cafe CardioKit");
+            cafeCardioKit.setOrganization(leicester);
+            cafeCardioKit.setVisible(true);
+            cafeCardioKit.setProcessor(pr.getProcessorId(CafeVariomeBeaconProcessor.class));
+            cafeCardioKit.setEnabled(true);
+            cafeCardioKit.setUrl("http://beacon.cafevariome.org/query");
             beaconDao.save(cafeCardioKit);
 
-//            // set up aggregators
-//            Beacon google = new Beacon("google", "Google Genomics Public Data", null, true, "Google");
-//            platinum.addAggregator(google);
-//            thousandGenomes.addAggregator(google);
-//            thousandGenomesPhase3.addAggregator(google);
-//
-//            Beacon cafeVariome = new Beacon("cafe-variome", "Cafe Variome", null, true, "University of Leicester");
-//            cafeVariomeCentral.addAggregator(cafeVariome);
-//            cafeCardioKit.addAggregator(cafeVariome);
-//
-//            Beacon broad = new Beacon("broad", "Broad Institute", broadInstituteService, true, "Broad Institute");
-//
-//            Beacon icgc = new Beacon("icgc", "ICGC", icgcService, true, "Ontario Institute for Cancer Research");
-//
-//            // add beacons ot collection
-//            beacons.add(bob);
-//
-//            beacons.add(clinvarBeacon);
-//            beacons.add(uniprotBeacon);
-//            beacons.add(lovdBeacon);
-//            beacons.add(ebiBeacon);
-//            beacons.add(ncbiBeacon);
-//            beacons.add(google);
-//            beacons.add(google);
-//            beacons.add(kaviar);
-//
-//            beacons.add(google);
-//            beacons.add(platinum);
-//            beacons.add(thousandGenomes);
-//            beacons.add(thousandGenomesPhase3);
-//
-//            beacons.add(curoverse);
-//            beacons.add(curoverseRefBeacon);
-//
-//            beacons.add(cafeVariome);
-//            beacons.add(cafeVariomeCentral);
-//            beacons.add(cafeCardioKit);
-//
-//            beacons.add(broad);
-//
-//            beacons.add(icgc);
-//
-//            // point all regular beacons to bob
-//            for (Beacon b : beacons) {
-//                if (b.getProcessor() != null) {
-//                    b.addAggregator(bob);
-//                }
-//            }
+            Organization broadInstitute = new Organization();
+            broadInstitute.setId("broad");
+            broadInstitute.setName("Broad Institute");
+            organizationDao.save(broadInstitute);
+            Beacon broad = new Beacon();
+            broad.setId("broad");
+            broad.setName("Broad Institute");
+            broad.setOrganization(broadInstitute);
+            broad.setVisible(true);
+            broad.setProcessor(pr.getProcessorId(BroadInstituteBeaconProcessor.class));
+            broad.setEnabled(true);
+            broad.setUrl("http://broad-beacon.broadinstitute.org:8090/dev/beacon/query");
+            beaconDao.save(broad);
+
+            Organization icgc = new Organization();
+            icgc.setId("icgc");
+            icgc.setName("Ontario Institute for Cancer Research");
+            organizationDao.save(icgc);
+            Beacon icgcBeacon = new Beacon();
+            icgcBeacon.setId("icgc");
+            icgcBeacon.setName("ICGC");
+            icgcBeacon.setOrganization(icgc);
+            icgcBeacon.setVisible(true);
+            icgcBeacon.setProcessor(pr.getProcessorId(IcgcBeaconProcessor.class));
+            icgcBeacon.setEnabled(true);
+            icgcBeacon.setUrl("https://dcc.icgc.org/api/v1/beacon/query");
+            beaconDao.save(icgcBeacon);
+
+            Beacon googleBeacon = new Beacon();
+            googleBeacon.setId("google");
+            googleBeacon.setName("Google Genomics Public Data");
+            googleBeacon.setOrganization(google);
+            googleBeacon.setVisible(true);
+            googleBeacon.setProcessor(null);
+            googleBeacon.setEnabled(true);
+            googleBeacon.setUrl("http://dnastack.com/p/beacon/");
+            beaconDao.save(googleBeacon);
+            beaconDao.addRelationship(platinum, googleBeacon);
+            beaconDao.update(platinum);
+            beaconDao.addRelationship(thousandGenomes, googleBeacon);
+            beaconDao.update(thousandGenomes);
+            beaconDao.addRelationship(thousandGenomesPhase3, googleBeacon);
+            beaconDao.update(thousandGenomesPhase3);
+
+            Beacon cafeVariome = new Beacon();
+            cafeVariome.setId("cafe-variome");
+            cafeVariome.setName("Cafe Variome");
+            cafeVariome.setOrganization(leicester);
+            cafeVariome.setVisible(true);
+            cafeVariome.setProcessor(null);
+            cafeVariome.setEnabled(true);
+            cafeVariome.setUrl("http://beacon.cafevariome.org/query");
+            beaconDao.save(cafeVariome);
+            beaconDao.addRelationship(cafeVariomeCentral, cafeVariome);
+            beaconDao.update(cafeVariomeCentral);
+            beaconDao.addRelationship(cafeCardioKit, cafeVariome);
+            beaconDao.update(cafeCardioKit);
+
+            // point all regular beacons to bob
+            List<Beacon> beacons = beaconDao.findAll();
+            for (Beacon b : beacons) {
+                if (b.getProcessor() != null) {
+                    beaconDao.addRelationship(b, bob);
+                    beaconDao.update(b);
+                }
+            }
+        } catch (Exception ex) {
+            // failed to initialize, continue with an empty DB
+            ex.printStackTrace();
         }
+    }
+
+    @PostConstruct
+    public void init() {
+        clean();
+        insertInitialData();
     }
 }

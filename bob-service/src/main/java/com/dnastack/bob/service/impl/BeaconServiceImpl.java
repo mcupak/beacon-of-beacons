@@ -21,12 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service;
+package com.dnastack.bob.service.impl;
 
-import com.dnastack.bob.dto.BeaconTo;
+import com.dnastack.bob.service.dto.BeaconTo;
 import com.dnastack.bob.persistence.api.BeaconDao;
 import com.dnastack.bob.persistence.entity.Beacon;
-import com.dnastack.bob.util.Entity2ToConvertor;
+import com.dnastack.bob.service.api.BeaconService;
+import com.dnastack.bob.service.util.Entity2ToConvertor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

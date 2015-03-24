@@ -21,9 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service;
+package com.dnastack.bob.service.impl;
 
-import com.dnastack.bob.dto.BeaconResponseTo;
 import com.dnastack.bob.lrg.Brca;
 import com.dnastack.bob.lrg.Brca2;
 import com.dnastack.bob.lrg.LrgConvertor;
@@ -36,8 +35,9 @@ import com.dnastack.bob.persistence.entity.Query;
 import com.dnastack.bob.persistence.enumerated.Chromosome;
 import com.dnastack.bob.persistence.enumerated.Reference;
 import com.dnastack.bob.processor.BeaconResponse;
-import com.dnastack.bob.util.BeaconAggregationResolver;
-import com.dnastack.bob.util.Entity2ToConvertor;
+import com.dnastack.bob.service.api.BeaconResponseService;
+import com.dnastack.bob.service.dto.BeaconResponseTo;
+import com.dnastack.bob.service.util.Entity2ToConvertor;
 import com.dnastack.bob.util.ProcessorResolver;
 import com.dnastack.bob.util.QueryUtils;
 import com.google.common.collect.HashMultimap;
@@ -82,9 +82,6 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
     private BeaconDao beaconDao;
 
     @Inject
-    private BeaconAggregationResolver aggregationResolver;
-
-    @Inject
     private ProcessorResolver pr;
 
     @Inject
@@ -118,7 +115,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
         return new Query(c == null ? null : c, pos, QueryUtils.normalizeAllele(allele), r == null ? null : r);
     }
 
-    private boolean checkIfQuerySuccessfullyNormalizedAndValid(Query q, String ref) {
+    private boolean queryNotNormalizedOrValid(Query q, String ref) {
         return (!(ref == null || ref.isEmpty()) && q.getReference() == null) || !validator.validate(q).isEmpty();
     }
 
@@ -131,7 +128,8 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
 
             // execute queries in parallel
             Map<Beacon, Future<Boolean>> futures = new HashMap<>();
-            for (Beacon bt : aggregationResolver.getAtomicAggregatees(b)) {
+            Set<Beacon> children = beaconDao.getRegularDescendants(b);
+            for (Beacon bt : children) {
                 futures.put(bt, pr.getProcessor(bt.getProcessor()).executeQuery(bt, q));
             }
 
@@ -238,7 +236,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
         Multimap<Beacon, Beacon> children = HashMultimap.create();
         for (Beacon b : beacons) {
             if (b.isAggregator()) {
-                children.putAll(b, aggregationResolver.getAtomicAggregatees(b));
+                children.putAll(b, beaconDao.getRegularDescendants(b));
             } else {
                 children.put(b, b);
             }
@@ -284,7 +282,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
         Map<Beacon, BeaconResponse> brs = setUpBeaconResponseMapForIds(beaconIds, q);
 
         // validate query
-        if (checkIfQuerySuccessfullyNormalizedAndValid(q, ref)) {
+        if (queryNotNormalizedOrValid(q, ref)) {
             return brs.values();
         }
 
@@ -304,11 +302,19 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
         Beacon b = beaconDao.findById(beaconId);
         if (b == null || !b.getVisible()) {
             // nonexisting beaconId param specified
-            return Entity2ToConvertor.getBeaconResponseTo(new BeaconResponse(new Beacon(null, "invalid beacon", null, null, true), q, null));
+            Beacon beacon = new Beacon();
+            beacon.setId("null");
+            beacon.setName("invalid beacon");
+            beacon.setOrganization(null);
+            beacon.setUrl(null);
+            beacon.setEnabled(false);
+            beacon.setVisible(false);
+            beacon.setProcessor(null);
+            return Entity2ToConvertor.getBeaconResponseTo(new BeaconResponse(beacon, q, null));
         }
 
         BeaconResponse br = new BeaconResponse(b, q, null);
-        if (checkIfQuerySuccessfullyNormalizedAndValid(q, ref)) {
+        if (queryNotNormalizedOrValid(q, ref)) {
             return Entity2ToConvertor.getBeaconResponseTo(br);
         }
 

@@ -59,6 +59,7 @@ public class Query implements BasicEntity {
     @Min(0L)
     @Max(300000000L)
     private Long position;
+    @NotNull
     @Pattern(regexp = "([D,I])|([A,C,T,G]+)")
     private String allele;
     @Enumerated(EnumType.STRING)
