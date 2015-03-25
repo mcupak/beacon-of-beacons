@@ -68,9 +68,7 @@ public abstract class BasicTest {
                 .loadPomFromFile("pom.xml")
                 .importBuildOutput()
                 .as(WebArchive.class)
-                .addClasses(BasicTest.class, AbstractResponseTest.class)
-                .addAsResource("test-persistence.xml", "WEB-INF/classes/META-INF/persistence.xml")
-                .addAsWebInfResource("jbossas-ds.xml");
+                .addClasses(BasicTest.class, AbstractResponseTest.class);
         System.out.println("WAR name: " + war.getName());
 
         return war;
