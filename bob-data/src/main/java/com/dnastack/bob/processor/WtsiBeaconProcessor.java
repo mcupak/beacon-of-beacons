@@ -23,9 +23,9 @@
  */
 package com.dnastack.bob.processor;
 
-import com.dnastack.bob.entity.Beacon;
-import com.dnastack.bob.entity.Query;
-import com.dnastack.bob.entity.Reference;
+import com.dnastack.bob.persistence.entity.Beacon;
+import com.dnastack.bob.persistence.entity.Query;
+import com.dnastack.bob.persistence.enumerated.Reference;
 import com.google.common.collect.ImmutableSet;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -47,8 +47,6 @@ import static com.dnastack.bob.util.QueryUtils.denormalizeReference;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Processor
-@Wtsi
 public class WtsiBeaconProcessor extends AbstractBeaconProcessor {
 
     private static final long serialVersionUID = 14L;

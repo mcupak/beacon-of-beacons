@@ -24,8 +24,8 @@
 package com.dnastack.bob.rest;
 
 import com.dnastack.bob.rest.util.ItemWrapper;
-import com.dnastack.bob.dto.ChromosomeTo;
-import com.dnastack.bob.dto.ReferenceTo;
+import com.dnastack.bob.service.dto.ChromosomeTo;
+import com.dnastack.bob.service.dto.ReferenceTo;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;

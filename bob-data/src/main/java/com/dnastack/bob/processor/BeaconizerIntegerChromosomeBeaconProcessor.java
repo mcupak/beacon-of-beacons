@@ -29,8 +29,6 @@ package com.dnastack.bob.processor;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Processor
-@IntegerChromosomeBeaconizer
 public class BeaconizerIntegerChromosomeBeaconProcessor extends BeaconizerBeaconProcessor {
 
     private static final long serialVersionUID = 113L;

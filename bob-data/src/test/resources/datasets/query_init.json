@@ -1,0 +1,12 @@
+{
+    "query":
+            [
+                {
+                    "id": 5,
+                    "chromosome": "CHR1",
+                    "reference": "HG19",
+                    "allele": "A",
+                    "position": 1
+                }
+            ]
+}

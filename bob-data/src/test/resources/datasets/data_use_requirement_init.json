@@ -1,0 +1,10 @@
+{
+    "dataUseRequirement":
+            [
+                {
+                    "id": 5,
+                    "name": "test",
+                    "description": "test"
+                }
+            ]
+}

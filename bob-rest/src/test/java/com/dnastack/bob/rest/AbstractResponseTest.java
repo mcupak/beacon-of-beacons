@@ -23,10 +23,10 @@
  */
 package com.dnastack.bob.rest;
 
-import com.dnastack.bob.dto.BeaconResponseTo;
-import com.dnastack.bob.dto.QueryTo;
-import com.dnastack.bob.dto.ChromosomeTo;
-import com.dnastack.bob.dto.ReferenceTo;
+import com.dnastack.bob.service.dto.BeaconResponseTo;
+import com.dnastack.bob.service.dto.QueryTo;
+import com.dnastack.bob.service.dto.ChromosomeTo;
+import com.dnastack.bob.service.dto.ReferenceTo;
 import com.google.common.collect.ImmutableList;
 import java.net.MalformedURLException;
 import java.net.URL;

@@ -23,8 +23,8 @@
  */
 package com.dnastack.bob.lrg;
 
-import com.dnastack.bob.entity.Chromosome;
-import com.dnastack.bob.entity.Reference;
+import com.dnastack.bob.persistence.enumerated.Chromosome;
+import com.dnastack.bob.persistence.enumerated.Reference;
 
 
 /**

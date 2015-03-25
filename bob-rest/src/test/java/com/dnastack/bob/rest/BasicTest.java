@@ -65,8 +65,12 @@ public abstract class BasicTest {
     @Deployment
     public static WebArchive createDeployment() {
         WebArchive war = ShrinkWrap.create(MavenImporter.class)
-                .loadPomFromFile("pom.xml").importBuildOutput().as(WebArchive.class)
-                .addClasses(BasicTest.class, AbstractResponseTest.class);
+                .loadPomFromFile("pom.xml")
+                .importBuildOutput()
+                .as(WebArchive.class)
+                .addClasses(BasicTest.class, AbstractResponseTest.class)
+                .addAsResource("test-persistence.xml", "WEB-INF/classes/META-INF/persistence.xml")
+                .addAsWebInfResource("jbossas-ds.xml");
         System.out.println("WAR name: " + war.getName());
 
         return war;

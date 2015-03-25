@@ -23,9 +23,12 @@
  */
 package com.dnastack.bob.processor;
 
-import com.dnastack.bob.entity.Beacon;
-import com.dnastack.bob.entity.Query;
-import com.dnastack.bob.entity.Reference;
+import com.dnastack.bob.persistence.entity.Beacon;
+import com.dnastack.bob.persistence.entity.Query;
+import com.dnastack.bob.persistence.enumerated.Reference;
+import com.dnastack.bob.util.HttpUtils;
+import com.dnastack.bob.util.ParsingUtils;
+import com.dnastack.bob.util.QueryUtils;
 import com.google.common.collect.ImmutableSet;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;

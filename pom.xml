@@ -56,6 +56,9 @@
         <version.jboss.spec.javaee.7.0>8.2.0.Final</version.jboss.spec.javaee.7.0>
         <version.shrinkwrap.resolver.bom>2.1.1</version.shrinkwrap.resolver.bom>
         <version.arquillian.bom>1.1.5.Final</version.arquillian.bom>
+        <version.arquillian.persistence>1.0.0.Alpha7</version.arquillian.persistence>
+        <version.arquillian.transaction>1.0.1.Final</version.arquillian.transaction>
+        <version.assertj>2.0.0</version.assertj>
         <version.org.apache.httpcomponents.httpclient>4.3.5</version.org.apache.httpcomponents.httpclient>
         <version.org.json.json>20140107</version.org.json.json>
         <version.eclipselink>2.5.2</version.eclipselink>
@@ -85,6 +88,12 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
+                <groupId>javax</groupId>
+                <artifactId>javaee-api</artifactId>
+                <version>7.0</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
                 <groupId>org.jboss.shrinkwrap.resolver</groupId>
                 <artifactId>shrinkwrap-resolver-bom</artifactId>
                 <version>${version.shrinkwrap.resolver.bom}</version>
@@ -97,6 +106,24 @@
                 <version>${version.arquillian.bom}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.arquillian.extension</groupId>
+                <artifactId>arquillian-transaction-jta</artifactId>
+                <version>${version.arquillian.transaction}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.arquillian.extension</groupId>
+                <artifactId>arquillian-persistence-dbunit</artifactId>
+                <version>${version.arquillian.persistence}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>${version.assertj}</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.httpcomponents</groupId>

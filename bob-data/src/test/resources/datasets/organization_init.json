@@ -1,0 +1,10 @@
+{
+    "organization":
+            [
+                {
+                    "id": "test",
+                    "name": "test",
+                    "description": "test"
+                }
+            ]
+}

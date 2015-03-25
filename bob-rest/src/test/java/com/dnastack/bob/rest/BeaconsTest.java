@@ -23,7 +23,7 @@
  */
 package com.dnastack.bob.rest;
 
-import com.dnastack.bob.dto.BeaconTo;
+import com.dnastack.bob.service.dto.BeaconTo;
 import com.google.common.collect.ImmutableSet;
 import java.net.MalformedURLException;
 import java.net.URL;

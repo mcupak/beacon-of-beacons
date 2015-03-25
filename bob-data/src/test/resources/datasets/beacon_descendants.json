@@ -1,0 +1,96 @@
+{
+    "organization":
+            [
+                {
+                    "id": "test",
+                    "name": "test",
+                    "description": "test"
+                }
+            ],
+    "beacon":
+            [
+                {
+                    "id": "root",
+                    "name": "root",
+                    "description": "root",
+                    "processor": null,
+                    "visible": true,
+                    "enabled": true,
+                    "url": "http://foo.bar",
+                    "organization_id": "test"
+                },
+                {
+                    "id": "aggregatorNode",
+                    "name": "aggregatorNode",
+                    "description": "aggregatorNode",
+                    "processor": null,
+                    "visible": true,
+                    "enabled": true,
+                    "url": "http://foo.bar",
+                    "organization_id": "test"
+                },
+                {
+                    "id": "visibleRegularNode",
+                    "name": "visibleRegularNode",
+                    "description": "visibleRegularNode",
+                    "processor": "processor",
+                    "visible": true,
+                    "enabled": true,
+                    "url": "http://foo.bar",
+                    "organization_id": "test"
+                },
+                {
+                    "id": "visibleRegularSubNode",
+                    "name": "visibleRegularSubNode",
+                    "description": "visibleRegularSubNode",
+                    "processor": "processor",
+                    "visible": true,
+                    "enabled": true,
+                    "url": "http://foo.bar",
+                    "organization_id": "test"
+                },
+                {
+                    "id": "invisibleRegularSubNode",
+                    "name": "invisibleRegularSubNode",
+                    "description": "invisibleRegularSubNode",
+                    "processor": "processor",
+                    "visible": false,
+                    "enabled": true,
+                    "url": "http://foo.bar",
+                    "organization_id": "test"
+                },
+                {
+                    "id": "disabledRegularSubNode",
+                    "name": "disabledRegularSubNode",
+                    "description": "disabledRegularSubNode",
+                    "processor": "processor",
+                    "visible": true,
+                    "enabled": false,
+                    "url": "http://foo.bar",
+                    "organization_id": "test"
+                }
+            ],
+    "beacon_beacon":
+            [
+                {
+                    "parents_id": "root",
+                    "children_id": "aggregatorNode"
+                },
+                {
+                    "parents_id": "root",
+                    "children_id": "visibleRegularNode"
+                },
+                {
+                    "parents_id": "aggregatorNode",
+                    "children_id": "visibleRegularSubNode"
+                },
+                {
+                    "parents_id": "aggregatorNode",
+                    "children_id": "invisibleRegularSubNode"
+                },
+                {
+                    "parents_id": "aggregatorNode",
+                    "children_id": "disabledRegularSubNode"
+                }
+            ]
+}

@@ -23,7 +23,7 @@
  */
 package com.dnastack.bob.rest;
 
-import com.dnastack.bob.dto.ReferenceTo;
+import com.dnastack.bob.service.dto.ReferenceTo;
 import com.dnastack.bob.rest.util.ItemWrapper;
 import java.util.ArrayList;
 import java.util.Collection;
