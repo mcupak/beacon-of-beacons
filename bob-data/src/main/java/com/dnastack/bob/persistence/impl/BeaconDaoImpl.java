@@ -77,23 +77,43 @@ public class BeaconDaoImpl extends AbstractEntityWithStringIdDaoImpl<Beacon> imp
         return res;
     }
 
+    private boolean beaconSatisfiesProperties(Beacon b, boolean invisible, boolean disabled) {
+        return (b.getVisible() || invisible) && (b.getEnabled() || disabled);
+    }
+
     @Override
-    public Set<Beacon> getRegularDescendants(Beacon parent) {
+    public Set<Beacon> findDescendants(Beacon parent, boolean includeAggregators, boolean includeInvisible, boolean includeDisabled, boolean includeSelf) {
         Set<Beacon> desc = new HashSet<>();
 
         Queue<Beacon> buffer = new LinkedBlockingQueue<>();
         Beacon b = parent;
         while (b != null) {
-            if (b.isAggregator()) {
-                buffer.addAll(b.getChildren());
+            if (b.equals(parent) && includeSelf) {
+                if (beaconSatisfiesProperties(b, includeInvisible, includeDisabled)) {
+                    desc.add(b);
+                }
+            } else if (b.isAggregator()) {
+                if (includeAggregators) {
+                    if (beaconSatisfiesProperties(b, includeInvisible, includeDisabled)) {
+                        desc.add(b);
+                    }
+                }
             } else {
-                desc.add(b);
+                if (beaconSatisfiesProperties(b, includeInvisible, includeDisabled)) {
+                    desc.add(b);
+                }
             }
 
+            buffer.addAll(b.getChildren());
             b = buffer.poll();
         }
 
         return desc;
+    }
+
+    @Override
+    public boolean haveRelationship(Beacon child, Beacon parent) {
+        return child.getParents().contains(parent);
     }
 
 }

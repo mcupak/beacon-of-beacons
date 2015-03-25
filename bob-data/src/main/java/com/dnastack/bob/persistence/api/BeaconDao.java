@@ -54,6 +54,16 @@ public interface BeaconDao extends EntityWithStringIdDao<Beacon> {
     List<Beacon> findByVisibility(boolean visible);
 
     /**
+     * Checks existence of a parent-child association.
+     *
+     * @param parent parent
+     * @param child  child
+     *
+     * @return true if the child did not have that parent already, false otherwise
+     */
+    boolean haveRelationship(Beacon child, Beacon parent);
+
+    /**
      * Creates parent-child association.
      *
      * @param parent parent
@@ -74,12 +84,16 @@ public interface BeaconDao extends EntityWithStringIdDao<Beacon> {
     boolean removeRelationship(Beacon child, Beacon parent);
 
     /**
-     * Computes a set of all the regular (non-aggregating) nodes covered by a specific node transitively.
+     * Computes a set of nodes covered by a specific node transitively.
      *
-     * @param parent node
+     * @param parent             node
+     * @param includeAggregators true if aggregators should be included in the results
+     * @param includeInvisible   true if invisible beacons should be included in the results
+     * @param includeDisabled    true if disabled beacons should be included as well
+     * @param includeSelf        true if self should be included in the results
      *
      * @return set of nodes
      */
-    Set<Beacon> getRegularDescendants(Beacon parent);
+    Set<Beacon> findDescendants(Beacon parent, boolean includeAggregators, boolean includeInvisible, boolean includeDisabled, boolean includeSelf);
 
 }

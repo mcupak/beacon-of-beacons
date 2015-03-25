@@ -128,7 +128,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
 
             // execute queries in parallel
             Map<Beacon, Future<Boolean>> futures = new HashMap<>();
-            Set<Beacon> children = beaconDao.getRegularDescendants(b);
+            Set<Beacon> children = beaconDao.findDescendants(b, false, true, false, false);
             for (Beacon bt : children) {
                 futures.put(bt, pr.getProcessor(bt.getProcessor()).executeQuery(bt, q));
             }
@@ -236,7 +236,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
         Multimap<Beacon, Beacon> children = HashMultimap.create();
         for (Beacon b : beacons) {
             if (b.isAggregator()) {
-                children.putAll(b, beaconDao.getRegularDescendants(b));
+                children.putAll(b, beaconDao.findDescendants(b, false, true, false, false));
             } else {
                 children.put(b, b);
             }

@@ -28,8 +28,6 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -79,12 +77,6 @@ public class Beacon implements BasicEntity {
     @Column(nullable = false)
     private Boolean enabled;
     @ManyToMany
-    @JoinTable(name = "BeaconRelationships", joinColumns = {
-        @JoinColumn(name = "parent", referencedColumnName = "id", nullable = false)},
-            inverseJoinColumns = {
-                @JoinColumn(name = "child", referencedColumnName = "id", nullable = false)
-            }
-    )
     private Set<Beacon> parents;
     @ManyToMany(mappedBy = "parents")
     private Set<Beacon> children;
