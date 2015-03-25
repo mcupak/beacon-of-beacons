@@ -25,20 +25,13 @@ package com.dnastack.bob.persistence;
 
 import com.dnastack.bob.persistence.api.GenericDao;
 import com.dnastack.bob.persistence.entity.BasicEntity;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.core.IsNot.not;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Fail.fail;
 
 /**
  * Tests for methods in GenericDao.
@@ -88,9 +81,13 @@ public abstract class GenericDaoTest extends BasicDaoTest {
         return (BasicEntity) em.find(entity, id);
     }
 
+    protected BasicEntity findById(Class entity, String id) {
+        return (BasicEntity) em.find(entity, id);
+    }
+
     @Test
     public void testCountAll() {
-        assertEquals((long) countAll(getEntityClass()), getDao().countAll());
+        assertThat(getDao().countAll()).isEqualTo(countAll(getEntityClass()));
     }
 
     @Test
@@ -100,11 +97,7 @@ public abstract class GenericDaoTest extends BasicDaoTest {
 
     @Test
     public void testFindAll() {
-        Set<BasicEntity> ents = new HashSet<>(findAll(getEntityClass()));
-
-        for (Object e : getDao().findAll()) {
-            assertTrue(ents.contains(e));
-        }
+        assertThat(getDao().findAll()).containsExactlyElementsOf(findAll(getEntityClass()));
     }
 
     @Test
@@ -115,9 +108,11 @@ public abstract class GenericDaoTest extends BasicDaoTest {
 
         BasicEntity b;
         for (BasicEntity e : getNewData()) {
-            assertThat(findAll(getEntityClass()), not(hasItem(equalTo(e))));
+            assertThat(findAll(getEntityClass())).doesNotContain(e);
+
             b = getDao().save(e);
-            assertThat(findAll(getEntityClass()), hasItem(equalTo(b)));
+
+            assertThat(findAll(getEntityClass()).contains(b));
         }
     }
 

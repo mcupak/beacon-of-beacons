@@ -38,11 +38,7 @@ import org.jboss.arquillian.transaction.api.annotation.Transactional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.Matchers.samePropertyValuesAs;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Data use DAO test.
@@ -88,7 +84,7 @@ public class DataUseDaoTest extends EntityWithLongIdDaoTest {
 
         DataUse b = dao.update(e);
 
-        assertThat(findAll(getEntityClass()), hasItem(samePropertyValuesAs(b)));
+        assertThat(findAll(getEntityClass())).contains(b);
     }
 
     @Override
@@ -96,7 +92,8 @@ public class DataUseDaoTest extends EntityWithLongIdDaoTest {
     public void testDelete() {
         DataUse e = (DataUse) findOne(getEntityClass());
         dao.delete(e.getId());
-        assertThat(findAll(getEntityClass()), not(hasItem(e)));
+
+        assertThat(findAll(getEntityClass())).doesNotContain(e);
     }
 
     @Override
@@ -104,7 +101,8 @@ public class DataUseDaoTest extends EntityWithLongIdDaoTest {
     public void testFindById() {
         DataUse e = (DataUse) findOne(getEntityClass());
         DataUse e2 = dao.findById(e.getId());
-        assertThat(e, equalTo(e2));
+
+        assertThat(e).isEqualTo(e2);
     }
 
 }

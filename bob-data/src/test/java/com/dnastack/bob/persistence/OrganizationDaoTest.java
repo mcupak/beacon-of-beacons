@@ -38,11 +38,7 @@ import org.jboss.arquillian.transaction.api.annotation.Transactional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.Matchers.samePropertyValuesAs;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Organization DAO test.
@@ -88,7 +84,7 @@ public class OrganizationDaoTest extends EntityWithStringIdDaoTest {
 
         Organization b = dao.update(e);
 
-        assertThat(findAll(getEntityClass()), hasItem(samePropertyValuesAs(b)));
+        assertThat(findAll(getEntityClass())).contains(b);
     }
 
     @Override
@@ -96,7 +92,8 @@ public class OrganizationDaoTest extends EntityWithStringIdDaoTest {
     public void testDelete() {
         Organization e = (Organization) findOne(getEntityClass());
         dao.delete(e.getId());
-        assertThat(findAll(getEntityClass()), not(hasItem(e)));
+
+        assertThat(findAll(getEntityClass())).doesNotContain(e);
     }
 
     @Override
@@ -104,7 +101,8 @@ public class OrganizationDaoTest extends EntityWithStringIdDaoTest {
     public void testFindById() {
         Organization e = (Organization) findOne(getEntityClass());
         Organization e2 = dao.findById(e.getId());
-        assertThat(e, equalTo(e2));
+
+        assertThat(e).isEqualTo(e2);
     }
 
 }

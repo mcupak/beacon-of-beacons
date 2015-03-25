@@ -40,11 +40,7 @@ import org.jboss.arquillian.transaction.api.annotation.Transactional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.Matchers.samePropertyValuesAs;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Query DAO test.
@@ -92,7 +88,7 @@ public class QueryDaoTest extends EntityWithLongIdDaoTest {
 
         Query b = dao.update(e);
 
-        assertThat(findAll(getEntityClass()), hasItem(samePropertyValuesAs(b)));
+        assertThat(findAll(getEntityClass())).contains(b);
     }
 
     @Override
@@ -100,7 +96,8 @@ public class QueryDaoTest extends EntityWithLongIdDaoTest {
     public void testDelete() {
         Query e = (Query) findOne(getEntityClass());
         dao.delete(e.getId());
-        assertThat(findAll(getEntityClass()), not(hasItem(e)));
+
+        assertThat(findAll(getEntityClass())).doesNotContain(e);
     }
 
     @Override
@@ -108,7 +105,8 @@ public class QueryDaoTest extends EntityWithLongIdDaoTest {
     public void testFindById() {
         Query e = (Query) findOne(getEntityClass());
         Query e2 = dao.findById(e.getId());
-        assertThat(e, equalTo(e2));
+
+        assertThat(e).isEqualTo(e2);
     }
 
 }

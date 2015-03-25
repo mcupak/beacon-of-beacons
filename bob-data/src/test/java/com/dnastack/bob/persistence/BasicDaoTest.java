@@ -23,6 +23,7 @@
  */
 package com.dnastack.bob.persistence;
 
+import org.assertj.core.api.Condition;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
@@ -47,10 +48,20 @@ public abstract class BasicDaoTest {
         }
     };
 
+    public Condition getNullCondition() {
+        return new Condition("null") {
+
+            @Override
+            public boolean matches(Object value) {
+                return value == null;
+            }
+        };
+    }
+
     @Deployment
     public static WebArchive createDeployment() {
         WebArchive war = ShrinkWrap.create(WebArchive.class, "test.war")
-                .addPackages(true, "com.dnastack.bob")
+                .addPackages(true, "com.dnastack.bob.persistence", "org.assertj.core")
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
                 .addAsWebInfResource("jbossas-ds.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
