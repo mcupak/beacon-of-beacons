@@ -1,0 +1,50 @@
+{
+    "organization":
+            [
+                {
+                    "id": "beacon_org",
+                    "name": "test",
+                    "description": "test"
+                }
+            ],
+    "beacon":
+            [
+                {
+                    "id": "parent",
+                    "name": "parent",
+                    "description": "parent",
+                    "processor": null,
+                    "visible": true,
+                    "enabled": true,
+                    "url": "http://foo.bar",
+                    "organization_id": "beacon_org"
+                },
+                {
+                    "id": "childWithParent",
+                    "name": "childWithParent",
+                    "description": "childWithParent",
+                    "processor": "processor",
+                    "visible": true,
+                    "enabled": true,
+                    "url": "http://foo.bar",
+                    "organization_id": "beacon_org"
+                },
+                {
+                    "id": "childWithoutParent",
+                    "name": "childWithoutParent",
+                    "description": "childWithoutParent",
+                    "processor": "processor",
+                    "visible": true,
+                    "enabled": true,
+                    "url": "http://foo.bar",
+                    "organization_id": "beacon_org"
+                }
+            ],
+    "beacon_beacon":
+            [
+                {
+                    "parents_id": "parent",
+                    "children_id": "childWithParent"
+                }
+            ]
+}
