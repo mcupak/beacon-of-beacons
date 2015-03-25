@@ -27,7 +27,7 @@ import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.persistence.entity.Query;
 import com.dnastack.bob.persistence.enumerated.Chromosome;
 import com.dnastack.bob.persistence.enumerated.Reference;
-import com.dnastack.bob.processor.BeaconResponse;
+import com.dnastack.bob.service.processor.api.BeaconResponse;
 import com.dnastack.bob.service.dto.BeaconResponseTo;
 import com.dnastack.bob.service.dto.BeaconTo;
 import com.dnastack.bob.service.dto.ChromosomeTo;

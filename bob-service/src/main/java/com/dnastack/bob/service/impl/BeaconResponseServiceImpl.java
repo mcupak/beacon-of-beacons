@@ -23,23 +23,23 @@
  */
 package com.dnastack.bob.service.impl;
 
-import com.dnastack.bob.lrg.Brca;
-import com.dnastack.bob.lrg.Brca2;
-import com.dnastack.bob.lrg.LrgConvertor;
-import com.dnastack.bob.lrg.LrgLocus;
-import com.dnastack.bob.lrg.LrgReference;
+import com.dnastack.bob.service.lrg.Brca;
+import com.dnastack.bob.service.lrg.Brca2;
+import com.dnastack.bob.service.lrg.LrgConvertor;
+import com.dnastack.bob.service.lrg.LrgLocus;
+import com.dnastack.bob.service.lrg.LrgReference;
 import com.dnastack.bob.persistence.api.BeaconDao;
 import com.dnastack.bob.persistence.api.QueryDao;
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.persistence.entity.Query;
 import com.dnastack.bob.persistence.enumerated.Chromosome;
 import com.dnastack.bob.persistence.enumerated.Reference;
-import com.dnastack.bob.processor.BeaconResponse;
+import com.dnastack.bob.service.processor.api.BeaconResponse;
 import com.dnastack.bob.service.api.BeaconResponseService;
 import com.dnastack.bob.service.dto.BeaconResponseTo;
 import com.dnastack.bob.service.util.Entity2ToConvertor;
-import com.dnastack.bob.util.ProcessorResolver;
-import com.dnastack.bob.util.QueryUtils;
+import com.dnastack.bob.service.processor.util.ProcessorResolver;
+import com.dnastack.bob.service.processor.util.QueryUtils;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import java.io.Serializable;
@@ -60,9 +60,10 @@ import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.transaction.Transactional;
 import javax.validation.Validator;
 
-import static com.dnastack.bob.util.Constants.REQUEST_TIMEOUT;
+import static com.dnastack.bob.service.processor.util.Constants.REQUEST_TIMEOUT;
 
 /**
  * Implementation of a service for managing beacon responses.
@@ -74,6 +75,7 @@ import static com.dnastack.bob.util.Constants.REQUEST_TIMEOUT;
 @LocalBean
 @Named
 @Dependent
+@Transactional
 public class BeaconResponseServiceImpl implements BeaconResponseService, Serializable {
 
     private static final long serialVersionUID = 103L;

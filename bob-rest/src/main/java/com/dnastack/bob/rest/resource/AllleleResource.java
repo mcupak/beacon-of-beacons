@@ -21,59 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.impl;
+package com.dnastack.bob.rest.resource;
 
-import com.dnastack.bob.persistence.api.BeaconDao;
-import com.dnastack.bob.persistence.entity.Beacon;
-import com.dnastack.bob.service.api.BeaconService;
-import com.dnastack.bob.service.dto.BeaconTo;
-import com.dnastack.bob.service.util.Entity2ToConvertor;
+import com.dnastack.bob.rest.util.ItemWrapper;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.inject.Inject;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
-import javax.transaction.Transactional;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 /**
- * Implementation of a service managing beacons.
+ * Allele rest resource.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Stateless
-@LocalBean
+@Path("/alleles")
+@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN})
+@RequestScoped
 @Named
-@Transactional
-public class BeaconServiceImpl implements BeaconService {
+public class AllleleResource {
 
-    @Inject
-    private BeaconDao beaconDao;
+    @GET
+    public Collection<ItemWrapper<String>> showAll() {
+        List<ItemWrapper<String>> vals = new ArrayList<>();
+        vals.add(new ItemWrapper<>("A"));
+        vals.add(new ItemWrapper<>("C"));
+        vals.add(new ItemWrapper<>("G"));
+        vals.add(new ItemWrapper<>("T"));
+        vals.add(new ItemWrapper<>("D"));
+        vals.add(new ItemWrapper<>("I"));
 
-    @Override
-    public BeaconTo getBeacon(String beaconId) {
-        Beacon b = beaconDao.findById(beaconId);
-        return Entity2ToConvertor.getBeaconTo((b == null || !b.getVisible()) ? null : b);
+        return vals;
     }
-
-    @Override
-    public Collection<BeaconTo> getBeacons(Collection<String> beaconIds) {
-        List<BeaconTo> res = new ArrayList<>();
-        for (String id : beaconIds) {
-            BeaconTo b = getBeacon(id);
-            if (b != null) {
-                res.add(b);
-            }
-        }
-
-        return res;
-    }
-
-    @Override
-    public Collection<BeaconTo> getAll() {
-        return Entity2ToConvertor.getBeaconTos(beaconDao.findByVisibility(true));
-    }
-
 }
