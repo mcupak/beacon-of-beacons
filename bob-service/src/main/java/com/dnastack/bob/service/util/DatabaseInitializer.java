@@ -37,6 +37,7 @@ import com.dnastack.bob.service.processor.impl.IcgcBeaconProcessor;
 import com.dnastack.bob.service.processor.impl.KaviarBeaconProcessor;
 import com.dnastack.bob.service.processor.impl.NcbiBeaconProcessor;
 import com.dnastack.bob.service.processor.impl.UcscBeaconProcessor;
+import com.dnastack.bob.service.processor.impl.UcscV2BeaconProcessor;
 import com.dnastack.bob.service.processor.impl.WtsiBeaconProcessor;
 import com.dnastack.bob.service.processor.util.ProcessorResolver;
 import java.util.ArrayList;
@@ -57,16 +58,16 @@ import org.jboss.logging.Logger;
 @Startup
 @Transactional
 public class DatabaseInitializer {
-
+    
     @Inject
     private OrganizationDao organizationDao;
-
+    
     @Inject
     private BeaconDao beaconDao;
-
+    
     @Inject
     private ProcessorResolver pr;
-
+    
     @Inject
     private Logger logger;
 
@@ -84,7 +85,7 @@ public class DatabaseInitializer {
                 }
             }
         } while (!beacons.isEmpty());
-
+        
         List<Organization> orgs = new ArrayList<>();
         do {
             orgs = organizationDao.findAll();
@@ -97,7 +98,7 @@ public class DatabaseInitializer {
             }
         } while (!orgs.isEmpty());
     }
-
+    
     private void insertInitialData() {
         logger.debug("Initializing DB...");
         try {
@@ -121,6 +122,15 @@ public class DatabaseInitializer {
             ucsc.setId("ucsc");
             ucsc.setName("UCSC");
             organizationDao.save(ucsc);
+            Beacon ucscBeacon = new Beacon();
+            ucscBeacon.setId("ucsc");
+            ucscBeacon.setName("UCSC");
+            ucscBeacon.setOrganization(ucsc);
+            ucscBeacon.setVisible(true);
+            ucscBeacon.setProcessor(null);
+            ucscBeacon.setEnabled(true);
+            ucscBeacon.setUrl("http://hgwdev-max.cse.ucsc.edu/cgi-bin/beacon/query");
+            beaconDao.save(ucscBeacon);
             Beacon clinvarBeacon = new Beacon();
             clinvarBeacon.setId("clinvar");
             clinvarBeacon.setName("ClinVar");
@@ -144,11 +154,25 @@ public class DatabaseInitializer {
             lovdBeacon.setName("Leiden Open Variation");
             lovdBeacon.setOrganization(ucsc);
             lovdBeacon.setVisible(true);
-            lovdBeacon.setProcessor(pr.getProcessorId(UcscBeaconProcessor.class));
+            lovdBeacon.setProcessor(pr.getProcessorId(UcscV2BeaconProcessor.class));
             lovdBeacon.setEnabled(true);
-            lovdBeacon.setUrl("http://hgwdev-max.cse.ucsc.edu/cgi-bin/beacon/query");
+            lovdBeacon.setUrl("http://genome.ucsc.edu/cgi-bin/hgBeacon/query");
             beaconDao.save(lovdBeacon);
-
+            Beacon hgmdBeacon = new Beacon();
+            hgmdBeacon.setId("hgmd");
+            hgmdBeacon.setName("Biobase - HGMD");
+            hgmdBeacon.setOrganization(ucsc);
+            hgmdBeacon.setVisible(true);
+            hgmdBeacon.setProcessor(pr.getProcessorId(UcscV2BeaconProcessor.class));
+            hgmdBeacon.setEnabled(true);
+            hgmdBeacon.setUrl("http://genome.ucsc.edu/cgi-bin/hgBeacon/query");
+            hgmdBeacon.setDescription("HGMD gives out only positions and ignores alleles.");
+            beaconDao.save(hgmdBeacon);
+            beaconDao.addRelationship(hgmdBeacon, ucscBeacon);
+            beaconDao.addRelationship(clinvarBeacon, ucscBeacon);
+            beaconDao.addRelationship(lovdBeacon, ucscBeacon);
+            beaconDao.addRelationship(uniprotBeacon, ucscBeacon);
+            
             Organization ebi = new Organization();
             ebi.setId("ebi");
             ebi.setName("EBI");
@@ -162,7 +186,7 @@ public class DatabaseInitializer {
             ebiBeacon.setEnabled(true);
             ebiBeacon.setUrl("http://wwwdev.ebi.ac.uk/eva/webservices/rest/v1/ga4gh/beacon");
             beaconDao.save(ebiBeacon);
-
+            
             Organization ncbi = new Organization();
             ncbi.setId("ncbi");
             ncbi.setName("NCBI");
@@ -176,7 +200,7 @@ public class DatabaseInitializer {
             ncbiBeacon.setEnabled(true);
             ncbiBeacon.setUrl("http://www.ncbi.nlm.nih.gov/projects/genome/beacon/beacon.cgi");
             beaconDao.save(ncbiBeacon);
-
+            
             Organization wtsi = new Organization();
             wtsi.setId("wtsi");
             wtsi.setName("WTSI");
@@ -190,7 +214,7 @@ public class DatabaseInitializer {
             wtsiBeacon.setEnabled(true);
             wtsiBeacon.setUrl("http://www.sanger.ac.uk/sanger/GA4GH_Beacon");
             beaconDao.save(wtsiBeacon);
-
+            
             Organization amplab = new Organization();
             amplab.setId("amplab");
             amplab.setName("AMPLab, University of California");
@@ -204,7 +228,7 @@ public class DatabaseInitializer {
             amplabBeacon.setEnabled(true);
             amplabBeacon.setUrl("http://beacon.eecs.berkeley.edu/beacon.php");
             beaconDao.save(amplabBeacon);
-
+            
             Organization isb = new Organization();
             isb.setId("isb");
             isb.setName("Institute for Systems Biology");
@@ -218,7 +242,7 @@ public class DatabaseInitializer {
             kaviar.setEnabled(true);
             kaviar.setUrl("http://db.systemsbiology.net/kaviar/cgi-pub/beacon");
             beaconDao.save(kaviar);
-
+            
             Organization google = new Organization();
             google.setId("google");
             google.setName("Google");
@@ -250,7 +274,7 @@ public class DatabaseInitializer {
             thousandGenomesPhase3.setEnabled(true);
             thousandGenomesPhase3.setUrl("http://dnastack.com/p/beacon/");
             beaconDao.save(thousandGenomesPhase3);
-
+            
             Organization curoverse = new Organization();
             curoverse.setId("curoverse");
             curoverse.setName("Curoverse");
@@ -273,7 +297,7 @@ public class DatabaseInitializer {
             curoverseRefBeacon.setEnabled(true);
             curoverseRefBeacon.setUrl("http://dnastack.com/p/beacon/");
             beaconDao.save(curoverseRefBeacon);
-
+            
             Organization leicester = new Organization();
             leicester.setId("leicester");
             leicester.setName("University of Leicester");
@@ -296,7 +320,7 @@ public class DatabaseInitializer {
             cafeCardioKit.setEnabled(true);
             cafeCardioKit.setUrl("http://beacon.cafevariome.org/query");
             beaconDao.save(cafeCardioKit);
-
+            
             Organization broadInstitute = new Organization();
             broadInstitute.setId("broad");
             broadInstitute.setName("Broad Institute");
@@ -310,7 +334,7 @@ public class DatabaseInitializer {
             broad.setEnabled(true);
             broad.setUrl("http://broad-beacon.broadinstitute.org:8090/dev/beacon/query");
             beaconDao.save(broad);
-
+            
             Organization icgc = new Organization();
             icgc.setId("icgc");
             icgc.setName("Ontario Institute for Cancer Research");
@@ -324,7 +348,7 @@ public class DatabaseInitializer {
             icgcBeacon.setEnabled(true);
             icgcBeacon.setUrl("https://dcc.icgc.org/api/v1/beacon/query");
             beaconDao.save(icgcBeacon);
-
+            
             Beacon googleBeacon = new Beacon();
             googleBeacon.setId("google");
             googleBeacon.setName("Google Genomics Public Data");
@@ -340,7 +364,7 @@ public class DatabaseInitializer {
             beaconDao.update(thousandGenomes);
             beaconDao.addRelationship(thousandGenomesPhase3, googleBeacon);
             beaconDao.update(thousandGenomesPhase3);
-
+            
             Beacon cafeVariome = new Beacon();
             cafeVariome.setId("cafe-variome");
             cafeVariome.setName("Cafe Variome");
@@ -368,7 +392,7 @@ public class DatabaseInitializer {
             ex.printStackTrace();
         }
     }
-
+    
     @PostConstruct
     public void init() {
         clean();
