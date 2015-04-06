@@ -25,18 +25,17 @@ package com.dnastack.bob.service.processor.impl;
 
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.persistence.entity.Query;
-import com.dnastack.bob.persistence.enumerated.Reference;
-import com.google.common.collect.ImmutableSet;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.util.Set;
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+import javax.inject.Named;
 
 import static com.dnastack.bob.service.processor.util.HttpUtils.createRequest;
 import static com.dnastack.bob.service.processor.util.HttpUtils.executeRequest;
-import static com.dnastack.bob.service.processor.util.ParsingUtils.parseYesNoCaseInsensitive;
 import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizePosition;
 
 /**
@@ -45,12 +44,14 @@ import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizePosi
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
+@Stateless
+@Named
+@LocalBean
 public class BroadInstituteBeaconProcessor extends AbstractBeaconProcessor {
 
     private static final long serialVersionUID = 6477729900179823208L;
     private static final String BASE_URL = "http://broad-beacon.broadinstitute.org:8090/dev/beacon/query";
     private static final String PARAM_TEMPLATE = "?ref=%s&chrom=%s&pos=%d&allele=%s";
-    private static final Set<Reference> SUPPORTED_REFS = ImmutableSet.of(Reference.HG19);
 
     private String getQueryUrl(String ref, String chrom, Long pos, String allele) throws MalformedURLException {
         String params = String.format(PARAM_TEMPLATE, ref, chrom, pos, allele);
@@ -71,16 +72,4 @@ public class BroadInstituteBeaconProcessor extends AbstractBeaconProcessor {
         return new AsyncResult<>(res);
     }
 
-    @Override
-    @Asynchronous
-    public Future<Boolean> parseQueryResponse(Beacon b, String response) {
-        Boolean res = parseYesNoCaseInsensitive(response);
-
-        return new AsyncResult<>(res);
-    }
-
-    @Override
-    public Set<Reference> getSupportedReferences() {
-        return SUPPORTED_REFS;
-    }
 }

@@ -23,23 +23,24 @@
  */
 package com.dnastack.bob.service.impl;
 
-import com.dnastack.bob.service.lrg.Brca;
-import com.dnastack.bob.service.lrg.Brca2;
-import com.dnastack.bob.service.lrg.LrgConvertor;
-import com.dnastack.bob.service.lrg.LrgLocus;
-import com.dnastack.bob.service.lrg.LrgReference;
 import com.dnastack.bob.persistence.api.BeaconDao;
 import com.dnastack.bob.persistence.api.QueryDao;
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.persistence.entity.Query;
 import com.dnastack.bob.persistence.enumerated.Chromosome;
 import com.dnastack.bob.persistence.enumerated.Reference;
-import com.dnastack.bob.service.processor.api.BeaconResponse;
 import com.dnastack.bob.service.api.BeaconResponseService;
 import com.dnastack.bob.service.dto.BeaconResponseTo;
-import com.dnastack.bob.service.util.Entity2ToConvertor;
-import com.dnastack.bob.service.processor.util.ProcessorResolver;
+import com.dnastack.bob.service.lrg.Brca;
+import com.dnastack.bob.service.lrg.Brca2;
+import com.dnastack.bob.service.lrg.LrgConvertor;
+import com.dnastack.bob.service.lrg.LrgLocus;
+import com.dnastack.bob.service.lrg.LrgReference;
+import com.dnastack.bob.service.processor.api.BeaconProcessor;
+import com.dnastack.bob.service.processor.api.BeaconResponse;
 import com.dnastack.bob.service.processor.util.QueryUtils;
+import com.dnastack.bob.service.util.CdiBeanResolver;
+import com.dnastack.bob.service.util.Entity2ToConvertor;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import java.io.Serializable;
@@ -84,7 +85,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
     private BeaconDao beaconDao;
 
     @Inject
-    private ProcessorResolver pr;
+    private CdiBeanResolver pr;
 
     @Inject
     private QueryDao queryDao;
@@ -125,14 +126,14 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
     private Future<Boolean> queryBeacon(Beacon b, Query q) throws ClassNotFoundException {
         Boolean total = null;
 
-        if (b.isAggregator()) {
+        if (b.getAggregator()) {
             total = false;
 
             // execute queries in parallel
             Map<Beacon, Future<Boolean>> futures = new HashMap<>();
             Set<Beacon> children = beaconDao.findDescendants(b, false, true, false, false);
             for (Beacon bt : children) {
-                futures.put(bt, pr.getProcessor(bt.getProcessor()).executeQuery(bt, q));
+                futures.put(bt, ((BeaconProcessor) pr.resolve(bt.getProcessor())).executeQuery(bt, q));
             }
 
             // collect results
@@ -149,7 +150,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
             }
         } else {
             try {
-                total = pr.getProcessor(b.getProcessor()).executeQuery(b, q).get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
+                total = ((BeaconProcessor) pr.resolve(b.getProcessor())).executeQuery(b, q).get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
             } catch (InterruptedException | ExecutionException | TimeoutException ex) {
                 // ignore
             }
@@ -237,7 +238,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
     private Multimap<Beacon, Beacon> setUpChildrenMultimap(Collection<Beacon> beacons) {
         Multimap<Beacon, Beacon> children = HashMultimap.create();
         for (Beacon b : beacons) {
-            if (b.isAggregator()) {
+            if (b.getAggregator()) {
                 children.putAll(b, beaconDao.findDescendants(b, false, true, false, false));
             } else {
                 children.put(b, b);

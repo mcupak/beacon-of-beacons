@@ -21,38 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.processor.api;
+package com.dnastack.bob.service.parser.api;
 
 import com.dnastack.bob.persistence.entity.Beacon;
-import com.dnastack.bob.persistence.entity.Query;
 import java.util.concurrent.Future;
 
 /**
- * Beacon query service.
+ * Beacon response parser.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public interface BeaconProcessor {
+public interface BeaconResponseParser {
 
     /**
-     * Asynchronously executes a query agaist a beacon.
+     * Asynchronously extracts beacon response value from the given raw query response.
      *
-     * @param beacon beacon
-     * @param query  query
+     * @param beacon   beacon
+     * @param response response
      *
-     * @return true/false according to the beacons response (or null if the valid response could not be obtained)
+     * @return true/false for valid values, null otherwise
      */
-    Future<Boolean> executeQuery(Beacon beacon, Query query);
-
-    /**
-     * Asynchronously obtains raw response to the query from the beacon.
-     *
-     * @param beacon beacon to query
-     * @param query  query
-     *
-     * @return raw result of the query from the beacon
-     */
-    Future<String> getQueryResponse(Beacon beacon, Query query);
+    Future<Boolean> parseQueryResponse(Beacon beacon, String response);
 
 }

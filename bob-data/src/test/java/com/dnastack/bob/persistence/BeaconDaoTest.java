@@ -28,7 +28,9 @@ import com.dnastack.bob.persistence.api.GenericDao;
 import com.dnastack.bob.persistence.entity.BasicEntity;
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.persistence.entity.Organization;
+import com.dnastack.bob.persistence.enumerated.Reference;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -79,7 +81,10 @@ public class BeaconDaoTest extends EntityWithStringIdDaoTest {
         b.setDescription("new");
         b.setVisible(true);
         b.setEnabled(true);
+        b.setAggregator(true);
         b.setOrganization(o);
+        b.setProcessor(null);
+        b.setSupportedReferences(EnumSet.noneOf(Reference.class));
         res.add(b);
 
         return res;

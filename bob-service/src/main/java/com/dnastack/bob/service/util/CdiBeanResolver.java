@@ -21,10 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.processor.util;
+package com.dnastack.bob.service.util;
 
-import com.dnastack.bob.service.processor.impl.AbstractBeaconProcessor;
-import com.dnastack.bob.service.processor.api.BeaconProcessor;
 import java.io.Serializable;
 import java.util.Set;
 import javax.enterprise.context.ApplicationScoped;
@@ -41,27 +39,27 @@ import javax.inject.Inject;
  * @version 1.0
  */
 @ApplicationScoped
-public class ProcessorResolver implements Serializable {
+public class CdiBeanResolver implements Serializable {
 
     private static final long serialVersionUID = 8760528174400816670L;
 
     @Inject
     private BeanManager beanManager;
 
-    public String getProcessorId(Class<? extends AbstractBeaconProcessor> clazz) {
+    public String getClassId(Class<?> clazz) {
         return (clazz == null) ? null : clazz.getCanonicalName();
     }
 
-    public BeaconProcessor getProcessor(String id) throws ClassNotFoundException {
+    public Object resolve(String id) throws ClassNotFoundException {
         Class<?> c = Class.forName(id);
         Set<Bean<?>> beans = beanManager.getBeans(c, new AnnotationLiteral<Any>() {
             private static final long serialVersionUID = 3109256773218160485L;
         });
         if (beans.size() == 1) {
-            Bean<? extends AbstractBeaconProcessor> b = (Bean<? extends AbstractBeaconProcessor>) beans.toArray()[0];
-            return (BeaconProcessor) beanManager.getReference(b, c, beanManager.createCreationalContext(b));
+            Bean<?> b = (Bean<?>) beans.toArray()[0];
+            return beanManager.getReference(b, c, beanManager.createCreationalContext(b));
         }
 
-        throw new ClassNotFoundException("Could not resolve this implementation of BeaconProcessor");
+        throw new ClassNotFoundException("Could not resolve class");
     }
 }

@@ -54,6 +54,7 @@ public class Dataset implements BasicEntity {
     private String id;
     @NotNull
     @Size(min = 1)
+    @Column(name = "name", nullable = false)
     private String name;
     private String description;
     @NotNull

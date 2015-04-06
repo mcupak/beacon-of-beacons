@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.processor.util;
+package com.dnastack.bob.service.parser.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,7 +37,7 @@ import org.json.JSONObject;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public class ParsingUtils {
+public class ParseUtils {
 
     /**
      * Checks whether a given response contains the specified string (found/not found), case insensitive.

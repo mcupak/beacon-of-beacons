@@ -23,9 +23,11 @@
  */
 package com.dnastack.bob.persistence.entity;
 
+import com.dnastack.bob.persistence.enumerated.Reference;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -70,12 +72,20 @@ public class Beacon implements BasicEntity {
     private String email;
     private String auth;
     private String processor;
+    private String parser;
+    @NotNull
+    @ElementCollection
+    // TODO: query from datasets or cache properly
+    private Set<Reference> supportedReferences;
     @NotNull
     @Column(nullable = false)
     private Boolean visible;
     @NotNull
     @Column(nullable = false)
     private Boolean enabled;
+    @NotNull
+    @Column(nullable = false)
+    private Boolean aggregator;
     @ManyToMany
     private Set<Beacon> parents;
     @ManyToMany(mappedBy = "parents")
@@ -84,16 +94,6 @@ public class Beacon implements BasicEntity {
     public Beacon() {
         visible = true;
         enabled = true;
-    }
-
-    public Beacon(String id, String name, String url, Organization organization, String processor, Boolean visible, Boolean enabled) {
-        this.id = id;
-        this.name = name;
-        this.url = url;
-        this.organization = organization;
-        this.processor = processor;
-        this.visible = visible;
-        this.enabled = enabled;
     }
 
     public String getId() {
@@ -118,10 +118,6 @@ public class Beacon implements BasicEntity {
 
     public void setProcessor(String processor) {
         this.processor = processor;
-    }
-
-    public boolean isAggregator() {
-        return processor == null || processor.isEmpty();
     }
 
     public Set<Beacon> getParents() {
@@ -212,6 +208,30 @@ public class Beacon implements BasicEntity {
         this.enabled = enabled;
     }
 
+    public Boolean getAggregator() {
+        return aggregator;
+    }
+
+    public void setAggregator(Boolean aggregator) {
+        this.aggregator = aggregator;
+    }
+
+    public String getParser() {
+        return parser;
+    }
+
+    public void setParser(String parser) {
+        this.parser = parser;
+    }
+
+    public Set<Reference> getSupportedReferences() {
+        return supportedReferences;
+    }
+
+    public void setSupportedReferences(Set<Reference> supportedReferences) {
+        this.supportedReferences = supportedReferences;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -236,7 +256,7 @@ public class Beacon implements BasicEntity {
 
     @Override
     public String toString() {
-        return "Beacon{" + "id=" + id + ", name=" + name + ", url=" + url + ", description=" + description + ", api=" + api + ", homePage=" + homePage + ", email=" + email + ", auth=" + auth + ", processor=" + processor + ", visible=" + visible + ", enabled=" + enabled + '}';
+        return "Beacon{" + "id=" + id + ", name=" + name + ", url=" + url + ", description=" + description + ", api=" + api + ", homePage=" + homePage + ", email=" + email + ", auth=" + auth + ", processor=" + processor + ", visible=" + visible + ", enabled=" + enabled + ", aggregator=" + aggregator + '}';
     }
 
 }

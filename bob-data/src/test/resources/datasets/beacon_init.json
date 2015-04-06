@@ -15,6 +15,7 @@
                     "description": "test",
                     "visible": true,
                     "enabled": true,
+                    "aggregator": false,
                     "url": "http://foo.bar",
                     "organization_id": "test"
                 },
@@ -24,6 +25,7 @@
                     "description": "test2",
                     "visible": false,
                     "enabled": true,
+                    "aggregator": false,
                     "url": "http://foo.bar",
                     "organization_id": "test"
                 }

@@ -25,18 +25,17 @@ package com.dnastack.bob.service.processor.impl;
 
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.persistence.entity.Query;
-import com.dnastack.bob.persistence.enumerated.Reference;
-import com.google.common.collect.ImmutableSet;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.util.Set;
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+import javax.inject.Named;
 
 import static com.dnastack.bob.service.processor.util.HttpUtils.createRequest;
 import static com.dnastack.bob.service.processor.util.HttpUtils.executeRequest;
-import static com.dnastack.bob.service.processor.util.ParsingUtils.parseYesNoCaseInsensitive;
 import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizeChromosome;
 
 /**
@@ -45,13 +44,15 @@ import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizeChro
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
+@Stateless
+@Named
+@LocalBean
 public class UcscBeaconProcessor extends AbstractBeaconProcessor {
 
     private static final long serialVersionUID = 13L;
     private static final String BASE_URL = "http://hgwdev-max.cse.ucsc.edu/cgi-bin/beacon/query";
     private static final String PARAM_TEMPLATE = "?track=%s&chrom=%s&pos=%d&allele=%s";
     private static final String CHROM_TEMPLATE = "chr%s";
-    private static final Set<Reference> SUPPORTED_REFS = ImmutableSet.of(Reference.HG19);
 
     private String getQueryUrl(String track, String chrom, Long pos, String allele) throws MalformedURLException {
         String params = String.format(PARAM_TEMPLATE, track, chrom, pos, allele);
@@ -72,16 +73,4 @@ public class UcscBeaconProcessor extends AbstractBeaconProcessor {
         return new AsyncResult<>(res);
     }
 
-    @Override
-    @Asynchronous
-    public Future<Boolean> parseQueryResponse(Beacon b, String response) {
-        Boolean res = parseYesNoCaseInsensitive(response);
-
-        return new AsyncResult<>(res);
-    }
-
-    @Override
-    public Set<Reference> getSupportedReferences() {
-        return SUPPORTED_REFS;
-    }
 }

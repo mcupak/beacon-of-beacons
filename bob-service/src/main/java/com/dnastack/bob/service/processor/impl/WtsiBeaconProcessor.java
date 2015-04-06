@@ -25,19 +25,17 @@ package com.dnastack.bob.service.processor.impl;
 
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.persistence.entity.Query;
-import com.dnastack.bob.persistence.enumerated.Reference;
-import com.google.common.collect.ImmutableSet;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.util.Set;
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+import javax.inject.Named;
 
 import static com.dnastack.bob.service.processor.util.HttpUtils.createRequest;
 import static com.dnastack.bob.service.processor.util.HttpUtils.executeRequest;
-import static com.dnastack.bob.service.processor.util.ParsingUtils.parseRef;
-import static com.dnastack.bob.service.processor.util.ParsingUtils.parseYesNoCaseInsensitive;
 import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizePosition;
 import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizeReference;
 
@@ -47,13 +45,15 @@ import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizeRefe
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
+@Stateless
+@Named
+@LocalBean
 public class WtsiBeaconProcessor extends AbstractBeaconProcessor {
 
     private static final long serialVersionUID = 14L;
     private static final String BASE_URL = "http://www.sanger.ac.uk/sanger/GA4GH_Beacon";
     private static final String PARAM_TEMPLATE_ASSEMBLY = "?src=all&ass=%s&chr=%s&pos=%d&all=%s";
     private static final String PARAM_TEMPLATE = "?src=all&chr=%s&pos=%d&all=%s";
-    private static final Set<Reference> SUPPORTED_REFS = ImmutableSet.of(Reference.HG19);
 
     private String getQueryUrl(String ref, String chrom, Long pos, String allele) throws MalformedURLException {
         String params;
@@ -79,23 +79,4 @@ public class WtsiBeaconProcessor extends AbstractBeaconProcessor {
         return new AsyncResult<>(res);
     }
 
-    @Override
-    @Asynchronous
-    public Future<Boolean> parseQueryResponse(Beacon b, String response) {
-        Boolean res = parseYesNoCaseInsensitive(response);
-        if (res == null) {
-            // ref response is treated as false
-            Boolean isRef = parseRef(response);
-            if (isRef != null && isRef) {
-                res = false;
-            }
-        }
-
-        return new AsyncResult<>(res);
-    }
-
-    @Override
-    public Set<Reference> getSupportedReferences() {
-        return SUPPORTED_REFS;
-    }
 }

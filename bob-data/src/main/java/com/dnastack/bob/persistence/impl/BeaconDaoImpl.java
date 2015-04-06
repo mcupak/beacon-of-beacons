@@ -92,7 +92,7 @@ public class BeaconDaoImpl extends AbstractEntityWithStringIdDaoImpl<Beacon> imp
                 if (beaconSatisfiesProperties(b, includeInvisible, includeDisabled)) {
                     desc.add(b);
                 }
-            } else if (b.isAggregator()) {
+            } else if (b.getAggregator()) {
                 if (includeAggregators) {
                     if (beaconSatisfiesProperties(b, includeInvisible, includeDisabled)) {
                         desc.add(b);

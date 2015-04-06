@@ -23,10 +23,12 @@
  */
 package com.dnastack.bob.service.processor.impl;
 
-import com.dnastack.bob.service.processor.api.BeaconProcessor;
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.persistence.entity.Query;
 import com.dnastack.bob.persistence.enumerated.Reference;
+import com.dnastack.bob.service.parser.api.BeaconResponseParser;
+import com.dnastack.bob.service.processor.api.BeaconProcessor;
+import com.dnastack.bob.service.util.CdiBeanResolver;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +38,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
+import javax.inject.Inject;
 
 import static com.dnastack.bob.service.processor.util.Constants.REQUEST_TIMEOUT;
 
@@ -49,14 +52,17 @@ public abstract class AbstractBeaconProcessor implements BeaconProcessor, Serial
 
     private static final long serialVersionUID = 10L;
 
+    @Inject
+    private CdiBeanResolver resolver;
+
     private List<Future<String>> executeQueriesInParallel(Beacon beacon, Query query) {
         List<Future<String>> fs = new ArrayList<>();
         if (query.getReference() == null) {
             // query all refs
-            for (Reference ref : getSupportedReferences()) {
+            for (Reference ref : beacon.getSupportedReferences()) {
                 fs.add(getQueryResponse(beacon, new Query(query.getChromosome(), query.getPosition(), query.getAllele(), ref)));
             }
-        } else if (getSupportedReferences().contains(query.getReference())) {
+        } else if (beacon.getSupportedReferences().contains(query.getReference())) {
             // query only the specified ref
             fs.add(getQueryResponse(beacon, query));
         }
@@ -68,8 +74,8 @@ public abstract class AbstractBeaconProcessor implements BeaconProcessor, Serial
         List<Future<Boolean>> bs = new ArrayList<>();
         for (Future<String> f : fs) {
             try {
-                bs.add(parseQueryResponse(b, f.get(REQUEST_TIMEOUT, TimeUnit.SECONDS)));
-            } catch (InterruptedException | ExecutionException | TimeoutException ex) {
+                bs.add(((BeaconResponseParser) resolver.resolve(b.getParser())).parseQueryResponse(b, f.get(REQUEST_TIMEOUT, TimeUnit.SECONDS)));
+            } catch (InterruptedException | ExecutionException | TimeoutException | ClassNotFoundException ex) {
                 // ignore
             }
         }

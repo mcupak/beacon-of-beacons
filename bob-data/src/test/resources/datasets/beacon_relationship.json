@@ -15,6 +15,7 @@
                     "description": "parent",
                     "processor": null,
                     "visible": true,
+                    "aggregator": true,
                     "enabled": true,
                     "url": "http://foo.bar",
                     "organization_id": "beacon_org"
@@ -26,6 +27,7 @@
                     "processor": "processor",
                     "visible": true,
                     "enabled": true,
+                    "aggregator": false,
                     "url": "http://foo.bar",
                     "organization_id": "beacon_org"
                 },
@@ -36,6 +38,7 @@
                     "processor": "processor",
                     "visible": true,
                     "enabled": true,
+                    "aggregator": false,
                     "url": "http://foo.bar",
                     "organization_id": "beacon_org"
                 }

@@ -25,19 +25,17 @@ package com.dnastack.bob.service.processor.impl;
 
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.persistence.entity.Query;
-import com.dnastack.bob.persistence.enumerated.Reference;
-import com.google.common.collect.ImmutableSet;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.util.Set;
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+import javax.inject.Named;
 
 import static com.dnastack.bob.service.processor.util.HttpUtils.createRequest;
 import static com.dnastack.bob.service.processor.util.HttpUtils.executeRequest;
-import static com.dnastack.bob.service.processor.util.ParsingUtils.parseBooleanFromJson;
-import static com.dnastack.bob.service.processor.util.ParsingUtils.parseStringFromJson;
 import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizePosition;
 import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizeReference;
 
@@ -47,11 +45,13 @@ import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizeRefe
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
+@Stateless
+@Named
+@LocalBean
 public class IcgcBeaconProcessor extends AbstractBeaconProcessor {
 
     private static final String BASE_URL = "https://dcc.icgc.org/api/v1/beacon/query";
     private static final String PARAM_TEMPLATE = "?reference=%s&chromosome=%s&position=%d&allele=%s&dataset=";
-    private static final Set<Reference> SUPPORTED_REFS = ImmutableSet.of(Reference.HG19);
     private static final long serialVersionUID = 7354434658474635980L;
 
     private String getQueryUrl(String ref, String chrom, Long pos, String allele) throws MalformedURLException {
@@ -74,24 +74,4 @@ public class IcgcBeaconProcessor extends AbstractBeaconProcessor {
         return new AsyncResult<>(res);
     }
 
-    @Override
-    @Asynchronous
-    public Future<Boolean> parseQueryResponse(Beacon b, String response) {
-        Boolean res = parseBooleanFromJson(response, "response", "exists");
-
-        // the beacon uses null as false, convert
-        if (res == null) {
-            String s = parseStringFromJson(response, "response", "exists");
-            if ("null".equals(s)) {
-                res = false;
-            }
-        }
-
-        return new AsyncResult<>(res);
-    }
-
-    @Override
-    public Set<Reference> getSupportedReferences() {
-        return SUPPORTED_REFS;
-    }
 }

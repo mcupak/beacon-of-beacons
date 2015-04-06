@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
+ * Copyright 2015 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,38 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.processor.api;
+package com.dnastack.bob.service.util;
 
-import com.dnastack.bob.persistence.entity.Beacon;
-import com.dnastack.bob.persistence.entity.Query;
-import java.util.concurrent.Future;
+import java.io.Serializable;
+import javax.annotation.Resource;
+import javax.ejb.Singleton;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 /**
- * Beacon query service.
+ * Computes string identifier for a processor and vice-versa.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public interface BeaconProcessor {
+@Singleton
+public class EjbResolver implements Serializable {
 
-    /**
-     * Asynchronously executes a query agaist a beacon.
-     *
-     * @param beacon beacon
-     * @param query  query
-     *
-     * @return true/false according to the beacons response (or null if the valid response could not be obtained)
-     */
-    Future<Boolean> executeQuery(Beacon beacon, Query query);
+    private static final long serialVersionUID = 8760528174400816670L;
+    private static final String LOOKUP_PREFIX = "java:app/bob-rest/";
 
-    /**
-     * Asynchronously obtains raw response to the query from the beacon.
-     *
-     * @param beacon beacon to query
-     * @param query  query
-     *
-     * @return raw result of the query from the beacon
-     */
-    Future<String> getQueryResponse(Beacon beacon, Query query);
+    @Resource
+    private InitialContext ctx;
 
+    public String getClassId(Class<?> clazz) {
+        return (clazz == null) ? null : LOOKUP_PREFIX + clazz.getSimpleName();
+    }
+
+    public Object resolve(String id) throws NamingException {
+        return ctx.lookup(id);
+    }
 }

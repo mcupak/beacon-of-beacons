@@ -27,7 +27,7 @@ import com.dnastack.bob.rest.util.BeaconToComparator;
 import com.dnastack.bob.rest.util.NameComparator;
 import com.dnastack.bob.service.dto.BeaconTo;
 import com.dnastack.bob.service.impl.BeaconServiceImpl;
-import com.dnastack.bob.service.processor.util.ParsingUtils;
+import com.dnastack.bob.service.parser.util.ParseUtils;
 import java.net.HttpURLConnection;
 import java.util.Collection;
 import java.util.Set;
@@ -92,7 +92,7 @@ public class BeaconResource {
         if (beaconIds == null) {
             bs.addAll(beaconService.getAll());
         } else {
-            bs.addAll(beaconService.getBeacons(ParsingUtils.parseMultipleParameterValues(beaconIds)));
+            bs.addAll(beaconService.getBeacons(ParseUtils.parseMultipleParameterValues(beaconIds)));
         }
 
         return bs;

@@ -25,11 +25,8 @@ package com.dnastack.bob.service.processor.impl;
 
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.persistence.entity.Query;
-import com.dnastack.bob.persistence.enumerated.Reference;
-import com.google.common.collect.ImmutableSet;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.util.Set;
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
@@ -37,7 +34,6 @@ import org.apache.http.client.methods.HttpRequestBase;
 
 import static com.dnastack.bob.service.processor.util.HttpUtils.createRequest;
 import static com.dnastack.bob.service.processor.util.HttpUtils.executeRequest;
-import static com.dnastack.bob.service.processor.util.ParsingUtils.parseBooleanFromJson;
 
 /**
  * Beaconizer beacon service.
@@ -48,7 +44,6 @@ import static com.dnastack.bob.service.processor.util.ParsingUtils.parseBooleanF
 public abstract class BeaconizerBeaconProcessor extends AbstractBeaconProcessor {
 
     private static final long serialVersionUID = 112L;
-    private static final Set<Reference> SUPPORTED_REFS = ImmutableSet.of(Reference.HG19);
 
     protected abstract String getParamTemplate();
 
@@ -77,16 +72,4 @@ public abstract class BeaconizerBeaconProcessor extends AbstractBeaconProcessor 
         return new AsyncResult<>(res);
     }
 
-    @Override
-    @Asynchronous
-    public Future<Boolean> parseQueryResponse(Beacon b, String response) {
-        Boolean res = parseBooleanFromJson(response, "exists");
-
-        return new AsyncResult<>(res);
-    }
-
-    @Override
-    public Set<Reference> getSupportedReferences() {
-        return SUPPORTED_REFS;
-    }
 }

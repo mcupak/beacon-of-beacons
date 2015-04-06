@@ -25,18 +25,17 @@ package com.dnastack.bob.service.processor.impl;
 
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.persistence.entity.Query;
-import com.dnastack.bob.persistence.enumerated.Reference;
-import com.google.common.collect.ImmutableSet;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.util.Set;
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+import javax.inject.Named;
 
 import static com.dnastack.bob.service.processor.util.HttpUtils.createRequest;
 import static com.dnastack.bob.service.processor.util.HttpUtils.executeRequest;
-import static com.dnastack.bob.service.processor.util.ParsingUtils.parseBooleanFromJson;
 import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizeAllele;
 import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizeAlleleToBrackets;
 import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizeChromosomeToNumber;
@@ -48,12 +47,14 @@ import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizePosi
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
+@Stateless
+@Named
+@LocalBean
 public class EbiBeaconProcessor extends AbstractBeaconProcessor {
 
     private static final long serialVersionUID = 11L;
     private static final String BASE_URL = "http://wwwdev.ebi.ac.uk/eva/webservices/rest/v1/ga4gh/beacon";
     private static final String PARAM_TEMPLATE = "?referenceName=%d&start=%d&allele=%s";
-    private static final Set<Reference> SUPPORTED_REFS = ImmutableSet.of(Reference.HG19);
 
     private String getQueryUrl(Integer chrom, Long pos, String allele) throws MalformedURLException {
         String params = String.format(PARAM_TEMPLATE, chrom, pos, allele);
@@ -74,16 +75,4 @@ public class EbiBeaconProcessor extends AbstractBeaconProcessor {
         return new AsyncResult<>(res);
     }
 
-    @Override
-    @Asynchronous
-    public Future<Boolean> parseQueryResponse(Beacon b, String response) {
-        Boolean res = parseBooleanFromJson(response, "exists");
-
-        return new AsyncResult<>(res);
-    }
-
-    @Override
-    public Set<Reference> getSupportedReferences() {
-        return SUPPORTED_REFS;
-    }
 }
