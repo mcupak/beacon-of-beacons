@@ -30,19 +30,19 @@ import java.util.Map;
 import javax.inject.Named;
 
 /**
- * Request constructor using base beacon URL with custom payload.
+ * Request constructor using URL with chrom, pos, allele and ref params.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
 @Named
-public class ChromPosAllleleRefNoPayloadRequestConstructor implements RequestConstructor, Serializable {
+public class RefChromPosAlleleRequestConstructor implements RequestConstructor, Serializable {
 
     private static final long serialVersionUID = -4140519271564294181L;
 
     @Override
     public String getUrl(Beacon b, String ref, String chrom, Long pos, String allele, String dataset) {
-        return String.format(b.getUrl(), chrom, pos, allele, ref);
+        return String.format(b.getUrl(), ref, chrom, pos, allele);
     }
 
     @Override

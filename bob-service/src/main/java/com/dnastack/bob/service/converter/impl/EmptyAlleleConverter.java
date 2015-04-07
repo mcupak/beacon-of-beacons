@@ -34,7 +34,7 @@ import javax.inject.Named;
  * @version 1.0
  */
 @Named
-public class IdentityAlleleConverter implements AlleleConverter, Serializable {
+public class EmptyAlleleConverter implements AlleleConverter, Serializable {
 
     private static final long serialVersionUID = -6787462855820591744L;
 

@@ -34,6 +34,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
+import org.apache.http.client.methods.HttpRequestBase;
 
 import static com.dnastack.bob.service.fetcher.util.HttpUtils.createRequest;
 import static com.dnastack.bob.service.fetcher.util.HttpUtils.executeRequest;
@@ -57,7 +58,9 @@ public class GetResponseFetcher implements ResponseFetcher, Serializable {
     public Future<String> getQueryResponse(String url, Map<String, String> payload) {
         String res = null;
         try {
-            res = executeRequest(createRequest(url, false, null));
+            HttpRequestBase request = createRequest(url, false, null);
+            request.setHeader("Accept", "application/json, text/plain");
+            res = executeRequest(request);
         } catch (UnsupportedEncodingException ex) {
             // ignore, already null
         }

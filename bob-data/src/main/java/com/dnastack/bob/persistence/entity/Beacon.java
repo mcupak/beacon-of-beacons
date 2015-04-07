@@ -29,6 +29,7 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -45,8 +46,7 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = "findAggregatingBeacons", query = "SELECT b FROM Beacon b WHERE b.processor IS NULL"),
-    @NamedQuery(name = "findRegularBeacons", query = "SELECT b FROM Beacon b WHERE b.processor IS NOT NULL"),
+    @NamedQuery(name = "findBeaconsByAggregation", query = "SELECT b FROM Beacon b WHERE b.aggregator=:aggregator"),
     @NamedQuery(name = "findBeaconsByVisibility", query = "SELECT b FROM Beacon b WHERE b.visible=:visible")
 })
 public class Beacon implements BasicEntity {
@@ -72,7 +72,6 @@ public class Beacon implements BasicEntity {
     private String email;
     private String auth;
 
-    private String processor;
     private String parser;
     private String fetcher;
     private String requester;
@@ -80,11 +79,10 @@ public class Beacon implements BasicEntity {
     private String positionConverter;
     private String alleleConverter;
     private String referenceConverter;
-
-    @NotNull
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     // TODO: query from datasets or cache properly
     private Set<Reference> supportedReferences;
+
     @NotNull
     @Column(nullable = false)
     private Boolean visible;
@@ -175,14 +173,6 @@ public class Beacon implements BasicEntity {
 
     public void setAuth(String auth) {
         this.auth = auth;
-    }
-
-    public String getProcessor() {
-        return processor;
-    }
-
-    public void setProcessor(String processor) {
-        this.processor = processor;
     }
 
     public String getParser() {
@@ -313,7 +303,7 @@ public class Beacon implements BasicEntity {
 
     @Override
     public String toString() {
-        return "Beacon{" + "id=" + id + ", name=" + name + ", url=" + url + ", organization=" + organization + ", description=" + description + ", api=" + api + ", homePage=" + homePage + ", email=" + email + ", auth=" + auth + ", processor=" + processor + ", parser=" + parser + ", fetcher=" + fetcher + ", requester=" + requester + ", chromosomeConverter=" + chromosomeConverter + ", positionConverter=" + positionConverter + ", alleleConverter=" + alleleConverter + ", referenceConverter=" + referenceConverter + ", supportedReferences=" + supportedReferences + ", visible=" + visible + ", enabled=" + enabled + ", aggregator=" + aggregator + '}';
+        return "Beacon{" + "id=" + id + ", name=" + name + ", url=" + url + ", organization=" + organization + ", description=" + description + ", api=" + api + ", homePage=" + homePage + ", email=" + email + ", auth=" + auth + ", parser=" + parser + ", fetcher=" + fetcher + ", requester=" + requester + ", chromosomeConverter=" + chromosomeConverter + ", positionConverter=" + positionConverter + ", alleleConverter=" + alleleConverter + ", referenceConverter=" + referenceConverter + ", supportedReferences=" + supportedReferences + ", visible=" + visible + ", enabled=" + enabled + ", aggregator=" + aggregator + '}';
     }
 
 }

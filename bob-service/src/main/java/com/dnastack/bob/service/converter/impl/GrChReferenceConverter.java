@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 DNAstack.
+ * Copyright 2015 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,26 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.processor.impl;
+package com.dnastack.bob.service.converter.impl;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-import javax.inject.Qualifier;
+import com.dnastack.bob.persistence.enumerated.Reference;
+import com.dnastack.bob.service.converter.api.ReferenceConverter;
+import java.io.Serializable;
+import java.util.Map;
+import javax.inject.Named;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static com.dnastack.bob.service.util.Constants.REFERENCE_MAPPING;
 
 /**
- * StringChromosomeBeaconizer qualifier.
+ * Converter of references to their non-HG string representations ((GRCh*, NCBI*).
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Qualifier
-@Retention(RUNTIME)
-@Target({METHOD, FIELD, PARAMETER, TYPE})
-public @interface StringChromosomeBeaconizer {
+@Named
+public class GrChReferenceConverter implements ReferenceConverter, Serializable {
+
+    private static final long serialVersionUID = -2361871357937831818L;
+
+    @Override
+    public String convert(Reference input) {
+        if (input == null) {
+            return null;
+        }
+
+        for (String s : REFERENCE_MAPPING.values()) {
+            if (s.equalsIgnoreCase(input.toString())) {
+                return s;
+            }
+        }
+        for (Map.Entry<Reference, String> e : REFERENCE_MAPPING.entrySet()) {
+            if (e.getKey().equals(input)) {
+                return e.getValue();
+            }
+        }
+
+        return input.toString();
+    }
+
 }

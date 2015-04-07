@@ -21,27 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.converter.impl;
+package com.dnastack.bob.service.requester.impl;
 
-import com.dnastack.bob.persistence.enumerated.Chromosome;
-import com.dnastack.bob.service.converter.api.ChromosomeConverter;
+import com.dnastack.bob.persistence.entity.Beacon;
+import com.dnastack.bob.service.requester.api.RequestConstructor;
 import java.io.Serializable;
+import java.util.Map;
 import javax.inject.Named;
 
 /**
- * Converter of chromosomes to their string representations.
+ * Request constructor using URL with chrom, pos, allele params.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
 @Named
-public class ToStringChromosomeConverter implements ChromosomeConverter, Serializable {
+public class ChromPosAlleleRequestConstructor implements RequestConstructor, Serializable {
 
-    private static final long serialVersionUID = 3624542022429404385L;
+    private static final long serialVersionUID = -4140519271564294181L;
 
     @Override
-    public String convert(Chromosome input) {
-        return (input == null) ? null : input.toString();
+    public String getUrl(Beacon b, String ref, String chrom, Long pos, String allele, String dataset) {
+        return String.format(b.getUrl(), chrom, pos, allele);
+    }
+
+    @Override
+    public Map<String, String> getPayload(Beacon b, String ref, String chrom, Long pos, String allele, String dataset) {
+        return null;
     }
 
 }

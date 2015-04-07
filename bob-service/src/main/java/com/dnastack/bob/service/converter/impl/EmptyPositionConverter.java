@@ -21,41 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.requester.impl;
+package com.dnastack.bob.service.converter.impl;
 
-import com.dnastack.bob.persistence.entity.Beacon;
-import com.dnastack.bob.service.requester.api.RequestConstructor;
+import com.dnastack.bob.service.converter.api.PositionConverter;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 import javax.inject.Named;
 
 /**
- * Request constructor using base beacon URL with custom payload.
+ * Position converter preserving the original position value.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
 @Named
-public class BaseUrlCustomPayloadRequestConstructor implements RequestConstructor, Serializable {
+public class EmptyPositionConverter implements PositionConverter, Serializable {
 
-    private static final long serialVersionUID = -1948686874610313749L;
-
-    @Override
-    public String getUrl(Beacon b, String ref, String chrom, Long pos, String allele, String dataset) {
-        return b.getUrl();
-    }
+    private static final long serialVersionUID = -5479380582660842544L;
 
     @Override
-    public Map<String, String> getPayload(Beacon b, String ref, String chrom, Long pos, String allele, String dataset) {
-        Map<String, String> res = new HashMap<>();
-        res.put("population", "1000genomes");
-        res.put("genome", ref);
-        res.put("chr", chrom);
-        res.put("coord", pos.toString());
-        res.put("allele", allele);
-
-        return res;
+    public Long convert(Long input) {
+        return (input == null) ? null : input;
     }
 
 }

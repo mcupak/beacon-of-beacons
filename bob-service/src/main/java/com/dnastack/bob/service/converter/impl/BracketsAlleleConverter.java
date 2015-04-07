@@ -23,25 +23,39 @@
  */
 package com.dnastack.bob.service.converter.impl;
 
-import com.dnastack.bob.persistence.enumerated.Reference;
-import com.dnastack.bob.service.converter.api.ReferenceConverter;
+import com.dnastack.bob.service.converter.api.AlleleConverter;
 import java.io.Serializable;
 import javax.inject.Named;
 
 /**
- * Converter of references to their string representations.
+ * Allele converter with indels converted to long strings and wrapped in <> (url encoded).
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
 @Named
-public class ToStringReferenceConverter implements ReferenceConverter, Serializable {
+public class BracketsAlleleConverter implements AlleleConverter, Serializable {
 
-    private static final long serialVersionUID = 6997571682231658379L;
+    private static final long serialVersionUID = -2526002182337944545L;
 
     @Override
-    public String convert(Reference input) {
-        return (input == null) ? null : input.toString();
+    public String convert(String input) {
+        if (input == null || input.isEmpty()) {
+            return null;
+        }
+
+        String res = input.toUpperCase();
+        if (res.equals("D")) {
+            res = "DEL";
+        }
+        if (res.equals("I")) {
+            res = "INS";
+        }
+        if (res.equals("DEL") || res.equals("INS")) {
+            res = "%3C" + res + "%3E";
+        }
+
+        return res;
     }
 
 }

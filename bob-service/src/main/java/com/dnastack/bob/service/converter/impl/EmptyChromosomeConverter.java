@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
+ * Copyright 2015 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,34 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.processor.impl;
+package com.dnastack.bob.service.converter.impl;
 
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
+import com.dnastack.bob.persistence.enumerated.Chromosome;
+import com.dnastack.bob.service.converter.api.ChromosomeConverter;
+import java.io.Serializable;
 import javax.inject.Named;
 
 /**
- * String chromosome beaconizer beacon service using integer chromosome identifiers.
+ * Converter of chromosomes to their string representations.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Stateless
 @Named
-@LocalBean
-public class BeaconizerStringChromosomeBeaconProcessor extends BeaconizerBeaconProcessor {
+public class EmptyChromosomeConverter implements ChromosomeConverter, Serializable {
 
-    private static final long serialVersionUID = 113L;
-    private static final String BASE_URL = "http://dnastack.com/p/beacon/";
-    private static final String PARAM_TEMPLATE = "%s?chromosome=chr%s&coordinate=%d&allele=%s";
+    private static final long serialVersionUID = 3624542022429404385L;
 
     @Override
-    protected String getParamTemplate() {
-        return PARAM_TEMPLATE;
+    public String convert(Chromosome input) {
+        return (input == null) ? null : input.toString();
     }
 
-    @Override
-    protected String getBaseUrl() {
-        return BASE_URL;
-    }
 }

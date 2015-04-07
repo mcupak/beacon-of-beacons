@@ -85,22 +85,10 @@ public class UcscResponseTest extends AbstractResponseTest {
     }
 
     @Test
-    public void testLovd(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String b = "lovd";
-        String[] query = {"1", "808921", "A", null};
-        BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(b, query));
-
-        assertNotNull(br);
-        assertTrue(beaconsMatch(br.getBeacon(), b));
-        assertTrue(queriesMatch(br.getQuery(), query));
-        assertFalse(br.getResponse());
-    }
-
-    @Test
     @Override
     public void testSpecificRefFound(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String b = "lovd";
-        String[] query = {"1", "808921", "A", "hg19"};
+        String b = "uniprot";
+        String[] query = {"1", "977027", "T", "hg19"};
         BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(b, query));
 
         assertNotNull(br);

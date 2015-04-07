@@ -30,6 +30,10 @@ import com.dnastack.bob.service.converter.api.AlleleConverter;
 import com.dnastack.bob.service.converter.api.ChromosomeConverter;
 import com.dnastack.bob.service.converter.api.PositionConverter;
 import com.dnastack.bob.service.converter.api.ReferenceConverter;
+import com.dnastack.bob.service.converter.impl.EmptyAlleleConverter;
+import com.dnastack.bob.service.converter.impl.EmptyChromosomeConverter;
+import com.dnastack.bob.service.converter.impl.EmptyPositionConverter;
+import com.dnastack.bob.service.converter.impl.EmptyReferenceConverter;
 import com.dnastack.bob.service.fetcher.api.ResponseFetcher;
 import com.dnastack.bob.service.parser.api.ResponseParser;
 import com.dnastack.bob.service.processor.api.BeaconProcessor;
@@ -83,13 +87,22 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
             fetcher = (ResponseFetcher) resolver.resolve(beacon.getFetcher());
             requester = (RequestConstructor) resolver.resolve(beacon.getRequester());
             chromosomeConverter = (ChromosomeConverter) resolver.resolve(beacon.getChromosomeConverter());
+            if (chromosomeConverter == null) {
+                chromosomeConverter = (ChromosomeConverter) resolver.resolve(resolver.getClassId(EmptyChromosomeConverter.class));
+            }
             referenceConverter = (ReferenceConverter) resolver.resolve(beacon.getReferenceConverter());
+            if (referenceConverter == null) {
+                referenceConverter = (ReferenceConverter) resolver.resolve(resolver.getClassId(EmptyReferenceConverter.class));
+            }
             positionConverter = (PositionConverter) resolver.resolve(beacon.getPositionConverter());
+            if (positionConverter == null) {
+                positionConverter = (PositionConverter) resolver.resolve(resolver.getClassId(EmptyPositionConverter.class));
+            }
             alleleConverter = (AlleleConverter) resolver.resolve(beacon.getAlleleConverter());
+            if (alleleConverter == null) {
+                alleleConverter = (AlleleConverter) resolver.resolve(resolver.getClassId(EmptyAlleleConverter.class));
+            }
         } catch (ClassNotFoundException ex) {
-            return fs;
-        }
-        if (fetcher == null || requester == null || chromosomeConverter == null || referenceConverter == null || positionConverter == null || alleleConverter == null) {
             return fs;
         }
 

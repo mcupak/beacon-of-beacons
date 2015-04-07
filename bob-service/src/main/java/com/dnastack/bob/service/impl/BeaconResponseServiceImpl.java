@@ -193,6 +193,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
                 } catch (InterruptedException | ExecutionException | TimeoutException ex) {
                     // ignore, response already null
                 }
+                System.out.println("-------- " + e.getKey() + ": " + res);
                 if (res != null && res) {
                     total = true;
                 }
@@ -361,7 +362,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
             beacon.setUrl(null);
             beacon.setEnabled(false);
             beacon.setVisible(false);
-            beacon.setProcessor(null);
+            beacon.setAggregator(true);
             return Entity2ToConvertor.getBeaconResponseTo(new BeaconResponse(beacon, q, null));
         }
 

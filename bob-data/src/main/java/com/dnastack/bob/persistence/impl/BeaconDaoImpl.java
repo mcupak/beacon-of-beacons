@@ -47,7 +47,7 @@ public class BeaconDaoImpl extends AbstractEntityWithStringIdDaoImpl<Beacon> imp
 
     @Override
     public List<Beacon> findByAggregation(boolean aggregator) {
-        return em.createNamedQuery((aggregator) ? "findAggregatingBeacons" : "findRegularBeacons", Beacon.class).getResultList();
+        return em.createNamedQuery("findBeaconsByAggregation", Beacon.class).setParameter("aggregator", aggregator).getResultList();
     }
 
     @Override
@@ -109,7 +109,6 @@ public class BeaconDaoImpl extends AbstractEntityWithStringIdDaoImpl<Beacon> imp
             buffer.addAll(b.getChildren());
             b = buffer.poll();
         }
-
         return desc;
     }
 

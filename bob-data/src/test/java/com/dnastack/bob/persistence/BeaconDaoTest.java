@@ -83,7 +83,6 @@ public class BeaconDaoTest extends EntityWithStringIdDaoTest {
         b.setEnabled(true);
         b.setAggregator(true);
         b.setOrganization(o);
-        b.setProcessor(null);
         b.setSupportedReferences(EnumSet.noneOf(Reference.class));
         res.add(b);
 

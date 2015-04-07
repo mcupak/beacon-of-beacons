@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 DNAstack.
+ * Copyright 2015 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,26 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.processor.impl;
+package com.dnastack.bob.service.requester.impl;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-import javax.inject.Qualifier;
-
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import com.dnastack.bob.persistence.entity.Beacon;
+import com.dnastack.bob.service.requester.api.RequestConstructor;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+import javax.inject.Named;
 
 /**
- * IntegerChromosomeBeaconizer qualifier.
+ * Request constructor using base beacon URL with custom payload.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Qualifier
-@Retention(RUNTIME)
-@Target({METHOD, FIELD, PARAMETER, TYPE})
-public @interface IntegerChromosomeBeaconizer {
+@Named
+public class NoParamCustomPayloadRequestConstructor implements RequestConstructor, Serializable {
+
+    private static final long serialVersionUID = -1948686874610313749L;
+
+    @Override
+    public String getUrl(Beacon b, String ref, String chrom, Long pos, String allele, String dataset) {
+        return b.getUrl();
+    }
+
+    @Override
+    public Map<String, String> getPayload(Beacon b, String ref, String chrom, Long pos, String allele, String dataset) {
+        Map<String, String> res = new HashMap<>();
+        res.put("population", "1000genomes");
+        res.put("genome", ref);
+        res.put("chr", chrom);
+        res.put("coord", pos.toString());
+        res.put("allele", allele);
+
+        return res;
+    }
+
 }
