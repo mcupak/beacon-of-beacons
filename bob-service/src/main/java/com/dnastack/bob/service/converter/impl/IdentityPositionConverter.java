@@ -21,23 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.persistence.impl;
+package com.dnastack.bob.service.converter.impl;
 
-import com.dnastack.bob.persistence.api.DataUseDao;
-import com.dnastack.bob.persistence.entity.DataUse;
-import javax.enterprise.context.Dependent;
+import com.dnastack.bob.service.converter.api.PositionConverter;
+import java.io.Serializable;
 import javax.inject.Named;
 
 /**
- * JPA-based implementation of data use DAO.
+ * Position converter preserving the original position value.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
 @Named
-@Dependent
-public class DataUseDaoImpl extends AbstractEntityWithLongIdDaoImpl<DataUse> implements DataUseDao {
+public class IdentityPositionConverter implements PositionConverter, Serializable {
 
-    private static final long serialVersionUID = -3202753985625190279L;
+    private static final long serialVersionUID = -5479380582660842544L;
+
+    @Override
+    public Long convert(Long input) {
+        return (input == null) ? null : input;
+    }
 
 }

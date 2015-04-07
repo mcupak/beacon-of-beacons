@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
+ * Copyright 2015 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,27 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.parser.api;
+package com.dnastack.bob.service.converter.impl;
 
-import com.dnastack.bob.persistence.entity.Beacon;
-import java.util.concurrent.Future;
+import com.dnastack.bob.persistence.enumerated.Chromosome;
+import com.dnastack.bob.service.converter.api.ChromosomeConverter;
+import java.io.Serializable;
+import javax.inject.Named;
 
 /**
- * Beacon response parser.
+ * Converter of chromosomes to their value prefixed with "chr".
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public interface BeaconResponseParser {
+@Named
+public class ChrPrefixChromosomeConverter implements ChromosomeConverter, Serializable {
 
-    /**
-     * Asynchronously extracts beacon response value from the given raw query response.
-     *
-     * @param beacon   beacon
-     * @param response response
-     *
-     * @return true/false for valid values, null otherwise
-     */
-    Future<Boolean> parseQueryResponse(Beacon beacon, String response);
+    private static final String CHROM_TEMPLATE = "chr%s";
+    private static final long serialVersionUID = 1811902430345428814L;
+
+    @Override
+    public String convert(Chromosome input) {
+        return (input == null) ? null : String.format(CHROM_TEMPLATE, input);
+    }
 
 }

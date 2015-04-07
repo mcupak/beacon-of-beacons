@@ -21,23 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.persistence.impl;
+package com.dnastack.bob.service.converter.api;
 
-import com.dnastack.bob.persistence.api.DataUseDao;
-import com.dnastack.bob.persistence.entity.DataUse;
-import javax.enterprise.context.Dependent;
-import javax.inject.Named;
+import com.dnastack.bob.persistence.enumerated.Reference;
 
 /**
- * JPA-based implementation of data use DAO.
+ * Reference converter.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Named
-@Dependent
-public class DataUseDaoImpl extends AbstractEntityWithLongIdDaoImpl<DataUse> implements DataUseDao {
-
-    private static final long serialVersionUID = -3202753985625190279L;
+public interface ReferenceConverter extends GenericConverter<Reference, String> {
 
 }

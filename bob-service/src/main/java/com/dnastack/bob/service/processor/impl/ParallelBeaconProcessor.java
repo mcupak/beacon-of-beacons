@@ -26,29 +26,44 @@ package com.dnastack.bob.service.processor.impl;
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.persistence.entity.Query;
 import com.dnastack.bob.persistence.enumerated.Reference;
-import com.dnastack.bob.service.parser.api.BeaconResponseParser;
+import com.dnastack.bob.service.converter.api.AlleleConverter;
+import com.dnastack.bob.service.converter.api.ChromosomeConverter;
+import com.dnastack.bob.service.converter.api.PositionConverter;
+import com.dnastack.bob.service.converter.api.ReferenceConverter;
+import com.dnastack.bob.service.fetcher.api.ResponseFetcher;
+import com.dnastack.bob.service.parser.api.ResponseParser;
 import com.dnastack.bob.service.processor.api.BeaconProcessor;
+import com.dnastack.bob.service.requester.api.RequestConstructor;
 import com.dnastack.bob.service.util.CdiBeanResolver;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+import javax.inject.Named;
 
-import static com.dnastack.bob.service.processor.util.Constants.REQUEST_TIMEOUT;
+import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
 
 /**
- * Abstract beacon service handling multiple genome specific queries.
+ * Beacon service handling multiple genome specific queries.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public abstract class AbstractBeaconProcessor implements BeaconProcessor, Serializable {
+@Stateless
+@Named
+@Dependent
+@LocalBean
+public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
 
     private static final long serialVersionUID = 10L;
 
@@ -57,14 +72,39 @@ public abstract class AbstractBeaconProcessor implements BeaconProcessor, Serial
 
     private List<Future<String>> executeQueriesInParallel(Beacon beacon, Query query) {
         List<Future<String>> fs = new ArrayList<>();
+
+        ResponseFetcher fetcher;
+        RequestConstructor requester;
+        ChromosomeConverter chromosomeConverter;
+        ReferenceConverter referenceConverter;
+        PositionConverter positionConverter;
+        AlleleConverter alleleConverter;
+        try {
+            fetcher = (ResponseFetcher) resolver.resolve(beacon.getFetcher());
+            requester = (RequestConstructor) resolver.resolve(beacon.getRequester());
+            chromosomeConverter = (ChromosomeConverter) resolver.resolve(beacon.getChromosomeConverter());
+            referenceConverter = (ReferenceConverter) resolver.resolve(beacon.getReferenceConverter());
+            positionConverter = (PositionConverter) resolver.resolve(beacon.getPositionConverter());
+            alleleConverter = (AlleleConverter) resolver.resolve(beacon.getAlleleConverter());
+        } catch (ClassNotFoundException ex) {
+            return fs;
+        }
+        if (fetcher == null || requester == null || chromosomeConverter == null || referenceConverter == null || positionConverter == null || alleleConverter == null) {
+            return fs;
+        }
+
         if (query.getReference() == null) {
             // query all refs
             for (Reference ref : beacon.getSupportedReferences()) {
-                fs.add(getQueryResponse(beacon, new Query(query.getChromosome(), query.getPosition(), query.getAllele(), ref)));
+                String url = requester.getUrl(beacon, referenceConverter.convert(ref), chromosomeConverter.convert(query.getChromosome()), positionConverter.convert(query.getPosition()), alleleConverter.convert(query.getAllele()), null);
+                Map<String, String> payload = requester.getPayload(beacon, referenceConverter.convert(ref), chromosomeConverter.convert(query.getChromosome()), positionConverter.convert(query.getPosition()), alleleConverter.convert(query.getAllele()), null);
+                fs.add(fetcher.getQueryResponse(url, payload));
             }
         } else if (beacon.getSupportedReferences().contains(query.getReference())) {
             // query only the specified ref
-            fs.add(getQueryResponse(beacon, query));
+            String url = requester.getUrl(beacon, referenceConverter.convert(query.getReference()), chromosomeConverter.convert(query.getChromosome()), positionConverter.convert(query.getPosition()), alleleConverter.convert(query.getAllele()), null);
+            Map<String, String> payload = requester.getPayload(beacon, referenceConverter.convert(query.getReference()), chromosomeConverter.convert(query.getChromosome()), positionConverter.convert(query.getPosition()), alleleConverter.convert(query.getAllele()), null);
+            fs.add(fetcher.getQueryResponse(url, payload));
         }
 
         return fs;
@@ -74,7 +114,7 @@ public abstract class AbstractBeaconProcessor implements BeaconProcessor, Serial
         List<Future<Boolean>> bs = new ArrayList<>();
         for (Future<String> f : fs) {
             try {
-                bs.add(((BeaconResponseParser) resolver.resolve(b.getParser())).parseQueryResponse(b, f.get(REQUEST_TIMEOUT, TimeUnit.SECONDS)));
+                bs.add(((ResponseParser) resolver.resolve(b.getParser())).parseQueryResponse(b, f.get(REQUEST_TIMEOUT, TimeUnit.SECONDS)));
             } catch (InterruptedException | ExecutionException | TimeoutException | ClassNotFoundException ex) {
                 // ignore
             }

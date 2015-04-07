@@ -34,8 +34,8 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.inject.Named;
 
-import static com.dnastack.bob.service.processor.util.HttpUtils.createRequest;
-import static com.dnastack.bob.service.processor.util.HttpUtils.executeRequest;
+import static com.dnastack.bob.service.fetcher.util.HttpUtils.createRequest;
+import static com.dnastack.bob.service.fetcher.util.HttpUtils.executeRequest;
 
 /**
  * A Genomics Alliance beacon 0.2 service at UCSC.
@@ -46,7 +46,7 @@ import static com.dnastack.bob.service.processor.util.HttpUtils.executeRequest;
 @Stateless
 @Named
 @LocalBean
-public class UcscV2BeaconProcessor extends AbstractBeaconProcessor {
+public class UcscV2BeaconProcessor  {
 
     private static final long serialVersionUID = 13L;
     private static final String BASE_URL = "http://genome.ucsc.edu/cgi-bin/hgBeacon/query";
@@ -58,7 +58,6 @@ public class UcscV2BeaconProcessor extends AbstractBeaconProcessor {
         return BASE_URL + params;
     }
 
-    @Override
     @Asynchronous
     public Future<String> getQueryResponse(Beacon beacon, Query query) {
         String res = null;

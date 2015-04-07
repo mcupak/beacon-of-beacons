@@ -34,10 +34,10 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.inject.Named;
 
-import static com.dnastack.bob.service.processor.util.HttpUtils.createRequest;
-import static com.dnastack.bob.service.processor.util.HttpUtils.executeRequest;
-import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizePosition;
-import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizeReference;
+import static com.dnastack.bob.service.converter.util.ConvertUtils.denormalizePosition;
+import static com.dnastack.bob.service.converter.util.ConvertUtils.denormalizeReference;
+import static com.dnastack.bob.service.fetcher.util.HttpUtils.createRequest;
+import static com.dnastack.bob.service.fetcher.util.HttpUtils.executeRequest;
 
 /**
  * ICGC beacon service. Preliminary 0.2 spec.
@@ -48,7 +48,7 @@ import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizeRefe
 @Stateless
 @Named
 @LocalBean
-public class IcgcBeaconProcessor extends AbstractBeaconProcessor {
+public class IcgcBeaconProcessor  {
 
     private static final String BASE_URL = "https://dcc.icgc.org/api/v1/beacon/query";
     private static final String PARAM_TEMPLATE = "?reference=%s&chromosome=%s&position=%d&allele=%s&dataset=";
@@ -60,7 +60,6 @@ public class IcgcBeaconProcessor extends AbstractBeaconProcessor {
         return BASE_URL + params;
     }
 
-    @Override
     @Asynchronous
     public Future<String> getQueryResponse(Beacon beacon, Query query) {
         String res = null;

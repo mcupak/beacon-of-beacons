@@ -21,12 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.processor.impl;
+package com.dnastack.bob.service.parser.impl;
 
 import com.dnastack.bob.persistence.entity.Beacon;
-import com.dnastack.bob.persistence.entity.Query;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
+import com.dnastack.bob.service.parser.api.ResponseParser;
+import java.io.Serializable;
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
@@ -34,12 +33,11 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.inject.Named;
 
-import static com.dnastack.bob.service.processor.util.HttpUtils.createRequest;
-import static com.dnastack.bob.service.processor.util.HttpUtils.executeRequest;
-import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizePosition;
+import static com.dnastack.bob.service.parser.util.ParseUtils.parseRef;
+import static com.dnastack.bob.service.parser.util.ParseUtils.parseYesNoCaseInsensitive;
 
 /**
- * A Genomics Alliance beacon service at Broad Institute.
+ * Parses "yes" and "no" strings with ref conversion.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
@@ -47,29 +45,22 @@ import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizePosi
 @Stateless
 @Named
 @LocalBean
-public class BroadInstituteBeaconProcessor extends AbstractBeaconProcessor {
+public class StringYesNoRefResponseParser implements ResponseParser, Serializable {
 
-    private static final long serialVersionUID = 6477729900179823208L;
-    private static final String BASE_URL = "http://broad-beacon.broadinstitute.org:8090/dev/beacon/query";
-    private static final String PARAM_TEMPLATE = "?ref=%s&chrom=%s&pos=%d&allele=%s";
+    private static final long serialVersionUID = -4790485566013440026L;
 
-    private String getQueryUrl(String ref, String chrom, Long pos, String allele) throws MalformedURLException {
-        String params = String.format(PARAM_TEMPLATE, ref, chrom, pos, allele);
-
-        return BASE_URL + params;
-    }
-
-    @Override
     @Asynchronous
-    public Future<String> getQueryResponse(Beacon beacon, Query query) {
-        String res = null;
-        try {
-            res = executeRequest(createRequest(getQueryUrl(query.getReference().toString(), query.getChromosome().toString(), denormalizePosition(query.getPosition()), query.getAllele()), false, null));
-        } catch (MalformedURLException | UnsupportedEncodingException ex) {
-            // ignore, already null
+    @Override
+    public Future<Boolean> parseQueryResponse(Beacon b, String response) {
+        Boolean res = parseYesNoCaseInsensitive(response);
+        if (res == null) {
+            // ref response is treated as false
+            Boolean isRef = parseRef(response);
+            if (isRef != null && isRef) {
+                res = false;
+            }
         }
 
         return new AsyncResult<>(res);
     }
-
 }

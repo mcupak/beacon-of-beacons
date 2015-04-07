@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
+ * Copyright 2015 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,38 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.parser.impl;
+package com.dnastack.bob.service.converter.api;
 
-import com.dnastack.bob.persistence.entity.Beacon;
-import com.dnastack.bob.service.parser.api.BeaconResponseParser;
-import java.io.Serializable;
-import java.util.concurrent.Future;
-import javax.ejb.AsyncResult;
-import javax.ejb.Asynchronous;
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.inject.Named;
-
-import static com.dnastack.bob.service.parser.util.ParseUtils.parseBooleanFromJson;
+import com.dnastack.bob.persistence.enumerated.Chromosome;
 
 /**
- * Parses exists_gt field from JSON.
+ * Chromosome converter.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Stateless
-@Named
-@LocalBean
-public class JsonExistsGtBeaconResponseParser implements BeaconResponseParser, Serializable {
+public interface ChromosomeConverter extends GenericConverter<Chromosome, String> {
 
-    private static final long serialVersionUID = -1035262558628936107L;
-
-    @Asynchronous
-    @Override
-    public Future<Boolean> parseQueryResponse(Beacon b, String response) {
-        Boolean res = parseBooleanFromJson(response, "exist_gt");
-
-        return new AsyncResult<>(res);
-    }
 }

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 DNAstack.
+ * Copyright 2014 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,23 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.persistence.impl;
+package com.dnastack.bob.service.util;
 
-import com.dnastack.bob.persistence.api.DataUseDao;
-import com.dnastack.bob.persistence.entity.DataUse;
-import javax.enterprise.context.Dependent;
-import javax.inject.Named;
+import com.dnastack.bob.persistence.enumerated.Reference;
+import com.google.common.collect.ImmutableMap;
+import java.util.Map;
 
 /**
- * JPA-based implementation of data use DAO.
+ * Global constants.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Named
-@Dependent
-public class DataUseDaoImpl extends AbstractEntityWithLongIdDaoImpl<DataUse> implements DataUseDao {
+public class Constants {
 
-    private static final long serialVersionUID = -3202753985625190279L;
-
+    public static final long REQUEST_TIMEOUT = 10L;
+    public static final Map<Reference, String> REFERENCE_MAPPING = ImmutableMap.of(
+            Reference.HG38, "GRCh38",
+            Reference.HG19, "GRCh37",
+            Reference.HG18, "NCBI36",
+            Reference.HG17, "NCBI35",
+            Reference.HG16, "NCBI34"
+    );
 }

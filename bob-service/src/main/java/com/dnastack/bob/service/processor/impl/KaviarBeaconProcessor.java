@@ -34,8 +34,8 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.inject.Named;
 
-import static com.dnastack.bob.service.processor.util.HttpUtils.createRequest;
-import static com.dnastack.bob.service.processor.util.HttpUtils.executeRequest;
+import static com.dnastack.bob.service.fetcher.util.HttpUtils.createRequest;
+import static com.dnastack.bob.service.fetcher.util.HttpUtils.executeRequest;
 
 /**
  * Kaviar beacon service.
@@ -46,7 +46,7 @@ import static com.dnastack.bob.service.processor.util.HttpUtils.executeRequest;
 @Stateless
 @Named
 @LocalBean
-public class KaviarBeaconProcessor extends AbstractBeaconProcessor {
+public class KaviarBeaconProcessor {
 
     private static final long serialVersionUID = 30L;
     private static final String BASE_URL = "http://db.systemsbiology.net/kaviar/cgi-pub/beacon";
@@ -58,7 +58,6 @@ public class KaviarBeaconProcessor extends AbstractBeaconProcessor {
         return BASE_URL + params;
     }
 
-    @Override
     @Asynchronous
     public Future<String> getQueryResponse(Beacon beacon, Query query) {
         String res = null;

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
+ * Copyright 2015 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,39 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.parser.impl;
+package com.dnastack.bob.service.requester.impl;
 
 import com.dnastack.bob.persistence.entity.Beacon;
-import com.dnastack.bob.service.parser.api.BeaconResponseParser;
+import com.dnastack.bob.service.requester.api.RequestConstructor;
 import java.io.Serializable;
-import java.util.concurrent.Future;
-import javax.ejb.AsyncResult;
-import javax.ejb.Asynchronous;
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
+import java.util.HashMap;
+import java.util.Map;
 import javax.inject.Named;
 
-import static com.dnastack.bob.service.parser.util.ParseUtils.parseBooleanFromJson;
-
 /**
- * Parses response->exists field from JSON.
+ * Request constructor using base beacon URL with custom payload.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Stateless
 @Named
-@LocalBean
-public class JsonResponseExistsBeaconResponseParser implements BeaconResponseParser, Serializable {
+public class BaseUrlCustomPayloadRequestConstructor implements RequestConstructor, Serializable {
 
-    private static final long serialVersionUID = 8528412790574916621L;
+    private static final long serialVersionUID = -1948686874610313749L;
 
-    @Asynchronous
     @Override
-    public Future<Boolean> parseQueryResponse(Beacon b, String response) {
-        Boolean res = parseBooleanFromJson(response, "response", "exists");
+    public String getUrl(Beacon b, String ref, String chrom, Long pos, String allele, String dataset) {
+        return b.getUrl();
+    }
 
-        return new AsyncResult<>(res);
+    @Override
+    public Map<String, String> getPayload(Beacon b, String ref, String chrom, Long pos, String allele, String dataset) {
+        Map<String, String> res = new HashMap<>();
+        res.put("population", "1000genomes");
+        res.put("genome", ref);
+        res.put("chr", chrom);
+        res.put("coord", pos.toString());
+        res.put("allele", allele);
+
+        return res;
     }
 
 }

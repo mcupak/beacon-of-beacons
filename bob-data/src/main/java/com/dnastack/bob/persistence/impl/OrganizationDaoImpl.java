@@ -25,7 +25,8 @@ package com.dnastack.bob.persistence.impl;
 
 import com.dnastack.bob.persistence.api.OrganizationDao;
 import com.dnastack.bob.persistence.entity.Organization;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.Dependent;
+import javax.inject.Named;
 
 /**
  * JPA-based implementation of organization DAO.
@@ -33,7 +34,8 @@ import javax.enterprise.context.RequestScoped;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@RequestScoped
+@Named
+@Dependent
 public class OrganizationDaoImpl extends AbstractEntityWithStringIdDaoImpl<Organization> implements OrganizationDao {
 
     private static final long serialVersionUID = 2403615525311736080L;

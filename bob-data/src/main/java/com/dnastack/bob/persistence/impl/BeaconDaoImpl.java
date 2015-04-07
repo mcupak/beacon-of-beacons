@@ -30,7 +30,8 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.Dependent;
+import javax.inject.Named;
 
 /**
  * Basic beacon DAO implementation..
@@ -38,7 +39,8 @@ import javax.enterprise.context.RequestScoped;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@RequestScoped
+@Named
+@Dependent
 public class BeaconDaoImpl extends AbstractEntityWithStringIdDaoImpl<Beacon> implements BeaconDao {
 
     private static final long serialVersionUID = 7394221412609376503L;

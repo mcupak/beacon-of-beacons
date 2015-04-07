@@ -34,12 +34,12 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.inject.Named;
 
-import static com.dnastack.bob.service.processor.util.HttpUtils.createRequest;
-import static com.dnastack.bob.service.processor.util.HttpUtils.executeRequest;
-import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizeAllele;
-import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizeAlleleToBrackets;
-import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizeChromosomeToNumber;
-import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizePosition;
+import static com.dnastack.bob.service.converter.util.ConvertUtils.denormalizeAllele;
+import static com.dnastack.bob.service.converter.util.ConvertUtils.denormalizeAlleleToBrackets;
+import static com.dnastack.bob.service.converter.util.ConvertUtils.denormalizeChromosomeToNumber;
+import static com.dnastack.bob.service.converter.util.ConvertUtils.denormalizePosition;
+import static com.dnastack.bob.service.fetcher.util.HttpUtils.createRequest;
+import static com.dnastack.bob.service.fetcher.util.HttpUtils.executeRequest;
 
 /**
  * EBI beacon service.
@@ -50,7 +50,7 @@ import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizePosi
 @Stateless
 @Named
 @LocalBean
-public class EbiBeaconProcessor extends AbstractBeaconProcessor {
+public class EbiBeaconProcessor  {
 
     private static final long serialVersionUID = 11L;
     private static final String BASE_URL = "http://wwwdev.ebi.ac.uk/eva/webservices/rest/v1/ga4gh/beacon";
@@ -62,7 +62,6 @@ public class EbiBeaconProcessor extends AbstractBeaconProcessor {
         return BASE_URL + params;
     }
 
-    @Override
     @Asynchronous
     public Future<String> getQueryResponse(Beacon beacon, Query query) {
         String res = null;

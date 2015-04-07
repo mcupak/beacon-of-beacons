@@ -25,7 +25,8 @@ package com.dnastack.bob.persistence.impl;
 
 import com.dnastack.bob.persistence.api.DataUseRequirementDao;
 import com.dnastack.bob.persistence.entity.DataUseRequirement;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.Dependent;
+import javax.inject.Named;
 
 /**
  * JPA-based implementation of data use requirement DAO.
@@ -33,7 +34,8 @@ import javax.enterprise.context.RequestScoped;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@RequestScoped
+@Named
+@Dependent
 public class DataUseRequirementDaoImpl extends AbstractEntityWithLongIdDaoImpl<DataUseRequirement> implements DataUseRequirementDao {
 
     private static final long serialVersionUID = -3778073256988252581L;

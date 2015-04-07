@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
+ * Copyright 2015 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,50 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.parser.impl;
+package com.dnastack.bob.service.requester.impl;
 
 import com.dnastack.bob.persistence.entity.Beacon;
-import com.dnastack.bob.service.parser.api.BeaconResponseParser;
+import com.dnastack.bob.service.requester.api.RequestConstructor;
 import java.io.Serializable;
-import java.util.concurrent.Future;
-import javax.ejb.AsyncResult;
-import javax.ejb.Asynchronous;
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
+import java.util.Map;
 import javax.inject.Named;
 
-import static com.dnastack.bob.service.parser.util.ParseUtils.parseBooleanFromJson;
-
 /**
- * Parses cafe-prefixed responses.
+ * Request constructor using base beacon URL with custom payload.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Stateless
 @Named
-@LocalBean
-public class JsonCafeBeaconResponseParser implements BeaconResponseParser, Serializable {
+public class ChromPosAllleleRefNoPayloadRequestConstructor implements RequestConstructor, Serializable {
 
-    private static final long serialVersionUID = 6472531100065834529L;
-    private static final String BEACON_PREFIX = "cafe-";
-    private static final String RESPONSE_FIELD = "response";
+    private static final long serialVersionUID = -4140519271564294181L;
 
-    private String getJsonFieldName(Beacon b) {
-        String res = null;
-        if (b.getId().startsWith(BEACON_PREFIX)) {
-            res = b.getId().substring(BEACON_PREFIX.length()) + "_" + RESPONSE_FIELD;
-        } else {
-            res = b.getId() + "_" + RESPONSE_FIELD;
-        }
-        return res;
-    }
-
-    @Asynchronous
     @Override
-    public Future<Boolean> parseQueryResponse(Beacon b, String response) {
-        Boolean res = parseBooleanFromJson(response, RESPONSE_FIELD, getJsonFieldName(b));
-
-        return new AsyncResult<>(res);
+    public String getUrl(Beacon b, String ref, String chrom, Long pos, String allele, String dataset) {
+        return String.format(b.getUrl(), chrom, pos, allele, ref);
     }
+
+    @Override
+    public Map<String, String> getPayload(Beacon b, String ref, String chrom, Long pos, String allele, String dataset) {
+        return null;
+    }
+
 }

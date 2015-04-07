@@ -24,7 +24,7 @@
 package com.dnastack.bob.service.parser.impl;
 
 import com.dnastack.bob.persistence.entity.Beacon;
-import com.dnastack.bob.service.parser.api.BeaconResponseParser;
+import com.dnastack.bob.service.parser.api.ResponseParser;
 import java.io.Serializable;
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
@@ -33,10 +33,10 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.inject.Named;
 
-import static com.dnastack.bob.service.parser.util.ParseUtils.parseYesNoCaseInsensitive;
+import static com.dnastack.bob.service.parser.util.ParseUtils.parseBooleanFromJson;
 
 /**
- * Parses "yes" and "no" strings.
+ * Parses exists field from JSON.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
@@ -44,14 +44,14 @@ import static com.dnastack.bob.service.parser.util.ParseUtils.parseYesNoCaseInse
 @Stateless
 @Named
 @LocalBean
-public class StringYesNoBeaconResponseParser implements BeaconResponseParser, Serializable {
+public class JsonExistsResponseParser implements ResponseParser, Serializable {
 
-    private static final long serialVersionUID = -4790485566013440026L;
+    private static final long serialVersionUID = -1035262558628936107L;
 
     @Asynchronous
     @Override
     public Future<Boolean> parseQueryResponse(Beacon b, String response) {
-        Boolean res = parseYesNoCaseInsensitive(response);
+        Boolean res = parseBooleanFromJson(response, "exists");
 
         return new AsyncResult<>(res);
     }

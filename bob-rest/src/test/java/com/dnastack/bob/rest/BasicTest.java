@@ -23,7 +23,7 @@
  */
 package com.dnastack.bob.rest;
 
-import com.dnastack.bob.service.processor.util.HttpUtils;
+import com.dnastack.bob.service.fetcher.util.HttpUtils;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;

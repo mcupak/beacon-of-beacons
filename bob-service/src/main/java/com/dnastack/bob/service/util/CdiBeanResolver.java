@@ -51,6 +51,9 @@ public class CdiBeanResolver implements Serializable {
     }
 
     public Object resolve(String id) throws ClassNotFoundException {
+        if (id==null) {
+            throw new NullPointerException("id");
+        }
         Class<?> c = Class.forName(id);
         Set<Bean<?>> beans = beanManager.getBeans(c, new AnnotationLiteral<Any>() {
             private static final long serialVersionUID = 3109256773218160485L;

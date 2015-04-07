@@ -21,12 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.processor.impl;
+package com.dnastack.bob.service.parser.impl;
 
 import com.dnastack.bob.persistence.entity.Beacon;
-import com.dnastack.bob.persistence.entity.Query;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
+import com.dnastack.bob.service.parser.api.ResponseParser;
+import java.io.Serializable;
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
@@ -34,13 +33,11 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.inject.Named;
 
-import static com.dnastack.bob.service.converter.util.ConvertUtils.denormalizePosition;
-import static com.dnastack.bob.service.converter.util.ConvertUtils.denormalizeReference;
-import static com.dnastack.bob.service.fetcher.util.HttpUtils.createRequest;
-import static com.dnastack.bob.service.fetcher.util.HttpUtils.executeRequest;
+import static com.dnastack.bob.service.parser.util.ParseUtils.parseBooleanFromJson;
+import static com.dnastack.bob.service.parser.util.ParseUtils.parseStringFromJson;
 
 /**
- * NCBI beacon service.
+ * Parses response->exists field from JSON with null conversion.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
@@ -48,30 +45,23 @@ import static com.dnastack.bob.service.fetcher.util.HttpUtils.executeRequest;
 @Stateless
 @Named
 @LocalBean
-public class NcbiBeaconProcessor  {
+public class JsonResponseExistsNullAsFalseResponseParser implements ResponseParser, Serializable {
 
-    private static final long serialVersionUID = 12L;
-    private static final String BASE_URL = "http://www.ncbi.nlm.nih.gov/projects/genome/beacon/beacon.cgi";
-    private static final String PARAM_TEMPLATE = "?ref=%s&chrom=%s&pos=%d&allele=%s";
-
-    private String getQueryUrl(String ref, String chrom, Long pos, String allele) throws MalformedURLException {
-        String params = String.format(PARAM_TEMPLATE, ref, chrom, pos, allele);
-
-        return BASE_URL + params;
-    }
+    private static final long serialVersionUID = 8528412790574916621L;
 
     @Asynchronous
-    public Future<String> getQueryResponse(Beacon beacon, Query query) {
-        String res = null;
+    @Override
+    public Future<Boolean> parseQueryResponse(Beacon b, String response) {
+        Boolean res = parseBooleanFromJson(response, "response", "exists");
 
-        // should be POST, but the server accepts GET as well
-        try {
-            res = executeRequest(createRequest(getQueryUrl(denormalizeReference(query.getReference()), query.getChromosome().toString(), denormalizePosition(query.getPosition()), query.getAllele()), false, null));
-        } catch (MalformedURLException | UnsupportedEncodingException ex) {
-            // ignore, already null
+        // the beacon uses null as false, convert
+        if (res == null) {
+            String s = parseStringFromJson(response, "response", "exists");
+            if ("null".equals(s)) {
+                res = false;
+            }
         }
 
         return new AsyncResult<>(res);
     }
-
 }

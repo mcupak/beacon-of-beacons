@@ -34,10 +34,10 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.inject.Named;
 
-import static com.dnastack.bob.service.processor.util.HttpUtils.createRequest;
-import static com.dnastack.bob.service.processor.util.HttpUtils.executeRequest;
-import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizePosition;
-import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizeReference;
+import static com.dnastack.bob.service.converter.util.ConvertUtils.denormalizePosition;
+import static com.dnastack.bob.service.converter.util.ConvertUtils.denormalizeReference;
+import static com.dnastack.bob.service.fetcher.util.HttpUtils.createRequest;
+import static com.dnastack.bob.service.fetcher.util.HttpUtils.executeRequest;
 
 /**
  * WTSI beacon service.
@@ -48,7 +48,7 @@ import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizeRefe
 @Stateless
 @Named
 @LocalBean
-public class WtsiBeaconProcessor extends AbstractBeaconProcessor {
+public class WtsiBeaconProcessor {
 
     private static final long serialVersionUID = 14L;
     private static final String BASE_URL = "http://www.sanger.ac.uk/sanger/GA4GH_Beacon";
@@ -66,7 +66,6 @@ public class WtsiBeaconProcessor extends AbstractBeaconProcessor {
         return BASE_URL + params;
     }
 
-    @Override
     @Asynchronous
     public Future<String> getQueryResponse(Beacon beacon, Query query) {
         String res = null;

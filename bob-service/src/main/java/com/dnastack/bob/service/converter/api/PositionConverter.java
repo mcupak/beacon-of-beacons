@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
+ * Copyright 2015 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,38 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.parser.impl;
-
-import com.dnastack.bob.persistence.entity.Beacon;
-import com.dnastack.bob.service.parser.api.BeaconResponseParser;
-import java.io.Serializable;
-import java.util.concurrent.Future;
-import javax.ejb.AsyncResult;
-import javax.ejb.Asynchronous;
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.inject.Named;
-
-import static com.dnastack.bob.service.parser.util.ParseUtils.parseContainsStringCaseInsensitive;
+package com.dnastack.bob.service.converter.api;
 
 /**
- * Parses "beacon found" and "beacon cannot find" strings.
+ * Position converter.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Stateless
-@Named
-@LocalBean
-public class StringFoundBeaconResponseParser implements BeaconResponseParser, Serializable {
+public interface PositionConverter extends GenericConverter<Long, Long> {
 
-    private static final long serialVersionUID = -7061531047782211195L;
-
-    @Asynchronous
-    @Override
-    public Future<Boolean> parseQueryResponse(Beacon b, String response) {
-        Boolean res = parseContainsStringCaseInsensitive(response, "beacon found", "beacon cannot find");
-
-        return new AsyncResult<>(res);
-    }
 }

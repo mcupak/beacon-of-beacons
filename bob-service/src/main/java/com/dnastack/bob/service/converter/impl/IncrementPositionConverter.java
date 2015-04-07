@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
+ * Copyright 2015 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,46 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.parser.impl;
+package com.dnastack.bob.service.converter.impl;
 
-import com.dnastack.bob.persistence.entity.Beacon;
-import com.dnastack.bob.service.parser.api.BeaconResponseParser;
+import com.dnastack.bob.service.converter.api.PositionConverter;
 import java.io.Serializable;
-import java.util.concurrent.Future;
-import javax.ejb.AsyncResult;
-import javax.ejb.Asynchronous;
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
 import javax.inject.Named;
 
-import static com.dnastack.bob.service.parser.util.ParseUtils.parseRef;
-import static com.dnastack.bob.service.parser.util.ParseUtils.parseYesNoCaseInsensitive;
-
 /**
- * Parses "yes" and "no" strings with ref conversion.
+ * Position converter incrementing the original position by 1.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Stateless
 @Named
-@LocalBean
-public class StringYesNoRefBeaconResponseParser implements BeaconResponseParser, Serializable {
+public class IncrementPositionConverter implements PositionConverter, Serializable {
 
-    private static final long serialVersionUID = -4790485566013440026L;
+    private static final long serialVersionUID = 8908286953351752283L;
 
-    @Asynchronous
     @Override
-    public Future<Boolean> parseQueryResponse(Beacon b, String response) {
-        Boolean res = parseYesNoCaseInsensitive(response);
-        if (res == null) {
-            // ref response is treated as false
-            Boolean isRef = parseRef(response);
-            if (isRef != null && isRef) {
-                res = false;
-            }
-        }
-
-        return new AsyncResult<>(res);
+    public Long convert(Long input) {
+        return (input == null) ? null : input + 1;
     }
+
 }

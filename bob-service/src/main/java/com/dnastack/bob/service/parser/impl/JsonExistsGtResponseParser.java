@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 DNAstack.
+ * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,16 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.processor.util;
+package com.dnastack.bob.service.parser.impl;
+
+import com.dnastack.bob.persistence.entity.Beacon;
+import com.dnastack.bob.service.parser.api.ResponseParser;
+import java.io.Serializable;
+import java.util.concurrent.Future;
+import javax.ejb.AsyncResult;
+import javax.ejb.Asynchronous;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+import javax.inject.Named;
+
+import static com.dnastack.bob.service.parser.util.ParseUtils.parseBooleanFromJson;
 
 /**
- * Global constants.
+ * Parses exists_gt field from JSON.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public class Constants {
+@Stateless
+@Named
+@LocalBean
+public class JsonExistsGtResponseParser implements ResponseParser, Serializable {
 
-    public static final long REQUEST_TIMEOUT = 10L;
+    private static final long serialVersionUID = -1035262558628936107L;
 
+    @Asynchronous
+    @Override
+    public Future<Boolean> parseQueryResponse(Beacon b, String response) {
+        Boolean res = parseBooleanFromJson(response, "exist_gt");
+
+        return new AsyncResult<>(res);
+    }
 }

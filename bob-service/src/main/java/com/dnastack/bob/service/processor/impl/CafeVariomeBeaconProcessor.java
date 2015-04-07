@@ -34,10 +34,10 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.inject.Named;
 
-import static com.dnastack.bob.service.processor.util.HttpUtils.createRequest;
-import static com.dnastack.bob.service.processor.util.HttpUtils.executeRequest;
-import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizeChromosome;
-import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizePosition;
+import static com.dnastack.bob.service.converter.util.ConvertUtils.denormalizeChromosome;
+import static com.dnastack.bob.service.converter.util.ConvertUtils.denormalizePosition;
+import static com.dnastack.bob.service.fetcher.util.HttpUtils.createRequest;
+import static com.dnastack.bob.service.fetcher.util.HttpUtils.executeRequest;
 
 /**
  * Cafe Variome beacon service.
@@ -48,7 +48,7 @@ import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizePosi
 @Stateless
 @Named
 @LocalBean
-public class CafeVariomeBeaconProcessor extends AbstractBeaconProcessor {
+public class CafeVariomeBeaconProcessor  {
 
     private static final long serialVersionUID = 12L;
     private static final String BASE_URL = "http://beacon.cafevariome.org/query";
@@ -60,7 +60,6 @@ public class CafeVariomeBeaconProcessor extends AbstractBeaconProcessor {
         return BASE_URL + params;
     }
 
-    @Override
     @Asynchronous
     public Future<String> getQueryResponse(Beacon beacon, Query query) {
         String res = null;

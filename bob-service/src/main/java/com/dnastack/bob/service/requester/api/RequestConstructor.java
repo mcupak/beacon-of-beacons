@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 DNAstack.
+ * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,23 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.persistence.impl;
+package com.dnastack.bob.service.requester.api;
 
-import com.dnastack.bob.persistence.api.DataUseDao;
-import com.dnastack.bob.persistence.entity.DataUse;
-import javax.enterprise.context.Dependent;
-import javax.inject.Named;
+import com.dnastack.bob.persistence.entity.Beacon;
+import java.util.Map;
 
 /**
- * JPA-based implementation of data use DAO.
+ * Query URL generator.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Named
-@Dependent
-public class DataUseDaoImpl extends AbstractEntityWithLongIdDaoImpl<DataUse> implements DataUseDao {
+public interface RequestConstructor {
 
-    private static final long serialVersionUID = -3202753985625190279L;
+    /**
+     * Generates query URL for a given beacon.
+     *
+     * @param b       beacon
+     * @param ref     reference genome
+     * @param chrom   chromosome
+     * @param pos     position
+     * @param allele  allele
+     * @param dataset dataset
+     *
+     * @return URL
+     */
+    String getUrl(Beacon b, String ref, String chrom, Long pos, String allele, String dataset);
+
+    /**
+     * Generates query request payload.
+     *
+     * @param b       beacon
+     * @param ref     reference genome
+     * @param chrom   chromosome
+     * @param pos     position
+     * @param allele  allele
+     * @param dataset dataset
+     *
+     * @return payload key-value pairs
+     */
+    Map<String, String> getPayload(Beacon b, String ref, String chrom, Long pos, String allele, String dataset);
 
 }

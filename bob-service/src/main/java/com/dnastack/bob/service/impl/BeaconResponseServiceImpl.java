@@ -24,7 +24,6 @@
 package com.dnastack.bob.service.impl;
 
 import com.dnastack.bob.persistence.api.BeaconDao;
-import com.dnastack.bob.persistence.api.QueryDao;
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.persistence.entity.Query;
 import com.dnastack.bob.persistence.enumerated.Chromosome;
@@ -36,9 +35,8 @@ import com.dnastack.bob.service.lrg.Brca2;
 import com.dnastack.bob.service.lrg.LrgConvertor;
 import com.dnastack.bob.service.lrg.LrgLocus;
 import com.dnastack.bob.service.lrg.LrgReference;
-import com.dnastack.bob.service.processor.api.BeaconProcessor;
 import com.dnastack.bob.service.processor.api.BeaconResponse;
-import com.dnastack.bob.service.processor.util.QueryUtils;
+import com.dnastack.bob.service.processor.impl.ParallelBeaconProcessor;
 import com.dnastack.bob.service.util.CdiBeanResolver;
 import com.dnastack.bob.service.util.Entity2ToConvertor;
 import com.google.common.collect.HashMultimap;
@@ -54,6 +52,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.regex.Pattern;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
 import javax.ejb.LocalBean;
@@ -64,7 +63,8 @@ import javax.inject.Named;
 import javax.transaction.Transactional;
 import javax.validation.Validator;
 
-import static com.dnastack.bob.service.processor.util.Constants.REQUEST_TIMEOUT;
+import static com.dnastack.bob.service.util.Constants.REFERENCE_MAPPING;
+import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
 
 /**
  * Implementation of a service for managing beacon responses.
@@ -85,10 +85,10 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
     private BeaconDao beaconDao;
 
     @Inject
-    private CdiBeanResolver pr;
+    private ParallelBeaconProcessor beaconProcessor;
 
     @Inject
-    private QueryDao queryDao;
+    private CdiBeanResolver pr;
 
     @Inject
     private Validator validator;
@@ -101,6 +101,55 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
     @Brca2
     private LrgConvertor brca2Convertor;
 
+    private Chromosome normalizeChromosome(String chrom) {
+        // parse chrom value
+        if (chrom != null) {
+            String orig = chrom.toUpperCase();
+            for (Chromosome c : Chromosome.values()) {
+                if (orig.endsWith(c.toString())) {
+                    return c;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private String normalizeAllele(String allele) {
+        if (allele == null || allele.isEmpty()) {
+            return null;
+        }
+
+        String res = allele.toUpperCase();
+        if (res.equals("DEL") || res.equals("INS")) {
+            return res.substring(0, 1);
+        }
+        if (Pattern.matches("([D,I])|([A,C,T,G]+)", res)) {
+            return res;
+        }
+
+        return null;
+    }
+
+    private Reference normalizeReference(String ref) {
+        if (ref == null || ref.isEmpty()) {
+            return null;
+        }
+
+        for (Reference s : REFERENCE_MAPPING.keySet()) {
+            if (s.toString().equalsIgnoreCase(ref)) {
+                return s;
+            }
+        }
+        for (Entry<Reference, String> e : REFERENCE_MAPPING.entrySet()) {
+            if (e.getValue().equalsIgnoreCase(ref)) {
+                return e.getKey();
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Obtains a canonical query object without persisting.
      *
@@ -112,10 +161,10 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
      * @return normalized query
      */
     private Query prepareQuery(String chrom, Long pos, String allele, String ref) {
-        Chromosome c = QueryUtils.normalizeChromosome(chrom);
-        Reference r = QueryUtils.normalizeReference(ref);
+        Chromosome c = normalizeChromosome(chrom);
+        Reference r = normalizeReference(ref);
 
-        return new Query(c == null ? null : c, pos, QueryUtils.normalizeAllele(allele), r == null ? null : r);
+        return new Query(c == null ? null : c, pos, normalizeAllele(allele), r == null ? null : r);
     }
 
     private boolean queryNotNormalizedOrValid(Query q, String ref) {
@@ -133,7 +182,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
             Map<Beacon, Future<Boolean>> futures = new HashMap<>();
             Set<Beacon> children = beaconDao.findDescendants(b, false, true, false, false);
             for (Beacon bt : children) {
-                futures.put(bt, ((BeaconProcessor) pr.resolve(bt.getProcessor())).executeQuery(bt, q));
+                futures.put(bt, beaconProcessor.executeQuery(bt, q));
             }
 
             // collect results
@@ -150,7 +199,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
             }
         } else {
             try {
-                total = ((BeaconProcessor) pr.resolve(b.getProcessor())).executeQuery(b, q).get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
+                total = beaconProcessor.executeQuery(b, q).get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
             } catch (InterruptedException | ExecutionException | TimeoutException ex) {
                 // ignore
             }

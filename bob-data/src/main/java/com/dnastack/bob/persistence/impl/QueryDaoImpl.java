@@ -25,7 +25,8 @@ package com.dnastack.bob.persistence.impl;
 
 import com.dnastack.bob.persistence.api.QueryDao;
 import com.dnastack.bob.persistence.entity.Query;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.Dependent;
+import javax.inject.Named;
 
 /**
  * Basic provider of queries.
@@ -33,7 +34,8 @@ import javax.enterprise.context.RequestScoped;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@RequestScoped
+@Named
+@Dependent
 public class QueryDaoImpl extends AbstractEntityWithLongIdDaoImpl<Query> implements QueryDao {
 
     private static final long serialVersionUID = 35L;

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 DNAstack.
+ * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,23 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.persistence.impl;
+package com.dnastack.bob.service.fetcher.api;
 
-import com.dnastack.bob.persistence.api.DataUseDao;
-import com.dnastack.bob.persistence.entity.DataUse;
-import javax.enterprise.context.Dependent;
-import javax.inject.Named;
+import java.util.Map;
+import java.util.concurrent.Future;
 
 /**
- * JPA-based implementation of data use DAO.
+ * Beacon response fetcher.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Named
-@Dependent
-public class DataUseDaoImpl extends AbstractEntityWithLongIdDaoImpl<DataUse> implements DataUseDao {
+public interface ResponseFetcher {
 
-    private static final long serialVersionUID = -3202753985625190279L;
+    /**
+     * Asynchronously obtains raw response to the query from the beacon.
+     *
+     * @param url     query URL
+     * @param payload request data (for POST)
+     *
+     * @return raw result of the query from the beacon
+     */
+    Future<String> getQueryResponse(String url, Map<String, String> payload);
 
 }

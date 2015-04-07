@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
+ * Copyright 2015 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,38 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.parser.impl;
+package com.dnastack.bob.service.converter.impl;
 
-import com.dnastack.bob.persistence.entity.Beacon;
-import com.dnastack.bob.service.parser.api.BeaconResponseParser;
+import com.dnastack.bob.persistence.enumerated.Chromosome;
+import com.dnastack.bob.service.converter.api.ChromosomeConverter;
 import java.io.Serializable;
-import java.util.concurrent.Future;
-import javax.ejb.AsyncResult;
-import javax.ejb.Asynchronous;
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
 import javax.inject.Named;
 
-import static com.dnastack.bob.service.parser.util.ParseUtils.parseBooleanFromJson;
-
 /**
- * Parses exists field from JSON.
+ * Converter of chromosomes to their string representations.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Stateless
 @Named
-@LocalBean
-public class JsonExistsBeaconResponseParser implements BeaconResponseParser, Serializable {
+public class ToStringChromosomeConverter implements ChromosomeConverter, Serializable {
 
-    private static final long serialVersionUID = -1035262558628936107L;
+    private static final long serialVersionUID = 3624542022429404385L;
 
-    @Asynchronous
     @Override
-    public Future<Boolean> parseQueryResponse(Beacon b, String response) {
-        Boolean res = parseBooleanFromJson(response, "exists");
-
-        return new AsyncResult<>(res);
+    public String convert(Chromosome input) {
+        return (input == null) ? null : input.toString();
     }
+
 }

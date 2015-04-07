@@ -21,14 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.processor.util;
+package com.dnastack.bob.service.converter.util;
 
 import com.dnastack.bob.persistence.enumerated.Chromosome;
 import com.dnastack.bob.persistence.enumerated.Reference;
-import com.google.common.collect.ImmutableMap;
-import java.util.Map;
 import java.util.Map.Entry;
-import java.util.regex.Pattern;
+
+import static com.dnastack.bob.service.util.Constants.REFERENCE_MAPPING;
 
 /**
  * Utils for query manipulation.
@@ -36,36 +35,7 @@ import java.util.regex.Pattern;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public class QueryUtils {
-
-    private static final Map<Reference, String> chromMapping = ImmutableMap.of(
-            Reference.HG38, "GRCh38",
-            Reference.HG19, "GRCh37",
-            Reference.HG18, "NCBI36",
-            Reference.HG17, "NCBI35",
-            Reference.HG16, "NCBI34"
-    );
-
-    /**
-     * Generates a canonical chrom ID.
-     *
-     * @param chrom chromosome
-     *
-     * @return normalized chromosome value
-     */
-    public static Chromosome normalizeChromosome(String chrom) {
-        // parse chrom value
-        if (chrom != null) {
-            String orig = chrom.toUpperCase();
-            for (Chromosome c : Chromosome.values()) {
-                if (orig.endsWith(c.toString())) {
-                    return c;
-                }
-            }
-        }
-
-        return null;
-    }
+public class ConvertUtils {
 
     /**
      * Generate a domain-specific chromosome identifier.
@@ -118,20 +88,6 @@ public class QueryUtils {
     }
 
     /**
-     * Converts 1-based position to 0-based position.
-     *
-     * @param pos position
-     *
-     * @return position
-     */
-    public static Long normalizePosition(Long pos) {
-        if (pos == null) {
-            return null;
-        }
-        return --pos;
-    }
-
-    /**
      * Converts 0-based position to 1-based position.
      *
      * @param pos position
@@ -143,29 +99,6 @@ public class QueryUtils {
             return null;
         }
         return ++pos;
-    }
-
-    /**
-     * Generate a canonical allele string.
-     *
-     * @param allele denormalized allele
-     *
-     * @return normalized allele
-     */
-    public static String normalizeAllele(String allele) {
-        if (allele == null || allele.isEmpty()) {
-            return null;
-        }
-
-        String res = allele.toUpperCase();
-        if (res.equals("DEL") || res.equals("INS")) {
-            return res.substring(0, 1);
-        }
-        if (Pattern.matches("([D,I])|([A,C,T,G]+)", res)) {
-            return res;
-        }
-
-        return null;
     }
 
     /**
@@ -212,32 +145,6 @@ public class QueryUtils {
     }
 
     /**
-     * Generate a canonical genome representation (hg*).
-     *
-     * @param ref denormalized genome
-     *
-     * @return normalized genome
-     */
-    public static Reference normalizeReference(String ref) {
-        if (ref == null || ref.isEmpty()) {
-            return null;
-        }
-
-        for (Reference s : chromMapping.keySet()) {
-            if (s.toString().equalsIgnoreCase(ref)) {
-                return s;
-            }
-        }
-        for (Entry<Reference, String> e : chromMapping.entrySet()) {
-            if (e.getValue().equalsIgnoreCase(ref)) {
-                return e.getKey();
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Generate a domain-specific genome representation (GRCh*, NCBI*).
      *
      * @param ref normalized genome
@@ -249,12 +156,12 @@ public class QueryUtils {
             return null;
         }
 
-        for (String s : chromMapping.values()) {
+        for (String s : REFERENCE_MAPPING.values()) {
             if (s.equalsIgnoreCase(ref.toString())) {
                 return s;
             }
         }
-        for (Entry<Reference, String> e : chromMapping.entrySet()) {
+        for (Entry<Reference, String> e : REFERENCE_MAPPING.entrySet()) {
             if (e.getKey().equals(ref)) {
                 return e.getValue();
             }

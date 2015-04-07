@@ -45,14 +45,4 @@ public interface BeaconProcessor {
      */
     Future<Boolean> executeQuery(Beacon beacon, Query query);
 
-    /**
-     * Asynchronously obtains raw response to the query from the beacon.
-     *
-     * @param beacon beacon to query
-     * @param query  query
-     *
-     * @return raw result of the query from the beacon
-     */
-    Future<String> getQueryResponse(Beacon beacon, Query query);
-
 }

@@ -32,8 +32,8 @@ import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
 import org.apache.http.client.methods.HttpRequestBase;
 
-import static com.dnastack.bob.service.processor.util.HttpUtils.createRequest;
-import static com.dnastack.bob.service.processor.util.HttpUtils.executeRequest;
+import static com.dnastack.bob.service.fetcher.util.HttpUtils.createRequest;
+import static com.dnastack.bob.service.fetcher.util.HttpUtils.executeRequest;
 
 /**
  * Beaconizer beacon service.
@@ -41,7 +41,7 @@ import static com.dnastack.bob.service.processor.util.HttpUtils.executeRequest;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public abstract class BeaconizerBeaconProcessor extends AbstractBeaconProcessor {
+public abstract class BeaconizerBeaconProcessor  {
 
     private static final long serialVersionUID = 112L;
 
@@ -55,7 +55,6 @@ public abstract class BeaconizerBeaconProcessor extends AbstractBeaconProcessor 
         return getBaseUrl() + params;
     }
 
-    @Override
     @Asynchronous
     public Future<String> getQueryResponse(Beacon beacon, Query query) {
         String res = null;

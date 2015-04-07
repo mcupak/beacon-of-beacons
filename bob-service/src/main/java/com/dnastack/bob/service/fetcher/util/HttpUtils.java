@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.processor.util;
+package com.dnastack.bob.service.fetcher.util;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

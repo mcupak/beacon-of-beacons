@@ -34,9 +34,9 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.inject.Named;
 
-import static com.dnastack.bob.service.processor.util.HttpUtils.createRequest;
-import static com.dnastack.bob.service.processor.util.HttpUtils.executeRequest;
-import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizeChromosome;
+import static com.dnastack.bob.service.converter.util.ConvertUtils.denormalizeChromosome;
+import static com.dnastack.bob.service.fetcher.util.HttpUtils.createRequest;
+import static com.dnastack.bob.service.fetcher.util.HttpUtils.executeRequest;
 
 /**
  * A Genomics Alliance beacon service at UCSC.
@@ -47,7 +47,7 @@ import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizeChro
 @Stateless
 @Named
 @LocalBean
-public class UcscBeaconProcessor extends AbstractBeaconProcessor {
+public class UcscBeaconProcessor  {
 
     private static final long serialVersionUID = 13L;
     private static final String BASE_URL = "http://hgwdev-max.cse.ucsc.edu/cgi-bin/beacon/query";
@@ -60,7 +60,6 @@ public class UcscBeaconProcessor extends AbstractBeaconProcessor {
         return BASE_URL + params;
     }
 
-    @Override
     @Asynchronous
     public Future<String> getQueryResponse(Beacon beacon, Query query) {
         String res = null;

@@ -24,7 +24,7 @@
 package com.dnastack.bob.service.parser.impl;
 
 import com.dnastack.bob.persistence.entity.Beacon;
-import com.dnastack.bob.service.parser.api.BeaconResponseParser;
+import com.dnastack.bob.service.parser.api.ResponseParser;
 import java.io.Serializable;
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
@@ -34,10 +34,9 @@ import javax.ejb.Stateless;
 import javax.inject.Named;
 
 import static com.dnastack.bob.service.parser.util.ParseUtils.parseBooleanFromJson;
-import static com.dnastack.bob.service.parser.util.ParseUtils.parseStringFromJson;
 
 /**
- * Parses response->exists field from JSON with null conversion.
+ * Parses cafe-prefixed responses.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
@@ -45,22 +44,26 @@ import static com.dnastack.bob.service.parser.util.ParseUtils.parseStringFromJso
 @Stateless
 @Named
 @LocalBean
-public class JsonResponseExistsNullAsFalseBeaconResponseParser implements BeaconResponseParser, Serializable {
+public class JsonCafeResponseParser implements ResponseParser, Serializable {
 
-    private static final long serialVersionUID = 8528412790574916621L;
+    private static final long serialVersionUID = 6472531100065834529L;
+    private static final String BEACON_PREFIX = "cafe-";
+    private static final String RESPONSE_FIELD = "response";
+
+    private String getJsonFieldName(Beacon b) {
+        String res = null;
+        if (b.getId().startsWith(BEACON_PREFIX)) {
+            res = b.getId().substring(BEACON_PREFIX.length()) + "_" + RESPONSE_FIELD;
+        } else {
+            res = b.getId() + "_" + RESPONSE_FIELD;
+        }
+        return res;
+    }
 
     @Asynchronous
     @Override
     public Future<Boolean> parseQueryResponse(Beacon b, String response) {
-        Boolean res = parseBooleanFromJson(response, "response", "exists");
-
-        // the beacon uses null as false, convert
-        if (res == null) {
-            String s = parseStringFromJson(response, "response", "exists");
-            if ("null".equals(s)) {
-                res = false;
-            }
-        }
+        Boolean res = parseBooleanFromJson(response, RESPONSE_FIELD, getJsonFieldName(b));
 
         return new AsyncResult<>(res);
     }

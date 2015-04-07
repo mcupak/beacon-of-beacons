@@ -21,60 +21,59 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.processor.impl;
+package com.dnastack.bob.service.fetcher.impl;
 
-import com.dnastack.bob.persistence.entity.Beacon;
-import com.dnastack.bob.persistence.entity.Query;
+import com.dnastack.bob.service.fetcher.api.ResponseFetcher;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.enterprise.context.Dependent;
 import javax.inject.Named;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
-import static com.dnastack.bob.service.processor.util.HttpUtils.createRequest;
-import static com.dnastack.bob.service.processor.util.HttpUtils.executeRequest;
-import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizeAllele;
-import static com.dnastack.bob.service.processor.util.QueryUtils.denormalizeChromosome;
+import static com.dnastack.bob.service.fetcher.util.HttpUtils.createRequest;
+import static com.dnastack.bob.service.fetcher.util.HttpUtils.executeRequest;
 
 /**
- * AMPLab beacon service.
+ * Fetcher of beacon responses via HTTP POST.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
 @Stateless
 @Named
+@Dependent
 @LocalBean
-public class AmpLabBeaconProcessor extends AbstractBeaconProcessor {
+public class PostResponseFetcher implements ResponseFetcher, Serializable {
 
-    private static final long serialVersionUID = 10L;
-    private static final String BASE_URL = "http://beacon.eecs.berkeley.edu/beacon.php";
-    private static final String CHROM_TEMPLATE = "chr%s";
+    private static final long serialVersionUID = -7691864900796853059L;
 
-    private List<NameValuePair> getQueryData(String ref, String chrom, Long pos, String allele) {
+    private List<NameValuePair> getQueryPayload(Map<String, String> payload) {
         List<NameValuePair> nvs = new ArrayList<>();
-        // so far there is only 1 population
-        nvs.add(new BasicNameValuePair("population", "1000genomes"));
-        nvs.add(new BasicNameValuePair("genome", ref));
-        nvs.add(new BasicNameValuePair("chr", chrom));
-        nvs.add(new BasicNameValuePair("coord", pos.toString()));
-        nvs.add(new BasicNameValuePair("allele", allele));
+
+        for (Entry<String, String> e : payload.entrySet()) {
+            nvs.add(new BasicNameValuePair(e.getKey(), e.getValue()));
+        }
 
         return nvs;
+
     }
 
     @Override
     @Asynchronous
-    public Future<String> getQueryResponse(Beacon beacon, Query query) {
+    public Future<String> getQueryResponse(String url, Map<String, String> payload) {
         String res = null;
         try {
-            res = executeRequest(createRequest(BASE_URL, true, getQueryData(query.getReference().toString(), denormalizeChromosome(CHROM_TEMPLATE, query.getChromosome()), query.getPosition(), denormalizeAllele(query.getAllele()))));
+            res = executeRequest(createRequest(url, true, getQueryPayload(payload)));
         } catch (UnsupportedEncodingException ex) {
             // ignore, already null
         }

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 DNAstack.
+ * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,23 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.persistence.impl;
+package com.dnastack.bob.service.parser.impl;
 
-import com.dnastack.bob.persistence.api.DataUseDao;
-import com.dnastack.bob.persistence.entity.DataUse;
-import javax.enterprise.context.Dependent;
+import com.dnastack.bob.persistence.entity.Beacon;
+import com.dnastack.bob.service.parser.api.ResponseParser;
+import java.io.Serializable;
+import java.util.concurrent.Future;
+import javax.ejb.AsyncResult;
+import javax.ejb.Asynchronous;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
 import javax.inject.Named;
 
+import static com.dnastack.bob.service.parser.util.ParseUtils.parseYesNoCaseInsensitive;
+
 /**
- * JPA-based implementation of data use DAO.
+ * Parses "yes" and "no" strings.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
+@Stateless
 @Named
-@Dependent
-public class DataUseDaoImpl extends AbstractEntityWithLongIdDaoImpl<DataUse> implements DataUseDao {
+@LocalBean
+public class StringYesNoResponseParser implements ResponseParser, Serializable {
 
-    private static final long serialVersionUID = -3202753985625190279L;
+    private static final long serialVersionUID = -4790485566013440026L;
 
+    @Asynchronous
+    @Override
+    public Future<Boolean> parseQueryResponse(Beacon b, String response) {
+        Boolean res = parseYesNoCaseInsensitive(response);
+
+        return new AsyncResult<>(res);
+    }
 }

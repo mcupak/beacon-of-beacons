@@ -71,8 +71,16 @@ public class Beacon implements BasicEntity {
     private String homePage;
     private String email;
     private String auth;
+
     private String processor;
     private String parser;
+    private String fetcher;
+    private String requester;
+    private String chromosomeConverter;
+    private String positionConverter;
+    private String alleleConverter;
+    private String referenceConverter;
+
     @NotNull
     @ElementCollection
     // TODO: query from datasets or cache properly
@@ -94,6 +102,7 @@ public class Beacon implements BasicEntity {
     public Beacon() {
         visible = true;
         enabled = true;
+        aggregator = false;
     }
 
     public String getId() {
@@ -112,28 +121,12 @@ public class Beacon implements BasicEntity {
         this.name = name;
     }
 
-    public String getProcessor() {
-        return processor;
+    public String getUrl() {
+        return url;
     }
 
-    public void setProcessor(String processor) {
-        this.processor = processor;
-    }
-
-    public Set<Beacon> getParents() {
-        return parents;
-    }
-
-    public void setParents(Set<Beacon> parents) {
-        this.parents = parents;
-    }
-
-    public Set<Beacon> getChildren() {
-        return children;
-    }
-
-    public void setChildren(Set<Beacon> children) {
-        this.children = children;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public Organization getOrganization() {
@@ -184,20 +177,84 @@ public class Beacon implements BasicEntity {
         this.auth = auth;
     }
 
+    public String getProcessor() {
+        return processor;
+    }
+
+    public void setProcessor(String processor) {
+        this.processor = processor;
+    }
+
+    public String getParser() {
+        return parser;
+    }
+
+    public void setParser(String parser) {
+        this.parser = parser;
+    }
+
+    public String getFetcher() {
+        return fetcher;
+    }
+
+    public void setFetcher(String fetcher) {
+        this.fetcher = fetcher;
+    }
+
+    public String getRequester() {
+        return requester;
+    }
+
+    public void setRequester(String requester) {
+        this.requester = requester;
+    }
+
+    public String getChromosomeConverter() {
+        return chromosomeConverter;
+    }
+
+    public void setChromosomeConverter(String chromosomeConverter) {
+        this.chromosomeConverter = chromosomeConverter;
+    }
+
+    public String getPositionConverter() {
+        return positionConverter;
+    }
+
+    public void setPositionConverter(String positionConverter) {
+        this.positionConverter = positionConverter;
+    }
+
+    public String getAlleleConverter() {
+        return alleleConverter;
+    }
+
+    public void setAlleleConverter(String alleleConverter) {
+        this.alleleConverter = alleleConverter;
+    }
+
+    public String getReferenceConverter() {
+        return referenceConverter;
+    }
+
+    public void setReferenceConverter(String referenceConverter) {
+        this.referenceConverter = referenceConverter;
+    }
+
+    public Set<Reference> getSupportedReferences() {
+        return supportedReferences;
+    }
+
+    public void setSupportedReferences(Set<Reference> supportedReferences) {
+        this.supportedReferences = supportedReferences;
+    }
+
     public Boolean getVisible() {
         return visible;
     }
 
     public void setVisible(Boolean visible) {
         this.visible = visible;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     public Boolean getEnabled() {
@@ -216,20 +273,20 @@ public class Beacon implements BasicEntity {
         this.aggregator = aggregator;
     }
 
-    public String getParser() {
-        return parser;
+    public Set<Beacon> getParents() {
+        return parents;
     }
 
-    public void setParser(String parser) {
-        this.parser = parser;
+    public void setParents(Set<Beacon> parents) {
+        this.parents = parents;
     }
 
-    public Set<Reference> getSupportedReferences() {
-        return supportedReferences;
+    public Set<Beacon> getChildren() {
+        return children;
     }
 
-    public void setSupportedReferences(Set<Reference> supportedReferences) {
-        this.supportedReferences = supportedReferences;
+    public void setChildren(Set<Beacon> children) {
+        this.children = children;
     }
 
     @Override
@@ -256,7 +313,7 @@ public class Beacon implements BasicEntity {
 
     @Override
     public String toString() {
-        return "Beacon{" + "id=" + id + ", name=" + name + ", url=" + url + ", description=" + description + ", api=" + api + ", homePage=" + homePage + ", email=" + email + ", auth=" + auth + ", processor=" + processor + ", visible=" + visible + ", enabled=" + enabled + ", aggregator=" + aggregator + '}';
+        return "Beacon{" + "id=" + id + ", name=" + name + ", url=" + url + ", organization=" + organization + ", description=" + description + ", api=" + api + ", homePage=" + homePage + ", email=" + email + ", auth=" + auth + ", processor=" + processor + ", parser=" + parser + ", fetcher=" + fetcher + ", requester=" + requester + ", chromosomeConverter=" + chromosomeConverter + ", positionConverter=" + positionConverter + ", alleleConverter=" + alleleConverter + ", referenceConverter=" + referenceConverter + ", supportedReferences=" + supportedReferences + ", visible=" + visible + ", enabled=" + enabled + ", aggregator=" + aggregator + '}';
     }
 
 }
