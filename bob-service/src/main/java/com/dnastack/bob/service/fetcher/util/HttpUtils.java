@@ -26,11 +26,14 @@ package com.dnastack.bob.service.fetcher.util;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import javax.enterprise.context.Dependent;
+import javax.inject.Named;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -39,22 +42,26 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
+import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
+
 /**
  * Util methods for querying over HTTP.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
+@Named
+@Dependent
 public class HttpUtils {
 
-    private static HttpGet createGet(String url) {
+    private HttpGet createGet(String url) {
         HttpGet httpGet;
         httpGet = new HttpGet(url);
 
         return httpGet;
     }
 
-    private static HttpPost createPost(String url, List<NameValuePair> data) throws UnsupportedEncodingException {
+    private HttpPost createPost(String url, List<NameValuePair> data) throws UnsupportedEncodingException {
         HttpPost httpPost = new HttpPost(url);
         httpPost.setEntity(new UrlEncodedFormEntity(data));
 
@@ -72,7 +79,7 @@ public class HttpUtils {
      *
      * @throws UnsupportedEncodingException
      */
-    public static HttpRequestBase createRequest(String url, boolean post, List<NameValuePair> data) throws UnsupportedEncodingException {
+    public HttpRequestBase createRequest(String url, boolean post, List<NameValuePair> data) throws UnsupportedEncodingException {
         return (post) ? createPost(url, data) : createGet(url);
     }
 
@@ -83,10 +90,12 @@ public class HttpUtils {
      *
      * @return response
      */
-    public static String executeRequest(HttpRequestBase request) {
+    public String executeRequest(HttpRequestBase request) {
         String response = null;
 
-        CloseableHttpClient httpclient = HttpClients.createDefault();
+        RequestConfig config = RequestConfig.custom().setSocketTimeout(REQUEST_TIMEOUT * 1000).setConnectTimeout(REQUEST_TIMEOUT * 1000).setConnectionRequestTimeout(REQUEST_TIMEOUT * 1000).build();
+        CloseableHttpClient httpClient = HttpClients.custom().setDefaultRequestConfig(config).build();
+
         try {
             ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
 
@@ -102,12 +111,12 @@ public class HttpUtils {
                 }
             };
 
-            response = httpclient.execute(request, responseHandler);
+            response = httpClient.execute(request, responseHandler);
         } catch (IOException ex) {
             // ignore, response already set to null
         } finally {
             try {
-                httpclient.close();
+                httpClient.close();
             } catch (IOException ex) {
                 // ignore
             }
