@@ -4,6 +4,7 @@
 
 * [What it is](#what-it-is)
 * [System requirements](#system-requirements)
+* [How to set up the runtime](#how-to-set-up-the-runtime)
 * [How to run it](#how-to-run-it)
 * [How to test it](#how-to-test-it)
 * [How to use it](#how-to-use-it)
@@ -14,6 +15,11 @@ Beacon of Beacons Project (BoB) provides a unified REST API to publicly availabl
 
 ##System requirements
 Java 1.7 or newer, Maven 3.1 or newer, Java EE runtime (WildFly 8 recommended).
+
+## How to set up the runtime
+BoB needs access to a database through a JTA datasource (`java:/jboss/datasources/bob`). Make sure you have the required datasource on your application server or change the configuration in `persistence.xml`.
+
+As BoB can execute many queries in parallel, it's advisable to increase the pool sizes for EJB subsystem in Wildfly, particularly `slsb-strict-max-pool` (`bean-instance-pools`) and `default` (`thread-pools`).
 
 ##How to run it
 Start the server:
@@ -29,7 +35,7 @@ Deploy BoB (from `bob-rest` module):
 
     mvn wildfly:deploy
 
-After deployment, the application will be running on <http://localhost:8080/>. Note that bob needs access to a database through a JTA datasource (`java:/jboss/datasources/bob`). Make sure you have the required datasource on your application server or change the configuration in `persistence.xml`.
+After deployment, the application will be running on <http://localhost:8080/>.
 
 To undeploy BoB when you're done, run:
 

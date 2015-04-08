@@ -39,6 +39,7 @@ import com.dnastack.bob.service.parser.api.ResponseParser;
 import com.dnastack.bob.service.processor.api.BeaconProcessor;
 import com.dnastack.bob.service.requester.api.RequestConstructor;
 import com.dnastack.bob.service.util.CdiBeanResolver;
+import com.dnastack.bob.service.util.EjbResolver;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,11 +50,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
-import javax.ejb.LocalBean;
+import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.naming.NamingException;
+import org.jboss.logging.Logger;
 
 import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
 
@@ -66,13 +69,19 @@ import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
 @Stateless
 @Named
 @Dependent
-@LocalBean
+@Local(BeaconProcessor.class)
 public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
 
     private static final long serialVersionUID = 10L;
 
     @Inject
-    private CdiBeanResolver resolver;
+    private CdiBeanResolver cdiResolver;
+
+    @Inject
+    private EjbResolver ejbResolver;
+
+    @Inject
+    private Logger logger;
 
     private List<Future<String>> executeQueriesInParallel(Beacon beacon, Query query) {
         List<Future<String>> fs = new ArrayList<>();
@@ -84,25 +93,25 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
         PositionConverter positionConverter;
         AlleleConverter alleleConverter;
         try {
-            fetcher = (ResponseFetcher) resolver.resolve(beacon.getFetcher());
-            requester = (RequestConstructor) resolver.resolve(beacon.getRequester());
-            chromosomeConverter = (ChromosomeConverter) resolver.resolve(beacon.getChromosomeConverter());
+            fetcher = (ResponseFetcher) ejbResolver.resolve(beacon.getFetcher());
+            requester = (RequestConstructor) cdiResolver.resolve(beacon.getRequester());
+            chromosomeConverter = (ChromosomeConverter) cdiResolver.resolve(beacon.getChromosomeConverter());
             if (chromosomeConverter == null) {
-                chromosomeConverter = (ChromosomeConverter) resolver.resolve(resolver.getClassId(EmptyChromosomeConverter.class));
+                chromosomeConverter = (ChromosomeConverter) cdiResolver.resolve(cdiResolver.getClassId(EmptyChromosomeConverter.class));
             }
-            referenceConverter = (ReferenceConverter) resolver.resolve(beacon.getReferenceConverter());
+            referenceConverter = (ReferenceConverter) cdiResolver.resolve(beacon.getReferenceConverter());
             if (referenceConverter == null) {
-                referenceConverter = (ReferenceConverter) resolver.resolve(resolver.getClassId(EmptyReferenceConverter.class));
+                referenceConverter = (ReferenceConverter) cdiResolver.resolve(cdiResolver.getClassId(EmptyReferenceConverter.class));
             }
-            positionConverter = (PositionConverter) resolver.resolve(beacon.getPositionConverter());
+            positionConverter = (PositionConverter) cdiResolver.resolve(beacon.getPositionConverter());
             if (positionConverter == null) {
-                positionConverter = (PositionConverter) resolver.resolve(resolver.getClassId(EmptyPositionConverter.class));
+                positionConverter = (PositionConverter) cdiResolver.resolve(cdiResolver.getClassId(EmptyPositionConverter.class));
             }
-            alleleConverter = (AlleleConverter) resolver.resolve(beacon.getAlleleConverter());
+            alleleConverter = (AlleleConverter) cdiResolver.resolve(beacon.getAlleleConverter());
             if (alleleConverter == null) {
-                alleleConverter = (AlleleConverter) resolver.resolve(resolver.getClassId(EmptyAlleleConverter.class));
+                alleleConverter = (AlleleConverter) cdiResolver.resolve(cdiResolver.getClassId(EmptyAlleleConverter.class));
             }
-        } catch (ClassNotFoundException ex) {
+        } catch (ClassNotFoundException | NamingException ex) {
             return fs;
         }
 
@@ -127,9 +136,9 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
         List<Future<Boolean>> bs = new ArrayList<>();
         for (Future<String> f : fs) {
             try {
-                bs.add(((ResponseParser) resolver.resolve(b.getParser())).parseQueryResponse(b, f.get(REQUEST_TIMEOUT, TimeUnit.SECONDS)));
-            } catch (InterruptedException | ExecutionException | TimeoutException | ClassNotFoundException ex) {
-                // ignore
+                bs.add(((ResponseParser) ejbResolver.resolve(b.getParser())).parseQueryResponse(b, f));
+            } catch (Exception ex) {
+                logger.error(ex.getMessage());
             }
         }
 
@@ -144,7 +153,7 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
             try {
                 r = b.get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
             } catch (InterruptedException | ExecutionException | TimeoutException ex) {
-                // ignore, already null
+                logger.error(ex.getMessage());
             }
             if (r != null) {
                 if (r) {
@@ -165,7 +174,6 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
     @Asynchronous
     public Future<Boolean> executeQuery(Beacon beacon, Query query) {
         Boolean res = null;
-
         if (query != null) {
             res = collectResults(parseResultsInParallel(beacon, executeQueriesInParallel(beacon, query)));
         }

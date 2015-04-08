@@ -23,9 +23,9 @@
  */
 package com.dnastack.bob.rest.resource;
 
-import com.dnastack.bob.service.dto.BeaconResponseTo;
 import com.dnastack.bob.rest.util.BeaconResponseToComparator;
-import com.dnastack.bob.service.impl.BeaconResponseServiceImpl;
+import com.dnastack.bob.service.api.BeaconResponseService;
+import com.dnastack.bob.service.dto.BeaconResponseTo;
 import com.dnastack.bob.service.parser.util.ParseUtils;
 import java.util.Collection;
 import java.util.Set;
@@ -53,10 +53,13 @@ import javax.ws.rs.core.MediaType;
 public class BeaconResponseResource {
 
     @Inject
-    private BeaconResponseServiceImpl beaconResponseService;
+    private BeaconResponseService beaconResponseService;
 
     @Inject
     private BeaconResponseToComparator beaconResponseComparator;
+
+    @Inject
+    private ParseUtils parseUtils;
 
     /**
      * Query a given beacon
@@ -94,7 +97,7 @@ public class BeaconResponseResource {
         if (beaconIds == null) {
             brs.addAll(beaconResponseService.queryAll(chrom, pos, allele, ref));
         } else {
-            brs.addAll(beaconResponseService.queryBeacons(ParseUtils.parseMultipleParameterValues(beaconIds), chrom, pos, allele, ref));
+            brs.addAll(beaconResponseService.queryBeacons(parseUtils.parseMultipleParameterValues(beaconIds), chrom, pos, allele, ref));
         }
 
         return brs;

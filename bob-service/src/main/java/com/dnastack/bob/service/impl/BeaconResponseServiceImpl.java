@@ -35,8 +35,8 @@ import com.dnastack.bob.service.lrg.Brca2;
 import com.dnastack.bob.service.lrg.LrgConvertor;
 import com.dnastack.bob.service.lrg.LrgLocus;
 import com.dnastack.bob.service.lrg.LrgReference;
+import com.dnastack.bob.service.processor.api.BeaconProcessor;
 import com.dnastack.bob.service.processor.api.BeaconResponse;
-import com.dnastack.bob.service.processor.impl.ParallelBeaconProcessor;
 import com.dnastack.bob.service.util.CdiBeanResolver;
 import com.dnastack.bob.service.util.Entity2ToConvertor;
 import com.google.common.collect.HashMultimap;
@@ -55,7 +55,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.regex.Pattern;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
-import javax.ejb.LocalBean;
+import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
@@ -73,7 +73,7 @@ import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
  * @version 1.0
  */
 @Stateless
-@LocalBean
+@Local(BeaconResponseService.class)
 @Named
 @Dependent
 @Transactional
@@ -85,7 +85,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
     private BeaconDao beaconDao;
 
     @Inject
-    private ParallelBeaconProcessor beaconProcessor;
+    private BeaconProcessor beaconProcessor;
 
     @Inject
     private CdiBeanResolver pr;
@@ -193,7 +193,6 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
                 } catch (InterruptedException | ExecutionException | TimeoutException ex) {
                     // ignore, response already null
                 }
-                System.out.println("-------- " + e.getKey() + ": " + res);
                 if (res != null && res) {
                     total = true;
                 }

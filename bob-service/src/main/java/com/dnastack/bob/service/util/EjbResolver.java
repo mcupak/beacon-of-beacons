@@ -24,31 +24,42 @@
 package com.dnastack.bob.service.util;
 
 import java.io.Serializable;
-import javax.annotation.Resource;
-import javax.ejb.Singleton;
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 /**
- * Computes string identifier for a processor and vice-versa.
+ * EJB lookup executor.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Singleton
+@ApplicationScoped
 public class EjbResolver implements Serializable {
 
     private static final long serialVersionUID = 8760528174400816670L;
     private static final String LOOKUP_PREFIX = "java:app/bob-rest/";
 
-    @Resource
     private InitialContext ctx;
+
+    @PostConstruct
+    private void init() {
+        try {
+            ctx = new InitialContext();
+        } catch (NamingException ex) {
+            ctx = null;
+        }
+    }
 
     public String getClassId(Class<?> clazz) {
         return (clazz == null) ? null : LOOKUP_PREFIX + clazz.getSimpleName();
     }
 
     public Object resolve(String id) throws NamingException {
+        if (ctx == null) {
+            throw new NullPointerException("ctx");
+        }
         return ctx.lookup(id);
     }
 }

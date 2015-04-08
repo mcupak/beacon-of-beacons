@@ -25,15 +25,21 @@ package com.dnastack.bob.service.parser.impl;
 
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.service.parser.api.ResponseParser;
+import com.dnastack.bob.service.parser.util.ParseUtils;
 import java.io.Serializable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
-import javax.ejb.LocalBean;
+import javax.ejb.Local;
 import javax.ejb.Stateless;
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 import javax.inject.Named;
 
-import static com.dnastack.bob.service.parser.util.ParseUtils.parseBooleanFromJson;
+import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
 
 /**
  * Parses cafe-prefixed responses.
@@ -43,12 +49,15 @@ import static com.dnastack.bob.service.parser.util.ParseUtils.parseBooleanFromJs
  */
 @Stateless
 @Named
-@LocalBean
+@Dependent
+@Local(ResponseParser.class)
 public class JsonCafeResponseParser implements ResponseParser, Serializable {
 
     private static final long serialVersionUID = 6472531100065834529L;
     private static final String BEACON_PREFIX = "cafe-";
     private static final String RESPONSE_FIELD = "response";
+    @Inject
+    private ParseUtils parseUtils;
 
     private String getJsonFieldName(Beacon b) {
         String res = null;
@@ -62,8 +71,13 @@ public class JsonCafeResponseParser implements ResponseParser, Serializable {
 
     @Asynchronous
     @Override
-    public Future<Boolean> parseQueryResponse(Beacon b, String response) {
-        Boolean res = parseBooleanFromJson(response, RESPONSE_FIELD, getJsonFieldName(b));
+    public Future<Boolean> parseQueryResponse(Beacon b, Future<String> response) {
+        Boolean res = null;
+        try {
+            res = parseUtils.parseBooleanFromJson(response.get(REQUEST_TIMEOUT, TimeUnit.SECONDS), RESPONSE_FIELD, getJsonFieldName(b));
+        } catch (InterruptedException | ExecutionException | TimeoutException ex) {
+            // ignore
+        }
 
         return new AsyncResult<>(res);
     }

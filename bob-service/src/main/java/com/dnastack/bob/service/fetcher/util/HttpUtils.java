@@ -26,21 +26,24 @@ package com.dnastack.bob.service.fetcher.util;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
+import org.apache.http.StatusLine;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.jboss.logging.Logger;
 
 import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
 
@@ -53,6 +56,28 @@ import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
 @Named
 @Dependent
 public class HttpUtils {
+
+    @Inject
+    private Logger logger;
+
+    private CloseableHttpClient httpClient;
+
+    @PostConstruct
+    private void init() {
+        RequestConfig config = RequestConfig.custom().setSocketTimeout(REQUEST_TIMEOUT * 1000).setConnectTimeout(REQUEST_TIMEOUT * 1000).setConnectionRequestTimeout(REQUEST_TIMEOUT * 1000).build();
+        httpClient = HttpClients.custom().setDefaultRequestConfig(config).build();
+    }
+
+    @PreDestroy
+    private void close() {
+        if (httpClient != null) {
+            try {
+                httpClient.close();
+            } catch (IOException ex) {
+                logger.error(ex.getMessage());
+            }
+        }
+    }
 
     private HttpGet createGet(String url) {
         HttpGet httpGet;
@@ -93,35 +118,24 @@ public class HttpUtils {
     public String executeRequest(HttpRequestBase request) {
         String response = null;
 
-        RequestConfig config = RequestConfig.custom().setSocketTimeout(REQUEST_TIMEOUT * 1000).setConnectTimeout(REQUEST_TIMEOUT * 1000).setConnectionRequestTimeout(REQUEST_TIMEOUT * 1000).build();
-        CloseableHttpClient httpClient = HttpClients.custom().setDefaultRequestConfig(config).build();
-
+        CloseableHttpResponse res = null;
         try {
-            ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
-
-                @Override
-                public String handleResponse(final HttpResponse response) throws ClientProtocolException, IOException {
-                    int status = response.getStatusLine().getStatusCode();
-                    if (status >= 200 && status < 300) {
-                        HttpEntity entity = response.getEntity();
-                        return entity != null ? EntityUtils.toString(entity) : null;
-                    } else {
-                        throw new ClientProtocolException("Unexpected response status: " + status);
-                    }
-                }
-            };
-
-            response = httpClient.execute(request, responseHandler);
+            res = httpClient.execute(request);
+            StatusLine line = res.getStatusLine();
+            int status = line.getStatusCode();
+            HttpEntity entity = res.getEntity();
+            response = (entity == null) ? null : EntityUtils.toString(entity);
         } catch (IOException ex) {
-            // ignore, response already set to null
+            logger.error(ex.getMessage());
         } finally {
             try {
-                httpClient.close();
+                if (res != null) {
+                    res.close();
+                }
             } catch (IOException ex) {
-                // ignore
+                logger.error(ex.getMessage());
             }
         }
-
         return response;
     }
 }

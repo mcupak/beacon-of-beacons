@@ -25,16 +25,21 @@ package com.dnastack.bob.service.parser.impl;
 
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.service.parser.api.ResponseParser;
+import com.dnastack.bob.service.parser.util.ParseUtils;
 import java.io.Serializable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
-import javax.ejb.LocalBean;
+import javax.ejb.Local;
 import javax.ejb.Stateless;
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 import javax.inject.Named;
 
-import static com.dnastack.bob.service.parser.util.ParseUtils.parseBooleanFromJson;
-import static com.dnastack.bob.service.parser.util.ParseUtils.parseStringFromJson;
+import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
 
 /**
  * Parses response->exists field from JSON with null conversion.
@@ -44,24 +49,34 @@ import static com.dnastack.bob.service.parser.util.ParseUtils.parseStringFromJso
  */
 @Stateless
 @Named
-@LocalBean
+@Dependent
+@Local(ResponseParser.class)
 public class JsonResponseExistsNullAsFalseResponseParser implements ResponseParser, Serializable {
 
     private static final long serialVersionUID = 8528412790574916621L;
 
+    @Inject
+    private ParseUtils parseUtils;
+
     @Asynchronous
     @Override
-    public Future<Boolean> parseQueryResponse(Beacon b, String response) {
-        Boolean res = parseBooleanFromJson(response, "response", "exists");
+    public Future<Boolean> parseQueryResponse(Beacon b, Future<String> response) {
+        Boolean res = null;
+        try {
+            String str = response.get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
+            res = parseUtils.parseBooleanFromJson(str, "response", "exists");
 
-        // the beacon uses null as false, convert
-        if (res == null) {
-            String s = parseStringFromJson(response, "response", "exists");
-            if ("null".equals(s)) {
-                res = false;
+            // the beacon uses null as false, convert
+            if (res == null) {
+                String s = null;
+                s = parseUtils.parseStringFromJson(str, "response", "exists");
+                if ("null".equals(s)) {
+                    res = false;
+                }
             }
+        } catch (InterruptedException | ExecutionException | TimeoutException ex) {
+            // ignore
         }
-
         return new AsyncResult<>(res);
     }
 }

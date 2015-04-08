@@ -54,6 +54,8 @@ import org.junit.runner.Description;
  */
 public abstract class BasicTest {
 
+    private static HttpUtils httpUtils = new HttpUtils();
+
     @Rule
     public TestRule watcher = new TestWatcher() {
         @Override
@@ -88,7 +90,7 @@ public abstract class BasicTest {
 
     public static String readResponse(String url) {
         try {
-            return HttpUtils.executeRequest(HttpUtils.createRequest(url, false, null));
+            return httpUtils.executeRequest(httpUtils.createRequest(url, false, null));
         } catch (UnsupportedEncodingException ex) {
             return null;
         }

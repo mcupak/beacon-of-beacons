@@ -24,20 +24,19 @@
 package com.dnastack.bob.service.fetcher.impl;
 
 import com.dnastack.bob.service.fetcher.api.ResponseFetcher;
+import com.dnastack.bob.service.fetcher.util.HttpUtils;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
-import javax.ejb.LocalBean;
+import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.http.client.methods.HttpRequestBase;
-
-import static com.dnastack.bob.service.fetcher.util.HttpUtils.createRequest;
-import static com.dnastack.bob.service.fetcher.util.HttpUtils.executeRequest;
 
 /**
  * Fetcher of beacon responses via HTTP GET.
@@ -48,19 +47,22 @@ import static com.dnastack.bob.service.fetcher.util.HttpUtils.executeRequest;
 @Stateless
 @Named
 @Dependent
-@LocalBean
+@Local(ResponseFetcher.class)
 public class GetResponseFetcher implements ResponseFetcher, Serializable {
 
     private static final long serialVersionUID = -596515080054098873L;
+
+    @Inject
+    private HttpUtils httpUtils;
 
     @Override
     @Asynchronous
     public Future<String> getQueryResponse(String url, Map<String, String> payload) {
         String res = null;
         try {
-            HttpRequestBase request = createRequest(url, false, null);
+            HttpRequestBase request = httpUtils.createRequest(url, false, null);
             request.setHeader("Accept", "application/json, text/plain");
-            res = executeRequest(request);
+            res = httpUtils.executeRequest(request);
         } catch (UnsupportedEncodingException ex) {
             // ignore, already null
         }

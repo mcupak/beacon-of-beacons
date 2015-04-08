@@ -25,15 +25,22 @@ package com.dnastack.bob.service.parser.impl;
 
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.service.parser.api.ResponseParser;
+import com.dnastack.bob.service.parser.util.ParseUtils;
 import java.io.Serializable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
-import javax.ejb.LocalBean;
+import javax.ejb.Local;
 import javax.ejb.Stateless;
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 import javax.inject.Named;
+import org.json.JSONException;
 
-import static com.dnastack.bob.service.parser.util.ParseUtils.parseBooleanFromJson;
+import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
 
 /**
  * Parses exists field from JSON.
@@ -43,15 +50,24 @@ import static com.dnastack.bob.service.parser.util.ParseUtils.parseBooleanFromJs
  */
 @Stateless
 @Named
-@LocalBean
+@Dependent
+@Local(ResponseParser.class)
 public class JsonExistsResponseParser implements ResponseParser, Serializable {
 
     private static final long serialVersionUID = -1035262558628936107L;
 
+    @Inject
+    private ParseUtils parseUtils;
+
     @Asynchronous
     @Override
-    public Future<Boolean> parseQueryResponse(Beacon b, String response) {
-        Boolean res = parseBooleanFromJson(response, "exists");
+    public synchronized Future<Boolean> parseQueryResponse(Beacon b, Future<String> response) {
+        Boolean res = null;
+        try {
+            res = parseUtils.parseBooleanFromJson(response.get(REQUEST_TIMEOUT, TimeUnit.SECONDS), "exists");
+        } catch (InterruptedException | ExecutionException | JSONException | TimeoutException ex) {
+            // ignore
+        }
 
         return new AsyncResult<>(res);
     }

@@ -31,7 +31,7 @@ import com.dnastack.bob.service.util.Entity2ToConvertor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import javax.ejb.LocalBean;
+import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -44,7 +44,7 @@ import javax.transaction.Transactional;
  * @version 1.0
  */
 @Stateless
-@LocalBean
+@Local(BeaconService.class)
 @Named
 @Transactional
 public class BeaconServiceImpl implements BeaconService {

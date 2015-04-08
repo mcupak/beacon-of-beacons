@@ -25,15 +25,21 @@ package com.dnastack.bob.service.parser.impl;
 
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.service.parser.api.ResponseParser;
+import com.dnastack.bob.service.parser.util.ParseUtils;
 import java.io.Serializable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
-import javax.ejb.LocalBean;
+import javax.ejb.Local;
 import javax.ejb.Stateless;
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 import javax.inject.Named;
 
-import static com.dnastack.bob.service.parser.util.ParseUtils.parseYesNoCaseInsensitive;
+import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
 
 /**
  * Parses "yes" and "no" strings.
@@ -43,16 +49,25 @@ import static com.dnastack.bob.service.parser.util.ParseUtils.parseYesNoCaseInse
  */
 @Stateless
 @Named
-@LocalBean
+@Dependent
+@Local(ResponseParser.class)
 public class StringYesNoResponseParser implements ResponseParser, Serializable {
 
     private static final long serialVersionUID = -4790485566013440026L;
+    @Inject
+    private ParseUtils parseUtils;
 
     @Asynchronous
     @Override
-    public Future<Boolean> parseQueryResponse(Beacon b, String response) {
-        Boolean res = parseYesNoCaseInsensitive(response);
-
+    public Future<Boolean> parseQueryResponse(Beacon b, Future<String> response) {
+        Boolean res = null;
+        System.out.println(b.getId() + ": " + Thread.currentThread().getId());
+        try {
+            res = parseUtils.parseYesNoCaseInsensitive(response.get(REQUEST_TIMEOUT, TimeUnit.SECONDS));
+        } catch (InterruptedException | ExecutionException | TimeoutException ex) {
+            // ignore
+        }
+System.out.println(b.getId() + ": " + Thread.currentThread().getId() + ": " + res);
         return new AsyncResult<>(res);
     }
 }

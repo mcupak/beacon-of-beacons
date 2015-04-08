@@ -25,8 +25,8 @@ package com.dnastack.bob.rest.resource;
 
 import com.dnastack.bob.rest.util.BeaconToComparator;
 import com.dnastack.bob.rest.util.NameComparator;
+import com.dnastack.bob.service.api.BeaconService;
 import com.dnastack.bob.service.dto.BeaconTo;
-import com.dnastack.bob.service.impl.BeaconServiceImpl;
 import com.dnastack.bob.service.parser.util.ParseUtils;
 import java.net.HttpURLConnection;
 import java.util.Collection;
@@ -56,11 +56,14 @@ import javax.ws.rs.core.MediaType;
 public class BeaconResource {
 
     @Inject
-    private BeaconServiceImpl beaconService;
+    private BeaconService beaconService;
 
     @Inject
     @NameComparator
     private BeaconToComparator beaconComparator;
+
+    @Inject
+    private ParseUtils parseUtils;
 
     /**
      * Shows beacon details.
@@ -92,7 +95,7 @@ public class BeaconResource {
         if (beaconIds == null) {
             bs.addAll(beaconService.getAll());
         } else {
-            bs.addAll(beaconService.getBeacons(ParseUtils.parseMultipleParameterValues(beaconIds)));
+            bs.addAll(beaconService.getBeacons(parseUtils.parseMultipleParameterValues(beaconIds)));
         }
 
         return bs;

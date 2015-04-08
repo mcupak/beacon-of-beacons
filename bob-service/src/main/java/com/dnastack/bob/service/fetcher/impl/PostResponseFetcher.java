@@ -24,6 +24,7 @@
 package com.dnastack.bob.service.fetcher.impl;
 
 import com.dnastack.bob.service.fetcher.api.ResponseFetcher;
+import com.dnastack.bob.service.fetcher.util.HttpUtils;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -33,15 +34,13 @@ import java.util.Map.Entry;
 import java.util.concurrent.Future;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
-import javax.ejb.LocalBean;
+import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-
-import static com.dnastack.bob.service.fetcher.util.HttpUtils.createRequest;
-import static com.dnastack.bob.service.fetcher.util.HttpUtils.executeRequest;
 
 /**
  * Fetcher of beacon responses via HTTP POST.
@@ -52,10 +51,13 @@ import static com.dnastack.bob.service.fetcher.util.HttpUtils.executeRequest;
 @Stateless
 @Named
 @Dependent
-@LocalBean
+@Local(ResponseFetcher.class)
 public class PostResponseFetcher implements ResponseFetcher, Serializable {
 
     private static final long serialVersionUID = -7691864900796853059L;
+
+    @Inject
+    private HttpUtils httpUtils;
 
     private List<NameValuePair> getQueryPayload(Map<String, String> payload) {
         List<NameValuePair> nvs = new ArrayList<>();
@@ -65,7 +67,6 @@ public class PostResponseFetcher implements ResponseFetcher, Serializable {
         }
 
         return nvs;
-
     }
 
     @Override
@@ -73,7 +74,7 @@ public class PostResponseFetcher implements ResponseFetcher, Serializable {
     public Future<String> getQueryResponse(String url, Map<String, String> payload) {
         String res = null;
         try {
-            res = executeRequest(createRequest(url, true, getQueryPayload(payload)));
+            res = httpUtils.executeRequest(httpUtils.createRequest(url, true, getQueryPayload(payload)));
         } catch (UnsupportedEncodingException ex) {
             // ignore, already null
         }

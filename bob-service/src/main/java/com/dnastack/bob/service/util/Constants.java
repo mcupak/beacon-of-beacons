@@ -35,7 +35,7 @@ import java.util.Map;
  */
 public class Constants {
 
-    public static final long REQUEST_TIMEOUT = 10L;
+    public static final int REQUEST_TIMEOUT = 8;
     public static final Map<Reference, String> REFERENCE_MAPPING = ImmutableMap.of(
             Reference.HG38, "GRCh38",
             Reference.HG19, "GRCh37",

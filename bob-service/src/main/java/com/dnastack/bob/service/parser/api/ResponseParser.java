@@ -42,6 +42,6 @@ public interface ResponseParser {
      *
      * @return true/false for valid values, null otherwise
      */
-    Future<Boolean> parseQueryResponse(Beacon beacon, String response);
+    Future<Boolean> parseQueryResponse(Beacon beacon, Future<String> response);
 
 }
