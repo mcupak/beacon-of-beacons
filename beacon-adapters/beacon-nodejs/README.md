@@ -9,7 +9,9 @@
 * [Technologies](#technologies)
 
 ##What it is
-This project contains BDK (beacon development kit) for Node.js developers. It provides a skeleton of a simple beacon allowing the developers to plug in their own data/functionality. The API makes sure the response produced is compatible with what the Beacon of Beacons can consume.
+This project contains BDK (beacon development kit) for Node.js developers.
+It provides a skeleton of a simple beacon allowing the developers to plug in their own data/functionality.
+The API makes sure the response produced is compatible with what the Beacon of Beacons can consume.
 
 ##System requirements
 All you need to build this project restify, which you can install via npm:

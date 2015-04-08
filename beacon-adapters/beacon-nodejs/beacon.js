@@ -36,7 +36,7 @@ var DataUseRequirementResource = {
 };
 
 // required field(s): variants
-var DataSizeResource = {
+var DataSetSizeResource = {
     'variants': 1, // integer
     'samples': 1 // integer
 };
@@ -50,34 +50,38 @@ var DataUseResource = {
     ]
 };
 
-// required field(s): id
+// required field(s): id, reference, multiple, datasets, data_use
 var DataSetResource = {
     'id': 'example Id',
     'description': 'dataset description',
     'reference': 'reference genome',
-    'size': DataSizeResource,  // Dimensions of the data set (required if the beacon reports allele frequencies)
-    'data_uses': [
+    'size': DataSetSizeResource,  // Dimensions of the data set (required if the beacon reports allele frequencies)
+    'multiple': 'multiple boolean',
+    'datasets': [
+        'dataset string'
+    ],
+    'data_use': [
         DataUseResource // Data use limitations
     ]
 };
 
 //########## QueryResource for beacon details ###############//
 
-// required field(s): allele, chromosome, position, reference
+// required field(s): referenceBases, alternateBases, chromosome, position, reference
 var QueryResource = {
-    'allele': 'allele string',
+    'referenceBases': 'referenceBases string',
+    'alternateBases': 'alternateBases string',
     'chromosome': 'chromosome Id',
     'position': 1, // integer
     'reference': 'genome Id',
-    'dataset_id': 'dataset Id'
+    'dataset': 'dataset string'
 };
 
 //################## Beacon details #########################//
 
-// required field(s): id, name, organization, api
-var beacon = {
+// required field(s): id, organization, description, api
+var BeaconInformationResource = {
     'id': 'foo',
-    'name': 'bar',
     'organization': 'org',
     'api': '0.1/0.2',
     'description': 'beacon description',
@@ -96,7 +100,7 @@ var beacon = {
 
 // info function
 function info(req, res, next) {
-    res.send(beacon);
+    res.send(BeaconInformationResource);
     next();
 }
 
@@ -105,9 +109,10 @@ function info(req, res, next) {
 function query(req, res, next) {
     
     // parse query
+    var referenceBases = req.query.refbases;//tentative
+    var alternateBases = req.query.altbases;//tentative
     var chromosome = req.query.chrom;
     var position = parseInt(req.query.pos);
-    var allele = req.query.allele;
     var reference = req.query.ref;
     var dataset = req.query.dataset;
 
@@ -117,20 +122,12 @@ function query(req, res, next) {
 
 //---- TODO: override with the necessary response details  ----//
 
-//############# AlleleResource for response ##############//
-
-    // required field(s): allele
-    var AlleleResource = {
-        'allele': allele,
-        'frequency': 0.5 // double between 0 & 1
-    };
-
 //############ ErrorResource for response #################//
 
     // required field(s): name
     var ErrorResource = {
-        'name': 'error name/code',
-        'description': 'error message'
+        'name': 'error name/code string',
+        'description': 'error message string'
     };
 
 //################## Response object ########################//
@@ -140,26 +137,27 @@ function query(req, res, next) {
     var response = {
         'exists': true,
         'observed': 0,  // integer, min 0
-        'alleles': [
-            AlleleResource
-        ],
-        'info': 'response information', 
+        'info': 'response information',
+        'frequency': 1, //double
+        'err': ErrorResource
     };
 
 //--------------------------------------------------------------//
 
     var query = {
+        'referenceBases': referenceBases,
+        'alternateBases': alternateBases,
         'chromosome': chromosome,
         'position': position,
-        'allele': allele,
         'reference': reference,
         'dataset': dataset
     };
 
-    if (query['chromosome'] == undefined || query['position'] == undefined || query['allele'] == undefined || query['reference'] == undefined) {
+    if (query['chromosome'] == undefined || query['position'] == undefined || query['referenceBases'] == undefined ||
+        query['alternateBases'] == undefined || query['reference'] == undefined) {
 
         ErrorResource['name'] = 'Incomplete Query';
-        ErrorResource['description'] = 'Required parameters are misssing';
+        ErrorResource['description'] = 'Required parameters are missing';
 
         response = {
             'exists': null,
@@ -168,7 +166,7 @@ function query(req, res, next) {
 
     }
 
-    res.send({"beacon": beacon["id"], "query": query, 'response': response});
+    res.send({"beacon": BeaconInformationResource["id"], "query": query, 'response': response});
     next();
 }
 
