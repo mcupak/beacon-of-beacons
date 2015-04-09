@@ -21,8 +21,6 @@
             <div class="row row-centered">
                 <div id="banner"></div>
                 <div class="col-xs-6 col-centered wide-container">
-                    <div id="banner"></div>
-
                     <form class="form-horizontal" action="query.html">
                         <div class="form-group">
                             <label for="beacon" class="control-label col-xs-3">Beacon</label>
@@ -32,7 +30,7 @@
                         <div class="form-group">
                             <label for="ref" class="control-label col-xs-3">Genome</label>
                             <div class="col-xs-9">
-                                <select class="form-control" name="ref">
+                                <select class="form-control" name="ref" id="ref">
                                     <option value="all">All</option>
                                     <option value="hg18">GRCh36/hg18</option>
                                     <option value="hg19">GRCh37/hg19</option>
@@ -43,7 +41,7 @@
                         <div class="form-group">
                             <label for="chrom" class="control-label col-xs-3">Chromosome</label>
                             <div class="col-xs-9">
-                                <select class="form-control" name="chrom">
+                                <select class="form-control" name="chrom" id="chrom">
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>
@@ -73,16 +71,16 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="position" class="control-label col-xs-3">Position</label>
+                            <label for="pos" class="control-label col-xs-3">Position</label>
                             <div class="col-xs-9">
-                                <input type="text" class="form-control" name="pos" placeholder="">
+                                <input type="text" class="form-control" name="pos" id="pos" placeholder="">
                                 <small style="color:rgb(130,130,130)">0-based coordinate</small>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="alt" class="control-label col-xs-3">Allele</label>
                             <div class="col-xs-9">
-                                <input type="text" class="form-control" name="alt" placeholder="">
+                                <input type="text" class="form-control" name="alt" id="alt" placeholder="">
                             </div>
                         </div>
 
