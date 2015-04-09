@@ -61,13 +61,12 @@ public class StringYesNoResponseParser implements ResponseParser, Serializable {
     @Override
     public Future<Boolean> parseQueryResponse(Beacon b, Future<String> response) {
         Boolean res = null;
-        System.out.println(b.getId() + ": " + Thread.currentThread().getId());
         try {
             res = parseUtils.parseYesNoCaseInsensitive(response.get(REQUEST_TIMEOUT, TimeUnit.SECONDS));
         } catch (InterruptedException | ExecutionException | TimeoutException ex) {
             // ignore
         }
-System.out.println(b.getId() + ": " + Thread.currentThread().getId() + ": " + res);
+
         return new AsyncResult<>(res);
     }
 }

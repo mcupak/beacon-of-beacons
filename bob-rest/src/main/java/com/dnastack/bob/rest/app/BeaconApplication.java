@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.rest.resource.app;
+package com.dnastack.bob.rest.app;
 
 import com.dnastack.bob.rest.resource.AllleleResource;
 import com.dnastack.bob.rest.resource.BeaconResource;
@@ -29,14 +29,14 @@ import com.dnastack.bob.rest.resource.BeaconResponseResource;
 import com.dnastack.bob.rest.resource.ChromosomeResource;
 import com.dnastack.bob.rest.resource.ReferenceResource;
 import com.dnastack.bob.rest.resource.RestEndPointResource;
-import com.dnastack.bob.rest.util.LoggingFilter;
-import com.dnastack.bob.rest.util.CORSFilter;
 import com.dnastack.bob.rest.util.ExceptionHandler;
+import com.dnastack.bob.rest.util.LoggingFilter;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
+import org.jboss.resteasy.plugins.interceptors.CorsFilter;
 
 /**
  * REST application.
@@ -46,9 +46,27 @@ import javax.ws.rs.core.Application;
  */
 @ApplicationPath("/rest")
 public class BeaconApplication extends Application {
-
+    
+    private Set<Object> singletons;
+    
     @Override
     public Set<Class<?>> getClasses() {
-        return new HashSet<>(Arrays.asList(RestEndPointResource.class, BeaconResource.class, BeaconResponseResource.class, ReferenceResource.class, ChromosomeResource.class, AllleleResource.class, LoggingFilter.class, CORSFilter.class, ExceptionHandler.class));
+        return new HashSet<>(Arrays.asList(RestEndPointResource.class, BeaconResource.class, BeaconResponseResource.class, ReferenceResource.class, ChromosomeResource.class, AllleleResource.class, LoggingFilter.class, ExceptionHandler.class));
+    }
+    
+    @Override
+    public Set<Object> getSingletons() {
+        if (singletons == null) {
+            CorsFilter corsFilter = new CorsFilter();
+            corsFilter.getAllowedOrigins().add("*");
+            corsFilter.setAllowCredentials(true);
+            corsFilter.setAllowedMethods("GET, POST, PUT, DELETE, OPTIONS, HEAD");
+//            corsFilter.setAllowedHeaders("origin, content-type, accept, authorization");
+            corsFilter.setCorsMaxAge(1209600);
+            
+            singletons = new HashSet<>();
+            singletons.add(corsFilter);
+        }
+        return singletons;
     }
 }

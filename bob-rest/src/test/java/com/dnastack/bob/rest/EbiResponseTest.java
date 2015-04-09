@@ -60,7 +60,7 @@ public class EbiResponseTest extends AbstractResponseTest {
     public void testAllRefsFound(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         String[] query = {"13", "32888798", "G", null};
         BeaconResponseTo br = readBeaconResponse(url.toExternalForm() + getUrl(BEACON, query));
-        System.out.println(br);
+        
         assertNotNull(br);
         assertTrue(beaconsMatch(br.getBeacon(), BEACON));
         assertTrue(queriesMatch(br.getQuery(), query));

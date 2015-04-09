@@ -23,8 +23,8 @@
  */
 package com.dnastack.bob.rest.resource;
 
-import com.dnastack.bob.service.dto.ChromosomeTo;
 import com.dnastack.bob.rest.util.ItemWrapper;
+import com.dnastack.bob.service.dto.ChromosomeTo;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
