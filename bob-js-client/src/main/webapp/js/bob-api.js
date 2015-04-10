@@ -139,11 +139,11 @@ function queryBeacon(beacon, chrom, pos, alt, ref) {
                 var responseIndicator = "";
 
                 if (response === null) {
-                    responseIndicator = "<span title='There was a problem obtaining the response for this beacon.' class='label label-warning'>&#x2005;&#x2005;&#x2005;&#x2005;</span>";
+                    responseIndicator = "<span title='There was a problem obtaining the response for this beacon.' class='label label-warning'>ERROR</span>";
                 } else if (response === true) {
-                    responseIndicator = "<span class='label label-success'>Yes</span>";
+                    responseIndicator = "<span class='label label-success'>YES</span>";
                 } else {
-                    responseIndicator = "<span class='label label-danger'>No</span>";
+                    responseIndicator = "<span class='label label-danger'>NO</span>";
                 }
 
                 var aggField = obj[i].beacon.aggregator;
