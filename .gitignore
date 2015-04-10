@@ -9,9 +9,6 @@ release.properties
 nb-configuration.xml
 nbactions*.xml
 
-# auxiliary scripts
-*.sh
-
 # log files
 *.log
 
