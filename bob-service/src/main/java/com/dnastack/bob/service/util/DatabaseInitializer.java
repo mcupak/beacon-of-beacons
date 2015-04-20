@@ -125,40 +125,6 @@ public class DatabaseInitializer {
             ucsc.setName("UCSC");
             organizationDao.save(ucsc);
 
-            Beacon clinvarBeacon = new Beacon();
-            clinvarBeacon.setId("clinvar");
-            clinvarBeacon.setName("ClinVar");
-            clinvarBeacon.setOrganization(ucsc);
-            clinvarBeacon.setVisible(true);
-            clinvarBeacon.setAggregator(false);
-            clinvarBeacon.setParser(ejbResolver.getClassId(StringYesNoResponseParser.class));
-            clinvarBeacon.setFetcher(ejbResolver.getClassId(GetResponseFetcher.class));
-            clinvarBeacon.setRequester(cdiResolver.getClassId(BeaconChromPosAlleleRequestConstructor.class));
-            clinvarBeacon.setReferenceConverter(cdiResolver.getClassId(EmptyReferenceConverter.class));
-            clinvarBeacon.setChromosomeConverter(cdiResolver.getClassId(EmptyChromosomeConverter.class));
-            clinvarBeacon.setPositionConverter(cdiResolver.getClassId(EmptyPositionConverter.class));
-            clinvarBeacon.setAlleleConverter(cdiResolver.getClassId(EmptyAlleleConverter.class));
-            clinvarBeacon.setEnabled(true);
-            clinvarBeacon.setUrl("http://hgwdev-max.cse.ucsc.edu/cgi-bin/beacon/query?track=%s&chrom=chr%s&pos=%d&allele=%s");
-            clinvarBeacon.setSupportedReferences(EnumSet.of(Reference.HG19));
-            beaconDao.save(clinvarBeacon);
-            Beacon uniprotBeacon = new Beacon();
-            uniprotBeacon.setId("uniprot");
-            uniprotBeacon.setName("UniProt");
-            uniprotBeacon.setOrganization(ucsc);
-            uniprotBeacon.setVisible(true);
-            uniprotBeacon.setAggregator(false);
-            uniprotBeacon.setParser(ejbResolver.getClassId(StringYesNoResponseParser.class));
-            uniprotBeacon.setFetcher(ejbResolver.getClassId(GetResponseFetcher.class));
-            uniprotBeacon.setRequester(cdiResolver.getClassId(BeaconChromPosAlleleRequestConstructor.class));
-            uniprotBeacon.setReferenceConverter(cdiResolver.getClassId(EmptyReferenceConverter.class));
-            uniprotBeacon.setChromosomeConverter(cdiResolver.getClassId(EmptyChromosomeConverter.class));
-            uniprotBeacon.setPositionConverter(cdiResolver.getClassId(EmptyPositionConverter.class));
-            uniprotBeacon.setAlleleConverter(cdiResolver.getClassId(EmptyAlleleConverter.class));
-            uniprotBeacon.setEnabled(true);
-            uniprotBeacon.setUrl("http://hgwdev-max.cse.ucsc.edu/cgi-bin/beacon/query?track=%s&chrom=chr%s&pos=%d&allele=%s");
-            uniprotBeacon.setSupportedReferences(EnumSet.of(Reference.HG19));
-            beaconDao.save(uniprotBeacon);
             Beacon lovdBeacon = new Beacon();
             lovdBeacon.setId("lovd");
             lovdBeacon.setName("Leiden Open Variation");
@@ -496,9 +462,7 @@ public class DatabaseInitializer {
             beaconDao.save(ucscBeacon);
 
             beaconDao.addRelationship(hgmdBeacon, ucscBeacon);
-            beaconDao.addRelationship(clinvarBeacon, ucscBeacon);
             beaconDao.addRelationship(lovdBeacon, ucscBeacon);
-            beaconDao.addRelationship(uniprotBeacon, ucscBeacon);
 
             Beacon googleBeacon = new Beacon();
             googleBeacon.setId("google");
