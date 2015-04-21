@@ -227,6 +227,29 @@ public class DatabaseInitializer {
             wtsiBeacon.setSupportedReferences(EnumSet.of(Reference.HG19));
             beaconDao.save(wtsiBeacon);
 
+            Organization bio = new Organization();
+            bio.setId("bioreference");
+            bio.setName("BioReference Laboratories");
+            organizationDao.save(bio);
+            Beacon bioReference = new Beacon();
+            bioReference.setId("bioreference");
+            bioReference.setName("BioReference");
+            bioReference.setDescription("The content able to be queried by this beacon comes from GeneDx - providing all high-confidence variants detected in both affected and unaffected samples sent for WES testing at GeneDx.");
+            bioReference.setOrganization(bio);
+            bioReference.setVisible(true);
+            bioReference.setAggregator(false);
+            bioReference.setParser(ejbResolver.getClassId(StringYesNoRefResponseParser.class));
+            bioReference.setFetcher(ejbResolver.getClassId(GetResponseFetcher.class));
+            bioReference.setRequester(cdiResolver.getClassId(ChromPosAlleleRequestConstructor.class));
+            bioReference.setReferenceConverter(cdiResolver.getClassId(EmptyReferenceConverter.class));
+            bioReference.setChromosomeConverter(cdiResolver.getClassId(EmptyChromosomeConverter.class));
+            bioReference.setPositionConverter(cdiResolver.getClassId(IncrementPositionConverter.class));
+            bioReference.setAlleleConverter(cdiResolver.getClassId(EmptyAlleleConverter.class));
+            bioReference.setEnabled(true);
+            bioReference.setUrl("http://beacon.bioreference.com/beacon/rest/responses/bioreference?src=all&chrom=%s&pos=%d&allele=%s");
+            bioReference.setSupportedReferences(EnumSet.of(Reference.HG19));
+            beaconDao.save(bioReference);
+
             Organization amplab = new Organization();
             amplab.setId("amplab");
             amplab.setName("AMPLab, University of California");
