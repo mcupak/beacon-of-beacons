@@ -23,11 +23,18 @@
  */
 package com.dnastack.bob.rest;
 
+import com.dnastack.bob.rest.util.ArquillianUtils;
+import com.dnastack.bob.rest.util.BeaconResponseTestUtils;
+import com.dnastack.bob.rest.util.Parameter;
+import com.dnastack.bob.rest.util.ParameterRule;
+import com.dnastack.bob.rest.util.QueryEntry;
+import com.dnastack.bob.rest.util.DataProvider;
 import com.dnastack.bob.service.fetcher.util.HttpUtils;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -42,6 +49,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Rule;
+import org.junit.rules.ErrorCollector;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
@@ -54,24 +62,30 @@ import org.junit.runner.Description;
  */
 public abstract class BasicTest {
 
-    private static HttpUtils httpUtils = new HttpUtils();
+    private static final Logger logger = Logger.getLogger(BeaconSingleResponseTest.class.getName());
+
+    private static final HttpUtils httpUtils = new HttpUtils();
 
     @Rule
     public TestRule watcher = new TestWatcher() {
         @Override
         protected void starting(Description description) {
-            System.out.println("Starting test: " + description.getClassName() + " - " + description.getMethodName() + "()");
+            logger.info("Starting test: " + description.getClassName() + " - " + description.getMethodName() + "()");
         }
     };
 
-    @Deployment
+    @Rule
+    public ErrorCollector collector = new ErrorCollector();
+
+    @Deployment(testable = false)
     public static WebArchive createDeployment() {
         WebArchive war = ShrinkWrap.create(MavenImporter.class)
                 .loadPomFromFile("pom.xml")
                 .importBuildOutput()
                 .as(WebArchive.class)
-                .addClasses(BasicTest.class, AbstractResponseTest.class);
-        System.out.println("WAR name: " + war.getName());
+                .addClasses(BasicTest.class, AbstractResponseTest.class, ParameterRule.class, ArquillianUtils.class, Parameter.class, BeaconResponseTestUtils.class, DataProvider.class, QueryEntry.class)
+                .addAsResource("queries.json");
+        logger.info("WAR name: " + war.getName());
 
         return war;
     }

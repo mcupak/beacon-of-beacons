@@ -24,7 +24,6 @@
 package com.dnastack.bob.rest;
 
 import com.dnastack.bob.service.dto.BeaconTo;
-import com.google.common.collect.ImmutableSet;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashSet;
@@ -37,9 +36,12 @@ import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static com.dnastack.bob.rest.util.DataProvider.getBeacons;
+import static org.hamcrest.CoreMatchers.everyItem;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.isIn;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.core.IsNull.notNullValue;
 
 /**
  * Test of beacons info.
@@ -54,7 +56,6 @@ public class BeaconsTest extends BasicTest {
     public static final String BEACONS_TEMPLATE = "rest/beacons";
     public static final String BEACONS_FILTERED_TEMPLATE = "rest/beacons?beacon=%s";
     public static final String BEACON_TEMPLATE = "rest/beacons/%s";
-    public static final Set<String> BEACON_IDS = ImmutableSet.of("clinvar", "uniprot", "lovd", "hgmd", "ucsc", "ebi", "ncbi", "wtsi", "amplab", "kaviar", "broad", "icgc", "cafe-variome", "bob");
 
     public static String getUrl() {
         return BEACONS_TEMPLATE;
@@ -81,39 +82,43 @@ public class BeaconsTest extends BasicTest {
             ids.add(b.getId());
         }
 
-        for (String s : BEACON_IDS) {
-            assertTrue(ids.contains(s));
-        }
+        assertThat(getBeacons(), everyItem(isIn(ids)));
     }
 
     @Test
     public void testBeaconsFiltered(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        for (String id : BEACON_IDS) {
+        for (String id : getBeacons()) {
             List<BeaconTo> beacons = readBeacons(url.toExternalForm() + getUrl(id, true));
 
-            assertNotNull(beacons);
-            assertEquals(beacons.get(0).getId(), id);
+            collector.checkThat(beacons, notNullValue());
+            collector.checkThat(beacons.get(0).getId(), equalTo(id));
         }
     }
 
     @Test
     public void testMultipleBeaconsFiltered(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        String id1 = "clinvar";
-        String id2 = "amplab";
-        List<BeaconTo> beacons = readBeacons(url.toExternalForm() + getUrl("[" + id1 + "," + id2 + "]", true));
+        Set<String> bs = getBeacons();
+        String a = (String) bs.toArray()[0];
 
-        assertNotNull(beacons);
-        assertTrue(beacons.size() == 2);
-        assertTrue((beacons.get(0).getId().equals(id1) || beacons.get(0).getId().equals(id2)) && (beacons.get(1).getId().equals(id1) || beacons.get(0).getId().equals(id2)));
+        for (String b : bs) {
+            if (!a.equals(b)) {
+                List<BeaconTo> beacons = readBeacons(url.toExternalForm() + getUrl("[" + a + "," + b + "]", true));
+
+                collector.checkThat(beacons, notNullValue());
+                collector.checkThat(beacons.size(), equalTo(2));
+                collector.checkThat((beacons.get(0).getId().equals(a) || beacons.get(0).getId().equals(b)) && (beacons.get(1).getId().equals(a) || beacons.get(1).getId().equals(b)), equalTo(true));
+            }
+        }
+
     }
 
     @Test
     public void testBeacon(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        for (String id : BEACON_IDS) {
+        for (String id : getBeacons()) {
             BeaconTo b = readBeacon(url.toExternalForm() + getUrl(id, false));
 
-            assertNotNull(b);
-            assertEquals(id, b.getId());
+            collector.checkThat(b, notNullValue());
+            collector.checkThat(b.getId(), equalTo(id));
         }
     }
 }

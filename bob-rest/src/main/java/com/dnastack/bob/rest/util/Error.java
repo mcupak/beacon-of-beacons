@@ -23,6 +23,7 @@
  */
 package com.dnastack.bob.rest.util;
 
+import java.io.Serializable;
 import java.util.Objects;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlElement;
@@ -35,7 +36,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @version 1.0
  */
 @XmlRootElement(name = "error")
-public class Error {
+public class Error implements Serializable {
+
+    private static final long serialVersionUID = 7211701892878610009L;
 
     @XmlElement
     @NotNull

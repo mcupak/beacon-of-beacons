@@ -64,44 +64,42 @@ public class BeaconResponseTestUtils {
     }
 
     /**
-     * Checks if the query attributes match a given parameter list.
+     * Checks if the query attributes match a given query entry.
      *
-     * @param q      query
-     * @param params parameter array containing the following elements as strings: chrom, pos, allele, ref
-     *               (respectively)
+     * @param q  query
+     * @param qe queryEntry
      *
      * @return true if the queries match, false otherwise
      */
-    public static boolean queriesMatch(QueryTo q, String[] params) {
-        return getNonMachingFields(q, params).isEmpty();
+    public static boolean queriesMatch(QueryTo q, QueryEntry qe) {
+        return getNonMachingFields(q, qe).isEmpty();
     }
 
     /**
      * Checks which attributes of queries don't match and returns their indices, i.e.
      * chrom=0, pos=1, allele=2, ref=3.
      *
-     * @param q      query
-     * @param params parameter array containing the following elements as strings: chrom, pos, allele, ref
-     *               (respectively)
+     * @param q  query
+     * @param qe queryEntry
      *
      * @return list of indices of nonmatching query attributes
      */
-    public static Set<Integer> getNonMachingFields(QueryTo q, String[] params) {
+    public static Set<Integer> getNonMachingFields(QueryTo q, QueryEntry qe) {
         if (q == null) {
             throw new NullPointerException("Query cannot be null.");
         }
 
         Set<Integer> fields = new HashSet<>();
-        if (!stringsEqual(q.getChromosome() == null ? null : q.getChromosome().toString(), params[0])) {
+        if (!stringsEqual(q.getChromosome() == null ? null : q.getChromosome().toString(), qe.getChromosome())) {
             fields.add(0);
         }
-        if (!stringsEqual(q.getPosition() == null ? null : q.getPosition().toString(), params[1])) {
+        if (!stringsEqual(q.getPosition() == null ? null : q.getPosition().toString(), qe.getPosition().toString())) {
             fields.add(1);
         }
-        if (!stringsEqual(q.getAllele(), params[2])) {
+        if (!stringsEqual(q.getAllele(), qe.getAllele())) {
             fields.add(2);
         }
-        if (!stringsEqual(q.getReference() == null ? null : q.getReference().toString(), params[3])) {
+        if (!stringsEqual(q.getReference() == null ? null : q.getReference().toString(), qe.getReference())) {
             fields.add(3);
         }
 

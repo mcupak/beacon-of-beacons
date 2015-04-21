@@ -23,15 +23,17 @@
  */
 package com.dnastack.bob.rest;
 
+import com.dnastack.bob.rest.util.QueryEntry;
 import com.dnastack.bob.service.dto.BeaconResponseTo;
-import com.dnastack.bob.service.dto.QueryTo;
 import com.dnastack.bob.service.dto.ChromosomeTo;
+import com.dnastack.bob.service.dto.QueryTo;
 import com.dnastack.bob.service.dto.ReferenceTo;
 import com.google.common.collect.ImmutableList;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 import javax.xml.bind.JAXBException;
+
+import static com.dnastack.bob.rest.util.DataProvider.isQueryForMultipleBeacons;
 
 /**
  * Test of a beacon service.
@@ -41,6 +43,10 @@ import javax.xml.bind.JAXBException;
  */
 public abstract class AbstractResponseTest extends BasicTest {
 
+    public static final String QUERY_BEACON_FILTER_TEMPLATE = "rest/responses?beacon=%s&chrom=%s&pos=%s&allele=%s";
+    public static final String QUERY_BEACON_FILTER_WITH_REF_TEMPLATE = "rest/responses?beacon=%s&chrom=%s&pos=%s&allele=%s&ref=%s";
+    public static final String QUERY_TEMPLATE = "rest/responses?chrom=%s&pos=%s&allele=%s";
+    public static final String QUERY_WITH_REF_TEMPLATE = "rest/responses?chrom=%s&pos=%s&allele=%s&ref=%s";
     public static final String QUERY_BEACON_TEMPLATE = "rest/responses/%s?chrom=%s&pos=%s&allele=%s";
     public static final String QUERY_BEACON_WITH_REF_TEMPLATE = "rest/responses/%s?chrom=%s&pos=%s&allele=%s&ref=%s";
     // paths for jettisson (not jackson)
@@ -53,26 +59,37 @@ public abstract class AbstractResponseTest extends BasicTest {
     public static final List<String> ALLELE_PATH = ImmutableList.of(BEACON_RESPONSE, QUERY, "allele");
     public static final List<String> REF_PATH = ImmutableList.of(BEACON_RESPONSE, QUERY, "reference");
 
-    /**
-     * Construct URL for the given BeaconResponseTo.
-     *
-     * @param beacon beacon id
-     * @param params parameter array containing the following elements as strings: chrom, pos, allele, ref
-     *               (respectively)
-     *
-     * @return url
-     */
-    protected static String getUrl(String beacon, String[] params) {
-        String res = null;
-        if (params.length == 4) {
-            if (params[3] == null) {
-                res = String.format(QUERY_BEACON_TEMPLATE, beacon, params[0], params[1], params[2]);
+    protected static String getUrl(QueryEntry q, boolean filter) {
+        String res;
+
+        if (q.getBeacon() == null || q.getBeacon().isEmpty()) {
+            // query all beacons
+            if (q.getReference() == null) {
+                res = String.format(QUERY_TEMPLATE, q.getChromosome(), q.getPosition(), q.getAllele());
             } else {
-                res = String.format(QUERY_BEACON_WITH_REF_TEMPLATE, beacon, params[0], params[1], params[2], params[3]);
+                res = String.format(QUERY_WITH_REF_TEMPLATE, q.getChromosome(), q.getPosition(), q.getAllele(), q.getReference());
+            }
+        } else if (isQueryForMultipleBeacons(q) || filter) {
+            // filtering
+            if (q.getReference() == null) {
+                res = String.format(QUERY_BEACON_FILTER_TEMPLATE, q.getBeacon(), q.getChromosome(), q.getPosition(), q.getAllele());
+            } else {
+                res = String.format(QUERY_BEACON_FILTER_WITH_REF_TEMPLATE, q.getBeacon(), q.getChromosome(), q.getPosition(), q.getAllele(), q.getReference());
+            }
+        } else {
+            if (q.getReference() == null) {
+                res = String.format(QUERY_BEACON_TEMPLATE, q.getBeacon(), q.getChromosome(), q.getPosition(), q.getAllele());
+            } else {
+                res = String.format(QUERY_BEACON_WITH_REF_TEMPLATE, q.getBeacon(), q.getChromosome(), q.getPosition(), q.getAllele(), q.getReference());
             }
         }
 
         return res;
+    }
+
+    @SuppressWarnings("unchecked")
+    public static List<BeaconResponseTo> readBeaconResponses(String url) throws JAXBException, MalformedURLException {
+        return (List<BeaconResponseTo>) readObject(BeaconResponseTo.class, url);
     }
 
     protected static BeaconResponseTo readBeaconResponse(String url) throws JAXBException, MalformedURLException {
@@ -106,37 +123,5 @@ public abstract class AbstractResponseTest extends BasicTest {
     protected static Boolean readResponsePredicate(String response) {
         return Boolean.valueOf(readField(response, RESPONSE_PATH));
     }
-
-    public abstract void testAllRefsFound(URL url) throws JAXBException, MalformedURLException;
-
-    public abstract void testAllRefsNotFound(URL url) throws JAXBException, MalformedURLException;
-
-    public abstract void testSpecificRefFound(URL url) throws JAXBException, MalformedURLException;
-
-    public abstract void testSpecificRefNotFound(URL url) throws JAXBException, MalformedURLException;
-
-    public abstract void testInvalidRef(URL url) throws JAXBException, MalformedURLException;
-
-    public abstract void testRefConversion(URL url) throws JAXBException, MalformedURLException;
-
-    public abstract void testDifferentGenome(URL url) throws JAXBException, MalformedURLException;
-
-    public abstract void testStringAllele(URL url) throws JAXBException, MalformedURLException;
-
-    public abstract void testDel(URL url) throws JAXBException, MalformedURLException;
-
-    public abstract void testIns(URL url) throws JAXBException, MalformedURLException;
-
-    public abstract void testInvalidAllele(URL url) throws JAXBException, MalformedURLException;
-
-    public abstract void testAlleleConversion(URL url) throws JAXBException, MalformedURLException;
-
-    public abstract void testChromConversion(URL url) throws JAXBException, MalformedURLException;
-
-    public abstract void testInvalidChrom(URL url) throws JAXBException, MalformedURLException;
-
-    public abstract void testChromX(URL url) throws JAXBException, MalformedURLException;
-
-    public abstract void testChromMT(URL url) throws JAXBException, MalformedURLException;
 
 }
