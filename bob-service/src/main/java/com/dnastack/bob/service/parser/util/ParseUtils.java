@@ -132,31 +132,35 @@ public class ParseUtils {
             return null;
         }
 
-        JSONObject jo = new JSONObject(response);
-        JSONObject current = null;
-        for (String s : path) {
-            current = jo.optJSONObject(s);
-            if (current == null) {
-                JSONArray a = jo.optJSONArray(s);
-                if (a != null) {
-                    current = a.optJSONObject(0);
-                    if (current == null) {
-                        try {
-                            return a.getBoolean(0);
-                        } catch (JSONException jex) {
-                            return null;
+        try {
+            JSONObject jo = new JSONObject(response);
+            JSONObject current = null;
+            for (String s : path) {
+                current = jo.optJSONObject(s);
+                if (current == null) {
+                    JSONArray a = jo.optJSONArray(s);
+                    if (a != null) {
+                        current = a.optJSONObject(0);
+                        if (current == null) {
+                            try {
+                                return a.getBoolean(0);
+                            } catch (JSONException jex) {
+                                return null;
+                            }
                         }
                     }
                 }
-            }
-            if (current == null) {
-                try {
-                    return jo.getBoolean(s);
-                } catch (JSONException jex) {
-                    return null;
+                if (current == null) {
+                    try {
+                        return jo.getBoolean(s);
+                    } catch (JSONException jex) {
+                        return null;
+                    }
                 }
+                jo = current;
             }
-            jo = current;
+        } catch (JSONException ex) {
+            return null;
         }
 
         return null;
@@ -175,31 +179,35 @@ public class ParseUtils {
             return null;
         }
 
-        JSONObject jo = new JSONObject(response);
-        JSONObject current = null;
-        for (String s : path) {
-            current = jo.optJSONObject(s);
-            if (current == null) {
-                JSONArray a = jo.optJSONArray(s);
-                if (a != null) {
-                    current = a.optJSONObject(0);
-                    if (current == null) {
-                        try {
-                            return a.getString(0);
-                        } catch (JSONException jex) {
-                            return null;
+        try {
+            JSONObject jo = new JSONObject(response);
+            JSONObject current = null;
+            for (String s : path) {
+                current = jo.optJSONObject(s);
+                if (current == null) {
+                    JSONArray a = jo.optJSONArray(s);
+                    if (a != null) {
+                        current = a.optJSONObject(0);
+                        if (current == null) {
+                            try {
+                                return a.getString(0);
+                            } catch (JSONException jex) {
+                                return null;
+                            }
                         }
                     }
                 }
-            }
-            if (current == null) {
-                try {
-                    return jo.getString(s);
-                } catch (JSONException jex) {
-                    return null;
+                if (current == null) {
+                    try {
+                        return jo.getString(s);
+                    } catch (JSONException jex) {
+                        return null;
+                    }
                 }
+                jo = current;
             }
-            jo = current;
+        } catch (JSONException ex) {
+            return null;
         }
 
         return null;
@@ -217,10 +225,7 @@ public class ParseUtils {
             throw new NullPointerException("param");
         }
 
-        if (param.matches("\\[(((\\w)*-(\\w)*)*(\\w)*,)*((\\w)*-(\\w)*)*(\\w)*\\]")) {
-            return true;
-        }
-        return false;
+        return param.matches("\\[(((\\w)*-(\\w)*)*(\\w)*,)*((\\w)*-(\\w)*)*(\\w)*\\]");
     }
 
     /**
@@ -235,10 +240,7 @@ public class ParseUtils {
             throw new NullPointerException("param");
         }
 
-        if (param.matches("[-a-zA-Z0-9]*")) {
-            return true;
-        }
-        return false;
+        return param.matches("[-a-zA-Z0-9]*");
     }
 
     /**

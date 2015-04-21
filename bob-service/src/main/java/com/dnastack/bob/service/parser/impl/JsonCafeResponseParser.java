@@ -60,7 +60,7 @@ public class JsonCafeResponseParser implements ResponseParser, Serializable {
     private ParseUtils parseUtils;
 
     private String getJsonFieldName(Beacon b) {
-        String res = null;
+        String res;
         if (b.getId().startsWith(BEACON_PREFIX)) {
             res = b.getId().substring(BEACON_PREFIX.length()) + "_" + RESPONSE_FIELD;
         } else {
