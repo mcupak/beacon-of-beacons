@@ -1,5 +1,5 @@
 // constants
-var timeout = 30000;
+var timeout = 60000;
 var restUrl = "http://dnastack.com/bob-api/rest/";
 //var restUrl = "http://localhost:8080/rest/";
 var beaconsUrl = restUrl + "beacons";
