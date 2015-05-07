@@ -415,17 +415,8 @@
     },
     {
         "beacon": "curoverse",
-        "chromosome": "13",
-        "position": 19020070,
-        "allele": "T",
-        "reference": null,
-        "description": "all references found",
-        "response": true
-    },
-    {
-        "beacon": "curoverse-ref",
-        "chromosome": "1",
-        "position": 14930,
+        "chromosome": "17",
+        "position": 41197711,
         "allele": "G",
         "reference": null,
         "description": "all references found",
@@ -433,18 +424,18 @@
     },
     {
         "beacon": "curoverse",
-        "chromosome": "13",
-        "position": 19020070,
-        "allele": "T",
+        "chromosome": "17",
+        "position": 41197711,
+        "allele": "G",
         "reference": "hg19",
         "description": "specific reference found",
         "response": true
     },
     {
         "beacon": "curoverse",
-        "chromosome": "13",
-        "position": 19020070,
-        "allele": "T",
+        "chromosome": "17",
+        "position": 41197711,
+        "allele": "G",
         "reference": "hg38",
         "description": "specific reference not found",
         "response": null
@@ -460,21 +451,30 @@
     },
     {
         "beacon": "curoverse",
-        "chromosome": "13",
-        "position": 19020070,
-        "allele": "T",
+        "chromosome": "17",
+        "position": 41197711,
+        "allele": "G",
         "reference": "grch37",
         "description": "reference conversion",
         "response": true
     },
     {
         "beacon": "curoverse",
-        "chromosome": "13",
-        "position": 19020070,
-        "allele": "TGT",
+        "chromosome": "9",
+        "position": 135909291,
+        "allele": "GAGGGGAACACTGGGCCTGATATG",
         "reference": null,
         "description": "string allele",
-        "response": false
+        "response": true
+    },
+    {
+        "beacon": "curoverse",
+        "chromosome": "9",
+        "position": 135904749,
+        "allele": "GCC",
+        "reference": null,
+        "description": "string allele2",
+        "response": true
     },
     {
         "beacon": "curoverse",
@@ -496,9 +496,9 @@
     },
     {
         "beacon": "curoverse",
-        "chromosome": "1",
-        "position": 41197713,
-        "allele": "G",
+        "chromosome": "9",
+        "position": 135904749,
+        "allele": "CCC",
         "reference": null,
         "description": "any references not found",
         "response": false
@@ -514,9 +514,9 @@
     },
     {
         "beacon": "curoverse",
-        "chromosome": "13",
-        "position": 19020070,
-        "allele": "t",
+        "chromosome": "17",
+        "position": 41197711,
+        "allele": "g",
         "reference": null,
         "description": "allele conversion",
         "response": true
@@ -528,7 +528,7 @@
         "allele": "G",
         "reference": null,
         "description": "chromosome conversion",
-        "response": false
+        "response": true
     },
     {
         "beacon": "curoverse",
@@ -542,17 +542,17 @@
     {
         "beacon": "curoverse",
         "chromosome": "X",
-        "position": 31224683,
-        "allele": "C",
+        "position": 41087869,
+        "allele": "A",
         "reference": null,
         "description": "x",
-        "response": false
+        "response": true
     },
     {
         "beacon": "curoverse",
         "chromosome": "MT",
-        "position": 41087870,
-        "allele": "A",
+        "position": 1,
+        "allele": "C",
         "reference": null,
         "description": "mt",
         "response": false
@@ -1797,7 +1797,7 @@
         "allele": "A",
         "reference": null,
         "description": "x",
-        "response": false
+        "response": true
     },
     {
         "beacon": "bob",
