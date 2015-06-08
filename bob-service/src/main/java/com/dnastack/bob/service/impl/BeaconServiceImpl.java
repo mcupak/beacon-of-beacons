@@ -62,7 +62,7 @@ import javax.transaction.Transactional;
 @Transactional
 public class BeaconServiceImpl implements BeaconService {
     
-    public static final String QUERY_URL = "/query?reference=%s&chromosome=%s&position=%d&referenceBases=G&alternateBases=%s&dataset=";
+    public static final String QUERY_URL = "/query?reference=%s&chromosome=%s&position=%d&referenceBases=&alternateBases=%s&dataset=";
     public static final String AUTH = "OAUTH2.0";
     
     @Inject
