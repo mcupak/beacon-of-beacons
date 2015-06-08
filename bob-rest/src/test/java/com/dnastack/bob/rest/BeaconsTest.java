@@ -23,7 +23,7 @@
  */
 package com.dnastack.bob.rest;
 
-import com.dnastack.bob.service.dto.BeaconTo;
+import com.dnastack.bob.service.dto.BeaconDto;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashSet;
@@ -66,19 +66,19 @@ public class BeaconsTest extends BasicTest {
     }
 
     @SuppressWarnings("unchecked")
-    public static List<BeaconTo> readBeacons(String url) throws JAXBException, MalformedURLException {
-        return (List<BeaconTo>) readObject(BeaconTo.class, url);
+    public static List<BeaconDto> readBeacons(String url) throws JAXBException, MalformedURLException {
+        return (List<BeaconDto>) readObject(BeaconDto.class, url);
     }
 
-    public static BeaconTo readBeacon(String url) throws JAXBException, MalformedURLException {
-        return (BeaconTo) readObject(BeaconTo.class, url);
+    public static BeaconDto readBeacon(String url) throws JAXBException, MalformedURLException {
+        return (BeaconDto) readObject(BeaconDto.class, url);
     }
 
     @Test
     public void testAllBeacons(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        List<BeaconTo> bs = readBeacons(url.toExternalForm() + getUrl());
+        List<BeaconDto> bs = readBeacons(url.toExternalForm() + getUrl());
         Set<String> ids = new HashSet<>();
-        for (BeaconTo b : bs) {
+        for (BeaconDto b : bs) {
             ids.add(b.getId());
         }
 
@@ -88,7 +88,7 @@ public class BeaconsTest extends BasicTest {
     @Test
     public void testBeaconsFiltered(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         for (String id : getBeacons()) {
-            List<BeaconTo> beacons = readBeacons(url.toExternalForm() + getUrl(id, true));
+            List<BeaconDto> beacons = readBeacons(url.toExternalForm() + getUrl(id, true));
 
             collector.checkThat(beacons, notNullValue());
             collector.checkThat(beacons.get(0).getId(), equalTo(id));
@@ -102,7 +102,7 @@ public class BeaconsTest extends BasicTest {
 
         for (String b : bs) {
             if (!a.equals(b)) {
-                List<BeaconTo> beacons = readBeacons(url.toExternalForm() + getUrl("[" + a + "," + b + "]", true));
+                List<BeaconDto> beacons = readBeacons(url.toExternalForm() + getUrl("[" + a + "," + b + "]", true));
 
                 collector.checkThat(beacons, notNullValue());
                 collector.checkThat(beacons.size(), equalTo(2));
@@ -115,7 +115,7 @@ public class BeaconsTest extends BasicTest {
     @Test
     public void testBeacon(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         for (String id : getBeacons()) {
-            BeaconTo b = readBeacon(url.toExternalForm() + getUrl(id, false));
+            BeaconDto b = readBeacon(url.toExternalForm() + getUrl(id, false));
 
             collector.checkThat(b, notNullValue());
             collector.checkThat(b.getId(), equalTo(id));

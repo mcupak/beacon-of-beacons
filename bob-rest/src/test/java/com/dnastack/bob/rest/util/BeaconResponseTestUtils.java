@@ -23,8 +23,8 @@
  */
 package com.dnastack.bob.rest.util;
 
-import com.dnastack.bob.service.dto.BeaconTo;
-import com.dnastack.bob.service.dto.QueryTo;
+import com.dnastack.bob.service.dto.BeaconDto;
+import com.dnastack.bob.service.dto.QueryDto;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -55,7 +55,7 @@ public class BeaconResponseTestUtils {
      *
      * @return true if the ids match, false otherwise
      */
-    public static boolean beaconsMatch(BeaconTo b, String id) {
+    public static boolean beaconsMatch(BeaconDto b, String id) {
         if (id == null || b == null) {
             throw new NullPointerException("Argument cannot be null.");
         }
@@ -71,7 +71,7 @@ public class BeaconResponseTestUtils {
      *
      * @return true if the queries match, false otherwise
      */
-    public static boolean queriesMatch(QueryTo q, QueryEntry qe) {
+    public static boolean queriesMatch(QueryDto q, QueryEntry qe) {
         return getNonMachingFields(q, qe).isEmpty();
     }
 
@@ -84,7 +84,7 @@ public class BeaconResponseTestUtils {
      *
      * @return list of indices of nonmatching query attributes
      */
-    public static Set<Integer> getNonMachingFields(QueryTo q, QueryEntry qe) {
+    public static Set<Integer> getNonMachingFields(QueryDto q, QueryEntry qe) {
         if (q == null) {
             throw new NullPointerException("Query cannot be null.");
         }

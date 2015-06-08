@@ -21,32 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.rest.util;
+package com.dnastack.bob.rest.comparator;
 
-import com.dnastack.bob.service.dto.BeaconTo;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
+import com.dnastack.bob.service.dto.BeaconDto;
+import java.util.Comparator;
 
 /**
- * Comparator of BeaconTo objects. Performs case-insensitive comparison of IDs of BeaconTo objects.
+ * Comparator of BeaconDto objects.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@RequestScoped
-@Named
-@IdComparator
-public class BeaconToIdComparator implements BeaconToComparator {
-
-    @Override
-    public int compare(BeaconTo o1, BeaconTo o2) {
-        if (o1 == null || o2 == null) {
-            throw new NullPointerException("Beacon is null.");
-        }
-        if (o1.getId() == null || o2.getId() == null) {
-            throw new NullPointerException("Beacon ID is null.");
-        }
-        return o1.getId().compareToIgnoreCase(o2.getId());
-    }
+public interface BeaconDtoComparator extends Comparator<BeaconDto> {
 
 }

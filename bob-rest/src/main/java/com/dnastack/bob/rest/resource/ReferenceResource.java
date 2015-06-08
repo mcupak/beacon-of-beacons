@@ -24,7 +24,7 @@
 package com.dnastack.bob.rest.resource;
 
 import com.dnastack.bob.rest.util.ItemWrapper;
-import com.dnastack.bob.service.dto.ReferenceTo;
+import com.dnastack.bob.service.dto.ReferenceDto;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -48,9 +48,9 @@ import javax.ws.rs.core.MediaType;
 public class ReferenceResource {
 
     @GET
-    public Collection<ItemWrapper<ReferenceTo>> showAll() {
-        List<ItemWrapper<ReferenceTo>> vals = new ArrayList<>();
-        for (ReferenceTo ref : ReferenceTo.values()) {
+    public Collection<ItemWrapper<ReferenceDto>> showAll() {
+        List<ItemWrapper<ReferenceDto>> vals = new ArrayList<>();
+        for (ReferenceDto ref : ReferenceDto.values()) {
             vals.add(new ItemWrapper<>(ref));
         }
 

@@ -27,6 +27,7 @@ import com.dnastack.bob.rest.resource.AllleleResource;
 import com.dnastack.bob.rest.resource.BeaconResource;
 import com.dnastack.bob.rest.resource.BeaconResponseResource;
 import com.dnastack.bob.rest.resource.ChromosomeResource;
+import com.dnastack.bob.rest.resource.OrganizationResource;
 import com.dnastack.bob.rest.resource.ReferenceResource;
 import com.dnastack.bob.rest.resource.RestEndPointResource;
 import com.dnastack.bob.rest.util.ExceptionHandler;
@@ -46,14 +47,14 @@ import org.jboss.resteasy.plugins.interceptors.CorsFilter;
  */
 @ApplicationPath("/rest")
 public class BeaconApplication extends Application {
-    
+
     private Set<Object> singletons;
-    
+
     @Override
     public Set<Class<?>> getClasses() {
-        return new HashSet<>(Arrays.asList(RestEndPointResource.class, BeaconResource.class, BeaconResponseResource.class, ReferenceResource.class, ChromosomeResource.class, AllleleResource.class, LoggingFilter.class, ExceptionHandler.class));
+        return new HashSet<>(Arrays.asList(RestEndPointResource.class, BeaconResource.class, BeaconResponseResource.class, ReferenceResource.class, ChromosomeResource.class, AllleleResource.class, OrganizationResource.class, LoggingFilter.class, ExceptionHandler.class));
     }
-    
+
     @Override
     public Set<Object> getSingletons() {
         if (singletons == null) {
@@ -63,7 +64,7 @@ public class BeaconApplication extends Application {
             corsFilter.setAllowedMethods("GET, POST, PUT, DELETE, OPTIONS, HEAD");
 //            corsFilter.setAllowedHeaders("origin, content-type, accept, authorization");
             corsFilter.setCorsMaxAge(1209600);
-            
+
             singletons = new HashSet<>();
             singletons.add(corsFilter);
         }

@@ -21,17 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.rest.util;
+package com.dnastack.bob.rest.comparator;
 
-import com.dnastack.bob.service.dto.BeaconTo;
-import java.util.Comparator;
+import com.dnastack.bob.service.dto.OrganizationDto;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Named;
 
 /**
- * Comparator of BeaconTo objects.
+ * Comparator of OrganizationDto objects. Performs case-insensitive comparison of IDs of OrganizationDto objects.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public interface BeaconToComparator extends Comparator<BeaconTo> {
+@RequestScoped
+@Named
+@IdComparator
+public class OrganizationDtoIdComparator implements OrganizationDtoComparator {
+
+    @Override
+    public int compare(OrganizationDto o1, OrganizationDto o2) {
+        if (o1 == null || o2 == null) {
+            throw new NullPointerException("Organization is null.");
+        }
+        if (o1.getId() == null || o2.getId() == null) {
+            throw new NullPointerException("Organization ID is null.");
+        }
+        return o1.getId().compareToIgnoreCase(o2.getId());
+    }
 
 }

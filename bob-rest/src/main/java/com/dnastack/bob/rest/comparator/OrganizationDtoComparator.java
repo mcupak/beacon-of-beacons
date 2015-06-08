@@ -21,37 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.rest.util;
+package com.dnastack.bob.rest.comparator;
 
-import com.dnastack.bob.service.dto.BeaconResponseTo;
+import com.dnastack.bob.service.dto.OrganizationDto;
 import java.util.Comparator;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
 
 /**
- * Comparator of BeaconResponseTo objects. Performs comparison of BeaconTo objects in the responses.
+ * Comparator of OrganizationDto objects.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@RequestScoped
-@Named
-public class BeaconResponseToComparator implements Comparator<BeaconResponseTo> {
-
-    @Inject
-    @NameComparator
-    private BeaconToComparator beaconComparator;
-
-    @Override
-    public int compare(BeaconResponseTo o1, BeaconResponseTo o2) {
-        if (o1 == null || o2 == null) {
-            throw new NullPointerException("Beacon response is null.");
-        }
-        if (o1.getBeacon() == null || o2.getBeacon() == null) {
-            throw new NullPointerException("Beacon is null.");
-        }
-        return beaconComparator.compare(o1.getBeacon(), o2.getBeacon());
-    }
+public interface OrganizationDtoComparator extends Comparator<OrganizationDto> {
 
 }

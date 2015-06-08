@@ -33,37 +33,37 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @version 1.0
  */
 @XmlRootElement(name = "beacon-response")
-public class BeaconResponseTo implements Serializable {
+public class BeaconResponseDto implements Serializable {
 
     private static final long serialVersionUID = 54L;
 
-    private BeaconTo beacon;
-    private QueryTo query;
+    private BeaconDto beacon;
+    private QueryDto query;
     private Boolean response = null;
 
-    public BeaconResponseTo() {
+    public BeaconResponseDto() {
         // needed for JAXB
     }
 
-    public BeaconResponseTo(BeaconTo beacon, QueryTo query, Boolean response) {
+    public BeaconResponseDto(BeaconDto beacon, QueryDto query, Boolean response) {
         this.beacon = beacon;
         this.query = query;
         this.response = response;
     }
 
-    public BeaconTo getBeacon() {
+    public BeaconDto getBeacon() {
         return beacon;
     }
 
-    public void setBeacon(BeaconTo beacon) {
+    public void setBeacon(BeaconDto beacon) {
         this.beacon = beacon;
     }
 
-    public QueryTo getQuery() {
+    public QueryDto getQuery() {
         return query;
     }
 
-    public void setQuery(QueryTo query) {
+    public void setQuery(QueryDto query) {
         this.query = query;
     }
 
@@ -92,7 +92,7 @@ public class BeaconResponseTo implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final BeaconResponseTo other = (BeaconResponseTo) obj;
+        final BeaconResponseDto other = (BeaconResponseDto) obj;
         if (this.beacon != other.beacon && (this.beacon == null || !this.beacon.equals(other.beacon))) {
             return false;
         }

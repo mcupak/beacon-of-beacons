@@ -41,6 +41,8 @@ public class ExceptionHandler implements ExceptionMapper<Exception> {
         Response.Status s = ResponseStatusMapper.getStatus(exception);
         Error error = new Error(s.getStatusCode(), exception.getMessage());
 
+        exception.printStackTrace();
+
         return Response.status(s).entity(error).build();
     }
 

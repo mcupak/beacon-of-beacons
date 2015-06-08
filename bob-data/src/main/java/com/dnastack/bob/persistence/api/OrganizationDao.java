@@ -33,4 +33,5 @@ import com.dnastack.bob.persistence.entity.Organization;
  */
 public interface OrganizationDao extends EntityWithStringIdDao<Organization> {
 
+    Organization findByName(String name);
 }

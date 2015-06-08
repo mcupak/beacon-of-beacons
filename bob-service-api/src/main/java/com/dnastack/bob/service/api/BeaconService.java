@@ -23,7 +23,7 @@
  */
 package com.dnastack.bob.service.api;
 
-import com.dnastack.bob.service.dto.BeaconTo;
+import com.dnastack.bob.service.dto.BeaconDto;
 import java.util.Collection;
 
 /**
@@ -37,26 +37,47 @@ public interface BeaconService {
     /**
      * Retrieves beacon details.
      *
-     * @param beaconId id of the beacon
+     * @param id id of the beacon
      *
      * @return beacon
      */
-    BeaconTo getBeacon(String beaconId);
+    BeaconDto find(String id);
+
+    /**
+     * Creates a new beacon.
+     *
+     * @param beacon
+     *
+     * @return
+     */
+    BeaconDto create(BeaconDto beacon);
+
+    /**
+     * Updates a beacon.
+     *
+     * @param id     ID of the beacon to update
+     * @param beacon template
+     *
+     * @return
+     */
+    BeaconDto update(String id, BeaconDto beacon);
+
+    void delete(String id);
 
     /**
      * Retrieves beacons with specified IDs.
      *
-     * @param beaconIds collection of beacon ids
+     * @param ids collection of beacon ids
      *
      * @return collection of beacons
      */
-    Collection<BeaconTo> getBeacons(Collection<String> beaconIds);
+    Collection<BeaconDto> find(Collection<String> ids);
 
     /**
      * Retrieves all the beacons.
      *
      * @return collection of beacons
      */
-    Collection<BeaconTo> getAll();
+    Collection<BeaconDto> findAll();
 
 }

@@ -29,7 +29,7 @@ import com.dnastack.bob.persistence.entity.Query;
 import com.dnastack.bob.persistence.enumerated.Chromosome;
 import com.dnastack.bob.persistence.enumerated.Reference;
 import com.dnastack.bob.service.api.BeaconResponseService;
-import com.dnastack.bob.service.dto.BeaconResponseTo;
+import com.dnastack.bob.service.dto.BeaconResponseDto;
 import com.dnastack.bob.service.lrg.Brca;
 import com.dnastack.bob.service.lrg.Brca2;
 import com.dnastack.bob.service.lrg.LrgConvertor;
@@ -38,7 +38,7 @@ import com.dnastack.bob.service.lrg.LrgReference;
 import com.dnastack.bob.service.processor.api.BeaconProcessor;
 import com.dnastack.bob.service.processor.api.BeaconResponse;
 import com.dnastack.bob.service.util.CdiBeanResolver;
-import com.dnastack.bob.service.util.Entity2ToConvertor;
+import com.dnastack.bob.service.util.EntityDtoConvertor;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import java.io.Serializable;
@@ -348,7 +348,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
     }
 
     @Override
-    public BeaconResponseTo queryBeacon(String beaconId, String chrom, Long pos, String allele, String ref) throws ClassNotFoundException {
+    public BeaconResponseDto queryBeacon(String beaconId, String chrom, Long pos, String allele, String ref) throws ClassNotFoundException {
         Query q = getQuery(chrom, pos, allele, ref);
 
         Beacon b = beaconDao.findById(beaconId);
@@ -362,12 +362,12 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
             beacon.setEnabled(false);
             beacon.setVisible(false);
             beacon.setAggregator(true);
-            return Entity2ToConvertor.getBeaconResponseTo(new BeaconResponse(beacon, q, null));
+            return EntityDtoConvertor.getBeaconResponseDto(new BeaconResponse(beacon, q, null));
         }
 
         BeaconResponse br = new BeaconResponse(b, q, null);
         if (queryNotNormalizedOrValid(q, ref)) {
-            return Entity2ToConvertor.getBeaconResponseTo(br);
+            return EntityDtoConvertor.getBeaconResponseDto(br);
         }
 
         try {
@@ -376,21 +376,21 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
             // ignore, response already null
         }
 
-        return Entity2ToConvertor.getBeaconResponseTo(br);
+        return EntityDtoConvertor.getBeaconResponseDto(br);
     }
 
     @Override
-    public Collection<BeaconResponseTo> queryBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref) throws ClassNotFoundException {
+    public Collection<BeaconResponseDto> queryBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref) throws ClassNotFoundException {
         if (beaconIds == null) {
             return new HashSet<>();
         }
 
-        return Entity2ToConvertor.getBeaconResponseTos(queryMultipleBeacons(beaconIds, chrom, pos, allele, ref));
+        return EntityDtoConvertor.getBeaconResponseDtos(queryMultipleBeacons(beaconIds, chrom, pos, allele, ref));
     }
 
     @Override
-    public Collection<BeaconResponseTo> queryAll(String chrom, Long pos, String allele, String ref) throws ClassNotFoundException {
-        return Entity2ToConvertor.getBeaconResponseTos(queryMultipleBeacons(null, chrom, pos, allele, ref));
+    public Collection<BeaconResponseDto> queryAll(String chrom, Long pos, String allele, String ref) throws ClassNotFoundException {
+        return EntityDtoConvertor.getBeaconResponseDtos(queryMultipleBeacons(null, chrom, pos, allele, ref));
     }
 
 }

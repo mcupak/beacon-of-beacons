@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 DNAstack.
+ * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,52 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.persistence.entity;
+package com.dnastack.bob.service.dto;
 
-import java.util.List;
+import java.io.Serializable;
 import java.util.Objects;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Organization owning a beacon.
+ * Organization DTO.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Entity
-@NamedQueries({
-    @NamedQuery(name = "findOrganizationByName", query = "SELECT b FROM Organization b WHERE b.name=:name")
-})
-public class Organization implements BasicEntity {
+@XmlRootElement(name = "organization")
+public class OrganizationDto implements Serializable {
 
-    private static final long serialVersionUID = -2628422425515576512L;
+    private static final long serialVersionUID = 5579930786521160428L;
 
-    @Id
-    @NotNull
-    @Size(min = 1)
-    @Column(nullable = false, unique = true)
     private String id;
-    @NotNull
-    @Size(min = 1)
-    @Column(nullable = false, unique = true)
     private String name;
     private String description;
     private String url;
     private String address;
-    @OneToMany(mappedBy = "organization")
-    private List<Beacon> beacons;
 
-    public Organization() {
+    public OrganizationDto() {
+        // needed for JAXB
     }
 
-    public Organization(String id, String name, String description, String url, String address) {
+    public OrganizationDto(String id) {
+        this.id = id;
+    }
+
+    public OrganizationDto(String id, String name, String description, String url, String address) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -98,14 +84,6 @@ public class Organization implements BasicEntity {
         this.description = description;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
     public String getAddress() {
         return address;
     }
@@ -114,18 +92,22 @@ public class Organization implements BasicEntity {
         this.address = address;
     }
 
-    public List<Beacon> getBeacons() {
-        return beacons;
+    public String getUrl() {
+        return url;
     }
 
-    public void setBeacons(List<Beacon> beacons) {
-        this.beacons = beacons;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 83 * hash + Objects.hashCode(this.id);
+        int hash = 3;
+        hash = 79 * hash + Objects.hashCode(this.id);
+        hash = 79 * hash + Objects.hashCode(this.name);
+        hash = 79 * hash + Objects.hashCode(this.description);
+        hash = 79 * hash + Objects.hashCode(this.url);
+        hash = 79 * hash + Objects.hashCode(this.address);
         return hash;
     }
 
@@ -137,8 +119,20 @@ public class Organization implements BasicEntity {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Organization other = (Organization) obj;
+        final OrganizationDto other = (OrganizationDto) obj;
         if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.description, other.description)) {
+            return false;
+        }
+        if (!Objects.equals(this.url, other.url)) {
+            return false;
+        }
+        if (!Objects.equals(this.address, other.address)) {
             return false;
         }
         return true;
@@ -146,7 +140,7 @@ public class Organization implements BasicEntity {
 
     @Override
     public String toString() {
-        return "Organization{" + "id=" + id + ", name=" + name + ", description=" + description + ", url=" + url + ", address=" + address + '}';
+        return "OrganizationDto{" + "id=" + id + ", name=" + name + ", description=" + description + ", url=" + url + ", address=" + address + '}';
     }
 
 }

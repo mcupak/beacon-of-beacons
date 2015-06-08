@@ -21,36 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.rest.util;
-
-import com.dnastack.bob.service.dto.ChromosomeDto;
-import com.dnastack.bob.service.dto.ReferenceDto;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
+package com.dnastack.bob.service.dto;
 
 /**
- * Convenient JAXB wrapper for enums and other items.
+ * Canonical genome representation.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
- * @param <T> item type
  */
-@XmlRootElement(name = "item")
-@XmlSeeAlso({ReferenceDto.class, ChromosomeDto.class, String.class})
-public class ItemWrapper<T> {
+public enum ReferenceDto {
 
-    private T item;
+    HG38("hg38"), HG19("hg19"), HG18("hg18"), HG17("hg17"), HG16("hg16");
 
-    public ItemWrapper() {
+    private final String ref;
+
+    private ReferenceDto(String ref) {
+        this.ref = ref;
     }
 
-    public ItemWrapper(T item) {
-        this.item = item;
+    public static ReferenceDto fromString(String text) {
+        if (text != null) {
+            for (ReferenceDto b : ReferenceDto.values()) {
+                if (text.equalsIgnoreCase(b.toString())) {
+                    return b;
+                }
+            }
+        }
+        return null;
     }
 
-    @XmlElement(name = "value")
-    public T getItem() {
-        return item;
+    @Override
+    public String toString() {
+        return ref;
     }
 }

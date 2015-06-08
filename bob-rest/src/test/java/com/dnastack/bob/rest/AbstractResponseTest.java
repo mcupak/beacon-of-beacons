@@ -24,10 +24,10 @@
 package com.dnastack.bob.rest;
 
 import com.dnastack.bob.rest.util.QueryEntry;
-import com.dnastack.bob.service.dto.BeaconResponseTo;
-import com.dnastack.bob.service.dto.ChromosomeTo;
-import com.dnastack.bob.service.dto.QueryTo;
-import com.dnastack.bob.service.dto.ReferenceTo;
+import com.dnastack.bob.service.dto.BeaconResponseDto;
+import com.dnastack.bob.service.dto.ChromosomeDto;
+import com.dnastack.bob.service.dto.QueryDto;
+import com.dnastack.bob.service.dto.ReferenceDto;
 import com.google.common.collect.ImmutableList;
 import java.net.MalformedURLException;
 import java.util.List;
@@ -88,12 +88,12 @@ public abstract class AbstractResponseTest extends BasicTest {
     }
 
     @SuppressWarnings("unchecked")
-    public static List<BeaconResponseTo> readBeaconResponses(String url) throws JAXBException, MalformedURLException {
-        return (List<BeaconResponseTo>) readObject(BeaconResponseTo.class, url);
+    public static List<BeaconResponseDto> readBeaconResponses(String url) throws JAXBException, MalformedURLException {
+        return (List<BeaconResponseDto>) readObject(BeaconResponseDto.class, url);
     }
 
-    protected static BeaconResponseTo readBeaconResponse(String url) throws JAXBException, MalformedURLException {
-        return (BeaconResponseTo) readObject(BeaconResponseTo.class, url);
+    protected static BeaconResponseDto readBeaconResponse(String url) throws JAXBException, MalformedURLException {
+        return (BeaconResponseDto) readObject(BeaconResponseDto.class, url);
     }
 
     protected static String readBeaconId(String response) {
@@ -104,20 +104,20 @@ public abstract class AbstractResponseTest extends BasicTest {
         return Long.valueOf(readField(response, POS_PATH));
     }
 
-    protected static ChromosomeTo readChrom(String response) {
-        return ChromosomeTo.fromString(readField(response, CHROM_PATH).substring(3));
+    protected static ChromosomeDto readChrom(String response) {
+        return ChromosomeDto.fromString(readField(response, CHROM_PATH).substring(3));
     }
 
     protected static String readAllele(String response) {
         return readField(response, ALLELE_PATH);
     }
 
-    protected static ReferenceTo readRef(String response) {
-        return ReferenceTo.fromString(readField(response, REF_PATH));
+    protected static ReferenceDto readRef(String response) {
+        return ReferenceDto.fromString(readField(response, REF_PATH));
     }
 
-    protected static QueryTo readQuery(String response) {
-        return new QueryTo(readChrom(response), readPos(response), readAllele(response), readRef(response));
+    protected static QueryDto readQuery(String response) {
+        return new QueryDto(readChrom(response), readPos(response), readAllele(response), readRef(response));
     }
 
     protected static Boolean readResponsePredicate(String response) {

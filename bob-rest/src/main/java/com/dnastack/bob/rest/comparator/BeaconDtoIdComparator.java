@@ -21,37 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.dto;
+package com.dnastack.bob.rest.comparator;
+
+import com.dnastack.bob.service.dto.BeaconDto;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Named;
 
 /**
- * Canonical genome representation.
+ * Comparator of BeaconDto objects. Performs case-insensitive comparison of IDs of BeaconDto objects.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public enum ReferenceTo {
-
-    HG38("hg38"), HG19("hg19"), HG18("hg18"), HG17("hg17"), HG16("hg16");
-
-    private final String ref;
-
-    private ReferenceTo(String ref) {
-        this.ref = ref;
-    }
-
-    public static ReferenceTo fromString(String text) {
-        if (text != null) {
-            for (ReferenceTo b : ReferenceTo.values()) {
-                if (text.equalsIgnoreCase(b.toString())) {
-                    return b;
-                }
-            }
-        }
-        return null;
-    }
+@RequestScoped
+@Named
+@IdComparator
+public class BeaconDtoIdComparator implements BeaconDtoComparator {
 
     @Override
-    public String toString() {
-        return ref;
+    public int compare(BeaconDto o1, BeaconDto o2) {
+        if (o1 == null || o2 == null) {
+            throw new NullPointerException("Beacon is null.");
+        }
+        if (o1.getId() == null || o2.getId() == null) {
+            throw new NullPointerException("Beacon ID is null.");
+        }
+        return o1.getId().compareToIgnoreCase(o2.getId());
     }
+
 }

@@ -121,6 +121,12 @@ public class DatabaseInitializer {
         logger.debug("Initializing DB...");
         try {
             // set up regular beacons
+            Organization dnastack = new Organization();
+            dnastack.setId("dnastack");
+            dnastack.setName("DNAstack");
+            dnastack.setUrl("http://dnastack.com/");
+            organizationDao.save(dnastack);
+
             Organization ucsc = new Organization();
             ucsc.setId("ucsc");
             ucsc.setName("UCSC");

@@ -21,44 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.rest.util;
+package com.dnastack.bob.rest.comparator;
 
-import com.dnastack.bob.service.dto.BeaconTo;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+import javax.inject.Qualifier;
+
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Comparator of BeaconTo objects. Performs case-insensitive comparison of names of BeaconTo objects.
- * In case the names are equal, IDs are compared to distinguish similar beacons.
+ * Comparator using names.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
- * @version 1.0
  */
-@RequestScoped
-@Named
-@NameComparator
-public class BeaconToNameComparator implements BeaconToComparator {
-
-    @Inject
-    @IdComparator
-    private BeaconToComparator idComparator;
-
-    @Override
-    public int compare(BeaconTo o1, BeaconTo o2) {
-        if (o1 == null || o2 == null) {
-            throw new NullPointerException("Beacon is null.");
-        }
-        if (o1.getName() == null || o2.getName() == null) {
-            throw new NullPointerException("Beacon ID is null.");
-        }
-
-        int i = o1.getName().compareToIgnoreCase(o2.getName());
-        if (i == 0) {
-            i = idComparator.compare(o1, o2);
-        }
-
-        return i;
-    }
-
+@Qualifier
+@Retention(RUNTIME)
+@Target({METHOD, FIELD, PARAMETER, TYPE})
+public @interface NameComparator {
 }

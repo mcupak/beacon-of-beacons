@@ -23,10 +23,10 @@
  */
 package com.dnastack.bob.rest.resource;
 
-import com.dnastack.bob.rest.comparator.BeaconDtoComparator;
 import com.dnastack.bob.rest.comparator.NameComparator;
-import com.dnastack.bob.service.api.BeaconService;
-import com.dnastack.bob.service.dto.BeaconDto;
+import com.dnastack.bob.rest.comparator.OrganizationDtoComparator;
+import com.dnastack.bob.service.api.OrganizationService;
+import com.dnastack.bob.service.dto.OrganizationDto;
 import com.dnastack.bob.service.parser.util.ParseUtils;
 import java.net.HttpURLConnection;
 import java.net.URI;
@@ -36,6 +36,7 @@ import java.util.TreeSet;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -51,38 +52,39 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 /**
- * Query rest resource.
+ * Organization rest resource.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Path("/beacons")
+@Path("/organizations")
+@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN})
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN})
 @RequestScoped
 @Named
-public class BeaconResource {
+public class OrganizationResource {
 
     @Inject
-    private BeaconService beaconService;
+    private OrganizationService organizationService;
 
     @Inject
     @NameComparator
-    private BeaconDtoComparator beaconComparator;
+    private OrganizationDtoComparator organizationComparator;
 
     @Inject
     private ParseUtils parseUtils;
 
     /**
-     * Shows beacon details.
+     * Shows organization details.
      *
-     * @param beaconId id of the beacon
+     * @param organizationId id of the organization
      *
-     * @return beacon
+     * @return organization
      */
     @GET
-    @Path("/{beaconId}")
-    public BeaconDto showBeacon(@PathParam("beaconId") String beaconId) {
-        BeaconDto b = beaconService.find(beaconId);
+    @Path("/{organizationId}")
+    public OrganizationDto showOrganization(@PathParam("organizationId") String organizationId) {
+        OrganizationDto b = organizationService.find(organizationId);
         if (b == null) {
             throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
         }
@@ -90,41 +92,41 @@ public class BeaconResource {
     }
 
     /**
-     * Shows all the beacons or a specific beacon as determined by a param.
+     * Shows all the organizations or a specific organization as determined by a param.
      *
-     * @param beaconIds beacon ID
+     * @param organizationIds organization ID
      *
-     * @return set of beacons
+     * @return set of organizations
      */
     @GET
-    public Collection<BeaconDto> show(@QueryParam("beacon") String beaconIds) {
-        Set<BeaconDto> bs = new TreeSet<>(beaconComparator);
-        if (beaconIds == null) {
-            bs.addAll(beaconService.findAll());
+    public Collection<OrganizationDto> show(@QueryParam("organization") String organizationIds) {
+        Set<OrganizationDto> bs = new TreeSet<>(organizationComparator);
+        if (organizationIds == null) {
+            bs.addAll(organizationService.findAll());
         } else {
-            bs.addAll(beaconService.find(parseUtils.parseMultipleParameterValues(beaconIds)));
+            bs.addAll(organizationService.find(parseUtils.parseMultipleParameterValues(organizationIds)));
         }
 
         return bs;
     }
 
     @POST
-    public Response create(@Context UriInfo uriInfo, BeaconDto beacon) {
-        BeaconDto o = beaconService.create(beacon);
+    public Response create(@Context UriInfo uriInfo, OrganizationDto organization) {
+        OrganizationDto o = organizationService.create(organization);
         return Response.created(URI.create(uriInfo.getAbsolutePath() + "/" + o.getId())).build();
     }
 
     @PUT
-    @Path("/{beaconId}")
-    public Response update(@Context UriInfo uriInfo, @PathParam("beaconId") String beaconId, BeaconDto beacon) {
-        BeaconDto o = beaconService.update(beaconId, beacon);
+    @Path("/{organizationId}")
+    public Response update(@Context UriInfo uriInfo, @PathParam("organizationId") String organizationId, OrganizationDto organization) {
+        OrganizationDto o = organizationService.update(organizationId, organization);
         return Response.ok(o).build();
     }
 
     @DELETE
-    @Path("/{beaconId}")
-    public Response delete(@Context UriInfo uriInfo, @PathParam("beaconId") String beaconId) {
-        beaconService.delete(beaconId);
+    @Path("/{organizationId}")
+    public Response delete(@Context UriInfo uriInfo, @PathParam("organizationId") String organizationId) {
+        organizationService.delete(organizationId);
         return Response.ok().build();
     }
 }

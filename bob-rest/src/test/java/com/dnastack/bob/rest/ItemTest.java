@@ -24,8 +24,8 @@
 package com.dnastack.bob.rest;
 
 import com.dnastack.bob.rest.util.ItemWrapper;
-import com.dnastack.bob.service.dto.ChromosomeTo;
-import com.dnastack.bob.service.dto.ReferenceTo;
+import com.dnastack.bob.service.dto.ChromosomeDto;
+import com.dnastack.bob.service.dto.ReferenceDto;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -60,13 +60,13 @@ public class ItemTest extends BasicTest {
     @Test
     public void testAllChromosomes(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         List<ItemWrapper> bs = readItems(url.toExternalForm() + CHROMOSOMES_TEMPLATE);
-        assertEquals(bs.size(), ChromosomeTo.values().length);
+        assertEquals(bs.size(), ChromosomeDto.values().length);
     }
 
     @Test
     public void testAllReferences(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         List<ItemWrapper> bs = readItems(url.toExternalForm() + REFERENCES_TEMPLATE);
-        assertEquals(bs.size(), ReferenceTo.values().length);
+        assertEquals(bs.size(), ReferenceDto.values().length);
     }
 
     @Test

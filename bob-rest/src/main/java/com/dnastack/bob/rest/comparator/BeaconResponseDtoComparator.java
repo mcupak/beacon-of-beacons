@@ -21,36 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.rest.util;
+package com.dnastack.bob.rest.comparator;
 
-import com.dnastack.bob.service.dto.ChromosomeDto;
-import com.dnastack.bob.service.dto.ReferenceDto;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
+import com.dnastack.bob.service.dto.BeaconResponseDto;
+import java.util.Comparator;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
- * Convenient JAXB wrapper for enums and other items.
+ * Comparator of BeaconResponseDto objects. Performs comparison of BeaconDto objects in the responses.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
- * @param <T> item type
  */
-@XmlRootElement(name = "item")
-@XmlSeeAlso({ReferenceDto.class, ChromosomeDto.class, String.class})
-public class ItemWrapper<T> {
+@RequestScoped
+@Named
+public class BeaconResponseDtoComparator implements Comparator<BeaconResponseDto> {
 
-    private T item;
+    @Inject
+    @NameComparator
+    private BeaconDtoComparator beaconComparator;
 
-    public ItemWrapper() {
+    @Override
+    public int compare(BeaconResponseDto o1, BeaconResponseDto o2) {
+        if (o1 == null || o2 == null) {
+            throw new NullPointerException("Beacon response is null.");
+        }
+        if (o1.getBeacon() == null || o2.getBeacon() == null) {
+            throw new NullPointerException("Beacon is null.");
+        }
+        return beaconComparator.compare(o1.getBeacon(), o2.getBeacon());
     }
 
-    public ItemWrapper(T item) {
-        this.item = item;
-    }
-
-    @XmlElement(name = "value")
-    public T getItem() {
-        return item;
-    }
 }

@@ -24,7 +24,7 @@
 package com.dnastack.bob.rest;
 
 import com.dnastack.bob.rest.util.QueryEntry;
-import com.dnastack.bob.service.dto.BeaconResponseTo;
+import com.dnastack.bob.service.dto.BeaconResponseDto;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashSet;
@@ -64,15 +64,15 @@ public class BeaconMultipleResponsesTest extends AbstractResponseTest {
     public void testAllResponses(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         QueryEntry q = new QueryEntry(getQueries().get(0));
         q.setBeacon(null);
-        List<BeaconResponseTo> brs = readBeaconResponses(url.toExternalForm() + getUrl(q, true));
+        List<BeaconResponseDto> brs = readBeaconResponses(url.toExternalForm() + getUrl(q, true));
 
         Set<String> ids = new HashSet<>();
-        for (BeaconResponseTo br : brs) {
+        for (BeaconResponseDto br : brs) {
             ids.add(br.getBeacon().getId());
         }
         assertThat(getBeacons(), everyItem(isIn(ids)));
 
-        for (BeaconResponseTo br : brs) {
+        for (BeaconResponseDto br : brs) {
             assertThat(queriesMatch(br.getQuery(), q), is(true));
         }
     }
@@ -103,17 +103,17 @@ public class BeaconMultipleResponsesTest extends AbstractResponseTest {
                 query.setBeacon(String.format("[%s,%s]", a, b));
                 logger.log(Level.INFO, String.format("Testing query: %s", query));
 
-                List<BeaconResponseTo> brs = readBeaconResponses(url.toExternalForm() + getUrl(query, true));
+                List<BeaconResponseDto> brs = readBeaconResponses(url.toExternalForm() + getUrl(query, true));
 
                 Set<String> ids = new HashSet<>();
-                for (BeaconResponseTo br : brs) {
+                for (BeaconResponseDto br : brs) {
                     ids.add(br.getBeacon().getId());
                 }
                 collector.checkThat(query.toString(), a, isIn(ids));
                 collector.checkThat(query.toString(), b, isIn(ids));
                 collector.checkThat(query.toString(), ids.size(), equalTo(2));
 
-                for (BeaconResponseTo br : brs) {
+                for (BeaconResponseDto br : brs) {
                     collector.checkThat(query.toString(), queriesMatch(br.getQuery(), query), is(true));
                 }
             }

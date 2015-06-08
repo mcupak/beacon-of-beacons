@@ -21,36 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.rest.util;
+package com.dnastack.bob.rest.comparator;
 
-import com.dnastack.bob.service.dto.ChromosomeDto;
-import com.dnastack.bob.service.dto.ReferenceDto;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
+import com.dnastack.bob.service.dto.BeaconDto;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
- * Convenient JAXB wrapper for enums and other items.
+ * Comparator of BeaconDto objects. Performs case-insensitive comparison of names of BeaconDto objects.
+ In case the names are equal, IDs are compared to distinguish similar beacons.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
- * @param <T> item type
  */
-@XmlRootElement(name = "item")
-@XmlSeeAlso({ReferenceDto.class, ChromosomeDto.class, String.class})
-public class ItemWrapper<T> {
+@RequestScoped
+@Named
+@NameComparator
+public class BeaconDtoNameComparator implements BeaconDtoComparator {
 
-    private T item;
+    @Inject
+    @IdComparator
+    private BeaconDtoComparator idComparator;
 
-    public ItemWrapper() {
+    @Override
+    public int compare(BeaconDto o1, BeaconDto o2) {
+        if (o1 == null || o2 == null) {
+            throw new NullPointerException("Beacon is null.");
+        }
+        if (o1.getName() == null || o2.getName() == null) {
+            throw new NullPointerException("Beacon ID is null.");
+        }
+
+        int i = o1.getName().compareToIgnoreCase(o2.getName());
+        if (i == 0) {
+            i = idComparator.compare(o1, o2);
+        }
+
+        return i;
     }
 
-    public ItemWrapper(T item) {
-        this.item = item;
-    }
-
-    @XmlElement(name = "value")
-    public T getItem() {
-        return item;
-    }
 }

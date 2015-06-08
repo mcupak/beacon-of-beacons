@@ -21,39 +21,63 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.rest.resource;
+package com.dnastack.bob.service.api;
 
-import com.dnastack.bob.rest.util.ItemWrapper;
-import com.dnastack.bob.service.dto.ChromosomeDto;
-import java.util.ArrayList;
+import com.dnastack.bob.service.dto.OrganizationDto;
 import java.util.Collection;
-import java.util.List;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 
 /**
- * Chromosome rest resource.
+ * Service managing organizations.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Path("/chromosomes")
-@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN})
-@RequestScoped
-@Named
-public class ChromosomeResource {
+public interface OrganizationService {
 
-    @GET
-    public Collection<ItemWrapper<ChromosomeDto>> showAll() {
-        List<ItemWrapper<ChromosomeDto>> vals = new ArrayList<>();
-        for (ChromosomeDto chr : ChromosomeDto.values()) {
-            vals.add(new ItemWrapper<>(chr));
-        }
+    /**
+     * Retrieves organization details.
+     *
+     * @param id id of the organization
+     *
+     * @return organization
+     */
+    OrganizationDto find(String id);
 
-        return vals;
-    }
+    /**
+     * Creates a new organization.
+     *
+     * @param organization
+     *
+     * @return
+     */
+    OrganizationDto create(OrganizationDto organization);
+
+    /**
+     * Updates an organization.
+     *
+     * @param id           ID of the organization to update
+     * @param organization template
+     *
+     * @return
+     */
+    OrganizationDto update(String id, OrganizationDto organization);
+
+    void delete(String id);
+
+    /**
+     * Retrieves organizations with specified IDs.
+     *
+     * @param ids collection of organization ids
+     *
+     * @return collection of organizations
+     */
+    Collection<OrganizationDto> find(Collection<String> ids);
+
+    /**
+     * Retrieves all the organizations.
+     *
+     * @return collection of organizations
+     */
+    Collection<OrganizationDto> findAll();
+
 }

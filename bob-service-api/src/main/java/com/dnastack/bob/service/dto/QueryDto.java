@@ -28,71 +28,71 @@ import java.util.Objects;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Beacon DTO.
+ * Query DTO.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@XmlRootElement(name = "beacon")
-public class BeaconTo implements Serializable {
+@XmlRootElement(name = "query")
+public class QueryDto implements Serializable {
 
-    private static final long serialVersionUID = 42L;
+    private static final long serialVersionUID = 3L;
 
-    private String id;
-    private String name;
-    private String organization;
-    private boolean aggregator;
+    private ChromosomeDto chromosome;
+    private Long position;
+    private String allele;
+    private ReferenceDto reference;
 
-    public BeaconTo() {
+    public QueryDto() {
         // needed for JAXB
     }
 
-    public BeaconTo(String id, String name, String organization, boolean aggregator) {
-        this.id = id;
-        this.name = name;
-        this.organization = organization;
-        this.aggregator = aggregator;
+    public QueryDto(ChromosomeDto chromosome, Long position, String allele, ReferenceDto reference) {
+        this.chromosome = chromosome;
+        this.position = position;
+        this.allele = allele;
+        this.reference = reference;
     }
 
-    public String getId() {
-        return id;
+    public ChromosomeDto getChromosome() {
+        return chromosome;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setChromosome(ChromosomeDto chromosome) {
+        this.chromosome = chromosome;
     }
 
-    public String getName() {
-        return name;
+    public Long getPosition() {
+        return position;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPosition(Long position) {
+        this.position = position;
     }
 
-    public String getOrganization() {
-        return organization;
+    public String getAllele() {
+        return allele;
     }
 
-    public void setOrganization(String organization) {
-        this.organization = organization;
+    public void setAllele(String allele) {
+        this.allele = allele;
     }
 
-    public boolean isAggregator() {
-        return aggregator;
+    public ReferenceDto getReference() {
+        return reference;
     }
 
-    public void setAggregator(boolean aggregator) {
-        this.aggregator = aggregator;
+    public void setReference(ReferenceDto reference) {
+        this.reference = reference;
     }
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 97 * hash + Objects.hashCode(this.id);
-        hash = 97 * hash + Objects.hashCode(this.name);
-        hash = 97 * hash + Objects.hashCode(this.organization);
-        hash = 97 * hash + (this.aggregator ? 1 : 0);
+        int hash = 3;
+        hash = 89 * hash + Objects.hashCode(this.chromosome);
+        hash = 89 * hash + Objects.hashCode(this.position);
+        hash = 89 * hash + Objects.hashCode(this.allele);
+        hash = 89 * hash + Objects.hashCode(this.reference);
         return hash;
     }
 
@@ -104,17 +104,17 @@ public class BeaconTo implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final BeaconTo other = (BeaconTo) obj;
-        if (!Objects.equals(this.id, other.id)) {
+        final QueryDto other = (QueryDto) obj;
+        if (this.chromosome != other.chromosome) {
             return false;
         }
-        if (!Objects.equals(this.name, other.name)) {
+        if (!Objects.equals(this.position, other.position)) {
             return false;
         }
-        if (!Objects.equals(this.organization, other.organization)) {
+        if (!Objects.equals(this.allele, other.allele)) {
             return false;
         }
-        if (this.aggregator != other.aggregator) {
+        if (this.reference != other.reference) {
             return false;
         }
         return true;
@@ -122,7 +122,7 @@ public class BeaconTo implements Serializable {
 
     @Override
     public String toString() {
-        return "BeaconTo{" + "id=" + id + ", name=" + name + ", organization=" + organization + ", aggregator=" + aggregator + '}';
+        return "Query{" + "chromosome=" + chromosome + ", position=" + position + ", allele=" + allele + ", reference=" + reference + '}';
     }
 
 }

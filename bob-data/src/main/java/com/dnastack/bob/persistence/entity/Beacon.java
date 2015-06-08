@@ -26,6 +26,7 @@ package com.dnastack.bob.persistence.entity;
 import com.dnastack.bob.persistence.enumerated.Reference;
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -59,11 +60,11 @@ public class Beacon implements BasicEntity {
     @Size(min = 1)
     private String id;
     @NotNull
-    @Column(nullable = false)
     @Size(min = 1)
+    @Column(nullable = false)
     private String name;
     private String url;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.DETACH})
     @NotNull
     private Organization organization;
     private String description;
