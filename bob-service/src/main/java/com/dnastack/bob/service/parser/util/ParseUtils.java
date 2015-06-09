@@ -214,6 +214,20 @@ public class ParseUtils {
     }
 
     /**
+     * Parses yes/no value out of the given field in a JSON response, case-insensitive.
+     *
+     * @param response
+     * @param path
+     *
+     * @return true if the response is yes, false otherwise
+     */
+    public Boolean parseYesNoFromJson(String response, String... path) {
+        String res = parseStringFromJson(response, path);
+
+        return (res == null) ? null : parseYesNoCaseInsensitive(res);
+    }
+
+    /**
      * Checks if there are multiple values given as a parameter.
      *
      * @param param values
