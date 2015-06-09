@@ -301,6 +301,28 @@ public class DatabaseInitializer {
             kaviar.setSupportedReferences(EnumSet.of(Reference.HG19, Reference.HG18));
             beaconDao.save(kaviar);
 
+            Organization ega = new Organization();
+            ega.setId("ega");
+            ega.setName("European Genome-phenome Archive");
+            organizationDao.save(ega);
+            Beacon egaBeacon = new Beacon();
+            egaBeacon.setId("ega");
+            egaBeacon.setName("EGA - Public datasets");
+            egaBeacon.setOrganization(ega);
+            egaBeacon.setVisible(true);
+            egaBeacon.setAggregator(false);
+            egaBeacon.setParser(ejbResolver.getClassId(JsonResponseExistsResponseParser.class));
+            egaBeacon.setFetcher(ejbResolver.getClassId(GetResponseFetcher.class));
+            egaBeacon.setRequester(cdiResolver.getClassId(RefChromPosAlleleRequestConstructor.class));
+            egaBeacon.setReferenceConverter(cdiResolver.getClassId(GrChReferenceConverter.class));
+            egaBeacon.setChromosomeConverter(cdiResolver.getClassId(NumberChromosomeConverter.class));
+            egaBeacon.setPositionConverter(cdiResolver.getClassId(EmptyPositionConverter.class));
+            egaBeacon.setAlleleConverter(cdiResolver.getClassId(EmptyAlleleConverter.class));
+            egaBeacon.setEnabled(true);
+            egaBeacon.setUrl("https://ega.crg.eu/requesterportal/v1/beacon/query?reference=%s&chromosome=%s&position=%d&alternateBases=%s");
+            egaBeacon.setSupportedReferences(EnumSet.of(Reference.HG19));
+            beaconDao.save(egaBeacon);
+
             Organization google = new Organization();
             google.setId("google");
             google.setName("Google");
