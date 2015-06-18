@@ -46,6 +46,3 @@ local.properties
 # Locally stored "Eclipse launch configurations"
 *.launch
 
-# initialization data
-DatabaseInitializer.java
-*.sql
