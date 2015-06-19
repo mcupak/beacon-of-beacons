@@ -42,7 +42,7 @@ import javax.inject.Named;
 import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
 
 /**
- * Parses "yes" and "no" strings.
+ * Parses "yes" and "no" strings (exact match, case insensitive).
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
@@ -51,7 +51,7 @@ import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
 @Named
 @Dependent
 @Local(ResponseParser.class)
-public class StringYesNoResponseParser implements ResponseParser, Serializable {
+public class StringYesNoStrictResponseParser implements ResponseParser, Serializable {
 
     private static final long serialVersionUID = -4790485566013440026L;
     @Inject
@@ -62,7 +62,7 @@ public class StringYesNoResponseParser implements ResponseParser, Serializable {
     public Future<Boolean> parseQueryResponse(Beacon b, Future<String> response) {
         Boolean res = null;
         try {
-            res = parseUtils.parseStartsWithYesNoCaseInsensitive(response.get(REQUEST_TIMEOUT, TimeUnit.SECONDS));
+            res = parseUtils.parseIsYesNoCaseInsensitive(response.get(REQUEST_TIMEOUT, TimeUnit.SECONDS));
         } catch (InterruptedException | ExecutionException | TimeoutException ex) {
             // ignore
         }

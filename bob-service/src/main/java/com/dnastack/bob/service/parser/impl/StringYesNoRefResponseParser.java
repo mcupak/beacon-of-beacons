@@ -63,7 +63,7 @@ public class StringYesNoRefResponseParser implements ResponseParser, Serializabl
         Boolean res = null;
         try {
             String str = response.get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
-            res = parseUtils.parseYesNoCaseInsensitive(str);
+            res = parseUtils.parseStartsWithYesNoCaseInsensitive(str);
             if (res == null) {
                 // ref response is treated as false
                 Boolean isRef = parseUtils.parseRef(str);

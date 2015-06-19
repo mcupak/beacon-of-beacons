@@ -94,14 +94,49 @@ public class ParseUtils {
     }
 
     /**
+     * Checks whether a given response is equal to the specified string, case insensitive.
+     *
+     * @param response    response
+     * @param trueString  string reporting a positive query result
+     * @param falseString string reporting a negative query result
+     *
+     * @return true if the response contains trueString, false if the response contains falseString, null otherwise
+     */
+    public Boolean parseIsStringCaseInsensitive(String response, String trueString, String falseString) {
+        if (response == null) {
+            return null;
+        }
+
+        if (response.equalsIgnoreCase(trueString)) {
+            return true;
+        }
+        if (response.equalsIgnoreCase(falseString)) {
+            return false;
+        }
+
+        return null;
+    }
+
+    /**
+     * Checks whether the response starts with yes or no.
+     *
+     * @param response response
+     *
+     * @return true if the response is yes, false if the response is no, null otherwise
+     */
+    public Boolean parseStartsWithYesNoCaseInsensitive(String response) {
+        return parseStartsWithStringCaseInsensitive(response, "yes", "no");
+    }
+
+    /**
      * Checks whether the response is yes or no.
      *
      * @param response response
      *
      * @return true if the response is yes, false if the response is no, null otherwise
      */
-    public Boolean parseYesNoCaseInsensitive(String response) {
-        return parseStartsWithStringCaseInsensitive(response, "yes", "no");
+    public Boolean parseIsYesNoCaseInsensitive(String response) {
+        return parseIsStringCaseInsensitive(response, "yes", "no");
     }
 
     /**
@@ -224,7 +259,7 @@ public class ParseUtils {
     public Boolean parseYesNoFromJson(String response, String... path) {
         String res = parseStringFromJson(response, path);
 
-        return (res == null) ? null : parseYesNoCaseInsensitive(res);
+        return (res == null) ? null : parseStartsWithYesNoCaseInsensitive(res);
     }
 
     /**
