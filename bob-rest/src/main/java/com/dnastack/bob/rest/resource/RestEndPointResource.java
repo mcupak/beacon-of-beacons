@@ -45,7 +45,7 @@ import javax.ws.rs.core.UriInfo;
  * @version 1.0
  */
 @Path("/")
-@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN})
+@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @RequestScoped
 @Named
 public class RestEndPointResource {

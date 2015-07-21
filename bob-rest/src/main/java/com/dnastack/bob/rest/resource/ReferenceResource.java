@@ -42,7 +42,7 @@ import javax.ws.rs.core.MediaType;
  * @version 1.0
  */
 @Path("/references")
-@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN})
+@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @RequestScoped
 @Named
 public class ReferenceResource {
