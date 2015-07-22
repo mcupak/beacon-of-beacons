@@ -27,6 +27,7 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * Beacon DTO.
@@ -35,6 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @version 1.0
  */
 @XmlRootElement(name = "beacon")
+@XmlType(name = "beacon")
 public class BeaconDto implements Serializable {
 
     private static final long serialVersionUID = 42L;

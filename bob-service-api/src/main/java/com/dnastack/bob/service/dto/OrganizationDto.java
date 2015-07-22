@@ -26,6 +26,7 @@ package com.dnastack.bob.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * Organization DTO.
@@ -34,6 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @version 1.0
  */
 @XmlRootElement(name = "organization")
+@XmlType(name = "organization")
 public class OrganizationDto implements Serializable {
 
     private static final long serialVersionUID = 5579930786521160428L;

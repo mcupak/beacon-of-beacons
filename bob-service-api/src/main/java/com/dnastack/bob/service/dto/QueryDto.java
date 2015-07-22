@@ -26,6 +26,7 @@ package com.dnastack.bob.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * Query DTO.
@@ -34,6 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @version 1.0
  */
 @XmlRootElement(name = "query")
+@XmlType(name = "query")
 public class QueryDto implements Serializable {
 
     private static final long serialVersionUID = 3L;

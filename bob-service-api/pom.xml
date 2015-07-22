@@ -27,7 +27,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${version.compiler.plugin}</version>
                 <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
@@ -35,4 +34,43 @@
             </plugin>
         </plugins>
     </build>
+    
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>docs</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>jaxb2-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>schemagen</id>
+                                <goals>
+                                    <goal>schemagen</goal>
+                                </goals>
+                                <phase>generate-resources</phase>
+                                <configuration>
+                                    <includes>
+                                        <include>com/dnastack/bob/service/dto/*.java</include>
+                                    </includes>
+                                    <outputDirectory>${project.build.directory}/schemas</outputDirectory>
+                                    <createJavaDocAnnotations>false</createJavaDocAnnotations>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

@@ -23,12 +23,15 @@
  */
 package com.dnastack.bob.service.dto;
 
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * Canonical genome representation.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
+@XmlType(name = "reference")
 public enum ReferenceDto {
 
     HG38("hg38"), HG19("hg19"), HG18("hg18"), HG17("hg17"), HG16("hg16");

@@ -23,12 +23,15 @@
  */
 package com.dnastack.bob.service.dto;
 
+import javax.xml.bind.annotation.XmlType;
+
 /**
  * Canonical chromosome representation.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
+@XmlType(name = "chromosome")
 public enum ChromosomeDto {
 
     // order is important!

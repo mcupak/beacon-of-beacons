@@ -25,6 +25,7 @@ package com.dnastack.bob.service.dto;
 
 import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * BeaconResponse DTO.
@@ -33,6 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @version 1.0
  */
 @XmlRootElement(name = "beacon-response")
+@XmlType(name = "beacon-response")
 public class BeaconResponseDto implements Serializable {
 
     private static final long serialVersionUID = 54L;
