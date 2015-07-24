@@ -27,9 +27,11 @@ import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.persistence.entity.Query;
 import com.dnastack.bob.persistence.enumerated.Reference;
 import com.dnastack.bob.service.converter.api.AlleleConverter;
+import com.dnastack.bob.service.converter.api.BeaconConverter;
 import com.dnastack.bob.service.converter.api.ChromosomeConverter;
 import com.dnastack.bob.service.converter.api.PositionConverter;
 import com.dnastack.bob.service.converter.api.ReferenceConverter;
+import com.dnastack.bob.service.converter.impl.BeaconIdBeaconConverter;
 import com.dnastack.bob.service.converter.impl.EmptyAlleleConverter;
 import com.dnastack.bob.service.converter.impl.EmptyChromosomeConverter;
 import com.dnastack.bob.service.converter.impl.EmptyPositionConverter;
@@ -92,6 +94,7 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
         ReferenceConverter referenceConverter;
         PositionConverter positionConverter;
         AlleleConverter alleleConverter;
+        BeaconConverter beaconConverter;
         try {
             fetcher = (ResponseFetcher) ejbResolver.resolve(beacon.getFetcher());
             requester = (RequestConstructor) cdiResolver.resolve(beacon.getRequester());
@@ -111,6 +114,10 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
             if (alleleConverter == null) {
                 alleleConverter = (AlleleConverter) cdiResolver.resolve(cdiResolver.getClassId(EmptyAlleleConverter.class));
             }
+            beaconConverter = (BeaconConverter) cdiResolver.resolve(beacon.getBeaconConverter());
+            if (beaconConverter == null) {
+                beaconConverter = (BeaconConverter) cdiResolver.resolve(cdiResolver.getClassId(BeaconIdBeaconConverter.class));
+            }
         } catch (ClassNotFoundException | NamingException ex) {
             return fs;
         }
@@ -118,14 +125,14 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
         if (query.getReference() == null) {
             // query all refs
             for (Reference ref : beacon.getSupportedReferences()) {
-                String url = requester.getUrl(beacon, referenceConverter.convert(ref), chromosomeConverter.convert(query.getChromosome()), positionConverter.convert(query.getPosition()), alleleConverter.convert(query.getAllele()), null);
-                Map<String, String> payload = requester.getPayload(beacon, referenceConverter.convert(ref), chromosomeConverter.convert(query.getChromosome()), positionConverter.convert(query.getPosition()), alleleConverter.convert(query.getAllele()), null);
+                String url = requester.getUrl(beacon.getUrl(), beaconConverter.convert(beacon), referenceConverter.convert(ref), chromosomeConverter.convert(query.getChromosome()), positionConverter.convert(query.getPosition()), alleleConverter.convert(query.getAllele()), null);
+                Map<String, String> payload = requester.getPayload(beacon.getUrl(), beaconConverter.convert(beacon), referenceConverter.convert(ref), chromosomeConverter.convert(query.getChromosome()), positionConverter.convert(query.getPosition()), alleleConverter.convert(query.getAllele()), null);
                 fs.add(fetcher.getQueryResponse(url, payload));
             }
         } else if (beacon.getSupportedReferences().contains(query.getReference())) {
             // query only the specified ref
-            String url = requester.getUrl(beacon, referenceConverter.convert(query.getReference()), chromosomeConverter.convert(query.getChromosome()), positionConverter.convert(query.getPosition()), alleleConverter.convert(query.getAllele()), null);
-            Map<String, String> payload = requester.getPayload(beacon, referenceConverter.convert(query.getReference()), chromosomeConverter.convert(query.getChromosome()), positionConverter.convert(query.getPosition()), alleleConverter.convert(query.getAllele()), null);
+            String url = requester.getUrl(beacon.getUrl(), beaconConverter.convert(beacon), referenceConverter.convert(query.getReference()), chromosomeConverter.convert(query.getChromosome()), positionConverter.convert(query.getPosition()), alleleConverter.convert(query.getAllele()), null);
+            Map<String, String> payload = requester.getPayload(beacon.getUrl(), beaconConverter.convert(beacon), referenceConverter.convert(query.getReference()), chromosomeConverter.convert(query.getChromosome()), positionConverter.convert(query.getPosition()), alleleConverter.convert(query.getAllele()), null);
             fs.add(fetcher.getQueryResponse(url, payload));
         }
 

@@ -23,7 +23,6 @@
  */
 package com.dnastack.bob.service.requester.impl;
 
-import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.service.requester.api.RequestConstructor;
 import java.io.Serializable;
 import java.util.Map;
@@ -41,12 +40,12 @@ public class RefChromPosAlleleRequestConstructor implements RequestConstructor, 
     private static final long serialVersionUID = -4140519271564294181L;
 
     @Override
-    public String getUrl(Beacon b, String ref, String chrom, Long pos, String allele, String dataset) {
-        return String.format(b.getUrl(), ref, chrom, pos, allele);
+    public String getUrl(String template, String beacon, String ref, String chrom, Long pos, String allele, String dataset) {
+        return String.format(template, ref, chrom, pos, allele);
     }
 
     @Override
-    public Map<String, String> getPayload(Beacon b, String ref, String chrom, Long pos, String allele, String dataset) {
+    public Map<String, String> getPayload(String template, String beacon, String ref, String chrom, Long pos, String allele, String dataset) {
         return null;
     }
 

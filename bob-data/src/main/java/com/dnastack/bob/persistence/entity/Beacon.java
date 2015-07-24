@@ -66,6 +66,8 @@ public class Beacon implements BasicEntity {
     @ManyToOne
     @NotNull
     private Organization organization;
+    @Size(max = 1000)
+    @Column(length = 1000)
     private String description;
     private String api;
     private String homePage;
@@ -79,6 +81,7 @@ public class Beacon implements BasicEntity {
     private String positionConverter;
     private String alleleConverter;
     private String referenceConverter;
+    private String beaconConverter;
     @ElementCollection(fetch = FetchType.EAGER)
     // TODO: query from datasets or cache properly
     private Set<Reference> supportedReferences;
@@ -231,6 +234,14 @@ public class Beacon implements BasicEntity {
         this.referenceConverter = referenceConverter;
     }
 
+    public String getBeaconConverter() {
+        return beaconConverter;
+    }
+
+    public void setBeaconConverter(String beaconConverter) {
+        this.beaconConverter = beaconConverter;
+    }
+
     public Set<Reference> getSupportedReferences() {
         return supportedReferences;
     }
@@ -303,7 +314,7 @@ public class Beacon implements BasicEntity {
 
     @Override
     public String toString() {
-        return "Beacon{" + "id=" + id + ", name=" + name + ", url=" + url + ", organization=" + organization + ", description=" + description + ", api=" + api + ", homePage=" + homePage + ", email=" + email + ", auth=" + auth + ", parser=" + parser + ", fetcher=" + fetcher + ", requester=" + requester + ", chromosomeConverter=" + chromosomeConverter + ", positionConverter=" + positionConverter + ", alleleConverter=" + alleleConverter + ", referenceConverter=" + referenceConverter + ", supportedReferences=" + supportedReferences + ", visible=" + visible + ", enabled=" + enabled + ", aggregator=" + aggregator + '}';
+        return "Beacon{" + "id=" + id + ", name=" + name + ", url=" + url + ", organization=" + organization + ", description=" + description + ", api=" + api + ", homePage=" + homePage + ", email=" + email + ", auth=" + auth + ", parser=" + parser + ", fetcher=" + fetcher + ", requester=" + requester + ", chromosomeConverter=" + chromosomeConverter + ", positionConverter=" + positionConverter + ", alleleConverter=" + alleleConverter + ", referenceConverter=" + referenceConverter + ", beaconConverter=" + beaconConverter + ", supportedReferences=" + supportedReferences + ", visible=" + visible + ", enabled=" + enabled + ", aggregator=" + aggregator + ", parents=" + parents + ", children=" + children + '}';
     }
 
 }

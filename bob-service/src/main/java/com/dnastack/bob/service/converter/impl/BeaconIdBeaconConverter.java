@@ -21,32 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.requester.impl;
+package com.dnastack.bob.service.converter.impl;
 
-import com.dnastack.bob.service.requester.api.RequestConstructor;
+import com.dnastack.bob.persistence.entity.Beacon;
+import com.dnastack.bob.service.converter.api.BeaconConverter;
 import java.io.Serializable;
-import java.util.Map;
 import javax.inject.Named;
 
 /**
- * Request constructor using URL with chrom, pos, allele params.
+ * Beacon converter returning the ID of the beacon.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
 @Named
-public class ChromPosAlleleRequestConstructor implements RequestConstructor, Serializable {
+public class BeaconIdBeaconConverter implements BeaconConverter, Serializable {
 
-    private static final long serialVersionUID = -4140519271564294181L;
-
-    @Override
-    public String getUrl(String template, String beacon, String ref, String chrom, Long pos, String allele, String dataset) {
-        return String.format(template, chrom, pos, allele);
-    }
+    private static final long serialVersionUID = -2087059187273663405L;
 
     @Override
-    public Map<String, String> getPayload(String template, String beacon, String ref, String chrom, Long pos, String allele, String dataset) {
-        return null;
+    public String convert(Beacon input) {
+        return (input == null) ? null : input.getId();
     }
 
 }

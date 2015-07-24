@@ -29,19 +29,19 @@ import java.util.Map;
 import javax.inject.Named;
 
 /**
- * Request constructor using URL with chrom, pos, allele params.
+ * Request constructor using URL with chrom, pos, allele and beacon ID params.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
 @Named
-public class ChromPosAlleleRequestConstructor implements RequestConstructor, Serializable {
+public class BeaconRefChromPosAlleleRequestConstructor implements RequestConstructor, Serializable {
 
-    private static final long serialVersionUID = -4140519271564294181L;
+    private static final long serialVersionUID = -31671343237822455L;
 
     @Override
     public String getUrl(String template, String beacon, String ref, String chrom, Long pos, String allele, String dataset) {
-        return String.format(template, chrom, pos, allele);
+        return String.format(template, beacon, ref, chrom, pos, allele);
     }
 
     @Override

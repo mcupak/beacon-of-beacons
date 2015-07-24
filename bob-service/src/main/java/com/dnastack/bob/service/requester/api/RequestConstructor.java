@@ -23,7 +23,6 @@
  */
 package com.dnastack.bob.service.requester.api;
 
-import com.dnastack.bob.persistence.entity.Beacon;
 import java.util.Map;
 
 /**
@@ -37,29 +36,31 @@ public interface RequestConstructor {
     /**
      * Generates query URL for a given beacon.
      *
-     * @param b       beacon
-     * @param ref     reference genome
-     * @param chrom   chromosome
-     * @param pos     position
-     * @param allele  allele
-     * @param dataset dataset
+     * @param template beacon url template
+     * @param beacon   beacon
+     * @param ref      reference genome
+     * @param chrom    chromosome
+     * @param pos      position
+     * @param allele   allele
+     * @param dataset  dataset
      *
      * @return URL
      */
-    String getUrl(Beacon b, String ref, String chrom, Long pos, String allele, String dataset);
+    String getUrl(String template, String beacon, String ref, String chrom, Long pos, String allele, String dataset);
 
     /**
      * Generates query request payload.
      *
-     * @param b       beacon
-     * @param ref     reference genome
-     * @param chrom   chromosome
-     * @param pos     position
-     * @param allele  allele
-     * @param dataset dataset
+     * @param template beacon url template
+     * @param beacon   beacon
+     * @param ref      reference genome
+     * @param chrom    chromosome
+     * @param pos      position
+     * @param allele   allele
+     * @param dataset  dataset
      *
      * @return payload key-value pairs
      */
-    Map<String, String> getPayload(Beacon b, String ref, String chrom, Long pos, String allele, String dataset);
+    Map<String, String> getPayload(String template, String beacon, String ref, String chrom, Long pos, String allele, String dataset);
 
 }

@@ -23,7 +23,6 @@
  */
 package com.dnastack.bob.service.requester.impl;
 
-import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.service.requester.api.RequestConstructor;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -42,12 +41,12 @@ public class NoParamCustomPayloadRequestConstructor implements RequestConstructo
     private static final long serialVersionUID = -1948686874610313749L;
 
     @Override
-    public String getUrl(Beacon b, String ref, String chrom, Long pos, String allele, String dataset) {
-        return b.getUrl();
+    public String getUrl(String template, String beacon, String ref, String chrom, Long pos, String allele, String dataset) {
+        return template;
     }
 
     @Override
-    public Map<String, String> getPayload(Beacon b, String ref, String chrom, Long pos, String allele, String dataset) {
+    public Map<String, String> getPayload(String template, String beacon, String ref, String chrom, Long pos, String allele, String dataset) {
         Map<String, String> res = new HashMap<>();
         res.put("population", "1000genomes");
         res.put("genome", ref);
