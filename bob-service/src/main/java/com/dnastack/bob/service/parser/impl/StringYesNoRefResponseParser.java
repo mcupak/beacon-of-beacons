@@ -25,7 +25,6 @@ package com.dnastack.bob.service.parser.impl;
 
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.service.parser.api.ResponseParser;
-import com.dnastack.bob.service.parser.util.ParseUtils;
 import java.io.Serializable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -36,9 +35,10 @@ import javax.ejb.Asynchronous;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
 import javax.inject.Named;
 
+import static com.dnastack.bob.service.parser.util.ParseUtils.parseRef;
+import static com.dnastack.bob.service.parser.util.ParseUtils.parseStartsWithYesNoCaseInsensitive;
 import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
 
 /**
@@ -54,8 +54,6 @@ import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
 public class StringYesNoRefResponseParser implements ResponseParser, Serializable {
 
     private static final long serialVersionUID = -4790485566013440026L;
-    @Inject
-    private ParseUtils parseUtils;
 
     @Asynchronous
     @Override
@@ -63,10 +61,10 @@ public class StringYesNoRefResponseParser implements ResponseParser, Serializabl
         Boolean res = null;
         try {
             String str = response.get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
-            res = parseUtils.parseStartsWithYesNoCaseInsensitive(str);
+            res = parseStartsWithYesNoCaseInsensitive(str);
             if (res == null) {
                 // ref response is treated as false
-                Boolean isRef = parseUtils.parseRef(str);
+                Boolean isRef = parseRef(str);
                 if (isRef != null && isRef) {
                     res = false;
                 }

@@ -27,8 +27,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import javax.enterprise.context.Dependent;
-import javax.inject.Named;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,8 +37,6 @@ import org.json.JSONObject;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Dependent
-@Named
 public class ParseUtils {
 
     /**
@@ -52,7 +48,7 @@ public class ParseUtils {
      *
      * @return true if the response contains trueString, false if the response contains falseString, null otherwise
      */
-    public Boolean parseContainsStringCaseInsensitive(String response, String trueString, String falseString) {
+    public static Boolean parseContainsStringCaseInsensitive(String response, String trueString, String falseString) {
         if (response == null) {
             return null;
         }
@@ -77,7 +73,7 @@ public class ParseUtils {
      *
      * @return true if the response contains trueString, false if the response contains falseString, null otherwise
      */
-    public Boolean parseStartsWithStringCaseInsensitive(String response, String trueString, String falseString) {
+    public static Boolean parseStartsWithStringCaseInsensitive(String response, String trueString, String falseString) {
         if (response == null) {
             return null;
         }
@@ -102,7 +98,7 @@ public class ParseUtils {
      *
      * @return true if the response contains trueString, false if the response contains falseString, null otherwise
      */
-    public Boolean parseIsStringCaseInsensitive(String response, String trueString, String falseString) {
+    public static Boolean parseIsStringCaseInsensitive(String response, String trueString, String falseString) {
         if (response == null) {
             return null;
         }
@@ -124,7 +120,7 @@ public class ParseUtils {
      *
      * @return true if the response is yes, false if the response is no, null otherwise
      */
-    public Boolean parseStartsWithYesNoCaseInsensitive(String response) {
+    public static Boolean parseStartsWithYesNoCaseInsensitive(String response) {
         return parseStartsWithStringCaseInsensitive(response, "yes", "no");
     }
 
@@ -135,7 +131,7 @@ public class ParseUtils {
      *
      * @return true if the response is yes, false if the response is no, null otherwise
      */
-    public Boolean parseIsYesNoCaseInsensitive(String response) {
+    public static Boolean parseIsYesNoCaseInsensitive(String response) {
         return parseIsStringCaseInsensitive(response, "yes", "no");
     }
 
@@ -146,7 +142,7 @@ public class ParseUtils {
      *
      * @return true if the response is ref, false otherwise, null if there are problems
      */
-    public Boolean parseRef(String response) {
+    public static Boolean parseRef(String response) {
         if (response == null) {
             return null;
         }
@@ -162,7 +158,7 @@ public class ParseUtils {
      *
      * @return field value if it is true/false, null otherwise
      */
-    public Boolean parseBooleanFromJson(String response, String... path) {
+    public static Boolean parseBooleanFromJson(String response, String... path) {
         if (response == null) {
             return null;
         }
@@ -209,7 +205,7 @@ public class ParseUtils {
      *
      * @return field value if it is true/false, null otherwise
      */
-    public String parseStringFromJson(String response, String... path) {
+    public static String parseStringFromJson(String response, String... path) {
         if (response == null) {
             return null;
         }
@@ -256,7 +252,7 @@ public class ParseUtils {
      *
      * @return true if the response is yes, false otherwise
      */
-    public Boolean parseYesNoFromJson(String response, String... path) {
+    public static Boolean parseYesNoFromJson(String response, String... path) {
         String res = parseStringFromJson(response, path);
 
         return (res == null) ? null : parseStartsWithYesNoCaseInsensitive(res);
@@ -269,7 +265,7 @@ public class ParseUtils {
      *
      * @return true/false
      */
-    public boolean parameterHasMultipleValidValue(String param) {
+    public static boolean parameterHasMultipleValidValue(String param) {
         if (param == null) {
             throw new NullPointerException("param");
         }
@@ -284,7 +280,7 @@ public class ParseUtils {
      *
      * @return true/false
      */
-    public boolean parameterHasSingleValidValue(String param) {
+    public static boolean parameterHasSingleValidValue(String param) {
         if (param == null) {
             throw new NullPointerException("param");
         }
@@ -299,7 +295,7 @@ public class ParseUtils {
      *
      * @return collection of individual values
      */
-    public Collection<String> parseMultipleParameterValues(String param) {
+    public static Collection<String> parseMultipleParameterValues(String param) {
         if (param == null) {
             throw new NullPointerException("param");
         }

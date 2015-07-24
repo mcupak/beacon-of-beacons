@@ -38,10 +38,11 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Named;
 
 import static com.dnastack.bob.service.parser.util.ParseUtils.parseBooleanFromJson;
+import static com.dnastack.bob.service.parser.util.ParseUtils.parseStringFromJson;
 import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
 
 /**
- * Parses cafe-prefixed responses.
+ * Parses response->exists field from JSON with overlap conversion.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
@@ -50,32 +51,28 @@ import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
 @Named
 @Dependent
 @Local(ResponseParser.class)
-public class JsonCafeResponseParser implements ResponseParser, Serializable {
+public class JsonResponseExistsWithOverlapResponseParser implements ResponseParser, Serializable {
 
-    private static final long serialVersionUID = 6472531100065834529L;
-    private static final String BEACON_PREFIX = "cafe-";
-    private static final String RESPONSE_FIELD = "response";
-
-    private String getJsonFieldName(Beacon b) {
-        String res;
-        if (b.getId().startsWith(BEACON_PREFIX)) {
-            res = b.getId().substring(BEACON_PREFIX.length()) + "_" + RESPONSE_FIELD;
-        } else {
-            res = b.getId() + "_" + RESPONSE_FIELD;
-        }
-        return res;
-    }
+    private static final long serialVersionUID = 760483666607969849L;
 
     @Asynchronous
     @Override
     public Future<Boolean> parseQueryResponse(Beacon b, Future<String> response) {
         Boolean res = null;
         try {
-            res = parseBooleanFromJson(response.get(REQUEST_TIMEOUT, TimeUnit.SECONDS), RESPONSE_FIELD, getJsonFieldName(b));
+            String str = response.get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
+            res = parseBooleanFromJson(str, "response", "exists");
+
+            // the beacon uses overlap as false, convert
+            if (res == null) {
+                String s = parseStringFromJson(str, "response", "exists");
+                if ("overlap".equalsIgnoreCase(s)) {
+                    res = false;
+                }
+            }
         } catch (InterruptedException | ExecutionException | TimeoutException ex) {
             // ignore
         }
-
         return new AsyncResult<>(res);
     }
 }

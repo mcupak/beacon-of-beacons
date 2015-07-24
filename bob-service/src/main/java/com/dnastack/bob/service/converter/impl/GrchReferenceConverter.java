@@ -38,7 +38,7 @@ import static com.dnastack.bob.service.util.Constants.REFERENCE_MAPPING;
  * @version 1.0
  */
 @Named
-public class GrChReferenceConverter implements ReferenceConverter, Serializable {
+public class GrchReferenceConverter implements ReferenceConverter, Serializable {
 
     private static final long serialVersionUID = -2361871357937831818L;
 

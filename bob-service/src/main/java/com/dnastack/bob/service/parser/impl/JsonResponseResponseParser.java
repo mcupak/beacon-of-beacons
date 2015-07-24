@@ -25,7 +25,6 @@ package com.dnastack.bob.service.parser.impl;
 
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.service.parser.api.ResponseParser;
-import com.dnastack.bob.service.parser.util.ParseUtils;
 import java.io.Serializable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -36,10 +35,10 @@ import javax.ejb.Asynchronous;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
 import javax.inject.Named;
 import org.json.JSONException;
 
+import static com.dnastack.bob.service.parser.util.ParseUtils.parseYesNoFromJson;
 import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
 
 /**
@@ -56,15 +55,12 @@ public class JsonResponseResponseParser implements ResponseParser, Serializable 
 
     private static final long serialVersionUID = 5530466295131939979L;
 
-    @Inject
-    private ParseUtils parseUtils;
-
     @Asynchronous
     @Override
     public synchronized Future<Boolean> parseQueryResponse(Beacon b, Future<String> response) {
         Boolean res = null;
         try {
-            res = parseUtils.parseYesNoFromJson(response.get(REQUEST_TIMEOUT, TimeUnit.SECONDS), "response");
+            res = parseYesNoFromJson(response.get(REQUEST_TIMEOUT, TimeUnit.SECONDS), "response");
         } catch (InterruptedException | ExecutionException | JSONException | TimeoutException ex) {
             // ignore
         }

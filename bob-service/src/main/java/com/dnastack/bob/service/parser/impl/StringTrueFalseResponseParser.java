@@ -25,7 +25,6 @@ package com.dnastack.bob.service.parser.impl;
 
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.service.parser.api.ResponseParser;
-import com.dnastack.bob.service.parser.util.ParseUtils;
 import java.io.Serializable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -36,9 +35,9 @@ import javax.ejb.Asynchronous;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
 import javax.inject.Named;
 
+import static com.dnastack.bob.service.parser.util.ParseUtils.parseContainsStringCaseInsensitive;
 import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
 
 /**
@@ -55,15 +54,12 @@ public class StringTrueFalseResponseParser implements ResponseParser, Serializab
 
     private static final long serialVersionUID = 3707552518257022614L;
 
-    @Inject
-    private ParseUtils parseUtils;
-
     @Asynchronous
     @Override
     public Future<Boolean> parseQueryResponse(Beacon b, Future<String> response) {
         Boolean res = null;
         try {
-            res = parseUtils.parseContainsStringCaseInsensitive(response.get(REQUEST_TIMEOUT, TimeUnit.SECONDS), "true", "false");
+            res = parseContainsStringCaseInsensitive(response.get(REQUEST_TIMEOUT, TimeUnit.SECONDS), "true", "false");
         } catch (InterruptedException | ExecutionException | TimeoutException ex) {
             // ignore
         }
