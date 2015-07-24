@@ -2088,6 +2088,429 @@
         "response": false
     },
     {
+        "beacon": "solvebio",
+        "chromosome": "6",
+        "position": 50432798,
+        "allele": "G",
+        "reference": null,
+        "description": "all references found",
+        "response": true
+    },
+    {
+        "beacon": "solvebio-184",
+        "chromosome": "6",
+        "position": 50432798,
+        "allele": "G",
+        "reference": null,
+        "description": "specific beacon all references found",
+        "response": true
+    },
+    {
+        "beacon": "solvebio-100",
+        "chromosome": "6",
+        "position": 50432798,
+        "allele": "G",
+        "reference": null,
+        "description": "non-allele specific beacon all references not found",
+        "response": false
+    },
+    {
+        "beacon": "solvebio",
+        "chromosome": "6",
+        "position": 50432798,
+        "allele": "G",
+        "reference": "hg19",
+        "description": "specific reference found",
+        "response": true
+    },
+    {
+        "beacon": "solvebio",
+        "chromosome": "6",
+        "position": 50432798,
+        "allele": "G",
+        "reference": "hg18",
+        "description": "specific reference not found",
+        "response": false
+    },
+    {
+        "beacon": "solvebio",
+        "chromosome": "6",
+        "position": 50432798,
+        "allele": "G",
+        "reference": "hg100",
+        "description": "invalid reference",
+        "response": null
+    },
+    {
+        "beacon": "solvebio",
+        "chromosome": "1",
+        "position": 808921,
+        "allele": "A",
+        "reference": "grch37",
+        "description": "reference conversion",
+        "response": true
+    },
+    {
+        "beacon": "solvebio",
+        "chromosome": "1",
+        "position": 46402,
+        "allele": "TGT",
+        "reference": null,
+        "description": "string allele",
+        "response": false
+    },
+    {
+        "beacon": "solvebio",
+        "chromosome": "1",
+        "position": 1002920,
+        "allele": "D",
+        "reference": null,
+        "description": "del/not supported",
+        "response": false
+    },
+    {
+        "beacon": "solvebio",
+        "chromosome": "1",
+        "position": 46402,
+        "allele": "I",
+        "reference": null,
+        "description": "ins/not supported",
+        "response": false
+    },
+    {
+        "beacon": "solvebio",
+        "chromosome": "13",
+        "position": 32888799,
+        "allele": "A",
+        "reference": null,
+        "description": "no reference found",
+        "response": false
+    },
+    {
+        "beacon": "solvebio",
+        "chromosome": "15",
+        "position": 41087870,
+        "allele": "DC",
+        "reference": null,
+        "description": "invalid allele",
+        "response": null
+    },
+    {
+        "beacon": "solvebio",
+        "chromosome": "1",
+        "position": 1002922,
+        "allele": "DEL",
+        "reference": null,
+        "description": "allele conversion",
+        "response": false
+    },
+    {
+        "beacon": "solvebio",
+        "chromosome": "chrom14",
+        "position": 106833421,
+        "allele": "A",
+        "reference": null,
+        "description": "chromosome conversion",
+        "response": false
+    },
+    {
+        "beacon": "solvebio",
+        "chromosome": "30",
+        "position": 106833421,
+        "allele": "A",
+        "reference": null,
+        "description": "invalid chromosome",
+        "response": null
+    },
+    {
+        "beacon": "solvebio",
+        "chromosome": "X",
+        "position": 41087870,
+        "allele": "C",
+        "reference": null,
+        "description": "x",
+        "response": false
+    },
+    {
+        "beacon": "solvebio",
+        "chromosome": "MT",
+        "position": 1,
+        "allele": "A",
+        "reference": null,
+        "description": "mt",
+        "response": false
+    },
+    {
+        "beacon": "narcissome",
+        "chromosome": "12",
+        "position": 112241765,
+        "allele": "A",
+        "reference": null,
+        "description": "all references found",
+        "response": true
+    },
+    {
+        "beacon": "narcissome",
+        "chromosome": "12",
+        "position": 112241765,
+        "allele": "A",
+        "reference": "hg19",
+        "description": "specific reference found",
+        "response": true
+    },
+    {
+        "beacon": "narcissome",
+        "chromosome": "12",
+        "position": 112241765,
+        "allele": "A",
+        "reference": "hg38",
+        "description": "specific reference not found",
+        "response": null
+    },
+    {
+        "beacon": "narcissome",
+        "chromosome": "12",
+        "position": 112241765,
+        "allele": "A",
+        "reference": "hg100",
+        "description": "invalid reference",
+        "response": null
+    },
+    {
+        "beacon": "narcissome",
+        "chromosome": "12",
+        "position": 112241765,
+        "allele": "A",
+        "reference": "grch37",
+        "description": "reference conversion",
+        "response": true
+    },
+    {
+        "beacon": "narcissome",
+        "chromosome": "1",
+        "position": 46402,
+        "allele": "TGT",
+        "reference": null,
+        "description": "string allele",
+        "response": false
+    },
+    {
+        "beacon": "narcissome",
+        "chromosome": "1",
+        "position": 1002920,
+        "allele": "D",
+        "reference": null,
+        "description": "del/not supported",
+        "response": false
+    },
+    {
+        "beacon": "narcissome",
+        "chromosome": "1",
+        "position": 46402,
+        "allele": "I",
+        "reference": null,
+        "description": "ins/not supported",
+        "response": false
+    },
+    {
+        "beacon": "narcissome",
+        "chromosome": "13",
+        "position": 32888799,
+        "allele": "A",
+        "reference": null,
+        "description": "no reference found",
+        "response": false
+    },
+    {
+        "beacon": "narcissome",
+        "chromosome": "15",
+        "position": 41087870,
+        "allele": "DC",
+        "reference": null,
+        "description": "invalid allele",
+        "response": null
+    },
+    {
+        "beacon": "narcissome",
+        "chromosome": "1",
+        "position": 1002922,
+        "allele": "DEL",
+        "reference": null,
+        "description": "allele conversion",
+        "response": false
+    },
+    {
+        "beacon": "narcissome",
+        "chromosome": "chrom14",
+        "position": 106833421,
+        "allele": "A",
+        "reference": null,
+        "description": "chromosome conversion",
+        "response": false
+    },
+    {
+        "beacon": "narcissome",
+        "chromosome": "30",
+        "position": 106833421,
+        "allele": "A",
+        "reference": null,
+        "description": "invalid chromosome",
+        "response": null
+    },
+    {
+        "beacon": "narcissome",
+        "chromosome": "X",
+        "position": 41087870,
+        "allele": "C",
+        "reference": null,
+        "description": "x",
+        "response": false
+    },
+    {
+        "beacon": "narcissome",
+        "chromosome": "MT",
+        "position": 1,
+        "allele": "A",
+        "reference": null,
+        "description": "mt",
+        "response": null
+    },
+    {
+        "beacon": "bgi",
+        "chromosome": "1",
+        "position": 808921,
+        "allele": "A",
+        "reference": null,
+        "description": "all references not found",
+        "response": false
+    },
+    {
+        "beacon": "bgi",
+        "chromosome": "1",
+        "position": 808921,
+        "allele": "A",
+        "reference": "hg19",
+        "description": "specific reference not found",
+        "response": false
+    },
+    {
+        "beacon": "bgi",
+        "chromosome": "1",
+        "position": 808921,
+        "allele": "A",
+        "reference": "hg38",
+        "description": "specific reference not found",
+        "response": null
+    },
+    {
+        "beacon": "bgi",
+        "chromosome": "1",
+        "position": 808921,
+        "allele": "A",
+        "reference": "hg100",
+        "description": "invalid reference",
+        "response": null
+    },
+    {
+        "beacon": "bgi",
+        "chromosome": "1",
+        "position": 808921,
+        "allele": "A",
+        "reference": "grch37",
+        "description": "reference conversion",
+        "response": false
+    },
+    {
+        "beacon": "bgi",
+        "chromosome": "1",
+        "position": 46402,
+        "allele": "TGT",
+        "reference": null,
+        "description": "string allele/not supported",
+        "response": false
+    },
+    {
+        "beacon": "bgi",
+        "chromosome": "1",
+        "position": 1002920,
+        "allele": "D",
+        "reference": null,
+        "description": "del/not supported",
+        "response": false
+    },
+    {
+        "beacon": "bgi",
+        "chromosome": "1",
+        "position": 46402,
+        "allele": "I",
+        "reference": null,
+        "description": "ins/not supported",
+        "response": false
+    },
+    {
+        "beacon": "bgi",
+        "chromosome": "13",
+        "position": 32888799,
+        "allele": "A",
+        "reference": null,
+        "description": "no reference found",
+        "response": false
+    },
+    {
+        "beacon": "bgi",
+        "chromosome": "15",
+        "position": 41087870,
+        "allele": "DC",
+        "reference": null,
+        "description": "invalid allele",
+        "response": null
+    },
+    {
+        "beacon": "bgi",
+        "chromosome": "1",
+        "position": 1002922,
+        "allele": "DEL",
+        "reference": null,
+        "description": "allele conversion",
+        "response": false
+    },
+    {
+        "beacon": "bgi",
+        "chromosome": "chrom14",
+        "position": 106833421,
+        "allele": "A",
+        "reference": null,
+        "description": "chromosome conversion",
+        "response": false
+    },
+    {
+        "beacon": "bgi",
+        "chromosome": "30",
+        "position": 106833421,
+        "allele": "A",
+        "reference": null,
+        "description": "invalid chromosome",
+        "response": null
+    },
+    {
+        "beacon": "bgi",
+        "chromosome": "X",
+        "position": 41087870,
+        "allele": "C",
+        "reference": null,
+        "description": "x",
+        "response": false
+    },
+    {
+        "beacon": "bgi",
+        "chromosome": "MT",
+        "position": 1,
+        "allele": "A",
+        "reference": null,
+        "description": "mt",
+        "response": false
+    },
+    {
         "beacon": "bob",
         "chromosome": "13",
         "position": 32888798,
@@ -2108,7 +2531,7 @@
     {
         "beacon": "bob",
         "chromosome": "13",
-        "position": 32888798,
+        "position": 1,
         "allele": "G",
         "reference": "hg38",
         "description": "specific reference not found",
