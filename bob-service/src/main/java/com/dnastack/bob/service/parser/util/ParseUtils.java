@@ -23,10 +23,6 @@
  */
 package com.dnastack.bob.service.parser.util;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -258,55 +254,4 @@ public class ParseUtils {
         return (res == null) ? null : parseStartsWithYesNoCaseInsensitive(res);
     }
 
-    /**
-     * Checks if there are multiple values given as a parameter.
-     *
-     * @param param values
-     *
-     * @return true/false
-     */
-    public static boolean parameterHasMultipleValidValue(String param) {
-        if (param == null) {
-            throw new NullPointerException("param");
-        }
-
-        return param.matches("\\[(((\\w)*-(\\w)*)*(\\w)*,)*((\\w)*-(\\w)*)*(\\w)*\\]");
-    }
-
-    /**
-     * Checks if there is a single value given for the specified parameter.
-     *
-     * @param param parameter value
-     *
-     * @return true/false
-     */
-    public static boolean parameterHasSingleValidValue(String param) {
-        if (param == null) {
-            throw new NullPointerException("param");
-        }
-
-        return param.matches("[-a-zA-Z0-9]*");
-    }
-
-    /**
-     * Extract multiple values of a single parameter using "," as a deliminer and "[]" as borders.
-     *
-     * @param param parameter value
-     *
-     * @return collection of individual values
-     */
-    public static Collection<String> parseMultipleParameterValues(String param) {
-        if (param == null) {
-            throw new NullPointerException("param");
-        }
-
-        List<String> values = new ArrayList<>();
-        if (parameterHasSingleValidValue(param)) {
-            values.add(param);
-        } else if (parameterHasMultipleValidValue(param)) {
-            values.addAll(Arrays.asList(param.substring(param.indexOf("[") + 1, param.indexOf("]")).split(",")));
-        }
-
-        return values;
-    }
 }

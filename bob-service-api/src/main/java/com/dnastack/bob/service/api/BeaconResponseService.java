@@ -24,6 +24,7 @@
 package com.dnastack.bob.service.api;
 
 import com.dnastack.bob.service.dto.BeaconResponseDto;
+import com.dnastack.bob.service.dto.UserDto;
 import java.util.Collection;
 
 /**
@@ -37,42 +38,48 @@ public interface BeaconResponseService {
     /**
      * Query a given beacon
      *
-     * @param beaconId beacon to query
-     * @param chrom    chromosome
-     * @param pos      position
-     * @param allele   allele
-     * @param ref      reference genome (optional)
+     * @param beaconId   beacon to query
+     * @param chrom      chromosome
+     * @param pos        position
+     * @param allele     allele
+     * @param ref        reference genome (optional)
+     * @param onBehalfOf user
      *
      * @return list of beacon responses
+     *
      * @throws java.lang.ClassNotFoundException
      */
-    BeaconResponseDto queryBeacon(String beaconId, String chrom, Long pos, String allele, String ref) throws ClassNotFoundException;
+    BeaconResponseDto queryBeacon(String beaconId, String chrom, Long pos, String allele, String ref, UserDto onBehalfOf) throws ClassNotFoundException;
 
     /**
      * Query specified beacons.
      *
-     * @param beaconIds collection of beacon IDs
-     * @param chrom     chromosome
-     * @param pos       position
-     * @param allele    allele
-     * @param ref       reference genome (optional)
+     * @param beaconIds  collection of beacon IDs
+     * @param chrom      chromosome
+     * @param pos        position
+     * @param allele     allele
+     * @param ref        reference genome (optional)
+     * @param onBehalfOf user
      *
      * @return collection of beacon responses
+     *
      * @throws java.lang.ClassNotFoundException
      */
-    Collection<BeaconResponseDto> queryBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref) throws ClassNotFoundException;
+    Collection<BeaconResponseDto> queryBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref, UserDto onBehalfOf) throws ClassNotFoundException;
 
     /**
      * Query all the beacons.
      *
-     * @param chrom  chromosome
-     * @param pos    position
-     * @param allele allele
-     * @param ref    reference genome (optional)
+     * @param chrom      chromosome
+     * @param pos        position
+     * @param allele     allele
+     * @param ref        reference genome (optional)
+     * @param onBehalfOf user
      *
      * @return collection of beacon responses
+     *
      * @throws java.lang.ClassNotFoundException
      */
-    Collection<BeaconResponseDto> queryAll(String chrom, Long pos, String allele, String ref) throws ClassNotFoundException;
+    Collection<BeaconResponseDto> queryAll(String chrom, Long pos, String allele, String ref, UserDto onBehalfOf) throws ClassNotFoundException;
 
 }

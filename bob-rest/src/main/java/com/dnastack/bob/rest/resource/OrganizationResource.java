@@ -27,7 +27,6 @@ import com.dnastack.bob.rest.comparator.NameComparator;
 import com.dnastack.bob.rest.comparator.OrganizationDtoComparator;
 import com.dnastack.bob.service.api.OrganizationService;
 import com.dnastack.bob.service.dto.OrganizationDto;
-import com.dnastack.bob.service.parser.util.ParseUtils;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.Collection;
@@ -51,6 +50,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import static com.dnastack.bob.rest.util.ParameterParser.parseMultipleParameterValues;
+
 /**
  * Organization rest resource.
  *
@@ -70,9 +71,6 @@ public class OrganizationResource {
     @Inject
     @NameComparator
     private OrganizationDtoComparator organizationComparator;
-
-    @Inject
-    private ParseUtils parseUtils;
 
     /**
      * Shows organization details.
@@ -104,7 +102,7 @@ public class OrganizationResource {
         if (organizationIds == null) {
             bs.addAll(organizationService.findAll());
         } else {
-            bs.addAll(organizationService.find(parseUtils.parseMultipleParameterValues(organizationIds)));
+            bs.addAll(organizationService.find(parseMultipleParameterValues(organizationIds)));
         }
 
         return bs;

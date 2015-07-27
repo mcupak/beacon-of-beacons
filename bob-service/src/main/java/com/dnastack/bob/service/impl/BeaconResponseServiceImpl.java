@@ -30,6 +30,7 @@ import com.dnastack.bob.persistence.enumerated.Chromosome;
 import com.dnastack.bob.persistence.enumerated.Reference;
 import com.dnastack.bob.service.api.BeaconResponseService;
 import com.dnastack.bob.service.dto.BeaconResponseDto;
+import com.dnastack.bob.service.dto.UserDto;
 import com.dnastack.bob.service.lrg.Brca;
 import com.dnastack.bob.service.lrg.Brca2;
 import com.dnastack.bob.service.lrg.LrgConvertor;
@@ -37,7 +38,6 @@ import com.dnastack.bob.service.lrg.LrgLocus;
 import com.dnastack.bob.service.lrg.LrgReference;
 import com.dnastack.bob.service.processor.api.BeaconProcessor;
 import com.dnastack.bob.service.processor.api.BeaconResponse;
-import com.dnastack.bob.service.util.CdiBeanResolver;
 import com.dnastack.bob.service.util.EntityDtoConvertor;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -86,9 +86,6 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
 
     @Inject
     private BeaconProcessor beaconProcessor;
-
-    @Inject
-    private CdiBeanResolver pr;
 
     @Inject
     private Validator validator;
@@ -348,7 +345,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
     }
 
     @Override
-    public BeaconResponseDto queryBeacon(String beaconId, String chrom, Long pos, String allele, String ref) throws ClassNotFoundException {
+    public BeaconResponseDto queryBeacon(String beaconId, String chrom, Long pos, String allele, String ref, UserDto onBehalfOf) throws ClassNotFoundException {
         Query q = getQuery(chrom, pos, allele, ref);
 
         Beacon b = beaconDao.findById(beaconId);
@@ -380,7 +377,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
     }
 
     @Override
-    public Collection<BeaconResponseDto> queryBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref) throws ClassNotFoundException {
+    public Collection<BeaconResponseDto> queryBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref, UserDto onBehalfOf) throws ClassNotFoundException {
         if (beaconIds == null) {
             return new HashSet<>();
         }
@@ -389,7 +386,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
     }
 
     @Override
-    public Collection<BeaconResponseDto> queryAll(String chrom, Long pos, String allele, String ref) throws ClassNotFoundException {
+    public Collection<BeaconResponseDto> queryAll(String chrom, Long pos, String allele, String ref, UserDto onBehalfOf) throws ClassNotFoundException {
         return EntityDtoConvertor.getBeaconResponseDtos(queryMultipleBeacons(null, chrom, pos, allele, ref));
     }
 

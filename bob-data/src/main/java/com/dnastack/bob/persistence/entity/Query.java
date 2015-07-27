@@ -117,6 +117,14 @@ public class Query implements BasicEntity {
         this.reference = reference;
     }
 
+    public Dataset getDataSet() {
+        return dataSet;
+    }
+
+    public void setDataSet(Dataset dataSet) {
+        this.dataSet = dataSet;
+    }
+
     @Override
     public int hashCode() {
         int hash = 3;

@@ -26,19 +26,25 @@ package com.dnastack.bob.rest.resource;
 import com.dnastack.bob.rest.comparator.BeaconResponseDtoComparator;
 import com.dnastack.bob.service.api.BeaconResponseService;
 import com.dnastack.bob.service.dto.BeaconResponseDto;
-import com.dnastack.bob.service.parser.util.ParseUtils;
+import com.dnastack.bob.service.dto.UserDto;
 import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+
+import static com.dnastack.bob.rest.util.IpExtractor.extractIpAddress;
+import static com.dnastack.bob.rest.util.ParameterParser.parseMultipleParameterValues;
 
 /**
  * Query rest resource.
@@ -52,14 +58,21 @@ import javax.ws.rs.core.MediaType;
 @Named
 public class BeaconResponseResource {
 
+    @Context
+    private HttpServletRequest request;
+
     @Inject
     private BeaconResponseService beaconResponseService;
 
     @Inject
     private BeaconResponseDtoComparator beaconResponseComparator;
 
-    @Inject
-    private ParseUtils parseUtils;
+    private UserDto user;
+
+    @PostConstruct
+    private void init() {
+        user = new UserDto(extractIpAddress(request), null);
+    }
 
     /**
      * Query a given beacon
@@ -71,11 +84,13 @@ public class BeaconResponseResource {
      * @param ref      reference genome (optional)
      *
      * @return list of beacon responses
+     *
+     * @throws java.lang.ClassNotFoundException
      */
     @GET
     @Path("/{beaconId}")
     public BeaconResponseDto queryBeacon(@PathParam("beaconId") String beaconId, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele, @QueryParam("ref") String ref) throws ClassNotFoundException {
-        return beaconResponseService.queryBeacon(beaconId, chrom, pos, allele, ref);
+        return beaconResponseService.queryBeacon(beaconId, chrom, pos, allele, ref, user);
     }
 
     /**
@@ -95,9 +110,9 @@ public class BeaconResponseResource {
     public Collection<BeaconResponseDto> query(@QueryParam("beacon") String beaconIds, @QueryParam("chrom") String chrom, @QueryParam("pos") Long pos, @QueryParam("allele") String allele, @QueryParam("ref") String ref) throws ClassNotFoundException {
         Set<BeaconResponseDto> brs = new TreeSet<>(beaconResponseComparator);
         if (beaconIds == null) {
-            brs.addAll(beaconResponseService.queryAll(chrom, pos, allele, ref));
+            brs.addAll(beaconResponseService.queryAll(chrom, pos, allele, ref, user));
         } else {
-            brs.addAll(beaconResponseService.queryBeacons(parseUtils.parseMultipleParameterValues(beaconIds), chrom, pos, allele, ref));
+            brs.addAll(beaconResponseService.queryBeacons(parseMultipleParameterValues(beaconIds), chrom, pos, allele, ref, user));
         }
 
         return brs;
