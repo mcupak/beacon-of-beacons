@@ -8,6 +8,7 @@
 * [How to run it](#how-to-run-it)
 * [How to test it](#how-to-test-it)
 * [How to use it](#how-to-use-it)
+* [License and terms of use](#license-and-terms-of-use)
 * [Technologies](#technologies)
 
 ##What it is
@@ -52,6 +53,9 @@ To test the supported beacons, execute the same command in `bob-rest` module. No
 
 ##How to use it
 Visit the project website for more information: <http://mcupak.github.io/beacon-of-beacons/>
+
+##License and terms of use
+The code in this repository is licensed under the [MIT license](http://opensource.org/licenses/MIT). An instance of the Beacon Network is a subject to [these terms of use](http://beacon-network.org/#/terms).
 
 ##Technologies
 Java EE. CDI, EJB, JAX-RS, JAXB, Bean Validation, JPA. Tested with Arquillian/ShrinkWrap/AssertJ.
