@@ -27,7 +27,6 @@ import com.dnastack.bob.rest.comparator.BeaconDtoComparator;
 import com.dnastack.bob.rest.comparator.NameComparator;
 import com.dnastack.bob.service.api.BeaconService;
 import com.dnastack.bob.service.dto.BeaconDto;
-import com.dnastack.bob.service.parser.util.ParseUtils;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.Collection;
@@ -50,6 +49,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import static com.dnastack.bob.rest.util.ParameterParser.parseMultipleParameterValues;
+
 /**
  * Query rest resource.
  *
@@ -68,9 +69,6 @@ public class BeaconResource {
     @Inject
     @NameComparator
     private BeaconDtoComparator beaconComparator;
-
-    @Inject
-    private ParseUtils parseUtils;
 
     /**
      * Shows beacon details.
@@ -102,7 +100,7 @@ public class BeaconResource {
         if (beaconIds == null) {
             bs.addAll(beaconService.findAll());
         } else {
-            bs.addAll(beaconService.find(parseUtils.parseMultipleParameterValues(beaconIds)));
+            bs.addAll(beaconService.find(parseMultipleParameterValues(beaconIds)));
         }
 
         return bs;

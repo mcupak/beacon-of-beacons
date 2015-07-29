@@ -26,6 +26,7 @@ package com.dnastack.bob.service.util;
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.persistence.entity.Organization;
 import com.dnastack.bob.persistence.entity.Query;
+import com.dnastack.bob.persistence.entity.User;
 import com.dnastack.bob.persistence.enumerated.Chromosome;
 import com.dnastack.bob.persistence.enumerated.Reference;
 import com.dnastack.bob.service.dto.BeaconDto;
@@ -34,6 +35,7 @@ import com.dnastack.bob.service.dto.ChromosomeDto;
 import com.dnastack.bob.service.dto.OrganizationDto;
 import com.dnastack.bob.service.dto.QueryDto;
 import com.dnastack.bob.service.dto.ReferenceDto;
+import com.dnastack.bob.service.dto.UserDto;
 import com.dnastack.bob.service.processor.api.BeaconResponse;
 import java.util.Collection;
 import java.util.HashSet;
@@ -199,6 +201,13 @@ public class EntityDtoConvertor {
         return (o == null) ? null : new OrganizationDto(o.getId(), o.getName(), o.getDescription(), o.getUrl(), o.getAddress());
     }
 
+    /**
+     * Converts an organization TO to aa organization.
+     *
+     * @param o organization TO
+     *
+     * @return organization
+     */
     public static Organization getOrganization(OrganizationDto o) {
         return (o == null) ? null : new Organization(o.getId(), o.getName(), o.getDescription(), o.getUrl(), o.getAddress());
     }
@@ -214,6 +223,44 @@ public class EntityDtoConvertor {
         Set<OrganizationDto> res = new HashSet<>();
         for (Organization br : qs) {
             res.add(getOrganizationDto(br));
+        }
+
+        return res;
+    }
+
+    /**
+     * Converts a user to a user TO.
+     *
+     * @param o user
+     *
+     * @return user TO
+     */
+    public static UserDto getUserDto(User o) {
+        return (o == null) ? null : new UserDto(o.getUserName(), o.getIp());
+    }
+
+    /**
+     * Converts an user TO to an user.
+     *
+     * @param o user TO
+     *
+     * @return user
+     */
+    public static User getUser(UserDto o) {
+        return (o == null) ? null : new User(o.getUserName(), o.getIpAddress());
+    }
+
+    /**
+     * Converts a collection of queries to a collection of user TOs.
+     *
+     * @param qs queries
+     *
+     * @return user TOs
+     */
+    public static Set<UserDto> getUserDtos(Collection<User> qs) {
+        Set<UserDto> res = new HashSet<>();
+        for (User br : qs) {
+            res.add(getUserDto(br));
         }
 
         return res;

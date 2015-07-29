@@ -66,6 +66,8 @@ public class Query implements BasicEntity {
     private Reference reference;
     @ManyToOne
     private Dataset dataSet;
+    @ManyToOne
+    private User user;
 
     public Query() {
     }
@@ -117,6 +119,22 @@ public class Query implements BasicEntity {
         this.reference = reference;
     }
 
+    public Dataset getDataSet() {
+        return dataSet;
+    }
+
+    public void setDataSet(Dataset dataSet) {
+        this.dataSet = dataSet;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public int hashCode() {
         int hash = 3;
@@ -153,7 +171,7 @@ public class Query implements BasicEntity {
 
     @Override
     public String toString() {
-        return "Query{" + "chromosome=" + chromosome + ", position=" + position + ", allele=" + allele + ", reference=" + reference + '}';
+        return "Query{" + "id=" + id + ", chromosome=" + chromosome + ", position=" + position + ", allele=" + allele + ", reference=" + reference + ", dataSet=" + dataSet + ", user=" + user + '}';
     }
 
 }

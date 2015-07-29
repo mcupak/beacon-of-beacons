@@ -25,10 +25,10 @@ package com.dnastack.bob.rest;
 
 import com.dnastack.bob.rest.util.ArquillianUtils;
 import com.dnastack.bob.rest.util.BeaconResponseTestUtils;
+import com.dnastack.bob.rest.util.DataProvider;
 import com.dnastack.bob.rest.util.Parameter;
 import com.dnastack.bob.rest.util.ParameterRule;
 import com.dnastack.bob.rest.util.QueryEntry;
-import com.dnastack.bob.rest.util.DataProvider;
 import com.dnastack.bob.service.fetcher.util.HttpUtils;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -104,7 +104,7 @@ public abstract class BasicTest {
 
     public static String readResponse(String url) {
         try {
-            return httpUtils.executeRequest(httpUtils.createRequest(url, false, null));
+            return httpUtils.executeRequest(httpUtils.createRequest(url, false, null, null));
         } catch (UnsupportedEncodingException ex) {
             return null;
         }

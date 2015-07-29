@@ -33,7 +33,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
-import org.apache.http.StatusLine;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -93,19 +92,41 @@ public class HttpUtils {
         return httpPost;
     }
 
+    private String getForwardedFor(String ip) {
+        final String token = "for=";
+        String res = "";
+        if (ip == null || ip.isEmpty()) {
+            res = token + "unknown";
+        } else {
+            String[] sources = ip.split(",");
+            for (String s : sources) {
+                String part = (s.contains(":") && !s.startsWith("\"")) ? "\"" + s + "\"" : s;
+                res += token + part + ",";
+            }
+            if (res.endsWith(",")) {
+                res = res.substring(0, res.length() - 1);
+            }
+        }
+        return res;
+    }
+
     /**
      * Creates a GET/POST request object.
      *
-     * @param url  url
-     * @param post true if we want to create a POST, false for GET
-     * @param data payload (only needed for POST)
+     * @param url       url
+     * @param post      true if we want to create a POST, false for GET
+     * @param data      payload (only needed for POST)
+     * @param requester client's IP
      *
      * @return request
      *
      * @throws UnsupportedEncodingException
      */
-    public HttpRequestBase createRequest(String url, boolean post, List<NameValuePair> data) throws UnsupportedEncodingException {
-        return (post) ? createPost(url, data) : createGet(url);
+    public HttpRequestBase createRequest(String url, boolean post, List<NameValuePair> data, String requester) throws UnsupportedEncodingException {
+        HttpRequestBase request = (post) ? createPost(url, data) : createGet(url);
+        request.setHeader("Forwarded", getForwardedFor(requester));
+
+        return request;
     }
 
     /**
@@ -117,12 +138,9 @@ public class HttpUtils {
      */
     public String executeRequest(HttpRequestBase request) {
         String response = null;
-
         CloseableHttpResponse res = null;
         try {
             res = httpClient.execute(request);
-            StatusLine line = res.getStatusLine();
-            int status = line.getStatusCode();
             HttpEntity entity = res.getEntity();
             response = (entity == null) ? null : EntityUtils.toString(entity);
         } catch (IOException ex) {

@@ -32,6 +32,9 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
+import org.jboss.logging.Logger;
+
+import static com.dnastack.bob.rest.util.IpExtractor.extractIpAddress;
 
 /**
  * Filter logging IP addresses requests coming to the REST API.
@@ -42,10 +45,9 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class LoggingFilter implements ContainerRequestFilter, Serializable {
 
-    private static final String APP_NAME = "BEACON-OF-BEACONS";
     private static final long serialVersionUID = 20L;
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("DD-MM-YYYY HH:mm:ss Z");
-    private static final org.jboss.logging.Logger logger = org.jboss.logging.Logger.getLogger("com.dnastack.bob");
+    private static final Logger logger = Logger.getLogger("com.dnastack.bob");
 
     @Context
     private HttpServletRequest request;
@@ -60,25 +62,7 @@ public class LoggingFilter implements ContainerRequestFilter, Serializable {
             url += q;
         }
 
-        String ip = request.getHeader("X-FORWARDED-FOR");
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_CLIENT_IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteHost();
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
+        String ip = extractIpAddress(request);
 
         logger.info(DATE_FORMAT.format(new Date()) + " : Request from " + ip + ": " + method + " " + url);
     }

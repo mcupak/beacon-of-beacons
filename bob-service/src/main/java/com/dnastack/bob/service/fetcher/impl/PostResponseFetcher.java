@@ -62,19 +62,19 @@ public class PostResponseFetcher implements ResponseFetcher, Serializable {
     private List<NameValuePair> getQueryPayload(Map<String, String> payload) {
         List<NameValuePair> nvs = new ArrayList<>();
 
-        for (Entry<String, String> e : payload.entrySet()) {
+        payload.entrySet().stream().forEach((Entry<String, String> e) -> {
             nvs.add(new BasicNameValuePair(e.getKey(), e.getValue()));
-        }
+        });
 
         return nvs;
     }
 
     @Override
     @Asynchronous
-    public Future<String> getQueryResponse(String url, Map<String, String> payload) {
+    public Future<String> getQueryResponse(String url, Map<String, String> payload, String requester) {
         String res = null;
         try {
-            res = httpUtils.executeRequest(httpUtils.createRequest(url, true, getQueryPayload(payload)));
+            res = httpUtils.executeRequest(httpUtils.createRequest(url, true, getQueryPayload(payload), requester));
         } catch (UnsupportedEncodingException ex) {
             // ignore, already null
         }

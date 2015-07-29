@@ -122,18 +122,19 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
             return fs;
         }
 
+        String ip = query.getUser() == null ? null : query.getUser().getIp();
         if (query.getReference() == null) {
             // query all refs
             for (Reference ref : beacon.getSupportedReferences()) {
                 String url = requester.getUrl(beacon.getUrl(), beaconConverter.convert(beacon), referenceConverter.convert(ref), chromosomeConverter.convert(query.getChromosome()), positionConverter.convert(query.getPosition()), alleleConverter.convert(query.getAllele()), null);
                 Map<String, String> payload = requester.getPayload(beacon.getUrl(), beaconConverter.convert(beacon), referenceConverter.convert(ref), chromosomeConverter.convert(query.getChromosome()), positionConverter.convert(query.getPosition()), alleleConverter.convert(query.getAllele()), null);
-                fs.add(fetcher.getQueryResponse(url, payload));
+                fs.add(fetcher.getQueryResponse(url, payload, ip));
             }
         } else if (beacon.getSupportedReferences().contains(query.getReference())) {
             // query only the specified ref
             String url = requester.getUrl(beacon.getUrl(), beaconConverter.convert(beacon), referenceConverter.convert(query.getReference()), chromosomeConverter.convert(query.getChromosome()), positionConverter.convert(query.getPosition()), alleleConverter.convert(query.getAllele()), null);
             Map<String, String> payload = requester.getPayload(beacon.getUrl(), beaconConverter.convert(beacon), referenceConverter.convert(query.getReference()), chromosomeConverter.convert(query.getChromosome()), positionConverter.convert(query.getPosition()), alleleConverter.convert(query.getAllele()), null);
-            fs.add(fetcher.getQueryResponse(url, payload));
+            fs.add(fetcher.getQueryResponse(url, payload, ip));
         }
 
         return fs;
@@ -141,13 +142,13 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
 
     private List<Future<Boolean>> parseResultsInParallel(Beacon b, List<Future<String>> fs) {
         List<Future<Boolean>> bs = new ArrayList<>();
-        for (Future<String> f : fs) {
+        fs.stream().forEach((Future<String> f) -> {
             try {
                 bs.add(((ResponseParser) ejbResolver.resolve(b.getParser())).parseQueryResponse(b, f));
             } catch (Exception ex) {
                 logger.error(ex.getMessage());
             }
-        }
+        });
 
         return bs;
     }
