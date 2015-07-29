@@ -57,10 +57,10 @@ public class GetResponseFetcher implements ResponseFetcher, Serializable {
 
     @Override
     @Asynchronous
-    public Future<String> getQueryResponse(String url, Map<String, String> payload) {
+    public Future<String> getQueryResponse(String url, Map<String, String> payload, String requester) {
         String res = null;
         try {
-            HttpRequestBase request = httpUtils.createRequest(url, false, null);
+            HttpRequestBase request = httpUtils.createRequest(url, false, null, requester);
             request.setHeader("Accept", "application/json, text/plain");
             res = httpUtils.executeRequest(request);
         } catch (UnsupportedEncodingException ex) {

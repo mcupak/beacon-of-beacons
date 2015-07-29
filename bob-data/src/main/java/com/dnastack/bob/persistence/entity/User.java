@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
+ * Copyright 2015 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,43 +21,53 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.dto;
+package com.dnastack.bob.persistence.entity;
 
-import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 /**
- * Query DTO.
+ * User.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@XmlRootElement(name = "user")
-@XmlType(name = "user")
-public class UserDto implements Serializable {
+@Entity
+@Table(uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"userName", "ip"})})
+public class User implements BasicEntity {
 
-    private static final long serialVersionUID = 729442166075465142L;
+    private static final long serialVersionUID = 7621625748088389070L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
     private String userName;
-    private String ipAddress;
+    private String ip;
+    @OneToMany(mappedBy = "user")
+    private List<Query> queries;
 
-    public UserDto() {
-        // needed for JAXB
+    public User() {
     }
 
-    public UserDto(String userName, String ipAddress) {
-        this.ipAddress = ipAddress;
+    public User(String userName, String ip) {
         this.userName = userName;
+        this.ip = ip;
     }
 
-    public String getIpAddress() {
-        return ipAddress;
+    public Long getId() {
+        return id;
     }
 
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUserName() {
@@ -68,11 +78,28 @@ public class UserDto implements Serializable {
         this.userName = userName;
     }
 
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public List<Query> getQueries() {
+        return queries;
+    }
+
+    public void setQueries(List<Query> queries) {
+        this.queries = queries;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 53 * hash + Objects.hashCode(this.ipAddress);
-        hash = 53 * hash + Objects.hashCode(this.userName);
+        int hash = 7;
+        hash = 59 * hash + Objects.hashCode(this.id);
+        hash = 59 * hash + Objects.hashCode(this.userName);
+        hash = 59 * hash + Objects.hashCode(this.ip);
         return hash;
     }
 
@@ -84,11 +111,14 @@ public class UserDto implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final UserDto other = (UserDto) obj;
-        if (!Objects.equals(this.ipAddress, other.ipAddress)) {
+        final User other = (User) obj;
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         if (!Objects.equals(this.userName, other.userName)) {
+            return false;
+        }
+        if (!Objects.equals(this.ip, other.ip)) {
             return false;
         }
         return true;
@@ -96,7 +126,7 @@ public class UserDto implements Serializable {
 
     @Override
     public String toString() {
-        return "UserDto{" + "ipAddress=" + ipAddress + ", userName=" + userName + '}';
+        return "User{" + "id=" + id + ", userName=" + userName + ", ip=" + ip + '}';
     }
 
 }

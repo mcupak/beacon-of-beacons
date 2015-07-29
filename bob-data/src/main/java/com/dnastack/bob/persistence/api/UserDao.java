@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
+ * Copyright 2015 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,28 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.fetcher.api;
+package com.dnastack.bob.persistence.api;
 
-import java.util.Map;
-import java.util.concurrent.Future;
+import com.dnastack.bob.persistence.entity.User;
 
 /**
- * Beacon response fetcher.
+ * User DAO.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public interface ResponseFetcher {
-
-    /**
-     * Asynchronously obtains raw response to the query from the beacon.
-     *
-     * @param url       query URL
-     * @param payload   request data (for POST)
-     * @param requester client's IP
-     *
-     * @return raw result of the query from the beacon
-     */
-    Future<String> getQueryResponse(String url, Map<String, String> payload, String requester);
+public interface UserDao extends EntityWithLongIdDao<User> {
 
 }

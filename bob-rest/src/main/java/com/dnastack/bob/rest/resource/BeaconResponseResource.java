@@ -71,7 +71,7 @@ public class BeaconResponseResource {
 
     @PostConstruct
     private void init() {
-        user = new UserDto(extractIpAddress(request), null);
+        user = new UserDto(null, extractIpAddress(request));
     }
 
     /**
