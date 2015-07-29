@@ -51,6 +51,7 @@ import javax.ws.rs.core.UriInfo;
 public class RestEndPointResource {
 
     private static final RestEndPoint beacons = new RestEndPoint("beacons", "beacons", "beacons");
+    private static final RestEndPoint organizations = new RestEndPoint("organizations", "organizations", "organizations");
     private static final RestEndPoint responses = new RestEndPoint("responses", "responses", "responses?chrom=14&pos=106833421&allele=A");
     private static final RestEndPoint alleles = new RestEndPoint("alleles", "alleles", "alleles");
     private static final RestEndPoint chromosomes = new RestEndPoint("chromosomes", "chromosomes", "chromosomes");
@@ -75,6 +76,7 @@ public class RestEndPointResource {
     public Collection<RestEndPoint> showEndPoints() {
         Set<RestEndPoint> reps = new HashSet<>();
         reps.add(new RestEndPoint(beacons.getId(), baseUrl + beacons.getBaseUrl(), baseUrl + beacons.getExample()));
+        reps.add(new RestEndPoint(organizations.getId(), baseUrl + organizations.getBaseUrl(), baseUrl + organizations.getExample()));
         reps.add(new RestEndPoint(responses.getId(), baseUrl + responses.getBaseUrl(), baseUrl + responses.getExample()));
         reps.add(new RestEndPoint(alleles.getId(), baseUrl + alleles.getBaseUrl(), baseUrl + alleles.getExample()));
         reps.add(new RestEndPoint(chromosomes.getId(), baseUrl + chromosomes.getBaseUrl(), baseUrl + chromosomes.getExample()));
