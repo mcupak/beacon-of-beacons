@@ -31,9 +31,9 @@ import com.dnastack.bob.persistence.entity.Organization;
 import com.dnastack.bob.persistence.enumerated.Reference;
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.inject.Inject;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.Cleanup;
@@ -104,7 +104,9 @@ public class BeaconDaoTest extends EntityWithStringIdDaoTest {
     @Test
     public void testDelete() {
         Beacon e = (Beacon) findOne(getEntityClass());
+
         dao.delete(e.getId());
+
         assertThat(findAll(getEntityClass())).doesNotContain(e);
     }
 
@@ -112,7 +114,9 @@ public class BeaconDaoTest extends EntityWithStringIdDaoTest {
     @Test
     public void testFindById() {
         Beacon e = (Beacon) findOne(getEntityClass());
+
         Beacon e2 = dao.findById(e.getId());
+
         assertThat(e).isEqualTo(e2);
     }
 
@@ -120,6 +124,7 @@ public class BeaconDaoTest extends EntityWithStringIdDaoTest {
     public void testFindByVisibility() {
         List<Beacon> visible = dao.findByVisibility(true);
         assertThat(visible).extracting("visible").containsOnly(true);
+
         List<Beacon> inVisible = dao.findByVisibility(false);
         assertThat(inVisible).extracting("visible").containsOnly(false);
 
@@ -127,6 +132,7 @@ public class BeaconDaoTest extends EntityWithStringIdDaoTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testFindByAggregation() {
         List<Beacon> aggregators = dao.findByAggregation(true);
         assertThat(aggregators).extracting("processor").are(getNullCondition());
@@ -215,10 +221,7 @@ public class BeaconDaoTest extends EntityWithStringIdDaoTest {
     @UsingDataSet("beacon_descendants.json")
     public void testFindAllDescendants() {
         Beacon parent = (Beacon) findById(getEntityClass(), "root");
-        Set<Beacon> all = new HashSet<>();
-        for (BasicEntity e : findAll(getEntityClass())) {
-            all.add((Beacon) e);
-        }
+        Set<Beacon> all = findAll(getEntityClass()).stream().map((BasicEntity e) -> (Beacon) e).collect(Collectors.toSet());
 
         Set<Beacon> bs = dao.findDescendants(parent, true, true, true, true);
 

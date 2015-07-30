@@ -26,7 +26,13 @@ package com.dnastack.bob.service.processor.api;
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.persistence.entity.Query;
 import java.io.Serializable;
-import java.util.Objects;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Builder;
 
 /**
  * Representation of a query result provided by a beacon.
@@ -34,9 +40,17 @@ import java.util.Objects;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
+@ToString
+@EqualsAndHashCode
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@SuppressWarnings("deprecation")
 public class BeaconResponse implements Serializable {
 
-    private static final long serialVersionUID = 53L;
+    private static final long serialVersionUID = 2318476024983822938L;
 
     private Beacon beacon;
     private Query query;
@@ -44,98 +58,5 @@ public class BeaconResponse implements Serializable {
     private Double frequency = null;
     private String info = null;
     private String externalUrl = null;
-
-    public BeaconResponse(Beacon beacon, Query query, Boolean response) {
-        this.beacon = beacon;
-        this.query = query;
-        this.response = response;
-    }
-
-    public Beacon getBeacon() {
-        return beacon;
-    }
-
-    public void setBeacon(Beacon beacon) {
-        this.beacon = beacon;
-    }
-
-    public Query getQuery() {
-        return query;
-    }
-
-    public void setQuery(Query query) {
-        this.query = query;
-    }
-
-    public Boolean getResponse() {
-        return response;
-    }
-
-    public void setResponse(Boolean response) {
-        this.response = response;
-    }
-
-    public Double getFrequency() {
-        return frequency;
-    }
-
-    public void setFrequency(Double frequency) {
-        this.frequency = frequency;
-    }
-
-    public String getInfo() {
-        return info;
-    }
-
-    public void setInfo(String info) {
-        this.info = info;
-    }
-
-    public String getExternalUrl() {
-        return externalUrl;
-    }
-
-    public void setExternalUrl(String externalUrl) {
-        this.externalUrl = externalUrl;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 73 * hash + Objects.hashCode(this.response);
-        hash = 73 * hash + Objects.hashCode(this.frequency);
-        hash = 73 * hash + Objects.hashCode(this.info);
-        hash = 73 * hash + Objects.hashCode(this.externalUrl);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final BeaconResponse other = (BeaconResponse) obj;
-        if (!Objects.equals(this.response, other.response)) {
-            return false;
-        }
-        if (!Objects.equals(this.frequency, other.frequency)) {
-            return false;
-        }
-        if (!Objects.equals(this.info, other.info)) {
-            return false;
-        }
-        if (!Objects.equals(this.externalUrl, other.externalUrl)) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "BeaconResponse{" + "response=" + response + ", frequency=" + frequency + ", info=" + info + ", externalUrl=" + externalUrl + '}';
-    }
 
 }

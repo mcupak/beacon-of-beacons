@@ -49,6 +49,7 @@ public abstract class AbstractGenericDaoImpl<T extends BasicEntity> implements G
     private Class<T> entityClass;
 
     @PostConstruct
+    @SuppressWarnings("unchecked")
     private void initialize() {
         if (entityClass == null) {
             Type type = getClass().getGenericSuperclass();
@@ -57,7 +58,7 @@ public abstract class AbstractGenericDaoImpl<T extends BasicEntity> implements G
                 if (type instanceof ParameterizedType) {
                     Type[] arguments = ((ParameterizedType) type).getActualTypeArguments();
                     for (Type argument : arguments) {
-                        if (argument instanceof Class && BasicEntity.class.isAssignableFrom(((Class<T>) argument))) {
+                        if ((argument instanceof Class) && BasicEntity.class.isAssignableFrom(((Class<T>) argument))) {
                             entityClass = (Class<T>) argument;
                             break loop;
                         }
@@ -73,7 +74,7 @@ public abstract class AbstractGenericDaoImpl<T extends BasicEntity> implements G
 
     @Override
     public long countAll() {
-        return em.createQuery("SELECT COUNT(e.id) FROM " + entityClass.getSimpleName() + " e", Long.class).getSingleResult();
+        return em.createQuery(String.format("SELECT COUNT(e.id) FROM %s e", entityClass.getSimpleName()), Long.class).getSingleResult();
     }
 
     protected Class<T> getEntityClass() {

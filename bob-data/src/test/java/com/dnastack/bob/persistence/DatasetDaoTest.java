@@ -84,6 +84,7 @@ public class DatasetDaoTest extends EntityWithStringIdDaoTest {
     public void testUpdate() {
         Dataset e = (Dataset) findOne(getEntityClass());
         e.setName("updated");
+
         Dataset b = dao.update(e);
 
         assertThat(findAll(getEntityClass())).contains(b);
@@ -93,6 +94,7 @@ public class DatasetDaoTest extends EntityWithStringIdDaoTest {
     @Test
     public void testDelete() {
         Dataset e = (Dataset) findOne(getEntityClass());
+
         dao.delete(e.getId());
 
         assertThat(findAll(getEntityClass())).doesNotContain(e);
@@ -102,6 +104,7 @@ public class DatasetDaoTest extends EntityWithStringIdDaoTest {
     @Test
     public void testFindById() {
         Dataset e = (Dataset) findOne(getEntityClass());
+
         Dataset e2 = dao.findById(e.getId());
 
         assertThat(e).isEqualTo(e2);

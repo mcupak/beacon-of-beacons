@@ -95,6 +95,7 @@ public class QueryDaoTest extends EntityWithLongIdDaoTest {
     @Test
     public void testDelete() {
         Query e = (Query) findOne(getEntityClass());
+
         dao.delete(e.getId());
 
         assertThat(findAll(getEntityClass())).doesNotContain(e);
@@ -104,6 +105,7 @@ public class QueryDaoTest extends EntityWithLongIdDaoTest {
     @Test
     public void testFindById() {
         Query e = (Query) findOne(getEntityClass());
+
         Query e2 = dao.findById(e.getId());
 
         assertThat(e).isEqualTo(e2);

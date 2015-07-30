@@ -27,15 +27,15 @@ import com.dnastack.bob.persistence.api.OrganizationDao;
 import com.dnastack.bob.persistence.entity.Organization;
 import com.dnastack.bob.service.api.OrganizationService;
 import com.dnastack.bob.service.dto.OrganizationDto;
-import com.dnastack.bob.service.util.EntityDtoConvertor;
-import java.util.ArrayList;
+import com.dnastack.bob.service.util.EntityDtoConverter;
 import java.util.Collection;
-import java.util.List;
+import java.util.stream.Collectors;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
+import lombok.NonNull;
 
 /**
  * Implementation of a service managing organizations.
@@ -48,48 +48,33 @@ import javax.transaction.Transactional;
 @Named
 @Transactional
 public class OrganizationServiceImpl implements OrganizationService {
-    
+
     @Inject
     private OrganizationDao organizationDao;
-    
+
     @Override
     public OrganizationDto find(String organizationId) {
         Organization o = organizationDao.findById(organizationId);
-        return EntityDtoConvertor.getOrganizationDto((o == null) ? null : o);
+        return EntityDtoConverter.getOrganizationDto((o == null) ? null : o);
     }
-    
+
     @Override
     public Collection<OrganizationDto> findAll() {
-        return EntityDtoConvertor.getOrganizationDtos(organizationDao.findAll());
+        return EntityDtoConverter.getOrganizationDtos(organizationDao.findAll());
     }
-    
+
     @Override
     public Collection<OrganizationDto> find(Collection<String> ids) {
-        List<OrganizationDto> res = new ArrayList<>();
-        for (String id : ids) {
-            OrganizationDto b = find(id);
-            if (b != null) {
-                res.add(b);
-            }
-        }
-        
-        return res;
+        return ids.stream().map((id) -> find(id)).filter((b) -> (b != null)).collect(Collectors.toList());
     }
-    
+
     @Override
-    public OrganizationDto create(OrganizationDto organization) {
-        if (organization == null) {
-            throw new NullPointerException("organization");
-        }
-        return EntityDtoConvertor.getOrganizationDto(organizationDao.save(EntityDtoConvertor.getOrganization(organization)));
+    public OrganizationDto create(@NonNull OrganizationDto organization) {
+        return EntityDtoConverter.getOrganizationDto(organizationDao.save(EntityDtoConverter.getOrganization(organization)));
     }
-    
+
     @Override
-    public OrganizationDto update(String id, OrganizationDto organization) {
-        if (organization == null) {
-            throw new NullPointerException("organization");
-        }
-        
+    public OrganizationDto update(String id, @NonNull OrganizationDto organization) {
         Organization o = organizationDao.findById(id);
         if (organization.getId() != null) {
             o.setId(organization.getId());
@@ -106,16 +91,13 @@ public class OrganizationServiceImpl implements OrganizationService {
         if (organization.getAddress() != null) {
             o.setAddress(organization.getAddress());
         }
-        
-        return EntityDtoConvertor.getOrganizationDto(organizationDao.update(o));
+
+        return EntityDtoConverter.getOrganizationDto(organizationDao.update(o));
     }
-    
+
     @Override
-    public void delete(String id) {
-        if (id == null) {
-            throw new NullPointerException("id");
-        }
+    public void delete(@NonNull String id) {
         organizationDao.delete(id);
     }
-    
+
 }

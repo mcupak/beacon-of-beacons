@@ -28,7 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Utils for parsing query responses.
+ * Utilities for parsing query responses.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
@@ -161,7 +161,7 @@ public class ParseUtils {
 
         try {
             JSONObject jo = new JSONObject(response);
-            JSONObject current = null;
+            JSONObject current;
             for (String s : path) {
                 current = jo.optJSONObject(s);
                 if (current == null) {
@@ -208,7 +208,7 @@ public class ParseUtils {
 
         try {
             JSONObject jo = new JSONObject(response);
-            JSONObject current = null;
+            JSONObject current;
             for (String s : path) {
                 current = jo.optJSONObject(s);
                 if (current == null) {

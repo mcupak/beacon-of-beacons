@@ -27,11 +27,11 @@ import com.dnastack.bob.service.fetcher.api.ResponseFetcher;
 import com.dnastack.bob.service.fetcher.util.HttpUtils;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
 import javax.ejb.Local;
@@ -60,13 +60,7 @@ public class PostResponseFetcher implements ResponseFetcher, Serializable {
     private HttpUtils httpUtils;
 
     private List<NameValuePair> getQueryPayload(Map<String, String> payload) {
-        List<NameValuePair> nvs = new ArrayList<>();
-
-        payload.entrySet().stream().forEach((Entry<String, String> e) -> {
-            nvs.add(new BasicNameValuePair(e.getKey(), e.getValue()));
-        });
-
-        return nvs;
+        return payload.entrySet().stream().map((Entry<String, String> e) -> new BasicNameValuePair(e.getKey(), e.getValue())).collect(Collectors.toList());
     }
 
     @Override

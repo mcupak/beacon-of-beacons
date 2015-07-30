@@ -23,6 +23,7 @@
  */
 package com.dnastack.bob.persistence;
 
+import lombok.extern.java.Log;
 import org.assertj.core.api.Condition;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -38,13 +39,14 @@ import org.junit.runner.Description;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
+@Log
 public abstract class BasicDaoTest {
 
     @Rule
     public TestRule watcher = new TestWatcher() {
         @Override
         protected void starting(Description description) {
-            System.out.println("Starting test: " + description.getClassName() + " - " + description.getMethodName() + "()");
+            log.info("Starting test: " + description.getClassName() + " - " + description.getMethodName() + "()");
         }
     };
 

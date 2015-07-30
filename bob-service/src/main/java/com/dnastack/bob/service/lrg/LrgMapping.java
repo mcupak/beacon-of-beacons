@@ -23,28 +23,31 @@
  */
 package com.dnastack.bob.service.lrg;
 
+import java.util.Objects;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.ToString;
+
 /**
  * LRG mapping.
  *
  * @author mfiume
  */
+@ToString
+@EqualsAndHashCode
 public class LrgMapping {
 
+    @Getter
     private final LrgCoordinates sourceCoordinates;
+    @Getter
     private final LrgCoordinates targetCoordinates;
 
-    LrgMapping(LrgCoordinates sourceCoordinates, LrgCoordinates targetCoordinates) {
+    public LrgMapping(@NonNull LrgCoordinates sourceCoordinates, @NonNull LrgCoordinates targetCoordinates) {
         this.sourceCoordinates = sourceCoordinates;
         this.targetCoordinates = targetCoordinates;
 
-        checkNulls(sourceCoordinates);
-        checkNulls(targetCoordinates);
         checkSpans(sourceCoordinates, targetCoordinates);
-    }
-
-    @Override
-    public String toString() {
-        return "Mapping{" + "lrgCoords=" + sourceCoordinates + ", otherCoords=" + targetCoordinates + '}';
     }
 
     public LrgCoordinates mapForward(LrgCoordinates coord) {
@@ -55,21 +58,12 @@ public class LrgMapping {
         return map(targetCoordinates, sourceCoordinates, coord);
     }
 
-    public LrgCoordinates getSourceCoordinates() {
-        return sourceCoordinates;
-    }
-
-    public LrgCoordinates getTargetCoordinates() {
-        return targetCoordinates;
-    }
-
     private LrgCoordinates map(LrgCoordinates fromCoordinates, LrgCoordinates toCoordinates, LrgCoordinates coord) throws IndexOutOfBoundsException {
-
         checkInBounds(fromCoordinates, coord);
 
         String remappedName = toCoordinates.getName();
         String remappedLocus = toCoordinates.getLocus();
-        Boolean remappedStrand = toCoordinates.isPositiveStrand();
+        Boolean remappedStrand = toCoordinates.getPositiveStrand();
 
         long startDiff = coord.getStart() - fromCoordinates.getStart();
         long endDiff = coord.getEnd() - fromCoordinates.getStart();
@@ -78,7 +72,7 @@ public class LrgMapping {
         long remappedEnd = toCoordinates.getStart() + endDiff;
 
         // TODO:double check
-        if (fromCoordinates.isPositiveStrand() != toCoordinates.isPositiveStrand()) {
+        if (!Objects.equals(fromCoordinates.getPositiveStrand(), toCoordinates.getPositiveStrand())) {
             remappedStart = toCoordinates.getEnd() - startDiff;
             remappedEnd = toCoordinates.getEnd() - endDiff;
         }
@@ -90,7 +84,6 @@ public class LrgMapping {
     }
 
     private void checkInBounds(LrgCoordinates target, LrgCoordinates query) throws IndexOutOfBoundsException {
-
         // check name
         if (!query.getName().equals(target.getName())) {
             throw new IndexOutOfBoundsException("Name mismatch: " + query.getName() + " does not match target name " + target.getName());
@@ -112,23 +105,14 @@ public class LrgMapping {
         }
 
         // check strand
-        if (query.isPositiveStrand() == null ? target.isPositiveStrand() != null : !query.isPositiveStrand().equals(target.isPositiveStrand())) {
-            throw new IndexOutOfBoundsException("Strand mismatch: " + query.isPositiveStrand() + " does not match " + target.isPositiveStrand());
-        }
-    }
-
-    private void checkNulls(LrgCoordinates coords) {
-        if (coords.getName() == null) {
-            throw new RuntimeException("Name for coordinate is null");
-        }
-        if (coords.getLocus() == null) {
-            throw new RuntimeException("Locus for coordinate is null");
+        if (query.getPositiveStrand() == null ? target.getPositiveStrand() != null : !query.getPositiveStrand().equals(target.getPositiveStrand())) {
+            throw new IndexOutOfBoundsException("Strand mismatch: " + query.getPositiveStrand() + " does not match " + target.getPositiveStrand());
         }
     }
 
     private void checkSpans(LrgCoordinates sourceCoordinates, LrgCoordinates targetCoordinates) {
         if (sourceCoordinates.getEnd() - sourceCoordinates.getStart() != targetCoordinates.getEnd() - targetCoordinates.getStart()) {
-            throw new RuntimeException("Source and target lengths do not match");
+            throw new IllegalArgumentException("Source and target lengths do not match");
         }
     }
 

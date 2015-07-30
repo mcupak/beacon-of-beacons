@@ -23,51 +23,27 @@
  */
 package com.dnastack.bob.service.lrg;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+
 /**
  * Coordinates in LRG:
  *
  * @author mfiume
  */
-class LrgCoordinates {
+@ToString
+@EqualsAndHashCode
+@Getter
+@RequiredArgsConstructor
+public class LrgCoordinates {
 
     private final String name;
     private final String locus;
 
     private final long start;
     private final long end;
-    private final Boolean isPositiveStrand;
-
-    public LrgCoordinates(String name, String locus, long start, long end, Boolean isPositiveStrand) {
-        this.name = name;
-        this.locus = locus;
-        this.start = start;
-        this.end = end;
-        this.isPositiveStrand = isPositiveStrand;
-    }
-
-    @Override
-    public String toString() {
-        return "Coordinates{" + "name=" + name + ", locus=" + locus + ", start=" + start + ", end=" + end + ", strand=" + isPositiveStrand + '}';
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getLocus() {
-        return locus;
-    }
-
-    public long getStart() {
-        return start;
-    }
-
-    public long getEnd() {
-        return end;
-    }
-
-    public Boolean isPositiveStrand() {
-        return isPositiveStrand;
-    }
+    private final Boolean positiveStrand;
 
 }

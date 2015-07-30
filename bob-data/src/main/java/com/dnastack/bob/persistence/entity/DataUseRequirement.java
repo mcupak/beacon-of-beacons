@@ -61,7 +61,6 @@ public class DataUseRequirement implements BasicEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false, unique = true)
     private Long id;
-
     @NotNull
     @Column(nullable = false)
     private String name;

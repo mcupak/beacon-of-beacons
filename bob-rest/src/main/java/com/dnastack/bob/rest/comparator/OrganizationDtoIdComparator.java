@@ -26,6 +26,7 @@ package com.dnastack.bob.rest.comparator;
 import com.dnastack.bob.service.dto.OrganizationDto;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
+import lombok.NonNull;
 
 /**
  * Comparator of OrganizationDto objects. Performs case-insensitive comparison of IDs of OrganizationDto objects.
@@ -39,10 +40,7 @@ import javax.inject.Named;
 public class OrganizationDtoIdComparator implements OrganizationDtoComparator {
 
     @Override
-    public int compare(OrganizationDto o1, OrganizationDto o2) {
-        if (o1 == null || o2 == null) {
-            throw new NullPointerException("Organization is null.");
-        }
+    public int compare(@NonNull OrganizationDto o1, @NonNull OrganizationDto o2) {
         if (o1.getId() == null || o2.getId() == null) {
             throw new NullPointerException("Organization ID is null.");
         }

@@ -42,7 +42,7 @@ import static org.assertj.core.api.Fail.fail;
 public abstract class GenericDaoTest extends BasicDaoTest {
 
     @PersistenceContext
-    protected EntityManager em;
+    private EntityManager em;
 
     public abstract GenericDao getDao();
 
@@ -50,38 +50,42 @@ public abstract class GenericDaoTest extends BasicDaoTest {
 
     public abstract Class<? extends BasicEntity> getEntityClass();
 
-    protected String getTableName(Class entity) {
+    protected String getTableName(Class<? extends BasicEntity> entity) {
         return entity.getSimpleName();
     }
 
-    protected Long countAll(Class entity) {
-        return (Long) em.createQuery("SELECT COUNT(e) FROM " + getTableName(entity) + " e").getSingleResult();
+    protected Long countAll(Class<? extends BasicEntity> entity) {
+        return (Long) em.createQuery(String.format("SELECT COUNT(e) FROM %s e", getTableName(entity))).getSingleResult();
     }
 
-    protected List<BasicEntity> findAll(Class entity) {
-        return em.createQuery("SELECT e FROM " + getTableName(entity) + " e").getResultList();
+    @SuppressWarnings("unchecked")
+    protected List<BasicEntity> findAll(Class<? extends BasicEntity> entity) {
+        return em.createQuery(String.format("SELECT e FROM %s e", getTableName(entity))).getResultList();
     }
 
-    protected List<BasicEntity> findByAttribute(Class entity, String attribute, String value) {
-        return em.createQuery("SELECT e FROM " + getTableName(entity) + " e WHERE e." + attribute + "=" + value).getResultList();
+    @SuppressWarnings("unchecked")
+    protected List<BasicEntity> findByAttribute(Class<? extends BasicEntity> entity, String attribute, String value) {
+        return em.createQuery(String.format("SELECT e FROM %s e WHERE e.%s=%s", getTableName(entity), attribute, value)).getResultList();
     }
 
-    protected BasicEntity findOneByAttribute(Class entity, String attribute, String value) {
+    protected BasicEntity findOneByAttribute(Class<? extends BasicEntity> entity, String attribute, String value) {
+        @SuppressWarnings("unchecked")
         List<BasicEntity> res = em.createQuery("SELECT e FROM " + getTableName(entity) + " e WHERE e." + attribute + "=" + value).getResultList();
         return (res.isEmpty()) ? null : res.get(0);
     }
 
-    protected BasicEntity findOne(Class entity) {
-        List<BasicEntity> res = em.createQuery("SELECT e FROM " + getTableName(entity) + " e").getResultList();
+    protected BasicEntity findOne(Class<? extends BasicEntity> entity) {
+        @SuppressWarnings("unchecked")
+        List<BasicEntity> res = em.createQuery(String.format("SELECT e FROM %s e", getTableName(entity))).getResultList();
 
         return (res.isEmpty()) ? null : res.get(0);
     }
 
-    protected BasicEntity findById(Class entity, Long id) {
+    protected BasicEntity findById(Class<? extends BasicEntity> entity, Long id) {
         return (BasicEntity) em.find(entity, id);
     }
 
-    protected BasicEntity findById(Class entity, String id) {
+    protected BasicEntity findById(Class<? extends BasicEntity> entity, String id) {
         return (BasicEntity) em.find(entity, id);
     }
 
@@ -96,11 +100,13 @@ public abstract class GenericDaoTest extends BasicDaoTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testFindAll() {
         assertThat(getDao().findAll()).containsExactlyElementsOf(findAll(getEntityClass()));
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testSave() {
         if (getNewData().size() < 1) {
             fail("No data to save.");

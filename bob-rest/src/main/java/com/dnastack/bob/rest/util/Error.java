@@ -24,10 +24,16 @@
 package com.dnastack.bob.rest.util;
 
 import java.io.Serializable;
-import java.util.Objects;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Builder;
 
 /**
  * Application error.
@@ -35,6 +41,14 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
+@SuppressWarnings("deprecation")
+@ToString
+@EqualsAndHashCode
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @XmlRootElement(name = "error")
 public class Error implements Serializable {
 
@@ -48,78 +62,5 @@ public class Error implements Serializable {
     private String message;
     @XmlElement
     private String description;
-
-    public Error() {
-    }
-
-    public Error(Integer status, String message) {
-        this.status = status;
-        this.message = message;
-    }
-
-    public Error(Integer status, String message, String description) {
-        this.status = status;
-        this.message = message;
-        this.description = description;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 17 * hash + Objects.hashCode(this.status);
-        hash = 17 * hash + Objects.hashCode(this.message);
-        hash = 17 * hash + Objects.hashCode(this.description);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Error other = (Error) obj;
-        if (this.status != other.status) {
-            return false;
-        }
-        if (!Objects.equals(this.message, other.message)) {
-            return false;
-        }
-        if (!Objects.equals(this.description, other.description)) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "Error{" + "status=" + status + ", message=" + message + ", description=" + description + '}';
-    }
 
 }

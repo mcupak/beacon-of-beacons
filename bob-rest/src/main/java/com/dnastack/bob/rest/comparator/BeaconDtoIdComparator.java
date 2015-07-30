@@ -26,6 +26,7 @@ package com.dnastack.bob.rest.comparator;
 import com.dnastack.bob.service.dto.BeaconDto;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
+import lombok.NonNull;
 
 /**
  * Comparator of BeaconDto objects. Performs case-insensitive comparison of IDs of BeaconDto objects.
@@ -39,10 +40,7 @@ import javax.inject.Named;
 public class BeaconDtoIdComparator implements BeaconDtoComparator {
 
     @Override
-    public int compare(BeaconDto o1, BeaconDto o2) {
-        if (o1 == null || o2 == null) {
-            throw new NullPointerException("Beacon is null.");
-        }
+    public int compare(@NonNull BeaconDto o1, @NonNull BeaconDto o2) {
         if (o1.getId() == null || o2.getId() == null) {
             throw new NullPointerException("Beacon ID is null.");
         }

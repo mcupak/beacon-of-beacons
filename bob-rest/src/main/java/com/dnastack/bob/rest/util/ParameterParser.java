@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import lombok.NonNull;
 
 /**
  * Parsing utils for request parameters.
@@ -43,11 +44,7 @@ public class ParameterParser {
      *
      * @return true/false
      */
-    public static boolean parameterHasMultipleValidValue(String param) {
-        if (param == null) {
-            throw new NullPointerException("param");
-        }
-
+    public static boolean parameterHasMultipleValidValue(@NonNull String param) {
         return param.matches("\\[(((\\w)*-(\\w)*)*(\\w)*,)*((\\w)*-(\\w)*)*(\\w)*\\]");
     }
 
@@ -58,26 +55,18 @@ public class ParameterParser {
      *
      * @return true/false
      */
-    public static boolean parameterHasSingleValidValue(String param) {
-        if (param == null) {
-            throw new NullPointerException("param");
-        }
-
+    public static boolean parameterHasSingleValidValue(@NonNull String param) {
         return param.matches("[-a-zA-Z0-9]*");
     }
 
     /**
-     * Extract multiple values of a single parameter using "," as a deliminer and "[]" as borders.
+     * Extract multiple values of a single parameter using "," as a delimiter and "[]" as borders.
      *
      * @param param parameter value
      *
      * @return collection of individual values
      */
-    public static Collection<String> parseMultipleParameterValues(String param) {
-        if (param == null) {
-            throw new NullPointerException("param");
-        }
-
+    public static Collection<String> parseMultipleParameterValues(@NonNull String param) {
         List<String> values = new ArrayList<>();
         if (parameterHasSingleValidValue(param)) {
             values.add(param);

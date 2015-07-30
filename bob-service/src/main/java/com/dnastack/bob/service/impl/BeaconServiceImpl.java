@@ -39,17 +39,17 @@ import com.dnastack.bob.service.parser.impl.JsonResponseExistsResponseParser;
 import com.dnastack.bob.service.requester.impl.RefChromPosAlleleRequestConstructor;
 import com.dnastack.bob.service.util.CdiBeanResolver;
 import com.dnastack.bob.service.util.EjbResolver;
-import com.dnastack.bob.service.util.EntityDtoConvertor;
-import java.util.ArrayList;
+import com.dnastack.bob.service.util.EntityDtoConverter;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
+import lombok.NonNull;
 
 /**
  * Implementation of a service managing beacons.
@@ -85,33 +85,21 @@ public class BeaconServiceImpl implements BeaconService {
     @Override
     public BeaconDto find(String beaconId) {
         Beacon b = beaconDao.findById(beaconId);
-        return EntityDtoConvertor.getBeaconDto((b == null || !b.getVisible()) ? null : b, false);
+        return EntityDtoConverter.getBeaconDto((b == null || !b.getVisible()) ? null : b, false);
     }
 
     @Override
     public Collection<BeaconDto> find(Collection<String> beaconIds) {
-        List<BeaconDto> res = new ArrayList<>();
-        for (String id : beaconIds) {
-            BeaconDto b = find(id);
-            if (b != null) {
-                res.add(b);
-            }
-        }
-
-        return res;
+        return beaconIds.stream().map((id) -> find(id)).filter((b) -> (b != null)).collect(Collectors.toList());
     }
 
     @Override
     public Set<BeaconDto> findAll() {
-        return EntityDtoConvertor.getBeaconDtos(beaconDao.findByVisibility(true), false);
+        return EntityDtoConverter.getBeaconDtos(beaconDao.findByVisibility(true), false);
     }
 
     @Override
-    public BeaconDto create(BeaconDto beacon) {
-        if (beacon == null) {
-            throw new NullPointerException("beacon");
-        }
-
+    public BeaconDto create(@NonNull BeaconDto beacon) {
         Organization o = organizationDao.findByName(beacon.getOrganization());
         if (o == null) {
 //            o = new Organization();
@@ -121,7 +109,7 @@ public class BeaconServiceImpl implements BeaconService {
             throw new IllegalArgumentException("organization");
         }
 
-        Beacon b = EntityDtoConvertor.getBeacon(beacon);
+        Beacon b = EntityDtoConverter.getBeacon(beacon);
         b.setOrganization(o);
         b.setAuth(AUTH);
         b.setUrl(beacon.getUrl() + QUERY_URL);
@@ -135,7 +123,7 @@ public class BeaconServiceImpl implements BeaconService {
         b.setAlleleConverter(cdiResolver.getClassId(EmptyAlleleConverter.class));
         b.setBeaconConverter(cdiResolver.getClassId(BeaconIdBeaconConverter.class));
 
-        return EntityDtoConvertor.getBeaconDto(beaconDao.save(b), false);
+        return EntityDtoConverter.getBeaconDto(beaconDao.save(b), false);
     }
 
     @Override
@@ -144,10 +132,7 @@ public class BeaconServiceImpl implements BeaconService {
     }
 
     @Override
-    public void delete(String id) {
-        if (id == null) {
-            throw new NullPointerException("id");
-        }
+    public void delete(@NonNull String id) {
         beaconDao.delete(id);
     }
 

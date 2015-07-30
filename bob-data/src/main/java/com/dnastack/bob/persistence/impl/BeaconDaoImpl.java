@@ -59,7 +59,7 @@ public class BeaconDaoImpl extends AbstractEntityWithStringIdDaoImpl<Beacon> imp
     public boolean addRelationship(Beacon child, Beacon parent) {
         Set<Beacon> parents = child.getParents();
         if (parents == null) {
-            child.setParents(new HashSet<Beacon>());
+            child.setParents(new HashSet<>());
         }
         boolean res = child.getParents().add(parent);
 

@@ -24,9 +24,14 @@
 package com.dnastack.bob.rest.util;
 
 import java.io.Serializable;
-import java.util.Objects;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Builder;
 
 /**
  * Rest endpoint representation.
@@ -34,75 +39,20 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
+@SuppressWarnings("deprecation")
+@ToString
+@EqualsAndHashCode
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @XmlRootElement(name = "rest-end-point")
 public class RestEndPoint implements Serializable {
 
     private static final long serialVersionUID = 35L;
-    @XmlAttribute(name = "id")
     private String id;
-    @XmlAttribute(name = "base-url")
     private String baseUrl;
-    @XmlAttribute(name = "example")
     private String example;
-
-    public RestEndPoint() {
-    }
-
-    public RestEndPoint(String id, String baseUrl, String example) {
-        this.id = id;
-        this.baseUrl = baseUrl;
-        this.example = example;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getBaseUrl() {
-        return baseUrl;
-    }
-
-    public void setBaseUrl(String baseUrl) {
-        this.baseUrl = baseUrl;
-    }
-
-    public String getExample() {
-        return example;
-    }
-
-    public void setExample(String example) {
-        this.example = example;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.id);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final RestEndPoint other = (RestEndPoint) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "RestEndPoint{" + "id=" + id + ", baseUrl=" + baseUrl + ", example=" + example + '}';
-    }
 
 }

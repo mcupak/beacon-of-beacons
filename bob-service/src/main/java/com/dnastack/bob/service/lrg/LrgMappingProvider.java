@@ -86,9 +86,7 @@ public class LrgMappingProvider {
                     return new LrgMapping(lrgCoords, otherCoords);
                 }
             }
-        } catch (MalformedURLException ex) {
-            ex.printStackTrace();
-        } catch (XmlRpcException ex) {
+        } catch (MalformedURLException | XmlRpcException ex) {
             ex.printStackTrace();
         }
 

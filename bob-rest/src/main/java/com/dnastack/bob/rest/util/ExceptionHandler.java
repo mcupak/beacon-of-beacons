@@ -39,9 +39,7 @@ public class ExceptionHandler implements ExceptionMapper<Exception> {
     @Override
     public Response toResponse(Exception exception) {
         Response.Status s = ResponseStatusMapper.getStatus(exception);
-        Error error = new Error(s.getStatusCode(), exception.getMessage());
-
-        exception.printStackTrace();
+        Error error = Error.builder().status(s.getStatusCode()).message(exception.getMessage()).build();
 
         return Response.status(s).entity(error).build();
     }

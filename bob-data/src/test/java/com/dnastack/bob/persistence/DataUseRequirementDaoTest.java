@@ -81,6 +81,7 @@ public class DataUseRequirementDaoTest extends EntityWithLongIdDaoTest {
     public void testUpdate() {
         DataUseRequirement e = (DataUseRequirement) findOne(getEntityClass());
         e.setName("updated");
+
         DataUseRequirement b = dao.update(e);
 
         assertThat(findAll(getEntityClass())).contains(b);
@@ -90,6 +91,7 @@ public class DataUseRequirementDaoTest extends EntityWithLongIdDaoTest {
     @Test
     public void testDelete() {
         DataUseRequirement e = (DataUseRequirement) findOne(getEntityClass());
+
         dao.delete(e.getId());
 
         assertThat(findAll(getEntityClass())).doesNotContain(e);
@@ -99,6 +101,7 @@ public class DataUseRequirementDaoTest extends EntityWithLongIdDaoTest {
     @Test
     public void testFindById() {
         DataUseRequirement e = (DataUseRequirement) findOne(getEntityClass());
+
         DataUseRequirement e2 = dao.findById(e.getId());
 
         assertThat(e).isEqualTo(e2);

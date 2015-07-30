@@ -23,15 +23,12 @@
  */
 package com.dnastack.bob.persistence.enumerated;
 
-import lombok.ToString;
-
 /**
  * Canonical chromosome representation.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@ToString
 public enum Chromosome {
 
     // order is important!
@@ -52,6 +49,11 @@ public enum Chromosome {
             }
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return chrom;
     }
 
 }

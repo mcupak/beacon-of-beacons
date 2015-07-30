@@ -91,6 +91,7 @@ public class OrganizationDaoTest extends EntityWithStringIdDaoTest {
     @Test
     public void testDelete() {
         Organization e = (Organization) findOne(getEntityClass());
+
         dao.delete(e.getId());
 
         assertThat(findAll(getEntityClass())).doesNotContain(e);
@@ -100,6 +101,7 @@ public class OrganizationDaoTest extends EntityWithStringIdDaoTest {
     @Test
     public void testFindById() {
         Organization e = (Organization) findOne(getEntityClass());
+
         Organization e2 = dao.findById(e.getId());
 
         assertThat(e).isEqualTo(e2);

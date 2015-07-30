@@ -39,7 +39,7 @@ import com.dnastack.bob.service.lrg.LrgLocus;
 import com.dnastack.bob.service.lrg.LrgReference;
 import com.dnastack.bob.service.processor.api.BeaconProcessor;
 import com.dnastack.bob.service.processor.api.BeaconResponse;
-import com.dnastack.bob.service.util.EntityDtoConvertor;
+import com.dnastack.bob.service.util.EntityDtoConverter;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import java.io.Serializable;
@@ -66,7 +66,7 @@ import javax.validation.Validator;
 
 import static com.dnastack.bob.service.util.Constants.REFERENCE_MAPPING;
 import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
-import static com.dnastack.bob.service.util.EntityDtoConvertor.getUser;
+import static com.dnastack.bob.service.util.EntityDtoConverter.getUser;
 
 /**
  * Implementation of a service for managing beacon responses.
@@ -213,7 +213,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
             bs.stream().filter((Beacon b) -> {
                 return b != null;
             }).forEach((b) -> {
-                brs.put(b, new BeaconResponse(b, q, null));
+                brs.put(b, BeaconResponse.builder().beacon(b).query(q).response(null).build());
             });
         }
 
@@ -298,7 +298,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
         for (Entry<Beacon, BeaconResponse> e : res.entrySet()) {
             BeaconResponse response = e.getValue();
             if (response == null) {
-                response = new BeaconResponse(e.getKey(), q, null);
+                response = BeaconResponse.builder().beacon(e.getKey()).query(q).response(null).build();
             }
 
             Collection<Beacon> cs = children.get(e.getKey());
@@ -358,12 +358,12 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
             beacon.setEnabled(false);
             beacon.setVisible(false);
             beacon.setAggregator(true);
-            return EntityDtoConvertor.getBeaconResponseDto(new BeaconResponse(beacon, q, null));
+            return EntityDtoConverter.getBeaconResponseDto(BeaconResponse.builder().beacon(beacon).query(q).response(null).build());
         }
 
-        BeaconResponse br = new BeaconResponse(b, q, null);
+        BeaconResponse br = BeaconResponse.builder().beacon(b).query(q).response(null).build();
         if (queryNotNormalizedOrValid(q, ref)) {
-            return EntityDtoConvertor.getBeaconResponseDto(br);
+            return EntityDtoConverter.getBeaconResponseDto(br);
         }
 
         try {
@@ -372,7 +372,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
             // ignore, response already null
         }
 
-        return EntityDtoConvertor.getBeaconResponseDto(br);
+        return EntityDtoConverter.getBeaconResponseDto(br);
     }
 
     @Override
@@ -381,12 +381,12 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
             return new HashSet<>();
         }
 
-        return EntityDtoConvertor.getBeaconResponseDtos(queryMultipleBeacons(beaconIds, chrom, pos, allele, ref, onBehalfOf));
+        return EntityDtoConverter.getBeaconResponseDtos(queryMultipleBeacons(beaconIds, chrom, pos, allele, ref, onBehalfOf));
     }
 
     @Override
     public Collection<BeaconResponseDto> queryAll(String chrom, Long pos, String allele, String ref, UserDto onBehalfOf) throws ClassNotFoundException {
-        return EntityDtoConvertor.getBeaconResponseDtos(queryMultipleBeacons(null, chrom, pos, allele, ref, onBehalfOf));
+        return EntityDtoConverter.getBeaconResponseDtos(queryMultipleBeacons(null, chrom, pos, allele, ref, onBehalfOf));
     }
 
 }

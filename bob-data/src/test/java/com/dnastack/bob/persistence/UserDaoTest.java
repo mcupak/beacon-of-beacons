@@ -80,6 +80,7 @@ public class UserDaoTest extends EntityWithLongIdDaoTest {
     public void testUpdate() {
         User e = (User) findOne(getEntityClass());
         e.setIp("unknown");
+
         User b = dao.update(e);
 
         assertThat(findAll(getEntityClass())).contains(b);
@@ -89,6 +90,7 @@ public class UserDaoTest extends EntityWithLongIdDaoTest {
     @Test
     public void testDelete() {
         User e = (User) findOne(getEntityClass());
+
         dao.delete(e.getId());
 
         assertThat(findAll(getEntityClass())).doesNotContain(e);
@@ -98,6 +100,7 @@ public class UserDaoTest extends EntityWithLongIdDaoTest {
     @Test
     public void testFindById() {
         User e = (User) findOne(getEntityClass());
+
         User e2 = dao.findById(e.getId());
 
         assertThat(e).isEqualTo(e2);

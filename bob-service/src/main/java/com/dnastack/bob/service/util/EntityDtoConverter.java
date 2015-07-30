@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public class EntityDtoConvertor {
+public class EntityDtoConverter {
 
     /**
      * Converts a beacon to a beacon TO.

@@ -91,6 +91,7 @@ public class DataUseDaoTest extends EntityWithLongIdDaoTest {
     @Test
     public void testDelete() {
         DataUse e = (DataUse) findOne(getEntityClass());
+
         dao.delete(e.getId());
 
         assertThat(findAll(getEntityClass())).doesNotContain(e);
@@ -100,6 +101,7 @@ public class DataUseDaoTest extends EntityWithLongIdDaoTest {
     @Test
     public void testFindById() {
         DataUse e = (DataUse) findOne(getEntityClass());
+
         DataUse e2 = dao.findById(e.getId());
 
         assertThat(e).isEqualTo(e2);

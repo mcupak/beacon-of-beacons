@@ -28,6 +28,7 @@ import com.dnastack.bob.persistence.entity.Organization;
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
 import javax.persistence.PersistenceException;
+import lombok.NonNull;
 
 /**
  * JPA-based implementation of organization DAO.
@@ -42,12 +43,8 @@ public class OrganizationDaoImpl extends AbstractEntityWithStringIdDaoImpl<Organ
     private static final long serialVersionUID = 2403615525311736080L;
 
     @Override
-    public Organization findByName(String name) {
-        if (name == null) {
-            throw new NullPointerException("name");
-        }
-
-        Organization o = null;
+    public Organization findByName(@NonNull String name) {
+        Organization o;
         try {
             o = em.createNamedQuery("findOrganizationByName", Organization.class).setParameter("name", name).getSingleResult();
         } catch (PersistenceException ex) {

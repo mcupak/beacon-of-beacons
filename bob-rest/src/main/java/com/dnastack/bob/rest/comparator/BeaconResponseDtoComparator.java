@@ -28,6 +28,7 @@ import java.util.Comparator;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import lombok.NonNull;
 
 /**
  * Comparator of BeaconResponseDto objects. Performs comparison of BeaconDto objects in the responses.
@@ -44,10 +45,7 @@ public class BeaconResponseDtoComparator implements Comparator<BeaconResponseDto
     private BeaconDtoComparator beaconComparator;
 
     @Override
-    public int compare(BeaconResponseDto o1, BeaconResponseDto o2) {
-        if (o1 == null || o2 == null) {
-            throw new NullPointerException("Beacon response is null.");
-        }
+    public int compare(@NonNull BeaconResponseDto o1, @NonNull BeaconResponseDto o2) {
         if (o1.getBeacon() == null || o2.getBeacon() == null) {
             throw new NullPointerException("Beacon is null.");
         }

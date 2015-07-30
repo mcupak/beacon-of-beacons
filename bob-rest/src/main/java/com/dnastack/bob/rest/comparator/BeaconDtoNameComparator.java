@@ -27,10 +27,11 @@ import com.dnastack.bob.service.dto.BeaconDto;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import lombok.NonNull;
 
 /**
  * Comparator of BeaconDto objects. Performs case-insensitive comparison of names of BeaconDto objects.
- In case the names are equal, IDs are compared to distinguish similar beacons.
+ * In case the names are equal, IDs are compared to distinguish similar beacons.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
@@ -45,10 +46,7 @@ public class BeaconDtoNameComparator implements BeaconDtoComparator {
     private BeaconDtoComparator idComparator;
 
     @Override
-    public int compare(BeaconDto o1, BeaconDto o2) {
-        if (o1 == null || o2 == null) {
-            throw new NullPointerException("Beacon is null.");
-        }
+    public int compare(@NonNull BeaconDto o1, @NonNull BeaconDto o2) {
         if (o1.getName() == null || o2.getName() == null) {
             throw new NullPointerException("Beacon ID is null.");
         }

@@ -24,7 +24,6 @@
 package com.dnastack.bob.service.dto;
 
 import javax.xml.bind.annotation.XmlType;
-import lombok.ToString;
 
 /**
  * Canonical chromosome representation.
@@ -33,7 +32,6 @@ import lombok.ToString;
  * @version 1.0
  */
 @XmlType(name = "chromosome")
-@ToString
 public enum ChromosomeDto {
 
     // order is important!
@@ -54,6 +52,11 @@ public enum ChromosomeDto {
             }
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return chrom;
     }
 
 }
