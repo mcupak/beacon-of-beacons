@@ -29,7 +29,6 @@ echo "=> MYSQL (docker host): " $DB_PORT_3306_TCP_ADDR
 echo "=> MYSQL (docker port): " $DB_PORT_3306_TCP_PORT
 echo "=> MYSQL (kubernetes host): " $MYSQL_SERVICE_HOST
 echo "=> MYSQL (kubernetes port): " $MYSQL_SERVICE_PORT
-#$JBOSS_CLI -c --file=`dirname "$0"`/commands.cli
 $JBOSS_CLI -c << EOF
 batch
 
@@ -63,4 +62,3 @@ fi
 
 echo "=> Restarting WildFly"
 $JBOSS_HOME/bin/$JBOSS_MODE.sh -b 0.0.0.0 -c $JBOSS_CONFIG
-
