@@ -26,6 +26,7 @@ package com.dnastack.bob.service.processor.api;
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.persistence.entity.Query;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Representation of a query result provided by a beacon.
@@ -40,6 +41,9 @@ public class BeaconResponse implements Serializable {
     private Beacon beacon;
     private Query query;
     private Boolean response = null;
+    private Double frequency = null;
+    private String info = null;
+    private String externalUrl = null;
 
     public BeaconResponse(Beacon beacon, Query query, Boolean response) {
         this.beacon = beacon;
@@ -71,12 +75,37 @@ public class BeaconResponse implements Serializable {
         this.response = response;
     }
 
+    public Double getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(Double frequency) {
+        this.frequency = frequency;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
+    public String getExternalUrl() {
+        return externalUrl;
+    }
+
+    public void setExternalUrl(String externalUrl) {
+        this.externalUrl = externalUrl;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 41 * hash + (this.beacon != null ? this.beacon.hashCode() : 0);
-        hash = 41 * hash + (this.query != null ? this.query.hashCode() : 0);
-        hash = 41 * hash + (this.response != null ? this.response.hashCode() : 0);
+        int hash = 5;
+        hash = 73 * hash + Objects.hashCode(this.response);
+        hash = 73 * hash + Objects.hashCode(this.frequency);
+        hash = 73 * hash + Objects.hashCode(this.info);
+        hash = 73 * hash + Objects.hashCode(this.externalUrl);
         return hash;
     }
 
@@ -89,13 +118,16 @@ public class BeaconResponse implements Serializable {
             return false;
         }
         final BeaconResponse other = (BeaconResponse) obj;
-        if (this.beacon != other.beacon && (this.beacon == null || !this.beacon.equals(other.beacon))) {
+        if (!Objects.equals(this.response, other.response)) {
             return false;
         }
-        if (this.query != other.query && (this.query == null || !this.query.equals(other.query))) {
+        if (!Objects.equals(this.frequency, other.frequency)) {
             return false;
         }
-        if (this.response != other.response && (this.response == null || !this.response.equals(other.response))) {
+        if (!Objects.equals(this.info, other.info)) {
+            return false;
+        }
+        if (!Objects.equals(this.externalUrl, other.externalUrl)) {
             return false;
         }
         return true;
@@ -103,7 +135,7 @@ public class BeaconResponse implements Serializable {
 
     @Override
     public String toString() {
-        return "BeaconResponse{" + "beacon=" + beacon + ", query=" + query + ", response=" + response + '}';
+        return "BeaconResponse{" + "response=" + response + ", frequency=" + frequency + ", info=" + info + ", externalUrl=" + externalUrl + '}';
     }
 
 }

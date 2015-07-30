@@ -23,9 +23,15 @@
  */
 package com.dnastack.bob.persistence.entity;
 
-import java.util.Objects;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Builder;
 
 /**
  * Data size.
@@ -33,6 +39,14 @@ import javax.validation.constraints.NotNull;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
+@SuppressWarnings("deprecation")
+@ToString
+@EqualsAndHashCode
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Embeddable
 public class DataSize implements BasicEntity {
 
@@ -42,60 +56,5 @@ public class DataSize implements BasicEntity {
     private Long variants;
     @NotNull
     private Long samples;
-
-    public DataSize() {
-    }
-
-    public DataSize(Long variants, Long samples) {
-        this.variants = variants;
-        this.samples = samples;
-    }
-
-    public Long getVariants() {
-        return variants;
-    }
-
-    public void setVariants(Long variants) {
-        this.variants = variants;
-    }
-
-    public Long getSamples() {
-        return samples;
-    }
-
-    public void setSamples(Long samples) {
-        this.samples = samples;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 89 * hash + Objects.hashCode(this.variants);
-        hash = 89 * hash + Objects.hashCode(this.samples);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final DataSize other = (DataSize) obj;
-        if (!Objects.equals(this.variants, other.variants)) {
-            return false;
-        }
-        if (!Objects.equals(this.samples, other.samples)) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "DataSize{" + "variants=" + variants + ", samples=" + samples + '}';
-    }
 
 }

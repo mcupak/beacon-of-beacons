@@ -23,12 +23,15 @@
  */
 package com.dnastack.bob.persistence.enumerated;
 
+import lombok.ToString;
+
 /**
  * Canonical genome representation.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
+@ToString
 public enum Reference {
 
     HG38("hg38"), HG19("hg19"), HG18("hg18"), HG17("hg17"), HG16("hg16");
@@ -50,8 +53,4 @@ public enum Reference {
         return null;
     }
 
-    @Override
-    public String toString() {
-        return ref;
-    }
 }

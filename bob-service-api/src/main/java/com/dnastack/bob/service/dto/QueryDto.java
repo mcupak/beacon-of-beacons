@@ -24,9 +24,15 @@
 package com.dnastack.bob.service.dto;
 
 import java.io.Serializable;
-import java.util.Objects;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Builder;
 
 /**
  * Query DTO.
@@ -36,95 +42,21 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement(name = "query")
 @XmlType(name = "query")
+@ToString
+@EqualsAndHashCode
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor // needed for JAXB
+@AllArgsConstructor
+@SuppressWarnings("deprecation")
 public class QueryDto implements Serializable {
 
-    private static final long serialVersionUID = 3L;
+    private static final long serialVersionUID = 4711685616673439706L;
 
     private ChromosomeDto chromosome;
     private Long position;
     private String allele;
     private ReferenceDto reference;
-
-    public QueryDto() {
-        // needed for JAXB
-    }
-
-    public QueryDto(ChromosomeDto chromosome, Long position, String allele, ReferenceDto reference) {
-        this.chromosome = chromosome;
-        this.position = position;
-        this.allele = allele;
-        this.reference = reference;
-    }
-
-    public ChromosomeDto getChromosome() {
-        return chromosome;
-    }
-
-    public void setChromosome(ChromosomeDto chromosome) {
-        this.chromosome = chromosome;
-    }
-
-    public Long getPosition() {
-        return position;
-    }
-
-    public void setPosition(Long position) {
-        this.position = position;
-    }
-
-    public String getAllele() {
-        return allele;
-    }
-
-    public void setAllele(String allele) {
-        this.allele = allele;
-    }
-
-    public ReferenceDto getReference() {
-        return reference;
-    }
-
-    public void setReference(ReferenceDto reference) {
-        this.reference = reference;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 89 * hash + Objects.hashCode(this.chromosome);
-        hash = 89 * hash + Objects.hashCode(this.position);
-        hash = 89 * hash + Objects.hashCode(this.allele);
-        hash = 89 * hash + Objects.hashCode(this.reference);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final QueryDto other = (QueryDto) obj;
-        if (this.chromosome != other.chromosome) {
-            return false;
-        }
-        if (!Objects.equals(this.position, other.position)) {
-            return false;
-        }
-        if (!Objects.equals(this.allele, other.allele)) {
-            return false;
-        }
-        if (this.reference != other.reference) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "Query{" + "chromosome=" + chromosome + ", position=" + position + ", allele=" + allele + ", reference=" + reference + '}';
-    }
 
 }

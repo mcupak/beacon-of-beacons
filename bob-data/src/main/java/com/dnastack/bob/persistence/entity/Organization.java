@@ -24,7 +24,6 @@
 package com.dnastack.bob.persistence.entity;
 
 import java.util.List;
-import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,6 +33,13 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Builder;
 
 /**
  * Organization owning a beacon.
@@ -41,6 +47,14 @@ import javax.validation.constraints.Size;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
+@SuppressWarnings("deprecation")
+@ToString(exclude = "beacons")
+@EqualsAndHashCode(exclude = {"id", "beacons"})
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @NamedQueries({
     @NamedQuery(name = "findOrganizationByName", query = "SELECT b FROM Organization b WHERE b.name=:name")
@@ -63,91 +77,5 @@ public class Organization implements BasicEntity {
     private String address;
     @OneToMany(mappedBy = "organization", cascade = {CascadeType.REMOVE, CascadeType.DETACH})
     private List<Beacon> beacons;
-
-    public Organization() {
-    }
-
-    public Organization(String id, String name, String description, String url, String address) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.url = url;
-        this.address = address;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public List<Beacon> getBeacons() {
-        return beacons;
-    }
-
-    public void setBeacons(List<Beacon> beacons) {
-        this.beacons = beacons;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 83 * hash + Objects.hashCode(this.id);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Organization other = (Organization) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "Organization{" + "id=" + id + ", name=" + name + ", description=" + description + ", url=" + url + ", address=" + address + '}';
-    }
 
 }

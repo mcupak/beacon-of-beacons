@@ -163,10 +163,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
         Chromosome c = normalizeChromosome(chrom);
         Reference r = normalizeReference(ref);
 
-        Query q = new Query(c == null ? null : c, pos, normalizeAllele(allele), r == null ? null : r);
-        q.setUser(u);
-
-        return q;
+        return Query.builder().chromosome(c == null ? null : c).position(pos).allele(normalizeAllele(allele)).reference(r == null ? null : r).user(u).build();
     }
 
     private boolean queryNotNormalizedOrValid(Query q, String ref) {

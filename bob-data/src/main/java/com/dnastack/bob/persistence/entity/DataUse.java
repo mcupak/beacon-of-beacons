@@ -24,7 +24,6 @@
 package com.dnastack.bob.persistence.entity;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,6 +32,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Builder;
 
 /**
  * Data use.
@@ -40,6 +46,14 @@ import javax.validation.constraints.NotNull;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
+@SuppressWarnings("deprecation")
+@ToString(exclude = {"datasets", "requirements"})
+@EqualsAndHashCode(exclude = {"id", "datasets", "requirements"})
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class DataUse implements BasicEntity {
 
@@ -56,81 +70,5 @@ public class DataUse implements BasicEntity {
     private Set<DataUseRequirement> requirements;
     @ManyToMany(mappedBy = "dataUses")
     private List<Dataset> datasets;
-
-    public DataUse() {
-    }
-
-    public DataUse(String category, String description, Set<DataUseRequirement> requirements) {
-        this.category = category;
-        this.description = description;
-        this.requirements = requirements;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public List<Dataset> getDatasets() {
-        return datasets;
-    }
-
-    public void setDatasets(List<Dataset> datasets) {
-        this.datasets = datasets;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Set<DataUseRequirement> getRequirements() {
-        return requirements;
-    }
-
-    public void setRequirements(Set<DataUseRequirement> requirements) {
-        this.requirements = requirements;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        hash = 29 * hash + Objects.hashCode(this.category);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final DataUse other = (DataUse) obj;
-        if (!Objects.equals(this.category, other.category)) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "DataUse{" + "id=" + id + ", category=" + category + ", description=" + description + ", requirements=" + requirements + '}';
-    }
 
 }

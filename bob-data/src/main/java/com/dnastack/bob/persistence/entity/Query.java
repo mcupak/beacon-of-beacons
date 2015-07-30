@@ -25,7 +25,6 @@ package com.dnastack.bob.persistence.entity;
 
 import com.dnastack.bob.persistence.enumerated.Chromosome;
 import com.dnastack.bob.persistence.enumerated.Reference;
-import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -37,6 +36,13 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Builder;
 
 /**
  * Generalized beacon query representation.
@@ -44,6 +50,14 @@ import javax.validation.constraints.Pattern;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
+@SuppressWarnings("deprecation")
+@ToString
+@EqualsAndHashCode(exclude = "id")
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Query implements BasicEntity {
 
@@ -68,110 +82,5 @@ public class Query implements BasicEntity {
     private Dataset dataSet;
     @ManyToOne
     private User user;
-
-    public Query() {
-    }
-
-    public Query(Chromosome chromosome, Long position, String allele, Reference reference) {
-        this.chromosome = chromosome;
-        this.position = position;
-        this.allele = allele;
-        this.reference = reference;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Chromosome getChromosome() {
-        return chromosome;
-    }
-
-    public void setChromosome(Chromosome chromosome) {
-        this.chromosome = chromosome;
-    }
-
-    public Long getPosition() {
-        return position;
-    }
-
-    public void setPosition(Long position) {
-        this.position = position;
-    }
-
-    public String getAllele() {
-        return allele;
-    }
-
-    public void setAllele(String allele) {
-        this.allele = allele;
-    }
-
-    public Reference getReference() {
-        return reference;
-    }
-
-    public void setReference(Reference reference) {
-        this.reference = reference;
-    }
-
-    public Dataset getDataSet() {
-        return dataSet;
-    }
-
-    public void setDataSet(Dataset dataSet) {
-        this.dataSet = dataSet;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 89 * hash + Objects.hashCode(this.chromosome);
-        hash = 89 * hash + Objects.hashCode(this.position);
-        hash = 89 * hash + Objects.hashCode(this.allele);
-        hash = 89 * hash + Objects.hashCode(this.reference);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Query other = (Query) obj;
-        if (this.chromosome != other.chromosome) {
-            return false;
-        }
-        if (!Objects.equals(this.position, other.position)) {
-            return false;
-        }
-        if (!Objects.equals(this.allele, other.allele)) {
-            return false;
-        }
-        if (this.reference != other.reference) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "Query{" + "id=" + id + ", chromosome=" + chromosome + ", position=" + position + ", allele=" + allele + ", reference=" + reference + ", dataSet=" + dataSet + ", user=" + user + '}';
-    }
 
 }

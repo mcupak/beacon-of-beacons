@@ -26,6 +26,13 @@ package com.dnastack.bob.service.dto;
 import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Builder;
 
 /**
  * BeaconResponse DTO.
@@ -35,81 +42,23 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement(name = "beacon-response")
 @XmlType(name = "beacon-response")
+@ToString
+@EqualsAndHashCode
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor // needed for JAXB
+@AllArgsConstructor
+@SuppressWarnings("deprecation")
 public class BeaconResponseDto implements Serializable {
 
-    private static final long serialVersionUID = 54L;
+    private static final long serialVersionUID = 7784232950079896515L;
 
     private BeaconDto beacon;
     private QueryDto query;
     private Boolean response = null;
-
-    public BeaconResponseDto() {
-        // needed for JAXB
-    }
-
-    public BeaconResponseDto(BeaconDto beacon, QueryDto query, Boolean response) {
-        this.beacon = beacon;
-        this.query = query;
-        this.response = response;
-    }
-
-    public BeaconDto getBeacon() {
-        return beacon;
-    }
-
-    public void setBeacon(BeaconDto beacon) {
-        this.beacon = beacon;
-    }
-
-    public QueryDto getQuery() {
-        return query;
-    }
-
-    public void setQuery(QueryDto query) {
-        this.query = query;
-    }
-
-    public Boolean getResponse() {
-        return response;
-    }
-
-    public void setResponse(Boolean response) {
-        this.response = response;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 41 * hash + (this.beacon != null ? this.beacon.hashCode() : 0);
-        hash = 41 * hash + (this.query != null ? this.query.hashCode() : 0);
-        hash = 41 * hash + (this.response != null ? this.response.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final BeaconResponseDto other = (BeaconResponseDto) obj;
-        if (this.beacon != other.beacon && (this.beacon == null || !this.beacon.equals(other.beacon))) {
-            return false;
-        }
-        if (this.query != other.query && (this.query == null || !this.query.equals(other.query))) {
-            return false;
-        }
-        if (this.response != other.response && (this.response == null || !this.response.equals(other.response))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "Response of '" + beacon + "' to '" + query + "': '" + response + "'";
-    }
+    private Double frequency = null;
+    private String info = null;
+    private String externalUrl = null;
 
 }

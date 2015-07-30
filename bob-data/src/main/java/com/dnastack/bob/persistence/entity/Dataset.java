@@ -25,7 +25,6 @@ package com.dnastack.bob.persistence.entity;
 
 import com.dnastack.bob.persistence.enumerated.Reference;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -34,9 +33,17 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Builder;
 
 /**
  * Beacon's data set.
@@ -44,6 +51,14 @@ import javax.validation.constraints.Size;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
+@SuppressWarnings("deprecation")
+@ToString(exclude = {"dataUses", "queries"})
+@EqualsAndHashCode(exclude = {"dataUses", "queries"})
+@Builder
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Dataset implements BasicEntity {
 
@@ -62,100 +77,11 @@ public class Dataset implements BasicEntity {
     private Reference reference;
     @Embedded
     private DataSize size;
+    @ManyToOne
+    private Beacon beacon;
     @ManyToMany
     private Set<DataUse> dataUses;
     @OneToMany(mappedBy = "dataSet")
     private List<Query> queries;
-
-    public Dataset() {
-    }
-
-    public Dataset(String id, String description) {
-        this.id = id;
-        this.description = description;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Reference getReference() {
-        return reference;
-    }
-
-    public void setReference(Reference reference) {
-        this.reference = reference;
-    }
-
-    public DataSize getSize() {
-        return size;
-    }
-
-    public void setSize(DataSize size) {
-        this.size = size;
-    }
-
-    public Set<DataUse> getDataUses() {
-        return dataUses;
-    }
-
-    public void setDataUses(Set<DataUse> dataUses) {
-        this.dataUses = dataUses;
-    }
-
-    public List<Query> getQueries() {
-        return queries;
-    }
-
-    public void setQueries(List<Query> queries) {
-        this.queries = queries;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 47 * hash + Objects.hashCode(this.id);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Dataset other = (Dataset) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "Dataset{" + "id=" + id + ", name=" + name + ", description=" + description + ", reference=" + reference + '}';
-    }
 
 }

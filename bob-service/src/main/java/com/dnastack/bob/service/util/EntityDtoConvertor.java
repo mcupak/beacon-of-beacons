@@ -38,8 +38,8 @@ import com.dnastack.bob.service.dto.ReferenceDto;
 import com.dnastack.bob.service.dto.UserDto;
 import com.dnastack.bob.service.processor.api.BeaconResponse;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Convertor of entities to TOs.
@@ -53,7 +53,7 @@ public class EntityDtoConvertor {
      * Converts a beacon to a beacon TO.
      *
      * @param b            beacon
-     * @param showInternal
+     * @param showInternal true if you want it to return internal fields, false otherwise
      *
      * @return beacon TO
      */
@@ -62,23 +62,13 @@ public class EntityDtoConvertor {
             return null;
         }
 
-        BeaconDto beacon = new BeaconDto();
-        beacon.setId(b.getId());
-        beacon.setName(b.getName());
-        beacon.setAggregator(b.getAggregator());
-        beacon.setOrganization(b.getOrganization().getName());
-        beacon.setDescription(b.getDescription());
-        beacon.setEnabled(b.getEnabled());
-        beacon.setVisible(b.getVisible());
+        BeaconDto.BeaconDtoBuilder builder = BeaconDto.builder().id(b.getId()).name(b.getName()).aggregator(b.getAggregator()).organization(b.getOrganization().getName()).description(b.getDescription()).enabled(b.getEnabled()).visible(b.getVisible());
 
         if (showInternal) {
-            beacon.setEmail(b.getEmail());
-            beacon.setHomePage(b.getHomePage());
-            beacon.setUrl(b.getUrl());
-            beacon.setSupportedReferences(getReferenceDtos(b.getSupportedReferences()));
+            builder.email(b.getEmail()).homePage(b.getHomePage()).url(b.getUrl()).supportedReferences(getReferenceDtos(b.getSupportedReferences()));
         }
 
-        return beacon;
+        return builder.build();
     }
 
     public static Beacon getBeacon(BeaconDto b) {
@@ -86,20 +76,9 @@ public class EntityDtoConvertor {
             return null;
         }
 
-        Beacon beacon = new Beacon();
-        beacon.setId(b.getId());
-        beacon.setName(b.getName());
-        beacon.setAggregator(b.isAggregator());
-        beacon.setDescription(b.getDescription());
-        beacon.setEnabled(b.isEnabled());
-        beacon.setVisible(b.isVisible());
+        Beacon.BeaconBuilder builder = Beacon.builder().id(b.getId()).name(b.getName()).aggregator(b.isAggregator()).description(b.getDescription()).enabled(b.isEnabled()).visible(b.isVisible()).email(b.getEmail()).homePage(b.getHomePage()).url(b.getUrl()).supportedReferences(getReferences(b.getSupportedReferences()));
 
-        beacon.setEmail(b.getEmail());
-        beacon.setHomePage(b.getHomePage());
-        beacon.setUrl(b.getUrl());
-        beacon.setSupportedReferences(getReferences(b.getSupportedReferences()));
-
-        return beacon;
+        return builder.build();
     }
 
     /**
@@ -111,12 +90,7 @@ public class EntityDtoConvertor {
      * @return beacon TOs
      */
     public static Set<BeaconDto> getBeaconDtos(Collection<Beacon> bs, boolean showInternal) {
-        Set<BeaconDto> res = new HashSet<>();
-        for (Beacon br : bs) {
-            res.add(getBeaconDto(br, showInternal));
-        }
-
-        return res;
+        return bs.parallelStream().map((Beacon br) -> getBeaconDto(br, showInternal)).collect(Collectors.toSet());
     }
 
     /**
@@ -146,21 +120,11 @@ public class EntityDtoConvertor {
     }
 
     public static Set<ReferenceDto> getReferenceDtos(Collection<Reference> qs) {
-        Set<ReferenceDto> res = new HashSet<>();
-        for (Reference br : qs) {
-            res.add(getReferenceDto(br));
-        }
-
-        return res;
+        return qs.parallelStream().map((Reference br) -> getReferenceDto(br)).collect(Collectors.toSet());
     }
 
     public static Set<Reference> getReferences(Collection<ReferenceDto> qs) {
-        Set<Reference> res = new HashSet<>();
-        for (ReferenceDto br : qs) {
-            res.add(getReference(br));
-        }
-
-        return res;
+        return qs.parallelStream().map((ReferenceDto br) -> getReference(br)).collect(Collectors.toSet());
     }
 
     /**
@@ -171,7 +135,7 @@ public class EntityDtoConvertor {
      * @return query TO
      */
     public static QueryDto getQueryDto(Query q) {
-        return (q == null) ? null : new QueryDto(getChromosomeDto(q.getChromosome()), q.getPosition(), q.getAllele(), getReferenceDto(q.getReference()));
+        return (q == null) ? null : QueryDto.builder().chromosome(getChromosomeDto(q.getChromosome())).position(q.getPosition()).allele(q.getAllele()).reference(getReferenceDto(q.getReference())).build();
     }
 
     /**
@@ -182,12 +146,7 @@ public class EntityDtoConvertor {
      * @return query TOs
      */
     public static Set<QueryDto> getQueryDtos(Collection<Query> qs) {
-        Set<QueryDto> res = new HashSet<>();
-        for (Query br : qs) {
-            res.add(getQueryDto(br));
-        }
-
-        return res;
+        return qs.parallelStream().map((Query br) -> getQueryDto(br)).collect(Collectors.toSet());
     }
 
     /**
@@ -198,7 +157,7 @@ public class EntityDtoConvertor {
      * @return organization TO
      */
     public static OrganizationDto getOrganizationDto(Organization o) {
-        return (o == null) ? null : new OrganizationDto(o.getId(), o.getName(), o.getDescription(), o.getUrl(), o.getAddress());
+        return (o == null) ? null : OrganizationDto.builder().id(o.getId()).name(o.getName()).address(o.getAddress()).description(o.getDescription()).url(o.getUrl()).build();
     }
 
     /**
@@ -209,7 +168,7 @@ public class EntityDtoConvertor {
      * @return organization
      */
     public static Organization getOrganization(OrganizationDto o) {
-        return (o == null) ? null : new Organization(o.getId(), o.getName(), o.getDescription(), o.getUrl(), o.getAddress());
+        return (o == null) ? null : Organization.builder().id(o.getId()).name(o.getName()).description(o.getDescription()).url(o.getUrl()).address(o.getAddress()).build();
     }
 
     /**
@@ -220,12 +179,7 @@ public class EntityDtoConvertor {
      * @return organization TOs
      */
     public static Set<OrganizationDto> getOrganizationDtos(Collection<Organization> qs) {
-        Set<OrganizationDto> res = new HashSet<>();
-        for (Organization br : qs) {
-            res.add(getOrganizationDto(br));
-        }
-
-        return res;
+        return qs.parallelStream().map((Organization br) -> getOrganizationDto(br)).collect(Collectors.toSet());
     }
 
     /**
@@ -236,7 +190,7 @@ public class EntityDtoConvertor {
      * @return user TO
      */
     public static UserDto getUserDto(User o) {
-        return (o == null) ? null : new UserDto(o.getUserName(), o.getIp());
+        return (o == null) ? null : UserDto.builder().userName(o.getUserName()).ipAddress(o.getIp()).build();
     }
 
     /**
@@ -247,7 +201,7 @@ public class EntityDtoConvertor {
      * @return user
      */
     public static User getUser(UserDto o) {
-        return (o == null) ? null : new User(o.getUserName(), o.getIpAddress());
+        return (o == null) ? null : User.builder().userName(o.getUserName()).ip(o.getIpAddress()).build();
     }
 
     /**
@@ -258,12 +212,7 @@ public class EntityDtoConvertor {
      * @return user TOs
      */
     public static Set<UserDto> getUserDtos(Collection<User> qs) {
-        Set<UserDto> res = new HashSet<>();
-        for (User br : qs) {
-            res.add(getUserDto(br));
-        }
-
-        return res;
+        return qs.parallelStream().map((User br) -> getUserDto(br)).collect(Collectors.toSet());
     }
 
     /**
@@ -274,7 +223,7 @@ public class EntityDtoConvertor {
      * @return beacon response TO
      */
     public static BeaconResponseDto getBeaconResponseDto(BeaconResponse br) {
-        return (br == null) ? null : new BeaconResponseDto(getBeaconDto(br.getBeacon(), false), getQueryDto(br.getQuery()), br.getResponse());
+        return (br == null) ? null : BeaconResponseDto.builder().beacon(getBeaconDto(br.getBeacon(), false)).query(getQueryDto(br.getQuery())).response(br.getResponse()).build();
     }
 
     /**
@@ -285,11 +234,6 @@ public class EntityDtoConvertor {
      * @return beacon response TOs
      */
     public static Set<BeaconResponseDto> getBeaconResponseDtos(Collection<BeaconResponse> brs) {
-        Set<BeaconResponseDto> res = new HashSet<>();
-        for (BeaconResponse br : brs) {
-            res.add(getBeaconResponseDto(br));
-        }
-
-        return res;
+        return brs.parallelStream().map((BeaconResponse br) -> getBeaconResponseDto(br)).collect(Collectors.toSet());
     }
 }
