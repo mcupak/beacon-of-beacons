@@ -80,6 +80,8 @@
         <version.wildfly.arquillian.plugin>8.2.0.Final</version.wildfly.arquillian.plugin>
         <version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
         <version.lombok.plugin>1.14.8.0</version.lombok.plugin>
+        <version.tools>1.4.2</version.tools>
+        <path.tools>${java.home}/../lib/tools.jar</path.tools>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -180,6 +182,14 @@
                 <artifactId>gson</artifactId>
                 <version>${version.gson}</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <!--sun jdk-->
+                <groupId>com.sun</groupId>
+                <artifactId>tools</artifactId>
+                <version>${version.tools}</version>
+                <scope>system</scope>
+                <systemPath>${path.tools}</systemPath>
             </dependency>
         </dependencies>
     </dependencyManagement>

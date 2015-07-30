@@ -54,6 +54,7 @@ public class HelpTest extends BasicTest {
         return HELP_TEMPLATE;
     }
 
+    @SuppressWarnings("unchecked")
     public static List<RestEndPoint> readRestEndPoints(String url) throws JAXBException, MalformedURLException {
         return (List<RestEndPoint>) readObject(RestEndPoint.class, url);
     }
@@ -66,7 +67,7 @@ public class HelpTest extends BasicTest {
     public void testHelp(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         List<RestEndPoint> rs = readRestEndPoints(url.toExternalForm() + getUrl());
 
-        assertEquals(5, rs.size());
+        assertEquals(6, rs.size());
     }
 
 }

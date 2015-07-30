@@ -169,6 +169,12 @@
                     <artifactId>arquillian-protocol-servlet</artifactId>
                     <scope>test</scope>
                 </dependency>
+                <dependency>
+                    <groupId>com.sun</groupId>
+                    <artifactId>tools</artifactId>
+                    <scope>system</scope>
+                    <systemPath>${path.tools}</systemPath>
+                </dependency>
             </dependencies>
         </profile>
         <profile>
@@ -183,6 +189,12 @@
                     <groupId>org.jboss.arquillian.protocol</groupId>
                     <artifactId>arquillian-protocol-servlet</artifactId>
                     <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>com.sun</groupId>
+                    <artifactId>tools</artifactId>
+                    <scope>system</scope>
+                    <systemPath>${path.tools}</systemPath>
                 </dependency>
             </dependencies>
         </profile>
@@ -199,6 +211,12 @@
                     <artifactId>arquillian-protocol-servlet</artifactId>
                     <scope>test</scope>
                 </dependency>
+                <dependency>
+                    <groupId>com.sun</groupId>
+                    <artifactId>tools</artifactId>
+                    <scope>system</scope>
+                    <systemPath>${path.tools}</systemPath>
+                </dependency>
             </dependencies>
         </profile>
         <profile>
@@ -213,6 +231,12 @@
                     <groupId>org.jboss.arquillian.protocol</groupId>
                     <artifactId>arquillian-protocol-servlet</artifactId>
                     <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>com.sun</groupId>
+                    <artifactId>tools</artifactId>
+                    <scope>system</scope>
+                    <systemPath>${path.tools}</systemPath>
                 </dependency>
             </dependencies>
         </profile>

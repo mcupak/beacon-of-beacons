@@ -34,12 +34,13 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+import java.util.logging.Level;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
+import lombok.extern.java.Log;
 import org.eclipse.persistence.jaxb.JAXBContextProperties;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -60,9 +61,8 @@ import org.junit.runner.Description;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
+@Log
 public abstract class BasicTest {
-
-    private static final Logger logger = Logger.getLogger(BeaconSingleResponseTest.class.getName());
 
     private static final HttpUtils httpUtils = new HttpUtils();
 
@@ -70,7 +70,7 @@ public abstract class BasicTest {
     public TestRule watcher = new TestWatcher() {
         @Override
         protected void starting(Description description) {
-            logger.info("Starting test: " + description.getClassName() + " - " + description.getMethodName() + "()");
+            log.info("Starting test: " + description.getClassName() + " - " + description.getMethodName() + "()");
         }
     };
 
@@ -85,12 +85,12 @@ public abstract class BasicTest {
                 .as(WebArchive.class)
                 .addClasses(BasicTest.class, AbstractResponseTest.class, ParameterRule.class, ArquillianUtils.class, Parameter.class, BeaconResponseTestUtils.class, DataProvider.class, QueryEntry.class)
                 .addAsResource("queries.json");
-        logger.info("WAR name: " + war.getName());
+        log.log(Level.INFO, "WAR name: {0}", war.getName());
 
         return war;
     }
 
-    public static Object readObject(Class c, String url) throws JAXBException, MalformedURLException {
+    public static Object readObject(Class<?> c, String url) throws JAXBException, MalformedURLException {
         JAXBContext jc = JAXBContext.newInstance(c);
 
         Unmarshaller unmarshaller = jc.createUnmarshaller();

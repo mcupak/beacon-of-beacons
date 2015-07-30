@@ -27,6 +27,7 @@ import com.dnastack.bob.service.dto.BeaconDto;
 import com.dnastack.bob.service.dto.QueryDto;
 import java.util.HashSet;
 import java.util.Set;
+import lombok.NonNull;
 
 /**
  * Utils for beacon response testing.
@@ -40,11 +41,7 @@ public class BeaconResponseTestUtils {
         boolean onlyOneNull = (a == null && b != null) || (a != null && b == null);
         boolean bothNull = a == null && b == null;
 
-        if (onlyOneNull) {
-            return false;
-        } else {
-            return (bothNull) ? true : a.equals(b);
-        }
+        return (onlyOneNull) ? false : (bothNull) ? true : a.equals(b);
     }
 
     /**
@@ -55,11 +52,7 @@ public class BeaconResponseTestUtils {
      *
      * @return true if the ids match, false otherwise
      */
-    public static boolean beaconsMatch(BeaconDto b, String id) {
-        if (id == null || b == null) {
-            throw new NullPointerException("Argument cannot be null.");
-        }
-
+    public static boolean beaconsMatch(@NonNull BeaconDto b, @NonNull String id) {
         return id.equals(b.getId());
     }
 
@@ -84,11 +77,7 @@ public class BeaconResponseTestUtils {
      *
      * @return list of indices of nonmatching query attributes
      */
-    public static Set<Integer> getNonMachingFields(QueryDto q, QueryEntry qe) {
-        if (q == null) {
-            throw new NullPointerException("Query cannot be null.");
-        }
-
+    public static Set<Integer> getNonMachingFields(@NonNull QueryDto q, @NonNull QueryEntry qe) {
         Set<Integer> fields = new HashSet<>();
         if (!stringsEqual(q.getChromosome() == null ? null : q.getChromosome().toString(), qe.getChromosome())) {
             fields.add(0);

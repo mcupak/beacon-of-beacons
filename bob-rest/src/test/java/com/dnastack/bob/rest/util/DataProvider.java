@@ -34,11 +34,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * Data holder.
@@ -75,25 +75,11 @@ public class DataProvider {
     }
 
     public static Set<QueryEntry> getQueries(String beacon) {
-        Set<QueryEntry> qs = new HashSet<>();
-        for (QueryEntry q : queries) {
-            if ((q.getBeacon() == null && beacon == null) || q.getBeacon().equals(beacon)) {
-                qs.add(q);
-            }
-        }
-
-        return Collections.unmodifiableSet(qs);
+        return queries.stream().filter((QueryEntry q) -> ((q.getBeacon() == null && beacon == null) || q.getBeacon().equals(beacon))).collect(Collectors.toSet());
     }
 
     public static Set<String> getBeacons() {
-        Set<String> beacons = new HashSet<>();
-        for (QueryEntry q : queries) {
-            if (q.getBeacon() != null && !q.getBeacon().isEmpty() && !isQueryForMultipleBeacons(q)) {
-                beacons.add(q.getBeacon());
-            }
-        }
-
-        return Collections.unmodifiableSet(beacons);
+        return queries.stream().filter((QueryEntry q) -> (q.getBeacon() != null && !q.getBeacon().isEmpty() && !isQueryForMultipleBeacons(q))).map((QueryEntry q) -> q.getBeacon()).collect(Collectors.toSet());
     }
 
     public static boolean isQueryForMultipleBeacons(QueryEntry q) {

@@ -27,12 +27,12 @@ import com.dnastack.bob.rest.util.QueryEntry;
 import com.dnastack.bob.service.dto.BeaconResponseDto;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javax.xml.bind.JAXBException;
+import lombok.extern.java.Log;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
@@ -56,9 +56,8 @@ import static org.hamcrest.Matchers.isIn;
  */
 @RunWith(Arquillian.class)
 @RunAsClient
+@Log
 public class BeaconMultipleResponsesTest extends AbstractResponseTest {
-
-    private static final Logger logger = Logger.getLogger(BeaconMultipleResponsesTest.class.getName());
 
     @Test
     public void testAllResponses(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
@@ -66,15 +65,12 @@ public class BeaconMultipleResponsesTest extends AbstractResponseTest {
         q.setBeacon(null);
         List<BeaconResponseDto> brs = readBeaconResponses(url.toExternalForm() + getUrl(q, true));
 
-        Set<String> ids = new HashSet<>();
-        for (BeaconResponseDto br : brs) {
-            ids.add(br.getBeacon().getId());
-        }
+        Set<String> ids = brs.stream().map((BeaconResponseDto br) -> br.getBeacon().getId()).collect(Collectors.toSet());
         assertThat(getBeacons(), everyItem(isIn(ids)));
 
-        for (BeaconResponseDto br : brs) {
+        brs.stream().forEach((BeaconResponseDto br) -> {
             assertThat(queriesMatch(br.getQuery(), q), is(true));
-        }
+        });
     }
 
     @Test
@@ -84,9 +80,9 @@ public class BeaconMultipleResponsesTest extends AbstractResponseTest {
         for (String b : beacons) {
             QueryEntry query = (QueryEntry) getQueries(b).toArray()[0];
 
-            logger.log(Level.INFO, String.format("Testing query: %s", query));
+            log.log(Level.INFO, String.format("Testing query: %s", query));
             Boolean res = readBeaconResponses(url.toExternalForm() + getUrl(query, true)).get(0).getResponse();
-            logger.log(Level.INFO, String.format("Beacon: " + query.getBeacon() + " - expected response: %s; actual response: %s", query.getResponse(), res));
+            log.log(Level.INFO, String.format("Beacon: " + query.getBeacon() + " - expected response: %s; actual response: %s", query.getResponse(), res));
 
             collector.checkThat(query.toString(), res, equalTo(query.getResponse()));
         }
@@ -101,21 +97,18 @@ public class BeaconMultipleResponsesTest extends AbstractResponseTest {
         for (String b : beacons) {
             if (!a.equals(b)) {
                 query.setBeacon(String.format("[%s,%s]", a, b));
-                logger.log(Level.INFO, String.format("Testing query: %s", query));
+                log.log(Level.INFO, String.format("Testing query: %s", query));
 
                 List<BeaconResponseDto> brs = readBeaconResponses(url.toExternalForm() + getUrl(query, true));
 
-                Set<String> ids = new HashSet<>();
-                for (BeaconResponseDto br : brs) {
-                    ids.add(br.getBeacon().getId());
-                }
+                Set<String> ids = brs.stream().map((BeaconResponseDto br) -> br.getBeacon().getId()).collect(Collectors.toSet());
                 collector.checkThat(query.toString(), a, isIn(ids));
                 collector.checkThat(query.toString(), b, isIn(ids));
                 collector.checkThat(query.toString(), ids.size(), equalTo(2));
 
-                for (BeaconResponseDto br : brs) {
+                brs.stream().forEach((BeaconResponseDto br) -> {
                     collector.checkThat(query.toString(), queriesMatch(br.getQuery(), query), is(true));
-                }
+                });
             }
         }
     }

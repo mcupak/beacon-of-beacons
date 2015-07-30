@@ -26,9 +26,9 @@ package com.dnastack.bob.rest;
 import com.dnastack.bob.service.dto.BeaconDto;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.xml.bind.JAXBException;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
@@ -77,10 +77,7 @@ public class BeaconsTest extends BasicTest {
     @Test
     public void testAllBeacons(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         List<BeaconDto> bs = readBeacons(url.toExternalForm() + getUrl());
-        Set<String> ids = new HashSet<>();
-        for (BeaconDto b : bs) {
-            ids.add(b.getId());
-        }
+        Set<String> ids = bs.stream().map((BeaconDto b) -> b.getId()).collect(Collectors.toSet());
 
         assertThat(getBeacons(), everyItem(isIn(ids)));
     }
