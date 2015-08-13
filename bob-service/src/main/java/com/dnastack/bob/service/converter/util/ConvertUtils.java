@@ -24,9 +24,11 @@
 package com.dnastack.bob.service.converter.util;
 
 import com.dnastack.bob.persistence.entity.Beacon;
+import com.dnastack.bob.persistence.enumerated.Reference;
+import lombok.NonNull;
 
 /**
- * Utility methods for requestors.
+ * Utility methods for requesters.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
@@ -100,5 +102,19 @@ public class ConvertUtils {
         }
 
         return res;
+    }
+
+    /**
+     * Replace HG prefix in reference with a custom string.
+     *
+     * @param r         reference
+     * @param newPrefix prefix
+     *
+     * @return string representation of the reference
+     */
+    public static String replaceHgPrefix(@NonNull Reference r, @NonNull String newPrefix) {
+        String res = r.toString().toLowerCase();
+
+        return res.replace(res, newPrefix);
     }
 }

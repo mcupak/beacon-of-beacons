@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
+ * Copyright 2015 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,28 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.processor.api;
+package com.dnastack.bob.service.converter.impl;
 
-import com.dnastack.bob.persistence.entity.Beacon;
-import com.dnastack.bob.persistence.entity.Query;
-import java.util.concurrent.Future;
+import com.dnastack.bob.persistence.enumerated.Reference;
+import com.dnastack.bob.service.converter.api.ReferenceConverter;
+import java.io.Serializable;
+import javax.inject.Named;
+
+import static com.dnastack.bob.service.converter.util.ConvertUtils.replaceHgPrefix;
 
 /**
- * Beacon query service.
+ * Converter of references to their string representations with h instead of HG prefix.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public interface BeaconProcessor {
+@Named
+public class HReferenceConverter implements ReferenceConverter, Serializable {
 
-    /**
-     * Asynchronously executes a query against a beacon.
-     *
-     * @param beacon beacon
-     * @param query  query
-     *
-     * @return true/false according to the beacons response (or null if the valid response could not be obtained)
-     */
-    Future<Boolean> executeQuery(Beacon beacon, Query query);
+    private static final long serialVersionUID = 6997571682231658379L;
+    private static final String PREFIX = "h";
+
+    @Override
+    public String convert(Reference input) {
+        return (input == null) ? null : replaceHgPrefix(input, PREFIX);
+    }
 
 }
