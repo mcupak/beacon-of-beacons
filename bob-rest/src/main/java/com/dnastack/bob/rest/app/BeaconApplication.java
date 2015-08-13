@@ -33,6 +33,7 @@ import com.dnastack.bob.rest.resource.RestEndPointResource;
 import com.dnastack.bob.rest.util.ExceptionHandler;
 import com.dnastack.bob.rest.util.LoggingFilter;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import javax.ws.rs.ApplicationPath;
@@ -68,6 +69,6 @@ public class BeaconApplication extends Application {
             singletons = new HashSet<>();
             singletons.add(corsFilter);
         }
-        return singletons;
+        return Collections.unmodifiableSet(singletons);
     }
 }

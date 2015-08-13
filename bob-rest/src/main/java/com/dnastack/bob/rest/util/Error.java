@@ -59,8 +59,11 @@ public class Error implements Serializable {
     private Integer status;
     @XmlElement
     @NotNull
+    private String reason;
+    @XmlElement
+    @NotNull
     private String message;
     @XmlElement
-    private String description;
+    private String stackTrace;
 
 }

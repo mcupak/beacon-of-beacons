@@ -3,6 +3,7 @@
     <deployment>
         <exclusions>
             <module name="org.jboss.resteasy.resteasy-jaxb-provider" />
+            <module name="org.jboss.resteasy.resteasy-multipart-provider" />
         </exclusions>
     </deployment>
 </jboss-deployment-structure>

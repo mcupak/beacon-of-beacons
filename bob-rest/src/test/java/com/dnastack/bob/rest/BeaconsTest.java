@@ -53,9 +53,9 @@ import static org.hamcrest.core.IsNull.notNullValue;
 @RunAsClient
 public class BeaconsTest extends BasicTest {
 
-    public static final String BEACONS_TEMPLATE = "rest/beacons";
-    public static final String BEACONS_FILTERED_TEMPLATE = "rest/beacons?beacon=%s";
-    public static final String BEACON_TEMPLATE = "rest/beacons/%s";
+    public static final String BEACONS_TEMPLATE = "beacons";
+    public static final String BEACONS_FILTERED_TEMPLATE = "beacons?beacon=%s";
+    public static final String BEACON_TEMPLATE = "beacons/%s";
 
     public static String getUrl() {
         return BEACONS_TEMPLATE;

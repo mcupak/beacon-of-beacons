@@ -5,7 +5,10 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          version="3.0">
     <distributable/>
-    
+
+    <!--do not change as the EJB resolver relies on this string in the database-->
+    <module-name>bob-rest</module-name>
+
     <session-config>
         <session-timeout>
             30

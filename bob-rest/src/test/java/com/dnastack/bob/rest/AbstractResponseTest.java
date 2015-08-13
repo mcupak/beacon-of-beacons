@@ -43,12 +43,12 @@ import static com.dnastack.bob.rest.util.DataProvider.isQueryForMultipleBeacons;
  */
 public abstract class AbstractResponseTest extends BasicTest {
 
-    public static final String QUERY_BEACON_FILTER_TEMPLATE = "rest/responses?beacon=%s&chrom=%s&pos=%s&allele=%s";
-    public static final String QUERY_BEACON_FILTER_WITH_REF_TEMPLATE = "rest/responses?beacon=%s&chrom=%s&pos=%s&allele=%s&ref=%s";
-    public static final String QUERY_TEMPLATE = "rest/responses?chrom=%s&pos=%s&allele=%s";
-    public static final String QUERY_WITH_REF_TEMPLATE = "rest/responses?chrom=%s&pos=%s&allele=%s&ref=%s";
-    public static final String QUERY_BEACON_TEMPLATE = "rest/responses/%s?chrom=%s&pos=%s&allele=%s";
-    public static final String QUERY_BEACON_WITH_REF_TEMPLATE = "rest/responses/%s?chrom=%s&pos=%s&allele=%s&ref=%s";
+    public static final String QUERY_BEACON_FILTER_TEMPLATE = "responses?beacon=%s&chrom=%s&pos=%s&allele=%s";
+    public static final String QUERY_BEACON_FILTER_WITH_REF_TEMPLATE = "responses?beacon=%s&chrom=%s&pos=%s&allele=%s&ref=%s";
+    public static final String QUERY_TEMPLATE = "responses?chrom=%s&pos=%s&allele=%s";
+    public static final String QUERY_WITH_REF_TEMPLATE = "responses?chrom=%s&pos=%s&allele=%s&ref=%s";
+    public static final String QUERY_BEACON_TEMPLATE = "responses/%s?chrom=%s&pos=%s&allele=%s";
+    public static final String QUERY_BEACON_WITH_REF_TEMPLATE = "responses/%s?chrom=%s&pos=%s&allele=%s&ref=%s";
     // paths for jettisson (not jackson)
     public static final String BEACON_RESPONSE = "beaconResponse";
     public static final List<String> BEACON_PATH = ImmutableList.of(BEACON_RESPONSE, "beacon", "id");

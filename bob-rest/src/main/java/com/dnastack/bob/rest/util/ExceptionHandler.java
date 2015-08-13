@@ -23,6 +23,11 @@
  */
 package com.dnastack.bob.rest.util;
 
+import java.util.Arrays;
+import java.util.List;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
@@ -36,12 +41,31 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class ExceptionHandler implements ExceptionMapper<Exception> {
 
+    @Context
+    private HttpHeaders headers;
+
     @Override
     public Response toResponse(Exception exception) {
         Response.Status s = ResponseStatusMapper.getStatus(exception);
-        Error error = Error.builder().status(s.getStatusCode()).message(exception.getMessage()).build();
+        Error error = Error.builder().status(s.getStatusCode()).reason(s.getReasonPhrase()).message(exception.getMessage()).stackTrace(Arrays.deepToString(exception.getStackTrace())).build();
 
-        return Response.status(s).entity(error).build();
+        List<MediaType> mediaTypes = headers.getAcceptableMediaTypes();
+        // default to JSON
+        String chosenType = MediaType.APPLICATION_JSON;
+        if (mediaTypes != null) {
+            for (MediaType m : mediaTypes) {
+                if (m.isCompatible(MediaType.APPLICATION_JSON_TYPE)) {
+                    chosenType = MediaType.APPLICATION_JSON;
+                    break;
+                }
+                if (m.isCompatible(MediaType.APPLICATION_XML_TYPE)) {
+                    chosenType = MediaType.APPLICATION_XML;
+                    break;
+                }
+            }
+        }
+
+        return Response.status(s).entity(error).type(chosenType).build();
     }
 
 }

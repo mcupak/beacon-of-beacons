@@ -48,9 +48,9 @@ import static org.junit.Assert.assertEquals;
 @RunAsClient
 public class ItemTest extends BasicTest {
 
-    public static final String CHROMOSOMES_TEMPLATE = "rest/chromosomes";
-    public static final String REFERENCES_TEMPLATE = "rest/references";
-    public static final String ALLELES_TEMPLATE = "rest/alleles";
+    public static final String CHROMOSOMES_TEMPLATE = "chromosomes";
+    public static final String REFERENCES_TEMPLATE = "references";
+    public static final String ALLELES_TEMPLATE = "alleles";
 
     @SuppressWarnings("unchecked")
     public static List<ItemWrapper> readItems(String url) throws JAXBException, MalformedURLException {

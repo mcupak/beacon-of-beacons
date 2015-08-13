@@ -46,7 +46,7 @@ import static org.junit.Assert.assertEquals;
 @RunAsClient
 public class HelpTest extends BasicTest {
 
-    public static final String HELP_TEMPLATE = "rest";
+    public static final String HELP_TEMPLATE = "";
     public static final String BEACONS = "beacons";
     public static final String RESPONSES = "responses";
 
