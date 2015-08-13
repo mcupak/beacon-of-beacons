@@ -2376,7 +2376,7 @@
         "response": null
     },
     {
-        "beacon": "bgi",
+        "beacon": "gigascience",
         "chromosome": "1",
         "position": 808921,
         "allele": "A",
@@ -2385,7 +2385,16 @@
         "response": false
     },
     {
-        "beacon": "bgi",
+        "beacon": "gigascience-1",
+        "chromosome": "1",
+        "position": 808921,
+        "allele": "A",
+        "reference": null,
+        "description": "all references not found",
+        "response": false
+    },
+    {
+        "beacon": "gigascience-1",
         "chromosome": "1",
         "position": 808921,
         "allele": "A",
@@ -2394,7 +2403,7 @@
         "response": false
     },
     {
-        "beacon": "bgi",
+        "beacon": "gigascience-1",
         "chromosome": "1",
         "position": 808921,
         "allele": "A",
@@ -2403,7 +2412,7 @@
         "response": null
     },
     {
-        "beacon": "bgi",
+        "beacon": "gigascience-1",
         "chromosome": "1",
         "position": 808921,
         "allele": "A",
@@ -2412,7 +2421,7 @@
         "response": null
     },
     {
-        "beacon": "bgi",
+        "beacon": "gigascience-1",
         "chromosome": "1",
         "position": 808921,
         "allele": "A",
@@ -2421,7 +2430,7 @@
         "response": false
     },
     {
-        "beacon": "bgi",
+        "beacon": "gigascience-1",
         "chromosome": "1",
         "position": 46402,
         "allele": "TGT",
@@ -2430,7 +2439,7 @@
         "response": false
     },
     {
-        "beacon": "bgi",
+        "beacon": "gigascience-1",
         "chromosome": "1",
         "position": 1002920,
         "allele": "D",
@@ -2439,7 +2448,7 @@
         "response": false
     },
     {
-        "beacon": "bgi",
+        "beacon": "gigascience-1",
         "chromosome": "1",
         "position": 46402,
         "allele": "I",
@@ -2448,7 +2457,7 @@
         "response": false
     },
     {
-        "beacon": "bgi",
+        "beacon": "gigascience-1",
         "chromosome": "13",
         "position": 32888799,
         "allele": "A",
@@ -2457,7 +2466,7 @@
         "response": false
     },
     {
-        "beacon": "bgi",
+        "beacon": "gigascience-1",
         "chromosome": "15",
         "position": 41087870,
         "allele": "DC",
@@ -2466,7 +2475,7 @@
         "response": null
     },
     {
-        "beacon": "bgi",
+        "beacon": "gigascience-1",
         "chromosome": "1",
         "position": 1002922,
         "allele": "DEL",
@@ -2475,7 +2484,7 @@
         "response": false
     },
     {
-        "beacon": "bgi",
+        "beacon": "gigascience-1",
         "chromosome": "chrom14",
         "position": 106833421,
         "allele": "A",
@@ -2484,7 +2493,7 @@
         "response": false
     },
     {
-        "beacon": "bgi",
+        "beacon": "gigascience-1",
         "chromosome": "30",
         "position": 106833421,
         "allele": "A",
@@ -2493,7 +2502,7 @@
         "response": null
     },
     {
-        "beacon": "bgi",
+        "beacon": "gigascience-1",
         "chromosome": "X",
         "position": 41087870,
         "allele": "C",
@@ -2502,7 +2511,142 @@
         "response": false
     },
     {
-        "beacon": "bgi",
+        "beacon": "gigascience-1",
+        "chromosome": "MT",
+        "position": 1,
+        "allele": "A",
+        "reference": null,
+        "description": "mt",
+        "response": false
+    },
+    {
+        "beacon": "gigascience-2",
+        "chromosome": "1",
+        "position": 808921,
+        "allele": "A",
+        "reference": null,
+        "description": "all references not found",
+        "response": false
+    },
+    {
+        "beacon": "gigascience-2",
+        "chromosome": "1",
+        "position": 808921,
+        "allele": "A",
+        "reference": "hg19",
+        "description": "specific reference not found",
+        "response": false
+    },
+    {
+        "beacon": "gigascience-2",
+        "chromosome": "1",
+        "position": 808921,
+        "allele": "A",
+        "reference": "hg38",
+        "description": "specific reference not found",
+        "response": null
+    },
+    {
+        "beacon": "gigascience-2",
+        "chromosome": "1",
+        "position": 808921,
+        "allele": "A",
+        "reference": "hg100",
+        "description": "invalid reference",
+        "response": null
+    },
+    {
+        "beacon": "gigascience-2",
+        "chromosome": "1",
+        "position": 808921,
+        "allele": "A",
+        "reference": "grch37",
+        "description": "reference conversion",
+        "response": false
+    },
+    {
+        "beacon": "gigascience-2",
+        "chromosome": "1",
+        "position": 46402,
+        "allele": "TGT",
+        "reference": null,
+        "description": "string allele/not supported",
+        "response": false
+    },
+    {
+        "beacon": "gigascience-2",
+        "chromosome": "1",
+        "position": 1002920,
+        "allele": "D",
+        "reference": null,
+        "description": "del/not supported",
+        "response": false
+    },
+    {
+        "beacon": "gigascience-2",
+        "chromosome": "1",
+        "position": 46402,
+        "allele": "I",
+        "reference": null,
+        "description": "ins/not supported",
+        "response": false
+    },
+    {
+        "beacon": "gigascience-2",
+        "chromosome": "13",
+        "position": 32888799,
+        "allele": "A",
+        "reference": null,
+        "description": "no reference found",
+        "response": false
+    },
+    {
+        "beacon": "gigascience-2",
+        "chromosome": "15",
+        "position": 41087870,
+        "allele": "DC",
+        "reference": null,
+        "description": "invalid allele",
+        "response": null
+    },
+    {
+        "beacon": "gigascience-2",
+        "chromosome": "1",
+        "position": 1002922,
+        "allele": "DEL",
+        "reference": null,
+        "description": "allele conversion",
+        "response": false
+    },
+    {
+        "beacon": "gigascience-2",
+        "chromosome": "chrom14",
+        "position": 106833421,
+        "allele": "A",
+        "reference": null,
+        "description": "chromosome conversion",
+        "response": false
+    },
+    {
+        "beacon": "gigascience-2",
+        "chromosome": "30",
+        "position": 106833421,
+        "allele": "A",
+        "reference": null,
+        "description": "invalid chromosome",
+        "response": null
+    },
+    {
+        "beacon": "gigascience-2",
+        "chromosome": "X",
+        "position": 41087870,
+        "allele": "C",
+        "reference": null,
+        "description": "x",
+        "response": false
+    },
+    {
+        "beacon": "gigascience-2",
         "chromosome": "MT",
         "position": 1,
         "allele": "A",
