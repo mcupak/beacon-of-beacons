@@ -45,7 +45,7 @@ import org.jboss.resteasy.plugins.interceptors.CorsFilter;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@ApplicationPath("/rest")
+@ApplicationPath("")
 public class BeaconApplication extends Application {
 
     private Set<Object> singletons;
