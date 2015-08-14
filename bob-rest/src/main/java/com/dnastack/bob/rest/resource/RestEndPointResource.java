@@ -50,6 +50,7 @@ import javax.ws.rs.core.UriInfo;
 @Named
 public class RestEndPointResource {
 
+    private static final String SEPARATOR = "/";
     private static final RestEndPoint beacons = new RestEndPoint("beacons", "beacons", "beacons");
     private static final RestEndPoint organizations = new RestEndPoint("organizations", "organizations", "organizations");
     private static final RestEndPoint responses = new RestEndPoint("responses", "responses", "responses?chrom=14&pos=106833421&allele=A");
@@ -64,7 +65,10 @@ public class RestEndPointResource {
 
     @PostConstruct
     private void init() {
-        baseUrl = uriInfo.getBaseUri().toString();
+        baseUrl = uriInfo.getBaseUri().normalize().toString();
+        if (!baseUrl.endsWith(SEPARATOR)) {
+            baseUrl += SEPARATOR;
+        }
     }
 
     /**
