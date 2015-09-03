@@ -40,9 +40,11 @@ import com.dnastack.bob.service.requester.impl.RefChromPosAlleleRequestConstruct
 import com.dnastack.bob.service.util.CdiBeanResolver;
 import com.dnastack.bob.service.util.EjbResolver;
 import com.dnastack.bob.service.util.EntityDtoConverter;
+import com.google.common.collect.ImmutableSet;
 import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
@@ -50,6 +52,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
 import lombok.NonNull;
+import lombok.extern.java.Log;
 
 /**
  * Implementation of a service managing beacons.
@@ -61,10 +64,13 @@ import lombok.NonNull;
 @Local(BeaconService.class)
 @Named
 @Transactional
+@Log
 public class BeaconServiceImpl implements BeaconService {
 
     public static final String QUERY_URL = "/query?reference=%s&chromosome=%s&position=%d&referenceBases=&alternateBases=%s&dataset=";
     public static final String AUTH = "OAUTH2.0";
+    public static final String PARENT_ID = "dnastack";
+    public static final String BOB_ID = "bob";
 
     @Inject
     private BeaconDao beaconDao;
@@ -102,10 +108,6 @@ public class BeaconServiceImpl implements BeaconService {
     public BeaconDto create(@NonNull BeaconDto beacon) {
         Organization o = organizationDao.findByName(beacon.getOrganization());
         if (o == null) {
-//            o = new Organization();
-//            o.setId(generateId());
-//            o.setName(beacon.getOrganization());
-//            organizationDao.save(o);
             throw new IllegalArgumentException("organization");
         }
 
@@ -123,7 +125,16 @@ public class BeaconServiceImpl implements BeaconService {
         b.setAlleleConverter(cdiResolver.getClassId(EmptyAlleleConverter.class));
         b.setBeaconConverter(cdiResolver.getClassId(BeaconIdBeaconConverter.class));
 
-        return EntityDtoConverter.getBeaconDto(beaconDao.save(b), false);
+        Beacon parent = beaconDao.findById(PARENT_ID);
+        Beacon bob = beaconDao.findById(BOB_ID);
+        if (bob != null) {
+            b.setParents(parent == null ? ImmutableSet.of(bob) : ImmutableSet.of(parent, bob));
+        }
+
+        Beacon res = beaconDao.save(b);
+        log.log(Level.INFO, "Beacon created: {0}", res.getId());
+
+        return EntityDtoConverter.getBeaconDto(res, false);
     }
 
     @Override

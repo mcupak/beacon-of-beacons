@@ -98,8 +98,8 @@ public class Beacon implements BasicEntity {
     private String alleleConverter;
     private String referenceConverter;
     private String beaconConverter;
-    @ElementCollection(fetch = FetchType.EAGER)
     // TODO: query from datasets or cache properly
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<Reference> supportedReferences;
 
     @NotNull
