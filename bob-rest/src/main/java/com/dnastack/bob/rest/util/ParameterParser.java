@@ -37,6 +37,10 @@ import lombok.NonNull;
  */
 public class ParameterParser {
 
+    private ParameterParser() {
+        // prevent instantiation
+    }
+
     /**
      * Checks if there are multiple values given as a parameter.
      *

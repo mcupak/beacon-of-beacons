@@ -36,6 +36,7 @@ import com.dnastack.bob.service.converter.impl.EmptyReferenceConverter;
 import com.dnastack.bob.service.dto.BeaconDto;
 import com.dnastack.bob.service.fetcher.impl.GetResponseFetcher;
 import com.dnastack.bob.service.parser.impl.JsonResponseExistsResponseParser;
+import com.dnastack.bob.service.parser.impl.JsonResponseExternalUrlParser;
 import com.dnastack.bob.service.requester.impl.RefChromPosAlleleRequestConstructor;
 import com.dnastack.bob.service.util.CdiBeanResolver;
 import com.dnastack.bob.service.util.EjbResolver;
@@ -116,7 +117,8 @@ public class BeaconServiceImpl implements BeaconService {
         b.setAuth(AUTH);
         b.setUrl(beacon.getUrl() + QUERY_URL);
 
-        b.setParser(ejbResolver.getClassId(JsonResponseExistsResponseParser.class));
+        b.setResponseParser(ejbResolver.getClassId(JsonResponseExistsResponseParser.class));
+        b.setExternalUrlParser(ejbResolver.getClassId(JsonResponseExternalUrlParser.class));
         b.setFetcher(ejbResolver.getClassId(GetResponseFetcher.class));
         b.setRequester(cdiResolver.getClassId(RefChromPosAlleleRequestConstructor.class));
         b.setReferenceConverter(cdiResolver.getClassId(EmptyReferenceConverter.class));

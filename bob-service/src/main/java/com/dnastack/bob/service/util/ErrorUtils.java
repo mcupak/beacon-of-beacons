@@ -21,28 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.parser.api;
+package com.dnastack.bob.service.util;
 
-import com.dnastack.bob.persistence.entity.Beacon;
-import java.util.concurrent.Future;
+import java.util.Arrays;
 
 /**
- * Beacon response parser.
+ * Utilities for generating errors.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public interface ResponseParser extends BeaconParser<Boolean> {
+public class ErrorUtils {
+
+    private ErrorUtils() {
+        // prevent instantiation
+    }
 
     /**
-     * Asynchronously extracts beacon response value from the given raw query response.
+     * Constructs a message to log from a throwable.
      *
-     * @param beacon   beacon
-     * @param response response
+     * @param t throwable
      *
-     * @return true/false for valid values, null otherwise
+     * @return message
      */
-    @Override
-    Future<Boolean> parse(Beacon beacon, Future<String> response);
-
+    public static String getErrorMessage(Throwable t) {
+        return String.format("%s: %s", t.getMessage(), Arrays.toString(t.getStackTrace()));
+    }
 }

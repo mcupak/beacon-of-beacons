@@ -41,8 +41,8 @@ public interface BeaconProcessor {
      * @param beacon beacon
      * @param query  query
      *
-     * @return true/false according to the beacons response (or null if the valid response could not be obtained)
+     * @return response
      */
-    Future<Boolean> executeQuery(Beacon beacon, Query query);
+    Future<BeaconResponse> executeQuery(Beacon beacon, Query query);
 
 }

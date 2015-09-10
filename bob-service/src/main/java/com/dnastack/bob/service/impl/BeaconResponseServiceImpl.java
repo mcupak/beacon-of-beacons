@@ -171,29 +171,30 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
     }
 
     @Asynchronous
-    private Future<Boolean> queryBeacon(Beacon b, Query q) throws ClassNotFoundException {
-        Boolean total = null;
+    private Future<BeaconResponse> queryBeacon(Beacon b, Query q) throws ClassNotFoundException {
+        BeaconResponse total = new BeaconResponse();
 
         if (b.getAggregator()) {
-            total = false;
+            total.setResponse(false);
 
             // execute queries in parallel
-            Map<Beacon, Future<Boolean>> futures = new HashMap<>();
+            Map<Beacon, Future<BeaconResponse>> futures = new HashMap<>();
             Set<Beacon> children = beaconDao.findDescendants(b, false, true, false, false);
             children.stream().forEach((Beacon bt) -> {
                 futures.put(bt, beaconProcessor.executeQuery(bt, q));
             });
 
             // collect results
-            for (Entry<Beacon, Future<Boolean>> e : futures.entrySet()) {
-                Boolean res = null;
+            for (Entry<Beacon, Future<BeaconResponse>> e : futures.entrySet()) {
+                BeaconResponse res = null;
                 try {
                     res = e.getValue().get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
                 } catch (InterruptedException | ExecutionException | TimeoutException ex) {
                     // ignore, response already null
                 }
-                if (res != null && res) {
-                    total = true;
+                if (res != null && res.getResponse() != null && res.getResponse()) {
+                    // hide everything other than reponses for aggregates
+                    total.setResponse(true);
                 }
             }
         } else {
@@ -235,21 +236,22 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
 
     private Map<Beacon, BeaconResponse> fillBeaconResponseMap(Map<Beacon, BeaconResponse> brs, Query q) throws ClassNotFoundException {
         // execute queries in parallel
-        Map<Beacon, Future<Boolean>> futures = new HashMap<>();
+        Map<Beacon, Future<BeaconResponse>> futures = new HashMap<>();
         for (Beacon b : brs.keySet()) {
             futures.put(b, queryBeacon(b, q));
         }
 
         // collect results
-        futures.entrySet().stream().forEach((Entry<Beacon, Future<Boolean>> e) -> {
-            Boolean b = null;
+        futures.entrySet().stream().forEach((Entry<Beacon, Future<BeaconResponse>> e) -> {
+            BeaconResponse b = null;
             try {
                 b = e.getValue().get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
             } catch (InterruptedException | ExecutionException | TimeoutException ex) {
                 // ignore, response already null
             }
             if (b != null) {
-                brs.get(e.getKey()).setResponse(b);
+                brs.get(e.getKey()).setResponse(b.getResponse());
+                brs.get(e.getKey()).setExternalUrl(b.getExternalUrl());
             }
         });
 
@@ -367,7 +369,9 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
         }
 
         try {
-            br.setResponse(queryBeacon(b, q).get(REQUEST_TIMEOUT, TimeUnit.SECONDS));
+            BeaconResponse inter = queryBeacon(b, q).get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
+            br.setResponse(inter.getResponse());
+            br.setExternalUrl(inter.getExternalUrl());
         } catch (InterruptedException | ExecutionException | TimeoutException ex) {
             // ignore, response already null
         }

@@ -49,6 +49,10 @@ import java.util.stream.Collectors;
  */
 public class EntityDtoConverter {
 
+    private EntityDtoConverter() {
+        // prevent instantiation
+    }
+
     /**
      * Converts a beacon to a beacon TO.
      *
@@ -223,7 +227,7 @@ public class EntityDtoConverter {
      * @return beacon response TO
      */
     public static BeaconResponseDto getBeaconResponseDto(BeaconResponse br) {
-        return (br == null) ? null : BeaconResponseDto.builder().beacon(getBeaconDto(br.getBeacon(), false)).query(getQueryDto(br.getQuery())).response(br.getResponse()).build();
+        return (br == null) ? null : BeaconResponseDto.builder().beacon(getBeaconDto(br.getBeacon(), false)).query(getQueryDto(br.getQuery())).response(br.getResponse()).externalUrl(br.getExternalUrl()).build();
     }
 
     /**

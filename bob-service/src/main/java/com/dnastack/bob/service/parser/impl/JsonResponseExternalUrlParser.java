@@ -24,7 +24,7 @@
 package com.dnastack.bob.service.parser.impl;
 
 import com.dnastack.bob.persistence.entity.Beacon;
-import com.dnastack.bob.service.parser.api.ResponseParser;
+import com.dnastack.bob.service.parser.api.ExternalUrlParser;
 import java.io.Serializable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -37,11 +37,11 @@ import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
 
-import static com.dnastack.bob.service.parser.util.ParseUtils.parseStartsWithYesNoCaseInsensitive;
+import static com.dnastack.bob.service.parser.util.ParseUtils.parseStringFromJson;
 import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
 
 /**
- * Parses "yes" and "no" strings.
+ * Parses external URL from a JSON field.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
@@ -49,17 +49,19 @@ import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
 @Stateless
 @Named
 @Dependent
-@Local(ResponseParser.class)
-public class StringYesNoResponseParser implements ResponseParser, Serializable {
+@Local(ExternalUrlParser.class)
+public class JsonResponseExternalUrlParser implements ExternalUrlParser, Serializable {
 
-    private static final long serialVersionUID = -4790485566013440026L;
+    private static final long serialVersionUID = -64474148101027085L;
+    public static final String EXTERNAL_URL_FIELD = "externalUrl";
+    public static final String RESPONSE_FIELD = "response";
 
     @Asynchronous
     @Override
-    public Future<Boolean> parse(Beacon b, Future<String> response) {
-        Boolean res = null;
+    public Future<String> parse(Beacon b, Future<String> response) {
+        String res = null;
         try {
-            res = parseStartsWithYesNoCaseInsensitive(response.get(REQUEST_TIMEOUT, TimeUnit.SECONDS));
+            res = parseStringFromJson(response.get(REQUEST_TIMEOUT, TimeUnit.SECONDS), RESPONSE_FIELD, EXTERNAL_URL_FIELD);
         } catch (InterruptedException | ExecutionException | TimeoutException ex) {
             // ignore
         }

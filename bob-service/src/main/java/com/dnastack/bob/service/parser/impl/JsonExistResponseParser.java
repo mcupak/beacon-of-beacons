@@ -57,7 +57,7 @@ public class JsonExistResponseParser implements ResponseParser, Serializable {
 
     @Asynchronous
     @Override
-    public synchronized Future<Boolean> parseQueryResponse(Beacon b, Future<String> response) {
+    public synchronized Future<Boolean> parse(Beacon b, Future<String> response) {
         Boolean res = null;
         try {
             res = parseBooleanFromJson(response.get(REQUEST_TIMEOUT, TimeUnit.SECONDS), "exist");

@@ -37,8 +37,10 @@ import com.dnastack.bob.service.converter.impl.EmptyChromosomeConverter;
 import com.dnastack.bob.service.converter.impl.EmptyPositionConverter;
 import com.dnastack.bob.service.converter.impl.EmptyReferenceConverter;
 import com.dnastack.bob.service.fetcher.api.ResponseFetcher;
+import com.dnastack.bob.service.parser.api.ExternalUrlParser;
 import com.dnastack.bob.service.parser.api.ResponseParser;
 import com.dnastack.bob.service.processor.api.BeaconProcessor;
+import com.dnastack.bob.service.processor.api.BeaconResponse;
 import com.dnastack.bob.service.requester.api.RequestConstructor;
 import com.dnastack.bob.service.util.CdiBeanResolver;
 import com.dnastack.bob.service.util.EjbResolver;
@@ -58,9 +60,17 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.naming.NamingException;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.Builder;
 import org.jboss.logging.Logger;
 
 import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
+import static com.dnastack.bob.service.util.ErrorUtils.getErrorMessage;
 
 /**
  * Beacon service handling multiple genome specific queries.
@@ -84,6 +94,20 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
 
     @Inject
     private Logger logger;
+
+    @ToString
+    @EqualsAndHashCode
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @SuppressWarnings("deprecation")
+    private static class FutureBeaconResponse {
+
+        private Future<Boolean> response = null;
+        private Future<String> externalUrl = null;
+    }
 
     private List<Future<String>> executeQueriesInParallel(Beacon beacon, Query query) {
         List<Future<String>> fs = new ArrayList<>();
@@ -140,36 +164,49 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
         return fs;
     }
 
-    private List<Future<Boolean>> parseResultsInParallel(Beacon b, List<Future<String>> fs) {
-        List<Future<Boolean>> bs = new ArrayList<>();
-        fs.stream().forEach((Future<String> f) -> {
-            try {
-                bs.add(((ResponseParser) ejbResolver.resolve(b.getParser())).parseQueryResponse(b, f));
-            } catch (Exception ex) {
-                logger.error(ex.getMessage());
-            }
-        });
+    private List<FutureBeaconResponse> parseResultsInParallel(Beacon b, List<Future<String>> fs) {
+        List<FutureBeaconResponse> bs = new ArrayList<>();
+        if (b != null) {
+            fs.stream().forEach((Future<String> f) -> {
+                try {
+                    ResponseParser rp = (ResponseParser) ejbResolver.resolve(b.getResponseParser());
+                    ExternalUrlParser eup = (ExternalUrlParser) ejbResolver.resolve(b.getExternalUrlParser());
+
+                    FutureBeaconResponse fbr = FutureBeaconResponse.builder()
+                        .response(rp == null ? null : rp.parse(b, f))
+                        .externalUrl(eup == null ? null : eup.parse(b, f))
+                        .build();
+                    bs.add(fbr);
+                } catch (Exception ex) {
+                    logger.error(getErrorMessage(ex));
+                }
+            });
+        }
 
         return bs;
     }
 
-    private Boolean collectResults(List<Future<Boolean>> bs) {
-        Boolean res = null;
+    private BeaconResponse collectResults(List<FutureBeaconResponse> bs) {
+        BeaconResponse res = new BeaconResponse();
 
-        for (Future<Boolean> b : bs) {
-            Boolean r = null;
+        for (FutureBeaconResponse fbr : bs) {
+            Boolean response = null;
+            String url = null;
             try {
-                r = b.get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
+                response = fbr.getResponse() == null ? null : fbr.getResponse().get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
+                url = fbr.getExternalUrl() == null ? null : fbr.getExternalUrl().get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
             } catch (InterruptedException | ExecutionException | TimeoutException ex) {
-                logger.error(ex.getMessage());
+                logger.error(getErrorMessage(ex));
             }
-            if (r != null) {
-                if (r) {
-                    res = r;
+            if (response != null) {
+                if (response) {
+                    res.setResponse(response);
+                    res.setExternalUrl(url);
                     break;
                 } else {
-                    if (res == null) {
-                        res = r;
+                    if (res.getResponse() == null) {
+                        res.setResponse(response);
+                        res.setExternalUrl(url);
                     }
                 }
             }
@@ -180,8 +217,8 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
 
     @Override
     @Asynchronous
-    public Future<Boolean> executeQuery(Beacon beacon, Query query) {
-        Boolean res = null;
+    public Future<BeaconResponse> executeQuery(Beacon beacon, Query query) {
+        BeaconResponse res = null;
         if (query != null) {
             res = collectResults(parseResultsInParallel(beacon, executeQueriesInParallel(beacon, query)));
         }

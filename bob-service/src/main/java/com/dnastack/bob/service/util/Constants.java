@@ -37,10 +37,15 @@ public class Constants {
 
     public static final int REQUEST_TIMEOUT = 15;
     public static final Map<Reference, String> REFERENCE_MAPPING = ImmutableMap.of(
-            Reference.HG38, "GRCh38",
-            Reference.HG19, "GRCh37",
-            Reference.HG18, "NCBI36",
-            Reference.HG17, "NCBI35",
-            Reference.HG16, "NCBI34"
+        Reference.HG38, "GRCh38",
+        Reference.HG19, "GRCh37",
+        Reference.HG18, "NCBI36",
+        Reference.HG17, "NCBI35",
+        Reference.HG16, "NCBI34"
     );
+
+    private Constants() {
+        // prevent instantiation
+    }
+
 }

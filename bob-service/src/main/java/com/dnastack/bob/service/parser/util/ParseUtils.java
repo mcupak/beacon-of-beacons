@@ -35,6 +35,10 @@ import org.json.JSONObject;
  */
 public class ParseUtils {
 
+    private ParseUtils() {
+        // prevent instantiation
+    }
+
     /**
      * Checks whether a given response contains the specified string (found/not found), case insensitive.
      *

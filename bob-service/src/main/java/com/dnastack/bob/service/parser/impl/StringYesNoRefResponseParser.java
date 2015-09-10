@@ -57,7 +57,7 @@ public class StringYesNoRefResponseParser implements ResponseParser, Serializabl
 
     @Asynchronous
     @Override
-    public Future<Boolean> parseQueryResponse(Beacon b, Future<String> response) {
+    public Future<Boolean> parse(Beacon b, Future<String> response) {
         Boolean res = null;
         try {
             String str = response.get(REQUEST_TIMEOUT, TimeUnit.SECONDS);

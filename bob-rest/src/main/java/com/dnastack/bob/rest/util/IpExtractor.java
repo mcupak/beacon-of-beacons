@@ -33,6 +33,10 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class IpExtractor {
 
+    private IpExtractor() {
+        // prevent instantiation
+    }
+
     /**
      * Extracts client's IP address from HTTP headers.
      *

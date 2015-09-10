@@ -40,7 +40,7 @@ public class EmptyAlleleConverter implements AlleleConverter, Serializable {
 
     @Override
     public String convert(String input) {
-        return (input == null) ? null : input;
+        return input;
     }
 
 }

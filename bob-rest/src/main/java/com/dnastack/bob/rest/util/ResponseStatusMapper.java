@@ -36,6 +36,10 @@ public class ResponseStatusMapper {
 
     private static final ImmutableMap<String, Response.Status> mapping = ImmutableMap.of();
 
+    private ResponseStatusMapper() {
+        // prevent instantiation
+    }
+
     /**
      * Retrieves Response.Status from a given exception according to the static mapping. If the mapping does not contain
      * the exception, INTERNAL_SERVER_ERROR is returned.

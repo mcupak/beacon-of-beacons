@@ -90,7 +90,8 @@ public class Beacon implements BasicEntity {
     private String email;
     private String auth;
 
-    private String parser;
+    private String responseParser;
+    private String externalUrlParser;
     private String fetcher;
     private String requester;
     private String chromosomeConverter;

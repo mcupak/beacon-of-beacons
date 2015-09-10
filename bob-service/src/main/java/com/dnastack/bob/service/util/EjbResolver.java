@@ -60,6 +60,6 @@ public class EjbResolver implements Serializable {
         if (ctx == null) {
             throw new NullPointerException("ctx");
         }
-        return ctx.lookup(id);
+        return id == null ? null : ctx.lookup(id);
     }
 }

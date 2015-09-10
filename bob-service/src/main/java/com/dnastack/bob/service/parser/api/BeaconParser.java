@@ -27,22 +27,22 @@ import com.dnastack.bob.persistence.entity.Beacon;
 import java.util.concurrent.Future;
 
 /**
- * Beacon response parser.
+ * Generic parser.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
+ * @param <T> parsed type
  */
-public interface ResponseParser extends BeaconParser<Boolean> {
+public interface BeaconParser<T> {
 
     /**
-     * Asynchronously extracts beacon response value from the given raw query response.
+     * Extracts beacon response value from the given raw query response.
      *
      * @param beacon   beacon
      * @param response response
      *
      * @return true/false for valid values, null otherwise
      */
-    @Override
-    Future<Boolean> parse(Beacon beacon, Future<String> response);
+    Future<T> parse(Beacon beacon, Future<String> response);
 
 }

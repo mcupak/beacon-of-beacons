@@ -40,7 +40,7 @@ public class EmptyPositionConverter implements PositionConverter, Serializable {
 
     @Override
     public Long convert(Long input) {
-        return (input == null) ? null : input;
+        return input;
     }
 
 }

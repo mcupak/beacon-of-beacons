@@ -56,7 +56,7 @@ public class StringTrueFalseResponseParser implements ResponseParser, Serializab
 
     @Asynchronous
     @Override
-    public Future<Boolean> parseQueryResponse(Beacon b, Future<String> response) {
+    public Future<Boolean> parse(Beacon b, Future<String> response) {
         Boolean res = null;
         try {
             res = parseContainsStringCaseInsensitive(response.get(REQUEST_TIMEOUT, TimeUnit.SECONDS), "true", "false");
