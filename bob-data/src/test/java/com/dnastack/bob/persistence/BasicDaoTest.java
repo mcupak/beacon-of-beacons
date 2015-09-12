@@ -23,7 +23,7 @@
  */
 package com.dnastack.bob.persistence;
 
-import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j;
 import org.assertj.core.api.Condition;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -39,7 +39,7 @@ import org.junit.runner.Description;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Log
+@Log4j
 public abstract class BasicDaoTest {
 
     @Rule
@@ -63,10 +63,10 @@ public abstract class BasicDaoTest {
     @Deployment
     public static WebArchive createDeployment() {
         WebArchive war = ShrinkWrap.create(WebArchive.class, "test.war")
-                .addPackages(true, "com.dnastack.bob.persistence", "org.assertj.core")
-                .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
-                .addAsWebInfResource("jbossas-ds.xml")
-                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
+            .addPackages(true, "com.dnastack.bob.persistence", "org.assertj.core")
+            .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
+            .addAsWebInfResource("jbossas-ds.xml")
+            .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
 
         return war;
     }

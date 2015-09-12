@@ -45,7 +45,6 @@ import com.google.common.collect.ImmutableSet;
 import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
@@ -53,7 +52,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
 import lombok.NonNull;
-import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j;
 
 /**
  * Implementation of a service managing beacons.
@@ -65,7 +64,7 @@ import lombok.extern.java.Log;
 @Local(BeaconService.class)
 @Named
 @Transactional
-@Log
+@Log4j
 public class BeaconServiceImpl implements BeaconService {
 
     public static final String QUERY_URL = "/query?reference=%s&chromosome=%s&position=%d&referenceBases=&alternateBases=%s&dataset=";
@@ -134,7 +133,7 @@ public class BeaconServiceImpl implements BeaconService {
         }
 
         Beacon res = beaconDao.save(b);
-        log.log(Level.INFO, "Beacon created: {0}", res.getId());
+        log.info(String.format("Beacon created: %s", res.getId()));
 
         return EntityDtoConverter.getBeaconDto(res, false);
     }

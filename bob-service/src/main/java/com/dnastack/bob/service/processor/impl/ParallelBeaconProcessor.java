@@ -67,7 +67,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Builder;
-import org.jboss.logging.Logger;
+import lombok.extern.log4j.Log4j;
 
 import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
 import static com.dnastack.bob.service.util.ErrorUtils.getErrorMessage;
@@ -81,6 +81,7 @@ import static com.dnastack.bob.service.util.ErrorUtils.getErrorMessage;
 @Stateless
 @Named
 @Dependent
+@Log4j
 @Local(BeaconProcessor.class)
 public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
 
@@ -91,9 +92,6 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
 
     @Inject
     private EjbResolver ejbResolver;
-
-    @Inject
-    private Logger logger;
 
     @ToString
     @EqualsAndHashCode
@@ -178,7 +176,7 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
                         .build();
                     bs.add(fbr);
                 } catch (Exception ex) {
-                    logger.error(getErrorMessage(ex));
+                    log.error(getErrorMessage(ex));
                 }
             });
         }
@@ -196,7 +194,7 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
                 response = fbr.getResponse() == null ? null : fbr.getResponse().get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
                 url = fbr.getExternalUrl() == null ? null : fbr.getExternalUrl().get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
             } catch (InterruptedException | ExecutionException | TimeoutException ex) {
-                logger.error(getErrorMessage(ex));
+                log.error(getErrorMessage(ex));
             }
             if (response != null) {
                 if (response) {

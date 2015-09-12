@@ -36,9 +36,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import lombok.extern.log4j.Log4j;
 
 /**
  * Data holder.
@@ -46,11 +45,11 @@ import java.util.stream.Collectors;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
+@Log4j
 public class DataProvider {
 
     private static final String FILE = "/queries.json";
     private static final List<QueryEntry> queries;
-    private static final Logger logger = Logger.getLogger(DataProvider.class.getName());
 
     static {
         Type collectionType = new TypeToken<Collection<QueryEntry>>() {
@@ -61,10 +60,10 @@ public class DataProvider {
             try (BufferedReader b = new BufferedReader(new InputStreamReader(DataProvider.class.getResourceAsStream(FILE), StandardCharsets.UTF_8))) {
                 res = new Gson().fromJson(b, collectionType);
             } catch (FileNotFoundException ex) {
-                Logger.getLogger(DataProvider.class.getName()).log(Level.SEVERE, null, ex);
+                log.info("Could not find file with test data.", ex);
             }
         } catch (IOException ex) {
-            logger.log(Level.SEVERE, null, ex);
+            log.info("Could not open file with test data.", ex);
         }
 
         queries = res;

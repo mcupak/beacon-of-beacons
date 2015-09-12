@@ -32,7 +32,7 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
-import org.jboss.logging.Logger;
+import lombok.extern.log4j.Log4j;
 
 import static com.dnastack.bob.rest.util.IpExtractor.extractIpAddress;
 
@@ -43,11 +43,11 @@ import static com.dnastack.bob.rest.util.IpExtractor.extractIpAddress;
  * @version 1.0
  */
 @Provider
+@Log4j
 public class LoggingFilter implements ContainerRequestFilter, Serializable {
 
-    private static final long serialVersionUID = 20L;
-    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("DD-MM-YYYY HH:mm:ss Z");
-    private static final Logger logger = Logger.getLogger("com.dnastack.bob");
+    private static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-YYYY HH:mm:ss Z");
+    private static final long serialVersionUID = 4233460164771834012L;
 
     @Context
     private HttpServletRequest request;
@@ -64,6 +64,6 @@ public class LoggingFilter implements ContainerRequestFilter, Serializable {
 
         String ip = extractIpAddress(request);
 
-        logger.info(DATE_FORMAT.format(new Date()) + " : Request from " + ip + ": " + method + " " + url);
+        log.info(String.format("%s : Request from %s: %s %s", DATE_FORMAT.format(new Date()), ip, method, url));
     }
 }

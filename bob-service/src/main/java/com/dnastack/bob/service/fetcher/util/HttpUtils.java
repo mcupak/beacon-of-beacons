@@ -29,8 +29,8 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
 import javax.inject.Named;
+import lombok.extern.log4j.Log4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
@@ -42,7 +42,6 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
-import org.jboss.logging.Logger;
 
 import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
 
@@ -54,10 +53,8 @@ import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
  */
 @Named
 @Dependent
+@Log4j
 public class HttpUtils {
-
-    @Inject
-    private Logger logger;
 
     private CloseableHttpClient httpClient;
 
@@ -73,7 +70,7 @@ public class HttpUtils {
             try {
                 httpClient.close();
             } catch (IOException ex) {
-                logger.error(ex.getMessage());
+                log.error(ex.getMessage());
             }
         }
     }
@@ -144,14 +141,14 @@ public class HttpUtils {
             HttpEntity entity = res.getEntity();
             response = (entity == null) ? null : EntityUtils.toString(entity);
         } catch (IOException ex) {
-            logger.error(ex.getMessage());
+            log.error(ex.getMessage());
         } finally {
             try {
                 if (res != null) {
                     res.close();
                 }
             } catch (IOException ex) {
-                logger.error(ex.getMessage());
+                log.error(ex.getMessage());
             }
         }
         return response;

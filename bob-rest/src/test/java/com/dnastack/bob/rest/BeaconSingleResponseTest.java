@@ -29,9 +29,8 @@ import com.dnastack.bob.rest.util.QueryEntry;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
-import java.util.logging.Level;
 import javax.xml.bind.JAXBException;
-import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
@@ -50,7 +49,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
  */
 @RunWith(Arquillian.class)
 @RunAsClient
-@Log
+@Log4j
 public class BeaconSingleResponseTest extends AbstractResponseTest {
 
     public static final List<QueryEntry> QUERIES = getQueries();
@@ -63,9 +62,9 @@ public class BeaconSingleResponseTest extends AbstractResponseTest {
 
     @Test
     public void testResponse(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        log.log(Level.INFO, String.format("Testing query: %s", query));
+        log.info(String.format("Testing query: %s", query));
         Boolean res = readBeaconResponse(url.toExternalForm() + getUrl(query, false)).getResponse();
-        log.log(Level.INFO, String.format("Beacon: " + query.getBeacon() + " - expected response: %s; actual response: %s", query.getResponse(), res));
+        log.info(String.format("Beacon: " + query.getBeacon() + " - expected response: %s; actual response: %s", query.getResponse(), res));
 
         collector.checkThat(query.toString(), res, equalTo(query.getResponse()));
     }

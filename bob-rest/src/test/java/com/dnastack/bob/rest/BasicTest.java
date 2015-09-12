@@ -34,13 +34,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
-import lombok.extern.java.Log;
+import lombok.extern.log4j.Log4j;
 import org.eclipse.persistence.jaxb.JAXBContextProperties;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -61,7 +60,7 @@ import org.junit.runner.Description;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Log
+@Log4j
 public abstract class BasicTest {
 
     private static final HttpUtils httpUtils = new HttpUtils();
@@ -80,12 +79,12 @@ public abstract class BasicTest {
     @Deployment(testable = false)
     public static WebArchive createDeployment() {
         WebArchive war = ShrinkWrap.create(MavenImporter.class)
-                .loadPomFromFile("pom.xml")
-                .importBuildOutput()
-                .as(WebArchive.class)
-                .addClasses(BasicTest.class, AbstractResponseTest.class, ParameterRule.class, ArquillianUtils.class, Parameter.class, BeaconResponseTestUtils.class, DataProvider.class, QueryEntry.class)
-                .addAsResource("queries.json");
-        log.log(Level.INFO, "WAR name: {0}", war.getName());
+            .loadPomFromFile("pom.xml")
+            .importBuildOutput()
+            .as(WebArchive.class)
+            .addClasses(BasicTest.class, AbstractResponseTest.class, ParameterRule.class, ArquillianUtils.class, Parameter.class, BeaconResponseTestUtils.class, DataProvider.class, QueryEntry.class)
+            .addAsResource("queries.json");
+        log.info(String.format("WAR name: %s", war.getName()));
 
         return war;
     }
