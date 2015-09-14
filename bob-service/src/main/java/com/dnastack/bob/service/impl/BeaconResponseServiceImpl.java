@@ -305,10 +305,12 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
 
             Collection<Beacon> cs = children.get(e.getKey());
             boolean notAllResponsesNull = false;
+            String externalUrl = null;
             for (Beacon c : cs) {
                 BeaconResponse cr = childrenResponses.get(c);
                 if (cr != null && cr.getResponse() != null) {
                     notAllResponsesNull = true;
+                    externalUrl = cr.getExternalUrl();
                     if (cr.getResponse()) {
                         response.setResponse(true);
                         break;
@@ -317,6 +319,9 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
             }
             if (notAllResponsesNull && response.getResponse() == null) {
                 response.setResponse(false);
+            }
+            if (e.getKey().getAggregator() == null || !e.getKey().getAggregator()) {
+                response.setExternalUrl(externalUrl);
             }
 
             e.setValue(response);
