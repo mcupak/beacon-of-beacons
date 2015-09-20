@@ -23,12 +23,15 @@
  */
 package com.dnastack.bob.rest;
 
-import com.dnastack.bob.rest.util.ItemWrapper;
+import com.dnastack.bob.service.dto.AlleleDto;
 import com.dnastack.bob.service.dto.ChromosomeDto;
 import com.dnastack.bob.service.dto.ReferenceDto;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.xml.bind.JAXBException;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
@@ -36,7 +39,8 @@ import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 
 /**
  * Test of chromosome, reference and allele info.
@@ -52,27 +56,30 @@ public class ItemTest extends BasicTest {
     public static final String REFERENCES_TEMPLATE = "references";
     public static final String ALLELES_TEMPLATE = "alleles";
 
-    @SuppressWarnings("unchecked")
-    public static List<ItemWrapper> readItems(String url) throws JAXBException, MalformedURLException {
-        return (List<ItemWrapper>) readObject(ItemWrapper.class, url);
+    public static List<String> readItems(String url) throws JAXBException, MalformedURLException, IOException {
+        String res = readResponse(url);
+        return Arrays.asList(res.substring(res.indexOf("[\"") + 2, res.indexOf("\"]")).split("\",\""));
     }
 
     @Test
-    public void testAllChromosomes(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        List<ItemWrapper> bs = readItems(url.toExternalForm() + CHROMOSOMES_TEMPLATE);
-        assertEquals(bs.size(), ChromosomeDto.values().length);
+    public void testAllChromosomes(@ArquillianResource URL url) throws JAXBException, MalformedURLException, IOException {
+        List<String> bs = readItems(url.toExternalForm() + CHROMOSOMES_TEMPLATE);
+
+        assertThat(bs, containsInAnyOrder(Arrays.asList(ChromosomeDto.values()).parallelStream().map(chr -> chr.toString()).collect(Collectors.toSet()).toArray()));
     }
 
     @Test
-    public void testAllReferences(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        List<ItemWrapper> bs = readItems(url.toExternalForm() + REFERENCES_TEMPLATE);
-        assertEquals(bs.size(), ReferenceDto.values().length);
+    public void testAllReferences(@ArquillianResource URL url) throws JAXBException, MalformedURLException, IOException {
+        List<String> bs = readItems(url.toExternalForm() + REFERENCES_TEMPLATE);
+
+        assertThat(bs, containsInAnyOrder(Arrays.asList(ReferenceDto.values()).parallelStream().map(r -> r.toString()).collect(Collectors.toSet()).toArray()));
     }
 
     @Test
-    public void testAllAlleles(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        List<ItemWrapper> bs = readItems(url.toExternalForm() + ALLELES_TEMPLATE);
-        assertEquals(bs.size(), "ACGTDI".length());
+    public void testAllAlleles(@ArquillianResource URL url) throws JAXBException, MalformedURLException, IOException {
+        List<String> bs = readItems(url.toExternalForm() + ALLELES_TEMPLATE);
+
+        assertThat(bs, containsInAnyOrder(Arrays.asList(AlleleDto.values()).parallelStream().map(a -> a.toString()).collect(Collectors.toSet()).toArray()));
     }
 
 }

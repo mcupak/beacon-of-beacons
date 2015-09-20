@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 DNAstack.
+ * Copyright 2015 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,34 +23,37 @@
  */
 package com.dnastack.bob.rest.util;
 
-import com.dnastack.bob.service.dto.ChromosomeDto;
-import com.dnastack.bob.service.dto.ReferenceDto;
+import java.util.Arrays;
+import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
 
 /**
- * Convenient JAXB wrapper for enums and other items.
+ * List wrapper used for serialization into XML.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
- * @param <T> item type
+ * @param <T> type
  */
-@XmlRootElement(name = "item")
-@XmlSeeAlso({ReferenceDto.class, ChromosomeDto.class, String.class})
-public class ItemWrapper<T> {
+@XmlRootElement(name = "list")
+public class JaxbList<T> {
 
-    private T item;
+    private List<T> collection;
 
-    public ItemWrapper() {
+    public JaxbList() {
     }
 
-    public ItemWrapper(T item) {
-        this.item = item;
+    public JaxbList(List<T> list) {
+        this.collection = list;
     }
 
-    @XmlElement(name = "value")
-    public T getItem() {
-        return item;
+    public JaxbList(T[] list) {
+        this.collection = Arrays.asList(list);
     }
+
+    @XmlElement(name = "item")
+    public List<T> getCollection() {
+        return collection;
+    }
+
 }

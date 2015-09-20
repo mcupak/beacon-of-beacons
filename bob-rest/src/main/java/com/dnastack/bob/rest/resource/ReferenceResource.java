@@ -23,17 +23,20 @@
  */
 package com.dnastack.bob.rest.resource;
 
-import com.dnastack.bob.rest.util.ItemWrapper;
+import com.dnastack.bob.rest.util.JaxbList;
+import com.dnastack.bob.rest.util.MediaTypeResolver;
 import com.dnastack.bob.service.dto.ReferenceDto;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  * Reference rest resource.
@@ -47,13 +50,13 @@ import javax.ws.rs.core.MediaType;
 @Named
 public class ReferenceResource {
 
-    @GET
-    public Collection<ItemWrapper<ReferenceDto>> showAll() {
-        List<ItemWrapper<ReferenceDto>> vals = new ArrayList<>();
-        for (ReferenceDto ref : ReferenceDto.values()) {
-            vals.add(new ItemWrapper<>(ref));
-        }
+    @Context
+    private HttpHeaders headers;
 
-        return vals;
+    @GET
+    public Response showAll() {
+        return (MediaType.APPLICATION_XML.equals(MediaTypeResolver.getMediaType(headers)))
+            ? Response.ok().entity(new JaxbList<>(ReferenceDto.values())).build()
+            : Response.ok().entity(Arrays.asList(ReferenceDto.values()).stream().map(c -> c.toString()).collect(Collectors.toList())).build();
     }
 }

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 DNAstack.
+ * Copyright 2014 DNAstack.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,33 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.rest.util;
+package com.dnastack.bob.service.dto;
 
-import java.util.Arrays;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
+import javax.xml.bind.annotation.XmlType;
 
 /**
- * Handler of DataAccessException hierarchy.
+ * Canonical allele representation.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Provider
-public class ExceptionHandler implements ExceptionMapper<Exception> {
+@XmlType(name = "allele")
+public enum AlleleDto {
 
-    @Context
-    private HttpHeaders headers;
+    A("A"), C("C"), G("G"), T("T"), D("D"), I("I");
+
+    private final String allele;
+
+    private AlleleDto(String allele) {
+        this.allele = allele;
+    }
+
+    public static AlleleDto fromString(String text) {
+        if (text != null) {
+            for (AlleleDto b : AlleleDto.values()) {
+                if (text.equalsIgnoreCase(b.toString())) {
+                    return b;
+                }
+            }
+        }
+        return null;
+    }
 
     @Override
-    public Response toResponse(Exception exception) {
-        Response.Status s = ResponseStatusMapper.getStatus(exception);
-        Error error = Error.builder().status(s.getStatusCode()).reason(s.getReasonPhrase()).message(exception.getMessage()).stackTrace(Arrays.deepToString(exception.getStackTrace())).build();
-
-        return Response.status(s).entity(error).type(MediaTypeResolver.getMediaType(headers)).build();
+    public String toString() {
+        return allele;
     }
 
 }

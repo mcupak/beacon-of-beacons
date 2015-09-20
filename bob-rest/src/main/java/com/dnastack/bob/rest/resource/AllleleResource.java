@@ -23,16 +23,20 @@
  */
 package com.dnastack.bob.rest.resource;
 
-import com.dnastack.bob.rest.util.ItemWrapper;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import com.dnastack.bob.rest.util.JaxbList;
+import com.dnastack.bob.rest.util.MediaTypeResolver;
+import com.dnastack.bob.service.dto.AlleleDto;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  * Allele rest resource.
@@ -46,16 +50,14 @@ import javax.ws.rs.core.MediaType;
 @Named
 public class AllleleResource {
 
-    @GET
-    public Collection<ItemWrapper<String>> showAll() {
-        List<ItemWrapper<String>> vals = new ArrayList<>();
-        vals.add(new ItemWrapper<>("A"));
-        vals.add(new ItemWrapper<>("C"));
-        vals.add(new ItemWrapper<>("G"));
-        vals.add(new ItemWrapper<>("T"));
-        vals.add(new ItemWrapper<>("D"));
-        vals.add(new ItemWrapper<>("I"));
+    @Context
+    private HttpHeaders headers;
 
-        return vals;
+    @GET
+    public Response showAll() {
+        return (MediaType.APPLICATION_XML.equals(MediaTypeResolver.getMediaType(headers)))
+            ? Response.ok().entity(new JaxbList<>(AlleleDto.values())).build()
+            : Response.ok().entity(Arrays.asList(AlleleDto.values()).stream().map(c -> c.toString()).collect(Collectors.toList())).build();
     }
+
 }

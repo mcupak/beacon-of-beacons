@@ -23,31 +23,46 @@
  */
 package com.dnastack.bob.rest.util;
 
-import java.util.Arrays;
-import javax.ws.rs.core.Context;
+import java.util.List;
 import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
+import javax.ws.rs.core.MediaType;
 
 /**
- * Handler of DataAccessException hierarchy.
+ * Utility determining the media type to use in a response.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Provider
-public class ExceptionHandler implements ExceptionMapper<Exception> {
+public class MediaTypeResolver {
 
-    @Context
-    private HttpHeaders headers;
-
-    @Override
-    public Response toResponse(Exception exception) {
-        Response.Status s = ResponseStatusMapper.getStatus(exception);
-        Error error = Error.builder().status(s.getStatusCode()).reason(s.getReasonPhrase()).message(exception.getMessage()).stackTrace(Arrays.deepToString(exception.getStackTrace())).build();
-
-        return Response.status(s).entity(error).type(MediaTypeResolver.getMediaType(headers)).build();
+    private MediaTypeResolver() {
+        // prevent instantiation
     }
 
+    /**
+     * Determines whether to use JSON (default) or XML.
+     *
+     * @param headers headers
+     *
+     * @return media type
+     */
+    public static String getMediaType(HttpHeaders headers) {
+        List<MediaType> mediaTypes = headers.getAcceptableMediaTypes();
+        // default to JSON
+        String chosenType = MediaType.APPLICATION_JSON;
+        if (mediaTypes != null) {
+            for (MediaType m : mediaTypes) {
+                if (m.isCompatible(MediaType.APPLICATION_JSON_TYPE)) {
+                    chosenType = MediaType.APPLICATION_JSON;
+                    break;
+                }
+                if (m.isCompatible(MediaType.APPLICATION_XML_TYPE)) {
+                    chosenType = MediaType.APPLICATION_XML;
+                    break;
+                }
+            }
+        }
+
+        return chosenType;
+    }
 }

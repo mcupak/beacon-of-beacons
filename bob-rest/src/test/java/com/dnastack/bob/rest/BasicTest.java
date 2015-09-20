@@ -29,8 +29,7 @@ import com.dnastack.bob.rest.util.DataProvider;
 import com.dnastack.bob.rest.util.Parameter;
 import com.dnastack.bob.rest.util.ParameterRule;
 import com.dnastack.bob.rest.util.QueryEntry;
-import com.dnastack.bob.service.fetcher.util.HttpUtils;
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +39,13 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
 import lombok.extern.log4j.Log4j;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.eclipse.persistence.jaxb.JAXBContextProperties;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -54,6 +60,8 @@ import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
+import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
+
 /**
  * Base test class to be extended by other tests.
  *
@@ -63,7 +71,12 @@ import org.junit.runner.Description;
 @Log4j
 public abstract class BasicTest {
 
-    private static final HttpUtils httpUtils = new HttpUtils();
+    private static final CloseableHttpClient httpClient;
+
+    static {
+        RequestConfig config = RequestConfig.custom().setSocketTimeout(REQUEST_TIMEOUT * 1000).setConnectTimeout(REQUEST_TIMEOUT * 1000).setConnectionRequestTimeout(REQUEST_TIMEOUT * 1000).build();
+        httpClient = HttpClients.custom().setDefaultRequestConfig(config).build();
+    }
 
     @Rule
     public TestRule watcher = new TestWatcher() {
@@ -101,12 +114,13 @@ public abstract class BasicTest {
         return jaxbElement.getValue();
     }
 
-    public static String readResponse(String url) {
-        try {
-            return httpUtils.executeRequest(httpUtils.createRequest(url, false, null, null));
-        } catch (UnsupportedEncodingException ex) {
-            return null;
-        }
+    public static String readResponse(String url) throws IOException {
+        HttpGet httpGet = new HttpGet(url);
+        httpGet.addHeader("Accept", "application/json");
+        CloseableHttpResponse res = httpClient.execute(httpGet);
+        HttpEntity entity = res.getEntity();
+
+        return (entity == null) ? null : EntityUtils.toString(entity);
     }
 
     private static String readField(JSONObject field, List<String> path) {
