@@ -35,6 +35,7 @@ import java.util.TreeSet;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -58,6 +59,7 @@ import static com.dnastack.bob.rest.util.ParameterParser.parseMultipleParameterV
  * @version 1.0
  */
 @Path("/beacons")
+@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @RequestScoped
 @Named
@@ -123,6 +125,6 @@ public class BeaconResource {
     @Path("/{beaconId}")
     public Response delete(@Context UriInfo uriInfo, @PathParam("beaconId") String beaconId) {
         beaconService.delete(beaconId);
-        return Response.ok().build();
+        return Response.noContent().build();
     }
 }

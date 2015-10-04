@@ -23,7 +23,7 @@
  */
 package com.dnastack.bob.persistence.entity;
 
-import java.util.List;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -76,6 +76,6 @@ public class Organization implements BasicEntity {
     private String url;
     private String address;
     @OneToMany(mappedBy = "organization", cascade = {CascadeType.REMOVE, CascadeType.DETACH})
-    private List<Beacon> beacons;
+    private Set<Beacon> beacons;
 
 }

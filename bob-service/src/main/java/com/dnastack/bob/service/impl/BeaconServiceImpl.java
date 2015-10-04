@@ -88,24 +88,11 @@ public class BeaconServiceImpl implements BeaconService {
         return UUID.randomUUID().toString();
     }
 
-    @Override
-    public BeaconDto find(String beaconId) {
-        Beacon b = beaconDao.findById(beaconId);
-        return EntityDtoConverter.getBeaconDto((b == null || !b.getVisible()) ? null : b, false);
+    private boolean beaconExists(@NonNull BeaconDto beacon) {
+        return beaconDao.findById(beacon.getId()) != null;
     }
 
-    @Override
-    public Collection<BeaconDto> find(Collection<String> beaconIds) {
-        return beaconIds.stream().map((id) -> find(id)).filter((b) -> (b != null)).collect(Collectors.toList());
-    }
-
-    @Override
-    public Set<BeaconDto> findAll() {
-        return EntityDtoConverter.getBeaconDtos(beaconDao.findByVisibility(true), false);
-    }
-
-    @Override
-    public BeaconDto create(@NonNull BeaconDto beacon) {
+    private Beacon getBeaconForSaving(@NonNull BeaconDto beacon) {
         Organization o = organizationDao.findByName(beacon.getOrganization());
         if (o == null) {
             throw new IllegalArgumentException("organization");
@@ -132,15 +119,45 @@ public class BeaconServiceImpl implements BeaconService {
             b.setParents(parent == null ? ImmutableSet.of(bob) : ImmutableSet.of(parent, bob));
         }
 
-        Beacon res = beaconDao.save(b);
+        return b;
+    }
+
+    @Override
+    public BeaconDto find(String beaconId) {
+        Beacon b = beaconDao.findById(beaconId);
+        return EntityDtoConverter.getBeaconDto((b == null || !b.getVisible()) ? null : b, false);
+    }
+
+    @Override
+    public Collection<BeaconDto> find(Collection<String> beaconIds) {
+        return beaconIds.stream().map((id) -> find(id)).filter((b) -> (b != null)).collect(Collectors.toList());
+    }
+
+    @Override
+    public Set<BeaconDto> findAll() {
+        return EntityDtoConverter.getBeaconDtos(beaconDao.findByVisibility(true), false);
+    }
+
+    @Override
+    public BeaconDto create(@NonNull BeaconDto beacon) {
+        Beacon res = beaconDao.save(getBeaconForSaving(beacon));
         log.info(String.format("Beacon created: %s", res.getId()));
 
         return EntityDtoConverter.getBeaconDto(res, false);
     }
 
     @Override
-    public BeaconDto update(String id, BeaconDto beacon) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public BeaconDto update(@NonNull String id, @NonNull BeaconDto beacon) {
+        Beacon b = beaconDao.findById(id);
+        if (b == null) {
+            log.info(String.format("Beacon NOT updated: %s", id));
+            throw new IllegalArgumentException("Could not find beacon with ID: " + id);
+        }
+
+        Beacon res = beaconDao.update(getBeaconForSaving(beacon));
+        log.info(String.format("Beacon updated: %s", res.getId()));
+
+        return EntityDtoConverter.getBeaconDto(res, false);
     }
 
     @Override

@@ -24,7 +24,6 @@
 package com.dnastack.bob.persistence.entity;
 
 import com.dnastack.bob.persistence.enumerated.Reference;
-import java.util.List;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -117,6 +116,6 @@ public class Beacon implements BasicEntity {
     @ManyToMany(mappedBy = "parents")
     private Set<Beacon> children;
     @OneToMany(mappedBy = "beacon")
-    private List<Dataset> datasets;
+    private Set<Dataset> datasets;
 
 }
