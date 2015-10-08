@@ -75,6 +75,7 @@ public class Organization implements BasicEntity {
     private String description;
     private String url;
     private String address;
+    private String logoUrl;
     @OneToMany(mappedBy = "organization", cascade = {CascadeType.REMOVE, CascadeType.DETACH})
     private Set<Beacon> beacons;
 

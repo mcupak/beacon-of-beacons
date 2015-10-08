@@ -66,7 +66,7 @@ public class EntityDtoConverter {
             return null;
         }
 
-        BeaconDto.BeaconDtoBuilder builder = BeaconDto.builder().id(b.getId()).name(b.getName()).aggregator(b.getAggregator()).organization(b.getOrganization().getName()).description(b.getDescription()).enabled(b.getEnabled()).visible(b.getVisible());
+        BeaconDto.BeaconDtoBuilder builder = BeaconDto.builder().id(b.getId()).name(b.getName()).aggregator(b.getAggregator()).organization(b.getOrganization() == null ? null : b.getOrganization().getName()).description(b.getDescription()).enabled(b.getEnabled()).visible(b.getVisible());
 
         if (showInternal) {
             builder.email(b.getEmail()).homePage(b.getHomePage()).url(b.getUrl()).supportedReferences(getReferenceDtos(b.getSupportedReferences()));
@@ -161,7 +161,7 @@ public class EntityDtoConverter {
      * @return organization TO
      */
     public static OrganizationDto getOrganizationDto(Organization o) {
-        return (o == null) ? null : OrganizationDto.builder().id(o.getId()).name(o.getName()).address(o.getAddress()).description(o.getDescription()).url(o.getUrl()).build();
+        return (o == null) ? null : OrganizationDto.builder().id(o.getId()).name(o.getName()).address(o.getAddress()).description(o.getDescription()).url(o.getUrl()).logoUrl(o.getLogoUrl()).build();
     }
 
     /**
@@ -172,7 +172,7 @@ public class EntityDtoConverter {
      * @return organization
      */
     public static Organization getOrganization(OrganizationDto o) {
-        return (o == null) ? null : Organization.builder().id(o.getId()).name(o.getName()).description(o.getDescription()).url(o.getUrl()).address(o.getAddress()).build();
+        return (o == null) ? null : Organization.builder().id(o.getId()).name(o.getName()).description(o.getDescription()).url(o.getUrl()).address(o.getAddress()).logoUrl(o.getLogoUrl()).build();
     }
 
     /**

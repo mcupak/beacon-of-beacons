@@ -59,5 +59,6 @@ public class OrganizationDto implements Serializable {
     private String description;
     private String url;
     private String address;
+    private String logoUrl;
 
 }
