@@ -1,0 +1,15 @@
+{
+    "beacon":
+            [
+                {
+                    "id": "test",
+                    "name": "test",
+                    "description": "test",
+                    "visible": true,
+                    "enabled": true,
+                    "aggregator": false,
+                    "url": "http://foo.bar",
+                    "organization_id": "test"
+                }
+            ]
+}

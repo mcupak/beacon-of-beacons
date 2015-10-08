@@ -21,16 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.persistence.api;
+package com.dnastack.bob.persistence.impl;
 
-import com.dnastack.bob.persistence.entity.Query;
+import com.dnastack.bob.persistence.api.BeaconResponseDao;
+import com.dnastack.bob.persistence.entity.BeaconResponse;
+import javax.enterprise.context.Dependent;
+import javax.inject.Named;
 
 /**
- * Query DAO.
+ * Basic DAO of beacon responses.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public interface QueryDao extends EntityWithLongIdDao<Query> {
+@Named
+@Dependent
+public class BeaconResponseDaoImpl extends AbstractEntityWithLongIdDaoImpl<BeaconResponse> implements BeaconResponseDao {
+
+    private static final long serialVersionUID = -2612774747789431430L;
 
 }

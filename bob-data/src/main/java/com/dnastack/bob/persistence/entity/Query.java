@@ -25,6 +25,7 @@ package com.dnastack.bob.persistence.entity;
 
 import com.dnastack.bob.persistence.enumerated.Chromosome;
 import com.dnastack.bob.persistence.enumerated.Reference;
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -32,6 +33,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -78,6 +81,9 @@ public class Query implements BasicEntity {
     private String allele;
     @Enumerated(EnumType.STRING)
     private Reference reference;
+    @NotNull
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date submitted;
     @ManyToOne
     private Dataset dataSet;
     @ManyToOne

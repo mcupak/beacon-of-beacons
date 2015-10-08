@@ -23,14 +23,13 @@
  */
 package com.dnastack.bob.persistence;
 
+import com.dnastack.bob.persistence.api.BeaconResponseDao;
 import com.dnastack.bob.persistence.api.GenericDao;
-import com.dnastack.bob.persistence.api.QueryDao;
 import com.dnastack.bob.persistence.entity.BasicEntity;
+import com.dnastack.bob.persistence.entity.Beacon;
+import com.dnastack.bob.persistence.entity.BeaconResponse;
 import com.dnastack.bob.persistence.entity.Query;
-import com.dnastack.bob.persistence.enumerated.Chromosome;
-import com.dnastack.bob.persistence.enumerated.Reference;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 import org.jboss.arquillian.junit.Arquillian;
@@ -44,39 +43,37 @@ import org.junit.runner.RunWith;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Query DAO test.
+ * Beacon response DAO test.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
 @RunWith(Arquillian.class)
 @Transactional
-@UsingDataSet("query.json")
+@UsingDataSet({"organization.json", "beacon_1.json", "query.json", "beacon_response.json"})
 @Cleanup(strategy = CleanupStrategy.USED_TABLES_ONLY) // this is important in order to prevent foreign-key violations
-public class QueryDaoTest extends EntityWithLongIdDaoTest {
+public class BeaconResponseDaoTest extends EntityWithLongIdDaoTest {
 
     @Inject
-    private QueryDao dao;
+    private BeaconResponseDao dao;
 
     @Override
-    public GenericDao<Query> getDao() {
+    public GenericDao<BeaconResponse> getDao() {
         return dao;
     }
 
     @Override
     public Class<? extends BasicEntity> getEntityClass() {
-        return Query.class;
+        return BeaconResponse.class;
     }
 
     @Override
     public List<BasicEntity> getNewData() {
         List<BasicEntity> res = new ArrayList<>();
-        Query o = new Query();
-        o.setAllele("G");
-        o.setChromosome(Chromosome.CHR22);
-        o.setReference(Reference.HG38);
-        o.setPosition(10L);
-        o.setSubmitted(new Date());
+        BeaconResponse o = new BeaconResponse();
+        o.setResponse(true);
+        o.setBeacon((Beacon) findOne(Beacon.class));
+        o.setQuery((Query) findOne(Query.class));
         res.add(o);
 
         return res;
@@ -85,10 +82,9 @@ public class QueryDaoTest extends EntityWithLongIdDaoTest {
     @Override
     @Test
     public void testUpdate() {
-        Query e = (Query) findOne(getEntityClass());
-        e.setAllele("T");
-        
-        Query b = dao.update(e);
+        BeaconResponse e = (BeaconResponse) findOne(getEntityClass());
+
+        BeaconResponse b = dao.update(e);
 
         assertThat(findAll(getEntityClass())).contains(b);
     }
@@ -96,7 +92,7 @@ public class QueryDaoTest extends EntityWithLongIdDaoTest {
     @Override
     @Test
     public void testDelete() {
-        Query e = (Query) findOne(getEntityClass());
+        BeaconResponse e = (BeaconResponse) findOne(getEntityClass());
 
         dao.delete(e.getId());
 
@@ -106,9 +102,9 @@ public class QueryDaoTest extends EntityWithLongIdDaoTest {
     @Override
     @Test
     public void testFindById() {
-        Query e = (Query) findOne(getEntityClass());
+        BeaconResponse e = (BeaconResponse) findOne(getEntityClass());
 
-        Query e2 = dao.findById(e.getId());
+        BeaconResponse e2 = dao.findById(e.getId());
 
         assertThat(e).isEqualTo(e2);
     }

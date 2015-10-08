@@ -53,7 +53,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @RunWith(Arquillian.class)
 @Transactional
-@UsingDataSet("beacon_init.json")
+@UsingDataSet({"organization.json", "beacon_1.json", "beacon_2.json"})
 @Cleanup(strategy = CleanupStrategy.USED_TABLES_ONLY) // this is important in order to prevent foreign-key violations
 public class BeaconDaoTest extends EntityWithStringIdDaoTest {
 
@@ -144,7 +144,7 @@ public class BeaconDaoTest extends EntityWithStringIdDaoTest {
     }
 
     @Test
-    @UsingDataSet("beacon_relationship.json")
+    @UsingDataSet({"organization.json", "beacon_relationship.json"})
     public void testHaveRelationship() {
         Beacon parent = (Beacon) findById(getEntityClass(), "parent");
         Beacon childWithParent = (Beacon) findById(getEntityClass(), "childWithParent");
@@ -153,7 +153,7 @@ public class BeaconDaoTest extends EntityWithStringIdDaoTest {
     }
 
     @Test
-    @UsingDataSet("beacon_relationship.json")
+    @UsingDataSet({"organization.json", "beacon_relationship.json"})
     public void testDoNotHaveRelationship() {
         Beacon parent = (Beacon) findById(getEntityClass(), "parent");
         Beacon childWithoutParent = (Beacon) findById(getEntityClass(), "childWithoutParent");
@@ -162,7 +162,7 @@ public class BeaconDaoTest extends EntityWithStringIdDaoTest {
     }
 
     @Test
-    @UsingDataSet("beacon_relationship.json")
+    @UsingDataSet({"organization.json", "beacon_relationship.json"})
     public void testAddExistingRelationship() {
         Beacon parent = (Beacon) findById(getEntityClass(), "parent");
         Beacon childWithParent = (Beacon) findById(getEntityClass(), "childWithParent");
@@ -175,7 +175,7 @@ public class BeaconDaoTest extends EntityWithStringIdDaoTest {
     }
 
     @Test
-    @UsingDataSet("beacon_relationship.json")
+    @UsingDataSet({"organization.json", "beacon_relationship.json"})
     public void testAddNonExistingRelationship() {
         Beacon parent = (Beacon) findById(getEntityClass(), "parent");
         Beacon childWithoutParent = (Beacon) findById(getEntityClass(), "childWithoutParent");
@@ -188,7 +188,7 @@ public class BeaconDaoTest extends EntityWithStringIdDaoTest {
     }
 
     @Test
-    @UsingDataSet("beacon_relationship.json")
+    @UsingDataSet({"organization.json", "beacon_relationship.json"})
     public void testRemoveExistingRelationship() {
         Beacon parent = (Beacon) findById(getEntityClass(), "parent");
         Beacon childWithParent = (Beacon) findById(getEntityClass(), "childWithParent");
@@ -203,7 +203,7 @@ public class BeaconDaoTest extends EntityWithStringIdDaoTest {
     }
 
     @Test
-    @UsingDataSet("beacon_relationship.json")
+    @UsingDataSet({"organization.json", "beacon_relationship.json"})
     public void testRemoveNonExistingRelationship() {
         Beacon parent = (Beacon) findById(getEntityClass(), "parent");
         Beacon childWithoutParent = (Beacon) findById(getEntityClass(), "childWithoutParent");
@@ -218,7 +218,7 @@ public class BeaconDaoTest extends EntityWithStringIdDaoTest {
     }
 
     @Test
-    @UsingDataSet("beacon_descendants.json")
+    @UsingDataSet({"organization.json", "beacon_descendants.json"})
     public void testFindAllDescendants() {
         Beacon parent = (Beacon) findById(getEntityClass(), "root");
         Set<Beacon> all = findAll(getEntityClass()).stream().map((BasicEntity e) -> (Beacon) e).collect(Collectors.toSet());

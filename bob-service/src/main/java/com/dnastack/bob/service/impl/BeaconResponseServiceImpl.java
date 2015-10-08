@@ -38,7 +38,7 @@ import com.dnastack.bob.service.lrg.LrgConvertor;
 import com.dnastack.bob.service.lrg.LrgLocus;
 import com.dnastack.bob.service.lrg.LrgReference;
 import com.dnastack.bob.service.processor.api.BeaconProcessor;
-import com.dnastack.bob.service.processor.api.BeaconResponse;
+import com.dnastack.bob.persistence.entity.BeaconResponse;
 import com.dnastack.bob.service.util.EntityDtoConverter;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;

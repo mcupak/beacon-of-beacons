@@ -40,7 +40,7 @@ import com.dnastack.bob.service.fetcher.api.ResponseFetcher;
 import com.dnastack.bob.service.parser.api.ExternalUrlParser;
 import com.dnastack.bob.service.parser.api.ResponseParser;
 import com.dnastack.bob.service.processor.api.BeaconProcessor;
-import com.dnastack.bob.service.processor.api.BeaconResponse;
+import com.dnastack.bob.persistence.entity.BeaconResponse;
 import com.dnastack.bob.service.requester.api.RequestConstructor;
 import com.dnastack.bob.service.util.CdiBeanResolver;
 import com.dnastack.bob.service.util.EjbResolver;

@@ -49,7 +49,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @RunWith(Arquillian.class)
 @Transactional
-@UsingDataSet("dataset_init.json")
+@UsingDataSet("dataset.json")
 @Cleanup(strategy = CleanupStrategy.USED_TABLES_ONLY) // this is important in order to prevent foreign-key violations
 public class DatasetDaoTest extends EntityWithStringIdDaoTest {
 

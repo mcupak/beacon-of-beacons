@@ -23,14 +23,14 @@
  */
 package com.dnastack.bob.persistence.api;
 
-import com.dnastack.bob.persistence.entity.Query;
+import com.dnastack.bob.persistence.entity.BeaconResponse;
 
 /**
- * Query DAO.
+ * Beacon response DAO.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public interface QueryDao extends EntityWithLongIdDao<Query> {
+public interface BeaconResponseDao extends EntityWithLongIdDao<BeaconResponse> {
 
 }

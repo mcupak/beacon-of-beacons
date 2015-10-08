@@ -23,12 +23,10 @@
  */
 package com.dnastack.bob.persistence.entity;
 
-import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
@@ -46,8 +44,8 @@ import lombok.experimental.Builder;
  * @version 1.0
  */
 @SuppressWarnings("deprecation")
-@ToString(exclude = "queries")
-@EqualsAndHashCode(exclude = {"id", "queries"})
+@ToString
+@EqualsAndHashCode(exclude = {"id"})
 @Builder
 @Getter
 @Setter
@@ -65,7 +63,5 @@ public class User implements BasicEntity {
     private Long id;
     private String userName;
     private String ip;
-    @OneToMany(mappedBy = "user")
-    private List<Query> queries;
 
 }

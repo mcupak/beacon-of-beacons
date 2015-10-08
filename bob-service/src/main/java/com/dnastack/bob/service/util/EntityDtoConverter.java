@@ -36,7 +36,7 @@ import com.dnastack.bob.service.dto.OrganizationDto;
 import com.dnastack.bob.service.dto.QueryDto;
 import com.dnastack.bob.service.dto.ReferenceDto;
 import com.dnastack.bob.service.dto.UserDto;
-import com.dnastack.bob.service.processor.api.BeaconResponse;
+import com.dnastack.bob.persistence.entity.BeaconResponse;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;

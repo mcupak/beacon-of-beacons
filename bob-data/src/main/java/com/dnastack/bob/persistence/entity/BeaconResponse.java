@@ -21,11 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.service.processor.api;
+package com.dnastack.bob.persistence.entity;
 
-import com.dnastack.bob.persistence.entity.Beacon;
-import com.dnastack.bob.persistence.entity.Query;
-import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -48,11 +50,17 @@ import lombok.experimental.Builder;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuppressWarnings("deprecation")
-public class BeaconResponse implements Serializable {
+@Entity
+public class BeaconResponse implements BasicEntity {
 
     private static final long serialVersionUID = 2318476024983822938L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
+    @ManyToOne
     private Beacon beacon;
+    @ManyToOne
     private Query query;
     private Boolean response = null;
     private Double frequency = null;

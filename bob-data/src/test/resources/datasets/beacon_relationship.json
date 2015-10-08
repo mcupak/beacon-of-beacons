@@ -1,12 +1,4 @@
 {
-    "organization":
-            [
-                {
-                    "id": "beacon_org",
-                    "name": "test",
-                    "description": "test"
-                }
-            ],
     "beacon":
             [
                 {
@@ -17,7 +9,7 @@
                     "aggregator": true,
                     "enabled": true,
                     "url": "http://foo.bar",
-                    "organization_id": "beacon_org"
+                    "organization_id": "test"
                 },
                 {
                     "id": "childWithParent",
@@ -27,7 +19,7 @@
                     "enabled": true,
                     "aggregator": false,
                     "url": "http://foo.bar",
-                    "organization_id": "beacon_org"
+                    "organization_id": "test"
                 },
                 {
                     "id": "childWithoutParent",
@@ -37,7 +29,7 @@
                     "enabled": true,
                     "aggregator": false,
                     "url": "http://foo.bar",
-                    "organization_id": "beacon_org"
+                    "organization_id": "test"
                 }
             ],
     "beacon_beacon":
