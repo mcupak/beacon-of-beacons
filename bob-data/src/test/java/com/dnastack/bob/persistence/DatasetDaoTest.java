@@ -25,7 +25,6 @@ package com.dnastack.bob.persistence;
 
 import com.dnastack.bob.persistence.api.DatasetDao;
 import com.dnastack.bob.persistence.api.GenericDao;
-import com.dnastack.bob.persistence.entity.BasicEntity;
 import com.dnastack.bob.persistence.entity.Dataset;
 import com.dnastack.bob.persistence.enumerated.Reference;
 import java.util.ArrayList;
@@ -36,10 +35,7 @@ import org.jboss.arquillian.persistence.Cleanup;
 import org.jboss.arquillian.persistence.CleanupStrategy;
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.jboss.arquillian.transaction.api.annotation.Transactional;
-import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Dataset DAO test.
@@ -51,24 +47,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 @UsingDataSet("dataset.json")
 @Cleanup(strategy = CleanupStrategy.USED_TABLES_ONLY) // this is important in order to prevent foreign-key violations
-public class DatasetDaoTest extends EntityWithStringIdDaoTest {
+public class DatasetDaoTest extends GenericDaoTest<Dataset, String> {
 
     @Inject
     private DatasetDao dao;
 
     @Override
-    public GenericDao<Dataset> getDao() {
+    public GenericDao<Dataset, String> getDao() {
         return dao;
     }
 
     @Override
-    public Class<? extends BasicEntity> getEntityClass() {
-        return Dataset.class;
-    }
-
-    @Override
-    public List<BasicEntity> getNewData() {
-        List<BasicEntity> res = new ArrayList<>();
+    public List<Dataset> getEntitiesForSave() {
+        List<Dataset> res = new ArrayList<>();
         Dataset o = new Dataset();
         o.setId("new");
         o.setName("new");
@@ -80,34 +71,9 @@ public class DatasetDaoTest extends EntityWithStringIdDaoTest {
     }
 
     @Override
-    @Test
-    public void testUpdate() {
-        Dataset e = (Dataset) findOne(getEntityClass());
+    public Dataset getEntityForUpdate(Dataset e) {
         e.setName("updated");
-
-        Dataset b = dao.update(e);
-
-        assertThat(findAll(getEntityClass())).contains(b);
-    }
-
-    @Override
-    @Test
-    public void testDelete() {
-        Dataset e = (Dataset) findOne(getEntityClass());
-
-        dao.delete(e.getId());
-
-        assertThat(findAll(getEntityClass())).doesNotContain(e);
-    }
-
-    @Override
-    @Test
-    public void testFindById() {
-        Dataset e = (Dataset) findOne(getEntityClass());
-
-        Dataset e2 = dao.findById(e.getId());
-
-        assertThat(e).isEqualTo(e2);
+        return e;
     }
 
 }

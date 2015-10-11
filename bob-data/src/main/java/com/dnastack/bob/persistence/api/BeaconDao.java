@@ -33,7 +33,7 @@ import java.util.Set;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public interface BeaconDao extends EntityWithStringIdDao<Beacon> {
+public interface BeaconDao extends GenericDao<Beacon, String> {
 
     /**
      * Retrieves beacons by aggregation flag.

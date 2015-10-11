@@ -38,7 +38,7 @@ import lombok.NonNull;
  */
 @Named
 @Dependent
-public class OrganizationDaoImpl extends AbstractEntityWithStringIdDaoImpl<Organization> implements OrganizationDao {
+public class OrganizationDaoImpl extends AbstractGenericDaoImpl<Organization, String> implements OrganizationDao {
 
     private static final long serialVersionUID = 2403615525311736080L;
 

@@ -62,7 +62,7 @@ import lombok.experimental.Builder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Query implements BasicEntity {
+public class Query implements BasicEntity<Long> {
 
     private static final long serialVersionUID = -4843153796455403263L;
 

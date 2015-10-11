@@ -51,7 +51,7 @@ import lombok.experimental.Builder;
 @AllArgsConstructor
 @SuppressWarnings("deprecation")
 @Entity
-public class BeaconResponse implements BasicEntity {
+public class BeaconResponse implements BasicEntity<Long> {
 
     private static final long serialVersionUID = 2318476024983822938L;
 

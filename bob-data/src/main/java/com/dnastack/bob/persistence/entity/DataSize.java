@@ -23,6 +23,7 @@
  */
 package com.dnastack.bob.persistence.entity;
 
+import java.io.Serializable;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -48,7 +49,7 @@ import lombok.experimental.Builder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Embeddable
-public class DataSize implements BasicEntity {
+public class DataSize implements Serializable {
 
     private static final long serialVersionUID = -3358978751981821234L;
 

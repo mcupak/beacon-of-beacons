@@ -25,7 +25,6 @@ package com.dnastack.bob.persistence;
 
 import com.dnastack.bob.persistence.api.DataUseDao;
 import com.dnastack.bob.persistence.api.GenericDao;
-import com.dnastack.bob.persistence.entity.BasicEntity;
 import com.dnastack.bob.persistence.entity.DataUse;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,10 +34,7 @@ import org.jboss.arquillian.persistence.Cleanup;
 import org.jboss.arquillian.persistence.CleanupStrategy;
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.jboss.arquillian.transaction.api.annotation.Transactional;
-import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Data use DAO test.
@@ -50,24 +46,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 @UsingDataSet("data_use.json")
 @Cleanup(strategy = CleanupStrategy.USED_TABLES_ONLY) // this is important in order to prevent foreign-key violations
-public class DataUseDaoTest extends EntityWithLongIdDaoTest {
+public class DataUseDaoTest extends GenericDaoTest<DataUse, Long> {
 
     @Inject
     private DataUseDao dao;
 
     @Override
-    public GenericDao<DataUse> getDao() {
+    public GenericDao<DataUse, Long> getDao() {
         return dao;
     }
 
     @Override
-    public Class<? extends BasicEntity> getEntityClass() {
-        return DataUse.class;
-    }
-
-    @Override
-    public List<BasicEntity> getNewData() {
-        List<BasicEntity> res = new ArrayList<>();
+    public List<DataUse> getEntitiesForSave() {
+        List<DataUse> res = new ArrayList<>();
         DataUse o = new DataUse();
         o.setCategory("new");
         o.setDescription("new");
@@ -77,34 +68,9 @@ public class DataUseDaoTest extends EntityWithLongIdDaoTest {
     }
 
     @Override
-    @Test
-    public void testUpdate() {
-        DataUse e = (DataUse) findOne(getEntityClass());
+    public DataUse getEntityForUpdate(DataUse e) {
         e.setCategory("updated");
-
-        DataUse b = dao.update(e);
-
-        assertThat(findAll(getEntityClass())).contains(b);
-    }
-
-    @Override
-    @Test
-    public void testDelete() {
-        DataUse e = (DataUse) findOne(getEntityClass());
-
-        dao.delete(e.getId());
-
-        assertThat(findAll(getEntityClass())).doesNotContain(e);
-    }
-
-    @Override
-    @Test
-    public void testFindById() {
-        DataUse e = (DataUse) findOne(getEntityClass());
-
-        DataUse e2 = dao.findById(e.getId());
-
-        assertThat(e).isEqualTo(e2);
+        return e;
     }
 
 }

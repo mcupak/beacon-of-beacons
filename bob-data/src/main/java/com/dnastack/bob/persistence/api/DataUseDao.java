@@ -31,6 +31,6 @@ import com.dnastack.bob.persistence.entity.DataUse;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public interface DataUseDao extends EntityWithLongIdDao<DataUse> {
+public interface DataUseDao extends GenericDao<DataUse, Long> {
 
 }

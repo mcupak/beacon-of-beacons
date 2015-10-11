@@ -25,7 +25,6 @@ package com.dnastack.bob.persistence;
 
 import com.dnastack.bob.persistence.api.GenericDao;
 import com.dnastack.bob.persistence.api.OrganizationDao;
-import com.dnastack.bob.persistence.entity.BasicEntity;
 import com.dnastack.bob.persistence.entity.Organization;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,10 +34,7 @@ import org.jboss.arquillian.persistence.Cleanup;
 import org.jboss.arquillian.persistence.CleanupStrategy;
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.jboss.arquillian.transaction.api.annotation.Transactional;
-import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Organization DAO test.
@@ -50,24 +46,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 @UsingDataSet("organization.json")
 @Cleanup(strategy = CleanupStrategy.USED_TABLES_ONLY) // this is important in order to prevent foreign-key violations
-public class OrganizationDaoTest extends EntityWithStringIdDaoTest {
+public class OrganizationDaoTest extends GenericDaoTest<Organization, String> {
 
     @Inject
     private OrganizationDao dao;
 
     @Override
-    public GenericDao<Organization> getDao() {
+    public GenericDao<Organization, String> getDao() {
         return dao;
     }
 
     @Override
-    public Class<? extends BasicEntity> getEntityClass() {
-        return Organization.class;
-    }
-
-    @Override
-    public List<BasicEntity> getNewData() {
-        List<BasicEntity> res = new ArrayList<>();
+    public List<Organization> getEntitiesForSave() {
+        List<Organization> res = new ArrayList<>();
         Organization o = new Organization();
         o.setId("new");
         o.setName("new");
@@ -77,34 +68,9 @@ public class OrganizationDaoTest extends EntityWithStringIdDaoTest {
     }
 
     @Override
-    @Test
-    public void testUpdate() {
-        Organization e = (Organization) findOne(getEntityClass());
+    public Organization getEntityForUpdate(Organization e) {
         e.setName("updated");
-
-        Organization b = dao.update(e);
-
-        assertThat(findAll(getEntityClass())).contains(b);
-    }
-
-    @Override
-    @Test
-    public void testDelete() {
-        Organization e = (Organization) findOne(getEntityClass());
-
-        dao.delete(e.getId());
-
-        assertThat(findAll(getEntityClass())).doesNotContain(e);
-    }
-
-    @Override
-    @Test
-    public void testFindById() {
-        Organization e = (Organization) findOne(getEntityClass());
-
-        Organization e2 = dao.findById(e.getId());
-
-        assertThat(e).isEqualTo(e2);
+        return e;
     }
 
 }

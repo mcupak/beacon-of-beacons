@@ -25,7 +25,6 @@ package com.dnastack.bob.persistence;
 
 import com.dnastack.bob.persistence.api.BeaconResponseDao;
 import com.dnastack.bob.persistence.api.GenericDao;
-import com.dnastack.bob.persistence.entity.BasicEntity;
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.persistence.entity.BeaconResponse;
 import com.dnastack.bob.persistence.entity.Query;
@@ -37,10 +36,7 @@ import org.jboss.arquillian.persistence.Cleanup;
 import org.jboss.arquillian.persistence.CleanupStrategy;
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.jboss.arquillian.transaction.api.annotation.Transactional;
-import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Beacon response DAO test.
@@ -52,24 +48,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 @UsingDataSet({"organization.json", "beacon_1.json", "query.json", "beacon_response.json"})
 @Cleanup(strategy = CleanupStrategy.USED_TABLES_ONLY) // this is important in order to prevent foreign-key violations
-public class BeaconResponseDaoTest extends EntityWithLongIdDaoTest {
+public class BeaconResponseDaoTest extends GenericDaoTest<BeaconResponse, Long> {
 
     @Inject
     private BeaconResponseDao dao;
 
     @Override
-    public GenericDao<BeaconResponse> getDao() {
+    public GenericDao<BeaconResponse, Long> getDao() {
         return dao;
     }
 
     @Override
-    public Class<? extends BasicEntity> getEntityClass() {
-        return BeaconResponse.class;
-    }
-
-    @Override
-    public List<BasicEntity> getNewData() {
-        List<BasicEntity> res = new ArrayList<>();
+    public List<BeaconResponse> getEntitiesForSave() {
+        List<BeaconResponse> res = new ArrayList<>();
         BeaconResponse o = new BeaconResponse();
         o.setResponse(true);
         o.setBeacon((Beacon) findOne(Beacon.class));
@@ -80,33 +71,9 @@ public class BeaconResponseDaoTest extends EntityWithLongIdDaoTest {
     }
 
     @Override
-    @Test
-    public void testUpdate() {
-        BeaconResponse e = (BeaconResponse) findOne(getEntityClass());
-
-        BeaconResponse b = dao.update(e);
-
-        assertThat(findAll(getEntityClass())).contains(b);
-    }
-
-    @Override
-    @Test
-    public void testDelete() {
-        BeaconResponse e = (BeaconResponse) findOne(getEntityClass());
-
-        dao.delete(e.getId());
-
-        assertThat(findAll(getEntityClass())).doesNotContain(e);
-    }
-
-    @Override
-    @Test
-    public void testFindById() {
-        BeaconResponse e = (BeaconResponse) findOne(getEntityClass());
-
-        BeaconResponse e2 = dao.findById(e.getId());
-
-        assertThat(e).isEqualTo(e2);
+    public BeaconResponse getEntityForUpdate(BeaconResponse e) {
+        e.setInfo("updated");
+        return e;
     }
 
 }

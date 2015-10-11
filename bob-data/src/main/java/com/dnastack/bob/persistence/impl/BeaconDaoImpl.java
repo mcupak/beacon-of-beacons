@@ -41,7 +41,7 @@ import javax.inject.Named;
  */
 @Named
 @Dependent
-public class BeaconDaoImpl extends AbstractEntityWithStringIdDaoImpl<Beacon> implements BeaconDao {
+public class BeaconDaoImpl extends AbstractGenericDaoImpl<Beacon, String> implements BeaconDao {
 
     private static final long serialVersionUID = 7394221412609376503L;
 

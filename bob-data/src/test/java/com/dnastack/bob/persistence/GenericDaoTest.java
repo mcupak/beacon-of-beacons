@@ -25,33 +25,77 @@ package com.dnastack.bob.persistence;
 
 import com.dnastack.bob.persistence.api.GenericDao;
 import com.dnastack.bob.persistence.entity.BasicEntity;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Fail.fail;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for methods in GenericDao.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
+ * @param <T> entity type
+ * @param <I> ID type
  */
-public abstract class GenericDaoTest extends BasicDaoTest {
+public abstract class GenericDaoTest<T extends BasicEntity<I>, I> extends BasicDaoTest {
 
     @PersistenceContext
     private EntityManager em;
 
-    public abstract GenericDao getDao();
+    private Class<T> entityClass;
 
-    public abstract List<BasicEntity> getNewData();
+    private Class<I> idClass;
 
-    public abstract Class<? extends BasicEntity> getEntityClass();
-
-    protected String getTableName(Class<? extends BasicEntity> entity) {
+    private static String getTableName(Class<? extends BasicEntity> entity) {
         return entity.getSimpleName();
+    }
+
+    @SuppressWarnings("unchecked")
+    protected GenericDaoTest() {
+        if (entityClass == null || idClass == null) {
+            Type type = getClass().getGenericSuperclass();
+            loop:
+            while (true) {
+                if (type instanceof ParameterizedType) {
+                    Type[] arguments = ((ParameterizedType) type).getActualTypeArguments();
+                    for (Type argument : arguments) {
+                        if ((argument instanceof Class)) {
+                            if (BasicEntity.class.isAssignableFrom(((Class<T>) argument))) {
+                                entityClass = (Class<T>) argument;
+                            } else {
+                                idClass = (Class<I>) argument;
+                            }
+                            if (entityClass != null && idClass != null) {
+                                break loop;
+                            }
+                        }
+                    }
+                }
+                type = ((Class<T>) type).getGenericSuperclass();
+                if (type == Object.class) {
+                    throw new RuntimeException("Could not find a parameterized type");
+                }
+            }
+        }
+    }
+
+    public abstract GenericDao<T, I> getDao();
+
+    public abstract T getEntityForUpdate(T e);
+
+    public abstract List<T> getEntitiesForSave();
+
+    @SuppressWarnings("unchecked")
+    protected I getInvalidId() {
+        return (I) (idClass.isAssignableFrom(Long.class) ? 1L : idClass.isAssignableFrom(Long.class) ? "zzz" : null);
     }
 
     protected Long countAll(Class<? extends BasicEntity> entity) {
@@ -82,16 +126,16 @@ public abstract class GenericDaoTest extends BasicDaoTest {
     }
 
     protected BasicEntity findById(Class<? extends BasicEntity> entity, Long id) {
-        return (BasicEntity) em.find(entity, id);
+        return em.find(entity, id);
     }
 
     protected BasicEntity findById(Class<? extends BasicEntity> entity, String id) {
-        return (BasicEntity) em.find(entity, id);
+        return em.find(entity, id);
     }
 
     @Test
     public void testCountAll() {
-        assertThat(getDao().countAll()).isEqualTo(countAll(getEntityClass()));
+        assertThat(getDao().countAll()).isEqualTo(countAll(entityClass));
     }
 
     @Test
@@ -102,32 +146,73 @@ public abstract class GenericDaoTest extends BasicDaoTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testFindAll() {
-        assertThat(getDao().findAll()).containsExactlyElementsOf(findAll(getEntityClass()));
+        assertThat(getDao().findAll()).containsExactlyElementsOf(findAll(entityClass).parallelStream().map(i -> (T) i).collect(Collectors.toList()));
     }
 
     @Test
     @SuppressWarnings("unchecked")
     public void testSave() {
-        if (getNewData().size() < 1) {
+        if (getEntitiesForSave().size() < 1) {
             fail("No data to save.");
         }
 
-        BasicEntity b;
-        for (BasicEntity e : getNewData()) {
-            assertThat(findAll(getEntityClass())).doesNotContain(e);
+        T b;
+        for (T e : getEntitiesForSave()) {
+            assertThat(findAll(entityClass)).doesNotContain(e);
 
             b = getDao().save(e);
 
-            assertThat(findAll(getEntityClass()).contains(b));
+            assertThat(findAll(entityClass).contains(b));
         }
     }
 
-    public abstract void testUpdate();
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testDelete() {
+        T e = (T) findOne(entityClass);
 
-    public abstract void testDelete();
+        getDao().delete(e.getId());
 
-    public abstract void testDeleteNonExistent();
+        assertThat(findAll(entityClass)).doesNotContain(e);
+    }
 
-    public abstract void testFindById();
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testFindById() {
+        T e = (T) findOne(entityClass);
 
+        T e2 = getDao().findById(e.getId());
+
+        assertThat(e).isEqualToComparingFieldByField(e2);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testGetReferenceById() {
+        T e = (T) findOne(entityClass);
+
+        T e2 = getDao().getReferenceById(e.getId());
+
+        assertThat(e).isEqualTo(e2);
+    }
+
+    @Test(expected = Exception.class)
+    @SuppressWarnings("unchecked")
+    public void testDeleteNonExistent() {
+        Long orig = countAll(entityClass);
+
+        getDao().delete(getInvalidId());
+
+        assertEquals(orig, countAll(entityClass));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testUpdate() {
+        T e = getEntityForUpdate((T) findOne(entityClass));
+
+        T b = getDao().update(e);
+
+        assertThat(findAll(entityClass)).contains(b);
+    }
 }

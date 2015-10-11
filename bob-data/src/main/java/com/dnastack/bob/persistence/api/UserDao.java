@@ -31,6 +31,6 @@ import com.dnastack.bob.persistence.entity.User;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public interface UserDao extends EntityWithLongIdDao<User> {
+public interface UserDao extends GenericDao<User, Long> {
 
 }

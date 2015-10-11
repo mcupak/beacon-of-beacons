@@ -58,7 +58,7 @@ import lombok.experimental.Builder;
 @NamedQueries({
     @NamedQuery(name = "findOrganizationByName", query = "SELECT b FROM Organization b WHERE b.name=:name")
 })
-public class Organization implements BasicEntity {
+public class Organization implements BasicEntity<String> {
 
     private static final long serialVersionUID = -2628422425515576512L;
 

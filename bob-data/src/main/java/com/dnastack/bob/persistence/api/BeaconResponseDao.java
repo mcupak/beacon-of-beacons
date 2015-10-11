@@ -31,6 +31,6 @@ import com.dnastack.bob.persistence.entity.BeaconResponse;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public interface BeaconResponseDao extends EntityWithLongIdDao<BeaconResponse> {
+public interface BeaconResponseDao extends GenericDao<BeaconResponse, Long> {
 
 }

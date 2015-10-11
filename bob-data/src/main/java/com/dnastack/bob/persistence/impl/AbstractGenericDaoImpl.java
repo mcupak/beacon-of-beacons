@@ -37,16 +37,17 @@ import javax.persistence.PersistenceContext;
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
- * @param <T> entity
+ * @param <T> entity type
+ * @param <I> ID type
  */
-public abstract class AbstractGenericDaoImpl<T extends BasicEntity> implements GenericDao<T> {
+public abstract class AbstractGenericDaoImpl<T extends BasicEntity<I>, I> implements GenericDao<T, I> {
 
     private static final long serialVersionUID = 8059580643827478476L;
 
+    private Class<T> entityClass;
+
     @PersistenceContext
     protected EntityManager em;
-
-    private Class<T> entityClass;
 
     @PostConstruct
     @SuppressWarnings("unchecked")
@@ -77,10 +78,6 @@ public abstract class AbstractGenericDaoImpl<T extends BasicEntity> implements G
         return em.createQuery(String.format("SELECT COUNT(e.id) FROM %s e", entityClass.getSimpleName()), Long.class).getSingleResult();
     }
 
-    protected Class<T> getEntityClass() {
-        return entityClass;
-    }
-
     @Override
     public T save(T t) {
         em.persist(t);
@@ -99,6 +96,21 @@ public abstract class AbstractGenericDaoImpl<T extends BasicEntity> implements G
 
     @Override
     public List<T> findAll() {
-        return em.createQuery(String.format("SELECT e FROM %s e", getEntityClass().getSimpleName()), getEntityClass()).getResultList();
+        return em.createQuery(String.format("SELECT e FROM %s e", entityClass.getSimpleName()), entityClass).getResultList();
+    }
+
+    @Override
+    public T findById(I id) {
+        return em.find(entityClass, id);
+    }
+
+    @Override
+    public T getReferenceById(I id) {
+        return em.getReference(entityClass, id);
+    }
+
+    @Override
+    public void delete(I id) {
+        em.remove(em.getReference(entityClass, id));
     }
 }

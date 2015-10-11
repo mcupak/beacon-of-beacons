@@ -31,6 +31,6 @@ import com.dnastack.bob.persistence.entity.Dataset;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public interface DatasetDao extends EntityWithStringIdDao<Dataset> {
+public interface DatasetDao extends GenericDao<Dataset, String> {
 
 }

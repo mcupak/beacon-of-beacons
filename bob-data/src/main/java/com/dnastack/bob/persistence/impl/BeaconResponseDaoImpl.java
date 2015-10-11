@@ -36,7 +36,7 @@ import javax.inject.Named;
  */
 @Named
 @Dependent
-public class BeaconResponseDaoImpl extends AbstractEntityWithLongIdDaoImpl<BeaconResponse> implements BeaconResponseDao {
+public class BeaconResponseDaoImpl extends AbstractGenericDaoImpl<BeaconResponse, Long> implements BeaconResponseDao {
 
     private static final long serialVersionUID = -2612774747789431430L;
 

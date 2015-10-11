@@ -31,7 +31,7 @@ import com.dnastack.bob.persistence.entity.Organization;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public interface OrganizationDao extends EntityWithStringIdDao<Organization> {
+public interface OrganizationDao extends GenericDao<Organization, String> {
 
     Organization findByName(String name);
 }

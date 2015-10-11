@@ -25,7 +25,6 @@ package com.dnastack.bob.persistence;
 
 import com.dnastack.bob.persistence.api.GenericDao;
 import com.dnastack.bob.persistence.api.QueryDao;
-import com.dnastack.bob.persistence.entity.BasicEntity;
 import com.dnastack.bob.persistence.entity.Query;
 import com.dnastack.bob.persistence.enumerated.Chromosome;
 import com.dnastack.bob.persistence.enumerated.Reference;
@@ -38,10 +37,7 @@ import org.jboss.arquillian.persistence.Cleanup;
 import org.jboss.arquillian.persistence.CleanupStrategy;
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.jboss.arquillian.transaction.api.annotation.Transactional;
-import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Query DAO test.
@@ -53,24 +49,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 @UsingDataSet("query.json")
 @Cleanup(strategy = CleanupStrategy.USED_TABLES_ONLY) // this is important in order to prevent foreign-key violations
-public class QueryDaoTest extends EntityWithLongIdDaoTest {
+public class QueryDaoTest extends GenericDaoTest<Query, Long> {
 
     @Inject
     private QueryDao dao;
 
     @Override
-    public GenericDao<Query> getDao() {
+    public GenericDao<Query, Long> getDao() {
         return dao;
     }
 
     @Override
-    public Class<? extends BasicEntity> getEntityClass() {
-        return Query.class;
-    }
-
-    @Override
-    public List<BasicEntity> getNewData() {
-        List<BasicEntity> res = new ArrayList<>();
+    public List<Query> getEntitiesForSave() {
+        List<Query> res = new ArrayList<>();
         Query o = new Query();
         o.setAllele("G");
         o.setChromosome(Chromosome.CHR22);
@@ -83,34 +74,9 @@ public class QueryDaoTest extends EntityWithLongIdDaoTest {
     }
 
     @Override
-    @Test
-    public void testUpdate() {
-        Query e = (Query) findOne(getEntityClass());
+    public Query getEntityForUpdate(Query e) {
         e.setAllele("T");
-        
-        Query b = dao.update(e);
-
-        assertThat(findAll(getEntityClass())).contains(b);
-    }
-
-    @Override
-    @Test
-    public void testDelete() {
-        Query e = (Query) findOne(getEntityClass());
-
-        dao.delete(e.getId());
-
-        assertThat(findAll(getEntityClass())).doesNotContain(e);
-    }
-
-    @Override
-    @Test
-    public void testFindById() {
-        Query e = (Query) findOne(getEntityClass());
-
-        Query e2 = dao.findById(e.getId());
-
-        assertThat(e).isEqualTo(e2);
+        return e;
     }
 
 }

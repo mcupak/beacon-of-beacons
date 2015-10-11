@@ -54,7 +54,7 @@ import lombok.experimental.Builder;
 @Entity
 @Table(uniqueConstraints = {
     @UniqueConstraint(columnNames = {"userName", "ip"})})
-public class User implements BasicEntity {
+public class User implements BasicEntity<Long> {
 
     private static final long serialVersionUID = 7621625748088389070L;
 

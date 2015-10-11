@@ -53,7 +53,7 @@ import lombok.experimental.Builder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class DataUseRequirement implements BasicEntity {
+public class DataUseRequirement implements BasicEntity<Long> {
 
     private static final long serialVersionUID = -7884494012832606419L;
 

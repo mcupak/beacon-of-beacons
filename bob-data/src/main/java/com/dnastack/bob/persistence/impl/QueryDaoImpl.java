@@ -36,8 +36,8 @@ import javax.inject.Named;
  */
 @Named
 @Dependent
-public class QueryDaoImpl extends AbstractEntityWithLongIdDaoImpl<Query> implements QueryDao {
+public class QueryDaoImpl extends AbstractGenericDaoImpl<Query, Long> implements QueryDao {
 
-    private static final long serialVersionUID = 35L;
+    private static final long serialVersionUID = 6294736555349335879L;
 
 }

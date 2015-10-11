@@ -32,9 +32,10 @@ import java.util.List;
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
- * @param <T> entity
+ * @param <T> entity type
+ * @param <I> ID type
  */
-public interface GenericDao<T extends BasicEntity> extends Serializable {
+public interface GenericDao<T extends BasicEntity<I>, I> extends Serializable {
 
     long countAll();
 
@@ -45,5 +46,11 @@ public interface GenericDao<T extends BasicEntity> extends Serializable {
     List<T> findAll();
 
     void flush();
+
+    void delete(I id);
+
+    T findById(I id);
+
+    T getReferenceById(I id);
 
 }

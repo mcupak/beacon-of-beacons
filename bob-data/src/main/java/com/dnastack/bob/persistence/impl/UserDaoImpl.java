@@ -36,7 +36,7 @@ import javax.inject.Named;
  */
 @Named
 @Dependent
-public class UserDaoImpl extends AbstractEntityWithLongIdDaoImpl<User> implements UserDao {
+public class UserDaoImpl extends AbstractGenericDaoImpl<User, Long> implements UserDao {
 
     private static final long serialVersionUID = 5901767014411009095L;
 

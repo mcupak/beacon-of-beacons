@@ -31,6 +31,6 @@ import com.dnastack.bob.persistence.entity.Query;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-public interface QueryDao extends EntityWithLongIdDao<Query> {
+public interface QueryDao extends GenericDao<Query, Long> {
 
 }

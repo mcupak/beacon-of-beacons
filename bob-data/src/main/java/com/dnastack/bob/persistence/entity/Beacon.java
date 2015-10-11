@@ -64,7 +64,7 @@ import lombok.experimental.Builder;
     @NamedQuery(name = "findBeaconsByAggregation", query = "SELECT b FROM Beacon b WHERE b.aggregator=:aggregator"),
     @NamedQuery(name = "findBeaconsByVisibility", query = "SELECT b FROM Beacon b WHERE b.visible=:visible")
 })
-public class Beacon implements BasicEntity {
+public class Beacon implements BasicEntity<String> {
 
     private static final long serialVersionUID = -1451238811291388547L;
 

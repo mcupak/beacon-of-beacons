@@ -25,7 +25,6 @@ package com.dnastack.bob.persistence;
 
 import com.dnastack.bob.persistence.api.DataUseRequirementDao;
 import com.dnastack.bob.persistence.api.GenericDao;
-import com.dnastack.bob.persistence.entity.BasicEntity;
 import com.dnastack.bob.persistence.entity.DataUseRequirement;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,10 +34,7 @@ import org.jboss.arquillian.persistence.Cleanup;
 import org.jboss.arquillian.persistence.CleanupStrategy;
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.jboss.arquillian.transaction.api.annotation.Transactional;
-import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Data use requirement DAO test.
@@ -50,24 +46,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 @UsingDataSet("data_use_requirement.json")
 @Cleanup(strategy = CleanupStrategy.USED_TABLES_ONLY) // this is important in order to prevent foreign-key violations
-public class DataUseRequirementDaoTest extends EntityWithLongIdDaoTest {
+public class DataUseRequirementDaoTest extends GenericDaoTest<DataUseRequirement, Long> {
 
     @Inject
     private DataUseRequirementDao dao;
 
     @Override
-    public GenericDao<DataUseRequirement> getDao() {
+    public GenericDao<DataUseRequirement, Long> getDao() {
         return dao;
     }
 
     @Override
-    public Class<? extends BasicEntity> getEntityClass() {
-        return DataUseRequirement.class;
-    }
-
-    @Override
-    public List<BasicEntity> getNewData() {
-        List<BasicEntity> res = new ArrayList<>();
+    public List<DataUseRequirement> getEntitiesForSave() {
+        List<DataUseRequirement> res = new ArrayList<>();
         DataUseRequirement o = new DataUseRequirement();
         o.setName("new");
         o.setDescription("new");
@@ -77,34 +68,9 @@ public class DataUseRequirementDaoTest extends EntityWithLongIdDaoTest {
     }
 
     @Override
-    @Test
-    public void testUpdate() {
-        DataUseRequirement e = (DataUseRequirement) findOne(getEntityClass());
+    public DataUseRequirement getEntityForUpdate(DataUseRequirement e) {
         e.setName("updated");
-
-        DataUseRequirement b = dao.update(e);
-
-        assertThat(findAll(getEntityClass())).contains(b);
-    }
-
-    @Override
-    @Test
-    public void testDelete() {
-        DataUseRequirement e = (DataUseRequirement) findOne(getEntityClass());
-
-        dao.delete(e.getId());
-
-        assertThat(findAll(getEntityClass())).doesNotContain(e);
-    }
-
-    @Override
-    @Test
-    public void testFindById() {
-        DataUseRequirement e = (DataUseRequirement) findOne(getEntityClass());
-
-        DataUseRequirement e2 = dao.findById(e.getId());
-
-        assertThat(e).isEqualTo(e2);
+        return e;
     }
 
 }

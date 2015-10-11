@@ -36,7 +36,7 @@ import javax.inject.Named;
  */
 @Named
 @Dependent
-public class DatasetDaoImpl extends AbstractEntityWithStringIdDaoImpl<Dataset> implements DatasetDao {
+public class DatasetDaoImpl extends AbstractGenericDaoImpl<Dataset, String> implements DatasetDao {
 
     private static final long serialVersionUID = -8323072266125550572L;
 

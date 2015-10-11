@@ -60,7 +60,7 @@ import lombok.experimental.Builder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Dataset implements BasicEntity {
+public class Dataset implements BasicEntity<String> {
 
     private static final long serialVersionUID = 469349231640573964L;
 
