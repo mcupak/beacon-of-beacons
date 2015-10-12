@@ -34,7 +34,10 @@ import org.jboss.arquillian.persistence.Cleanup;
 import org.jboss.arquillian.persistence.CleanupStrategy;
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.jboss.arquillian.transaction.api.annotation.Transactional;
+import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Organization DAO test.
@@ -44,7 +47,7 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Arquillian.class)
 @Transactional
-@UsingDataSet("organization.json")
+@UsingDataSet("organization_1.json")
 @Cleanup(strategy = CleanupStrategy.USED_TABLES_ONLY) // this is important in order to prevent foreign-key violations
 public class OrganizationDaoTest extends GenericDaoTest<Organization, String> {
 
@@ -73,4 +76,30 @@ public class OrganizationDaoTest extends GenericDaoTest<Organization, String> {
         return e;
     }
 
+    @Test
+    public void testFindByName() {
+        Organization o = (Organization) findOne(Organization.class);
+        Organization found = dao.findByName(o.getName());
+
+        assertThat(found.getName()).isEqualTo(o.getName());
+    }
+
+    @Test
+    @UsingDataSet({"organization_1.json", "organization_2.json", "beacon_1.json"})
+    public void testFindWithBeacons() {
+        Organization o = (Organization) findById(Organization.class, "test");
+        List<Organization> found = dao.findByVisibility(true);
+
+        assertThat(found.size()).isEqualTo(1);
+        assertThat(found).contains(o);
+    }
+
+    @Test
+    @UsingDataSet({"organization_1.json", "organization_2.json", "beacon_2.json"})
+    public void testFindVisible() {
+        Organization o = (Organization) findById(Organization.class, "test");
+        List<Organization> found = dao.findByVisibility(true);
+
+        assertThat(found).isEmpty();
+    }
 }

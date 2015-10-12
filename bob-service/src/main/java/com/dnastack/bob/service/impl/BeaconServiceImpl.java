@@ -35,12 +35,12 @@ import com.dnastack.bob.service.converter.impl.EmptyPositionConverter;
 import com.dnastack.bob.service.converter.impl.EmptyReferenceConverter;
 import com.dnastack.bob.service.dto.BeaconDto;
 import com.dnastack.bob.service.fetcher.impl.GetResponseFetcher;
+import com.dnastack.bob.service.mapper.api.BeaconMapper;
 import com.dnastack.bob.service.parser.impl.JsonResponseExistsResponseParser;
 import com.dnastack.bob.service.parser.impl.JsonResponseExternalUrlParser;
 import com.dnastack.bob.service.requester.impl.RefChromPosAlleleRequestConstructor;
 import com.dnastack.bob.service.util.CdiBeanResolver;
 import com.dnastack.bob.service.util.EjbResolver;
-import com.dnastack.bob.service.util.EntityDtoConverter;
 import com.google.common.collect.ImmutableSet;
 import java.util.Collection;
 import java.util.Set;
@@ -84,6 +84,9 @@ public class BeaconServiceImpl implements BeaconService {
     @Inject
     private EjbResolver ejbResolver;
 
+    @Inject
+    private BeaconMapper beaconMapper;
+
     private String generateId() {
         return UUID.randomUUID().toString();
     }
@@ -98,7 +101,7 @@ public class BeaconServiceImpl implements BeaconService {
             throw new IllegalArgumentException("organization");
         }
 
-        Beacon b = EntityDtoConverter.getBeacon(beacon);
+        Beacon b = beaconMapper.mapDtoToEntity(beacon);
         b.setOrganization(o);
         b.setAuth(AUTH);
         b.setUrl(beacon.getUrl() + QUERY_URL);
@@ -125,7 +128,7 @@ public class BeaconServiceImpl implements BeaconService {
     @Override
     public BeaconDto find(String beaconId) {
         Beacon b = beaconDao.findById(beaconId);
-        return EntityDtoConverter.getBeaconDto((b == null || !b.getVisible()) ? null : b, false);
+        return beaconMapper.mapEntityToDto((b == null || !b.getVisible()) ? null : b, false);
     }
 
     @Override
@@ -135,7 +138,7 @@ public class BeaconServiceImpl implements BeaconService {
 
     @Override
     public Set<BeaconDto> findAll() {
-        return EntityDtoConverter.getBeaconDtos(beaconDao.findByVisibility(true), false);
+        return beaconMapper.mapEntitiesToDtos(beaconDao.findByVisibility(true), false);
     }
 
     @Override
@@ -143,7 +146,7 @@ public class BeaconServiceImpl implements BeaconService {
         Beacon res = beaconDao.save(getBeaconForSaving(beacon));
         log.info(String.format("Beacon created: %s", res.getId()));
 
-        return EntityDtoConverter.getBeaconDto(res, false);
+        return beaconMapper.mapEntityToDto(res, false);
     }
 
     @Override
@@ -157,7 +160,7 @@ public class BeaconServiceImpl implements BeaconService {
         Beacon res = beaconDao.update(getBeaconForSaving(beacon));
         log.info(String.format("Beacon updated: %s", res.getId()));
 
-        return EntityDtoConverter.getBeaconDto(res, false);
+        return beaconMapper.mapEntityToDto(res, false);
     }
 
     @Override

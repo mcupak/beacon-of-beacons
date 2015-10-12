@@ -55,6 +55,6 @@ public class UserDto implements Serializable {
     private static final long serialVersionUID = 729442166075465142L;
 
     private String userName;
-    private String ipAddress;
+    private String ip;
 
 }

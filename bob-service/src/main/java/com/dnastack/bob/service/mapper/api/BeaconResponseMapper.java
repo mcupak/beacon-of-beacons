@@ -21,43 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.persistence.impl;
+package com.dnastack.bob.service.mapper.api;
 
-import com.dnastack.bob.persistence.api.OrganizationDao;
-import com.dnastack.bob.persistence.entity.Organization;
-import java.util.List;
-import javax.enterprise.context.Dependent;
-import javax.inject.Named;
-import javax.persistence.PersistenceException;
-import lombok.NonNull;
+import com.dnastack.bob.persistence.entity.BeaconResponse;
+import com.dnastack.bob.service.dto.BeaconResponseDto;
 
 /**
- * JPA-based implementation of organization DAO.
+ * Mapper of beacon responses to their DTOs.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Named
-@Dependent
-public class OrganizationDaoImpl extends AbstractGenericDaoImpl<Organization, String> implements OrganizationDao {
-
-    private static final long serialVersionUID = 2403615525311736080L;
-
-    @Override
-    public Organization findByName(@NonNull String name) {
-        Organization o;
-        try {
-            o = em.createNamedQuery("findOrganizationByName", Organization.class).setParameter("name", name).getSingleResult();
-        } catch (PersistenceException ex) {
-            o = null;
-        }
-
-        return o;
-    }
-
-    @Override
-    public List<Organization> findByVisibility(boolean visible) {
-        return em.createNamedQuery("findOrganizationsByVisibility", Organization.class).setParameter("visible", visible).getResultList();
-    }
+public interface BeaconResponseMapper extends Mapper<BeaconResponse, BeaconResponseDto> {
 
 }

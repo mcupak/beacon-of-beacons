@@ -25,8 +25,11 @@ package com.dnastack.bob.persistence.impl;
 
 import com.dnastack.bob.persistence.api.UserDao;
 import com.dnastack.bob.persistence.entity.User;
+import java.util.List;
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
+import javax.persistence.PersistenceException;
+import javax.persistence.TypedQuery;
 
 /**
  * JPA-based implementation of user DAO.
@@ -39,5 +42,31 @@ import javax.inject.Named;
 public class UserDaoImpl extends AbstractGenericDaoImpl<User, Long> implements UserDao {
 
     private static final long serialVersionUID = 5901767014411009095L;
+
+    @Override
+    public List<User> findByUserName(String userName) {
+        List<User> us;
+        try {
+            TypedQuery<User> q = userName == null ? em.createNamedQuery("findUserByUserNameNull", User.class) : em.createNamedQuery("findUserByUserName", User.class).setParameter("userName", userName);
+            us = q.getResultList();
+        } catch (PersistenceException ex) {
+            us = null;
+        }
+
+        return us;
+    }
+
+    @Override
+    public List<User> findByIp(String ip) {
+        List<User> us;
+        try {
+            TypedQuery<User> q = ip == null ? em.createNamedQuery("findUserByIpNull", User.class) : em.createNamedQuery("findUserByIp", User.class).setParameter("ip", ip);
+            us = q.getResultList();
+        } catch (PersistenceException ex) {
+            us = null;
+        }
+
+        return us;
+    }
 
 }

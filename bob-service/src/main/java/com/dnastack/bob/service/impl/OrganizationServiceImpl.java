@@ -27,7 +27,7 @@ import com.dnastack.bob.persistence.api.OrganizationDao;
 import com.dnastack.bob.persistence.entity.Organization;
 import com.dnastack.bob.service.api.OrganizationService;
 import com.dnastack.bob.service.dto.OrganizationDto;
-import com.dnastack.bob.service.util.EntityDtoConverter;
+import com.dnastack.bob.service.mapper.api.OrganizationMapper;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import javax.ejb.Local;
@@ -52,15 +52,17 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Inject
     private OrganizationDao organizationDao;
 
+    @Inject
+    private OrganizationMapper organizationMapper;
+
     @Override
     public OrganizationDto find(String organizationId) {
-        Organization o = organizationDao.findById(organizationId);
-        return EntityDtoConverter.getOrganizationDto((o == null) ? null : o);
+        return organizationMapper.mapEntityToDto(organizationDao.findById(organizationId), false);
     }
 
     @Override
     public Collection<OrganizationDto> findAll() {
-        return EntityDtoConverter.getOrganizationDtos(organizationDao.findAll());
+        return organizationMapper.mapEntitiesToDtos(organizationDao.findAll(), false);
     }
 
     @Override
@@ -70,7 +72,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     public OrganizationDto create(@NonNull OrganizationDto organization) {
-        return EntityDtoConverter.getOrganizationDto(organizationDao.save(EntityDtoConverter.getOrganization(organization)));
+        return organizationMapper.mapEntityToDto(organizationDao.save(organizationMapper.mapDtoToEntity(organization)), false);
     }
 
     @Override
@@ -92,7 +94,7 @@ public class OrganizationServiceImpl implements OrganizationService {
             o.setAddress(organization.getAddress());
         }
 
-        return EntityDtoConverter.getOrganizationDto(organizationDao.update(o));
+        return organizationMapper.mapEntityToDto(organizationDao.update(o), false);
     }
 
     @Override

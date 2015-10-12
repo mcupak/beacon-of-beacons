@@ -3,8 +3,8 @@
             [
                 {
                     "id": 5,
-                    "userName": null,
-                    "ip": "127.0.0.1"
+                    "userName": "test",
+                    "ip": [null]
                 }
             ]
 }

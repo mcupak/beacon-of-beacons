@@ -24,6 +24,7 @@
 package com.dnastack.bob.persistence.api;
 
 import com.dnastack.bob.persistence.entity.User;
+import java.util.List;
 
 /**
  * User DAO.
@@ -33,4 +34,7 @@ import com.dnastack.bob.persistence.entity.User;
  */
 public interface UserDao extends GenericDao<User, Long> {
 
+    List<User> findByUserName(String userName);
+
+    List<User> findByIp(String ip);
 }

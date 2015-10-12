@@ -86,6 +86,7 @@ public class Query implements BasicEntity<Long> {
     private Date submitted;
     @ManyToOne
     private Dataset dataSet;
+    @NotNull
     @ManyToOne
     private User user;
 

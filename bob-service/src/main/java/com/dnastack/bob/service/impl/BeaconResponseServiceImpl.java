@@ -24,7 +24,11 @@
 package com.dnastack.bob.service.impl;
 
 import com.dnastack.bob.persistence.api.BeaconDao;
+import com.dnastack.bob.persistence.api.BeaconResponseDao;
+import com.dnastack.bob.persistence.api.QueryDao;
+import com.dnastack.bob.persistence.api.UserDao;
 import com.dnastack.bob.persistence.entity.Beacon;
+import com.dnastack.bob.persistence.entity.BeaconResponse;
 import com.dnastack.bob.persistence.entity.Query;
 import com.dnastack.bob.persistence.entity.User;
 import com.dnastack.bob.persistence.enumerated.Chromosome;
@@ -37,15 +41,17 @@ import com.dnastack.bob.service.lrg.Brca2;
 import com.dnastack.bob.service.lrg.LrgConvertor;
 import com.dnastack.bob.service.lrg.LrgLocus;
 import com.dnastack.bob.service.lrg.LrgReference;
+import com.dnastack.bob.service.mapper.api.BeaconResponseMapper;
+import com.dnastack.bob.service.mapper.api.UserMapper;
 import com.dnastack.bob.service.processor.api.BeaconProcessor;
-import com.dnastack.bob.persistence.entity.BeaconResponse;
-import com.dnastack.bob.service.util.EntityDtoConverter;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -63,10 +69,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
 import javax.validation.Validator;
+import lombok.NonNull;
 
 import static com.dnastack.bob.service.util.Constants.REFERENCE_MAPPING;
 import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
-import static com.dnastack.bob.service.util.EntityDtoConverter.getUser;
 
 /**
  * Implementation of a service for managing beacon responses.
@@ -87,6 +93,15 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
     private BeaconDao beaconDao;
 
     @Inject
+    private BeaconResponseDao beaconResponseDao;
+
+    @Inject
+    private QueryDao queryDao;
+
+    @Inject
+    private UserDao userDao;
+
+    @Inject
     private BeaconProcessor beaconProcessor;
 
     @Inject
@@ -99,6 +114,12 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
     @Inject
     @Brca2
     private LrgConvertor brca2Convertor;
+
+    @Inject
+    private BeaconResponseMapper beaconResponseMapper;
+
+    @Inject
+    private UserMapper userMapper;
 
     private Chromosome normalizeChromosome(String chrom) {
         // parse chrom value
@@ -163,49 +184,62 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
         Chromosome c = normalizeChromosome(chrom);
         Reference r = normalizeReference(ref);
 
-        return Query.builder().chromosome(c == null ? null : c).position(pos).allele(normalizeAllele(allele)).reference(r == null ? null : r).user(u).build();
+        return Query.builder().chromosome(c == null ? null : c).position(pos).allele(normalizeAllele(allele)).reference(r == null ? null : r).user(u).submitted(new Date()).build();
     }
 
     private boolean queryNotNormalizedOrValid(Query q, String ref) {
         return (!(ref == null || ref.isEmpty()) && q.getReference() == null) || !validator.validate(q).isEmpty();
     }
 
-    @Asynchronous
-    private Future<BeaconResponse> queryBeacon(Beacon b, Query q) throws ClassNotFoundException {
-        BeaconResponse total = new BeaconResponse();
-
-        if (b.getAggregator()) {
-            total.setResponse(false);
-
-            // execute queries in parallel
-            Map<Beacon, Future<BeaconResponse>> futures = new HashMap<>();
-            Set<Beacon> children = beaconDao.findDescendants(b, false, true, false, false);
-            children.stream().forEach((Beacon bt) -> {
-                futures.put(bt, beaconProcessor.executeQuery(bt, q));
-            });
-
-            // collect results
-            for (Entry<Beacon, Future<BeaconResponse>> e : futures.entrySet()) {
-                BeaconResponse res = null;
-                try {
-                    res = e.getValue().get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
-                } catch (InterruptedException | ExecutionException | TimeoutException ex) {
-                    // ignore, response already null
-                }
-                if (res != null && res.getResponse() != null && res.getResponse()) {
-                    // hide everything other than reponses for aggregates
-                    total.setResponse(true);
-                }
+    private User setUpUser(@NonNull UserDto u) {
+        User user = null;
+        if (u.getUserName() != null || u.getIp() != null) {
+            List<User> found = null;
+            if (u.getUserName() != null) {
+                found = userDao.findByUserName(u.getUserName());
+            } else if (u.getIp() != null) {
+                found = userDao.findByIp(u.getIp());
             }
-        } else {
-            try {
-                total = beaconProcessor.executeQuery(b, q).get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
-            } catch (InterruptedException | ExecutionException | TimeoutException ex) {
-                // ignore
+            user = found == null || found.isEmpty() ? null : found.get(0);
+        }
+        if (user == null) {
+            user = userMapper.mapDtoToEntity(u);
+        }
+
+        return user;
+    }
+
+    private User saveUser(@NonNull User u) {
+        return u.getId() == null ? userDao.save(u) : userDao.update(u);
+    }
+
+    private Query setUpQuery(String chrom, Long pos, String allele, String ref, UserDto u) {
+        LrgConvertor l = null;
+        String c = chrom;
+        Long p = pos;
+        String r = ref;
+        String a = allele;
+
+        if (ref != null && ref.equalsIgnoreCase(LrgReference.LRG.toString())) {
+            if (chrom.equalsIgnoreCase(LrgLocus.LRG_292.toString())) {
+                l = brcaConvertor;
+            } else if (chrom.equalsIgnoreCase(LrgLocus.LRG_293.toString())) {
+                l = brca2Convertor;
+            }
+
+            if (l != null) {
+                c = l.getChromosome().toString();
+                p = l.getPosition(pos);
+                r = l.getReference().toString();
             }
         }
 
-        return new AsyncResult<>(total);
+        return prepareQuery(c, p, a, r, setUpUser(u));
+    }
+
+    private Query saveQuery(Query q) {
+        saveUser(q.getUser());
+        return queryDao.save(q);
     }
 
     private Map<Beacon, BeaconResponse> setUpBeaconResponseMapForBeacons(Collection<Beacon> bs, Query q) {
@@ -258,30 +292,6 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
         return brs;
     }
 
-    private Query getQuery(String chrom, Long pos, String allele, String ref, UserDto u) {
-        LrgConvertor l = null;
-        String c = chrom;
-        Long p = pos;
-        String r = ref;
-        String a = allele;
-
-        if (ref != null && ref.equalsIgnoreCase(LrgReference.LRG.toString())) {
-            if (chrom.equalsIgnoreCase(LrgLocus.LRG_292.toString())) {
-                l = brcaConvertor;
-            } else if (chrom.equalsIgnoreCase(LrgLocus.LRG_293.toString())) {
-                l = brca2Convertor;
-            }
-
-            if (l != null) {
-                c = l.getChromosome().toString();
-                p = l.getPosition(pos);
-                r = l.getReference().toString();
-            }
-        }
-
-        return prepareQuery(c, p, a, r, getUser(u));
-    }
-
     private Multimap<Beacon, Beacon> setUpChildrenMultimap(Collection<Beacon> beacons) {
         Multimap<Beacon, Beacon> children = HashMultimap.create();
         beacons.stream().forEach((Beacon b) -> {
@@ -330,8 +340,59 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
         return res;
     }
 
+    @Asynchronous
+    private Future<BeaconResponse> queryBeacon(Beacon b, Query q) throws ClassNotFoundException {
+        BeaconResponse total = new BeaconResponse();
+        BeaconResponse logged;
+
+        if (b.getAggregator()) {
+            total.setResponse(false);
+
+            // execute queries in parallel
+            Map<Beacon, Future<BeaconResponse>> futures = new HashMap<>();
+            Set<Beacon> children = beaconDao.findDescendants(b, false, true, false, false);
+            children.stream().forEach((Beacon bt) -> {
+                futures.put(bt, beaconProcessor.executeQuery(bt, q));
+            });
+
+            // collect results
+            for (Entry<Beacon, Future<BeaconResponse>> e : futures.entrySet()) {
+                BeaconResponse res = null;
+                BeaconResponse childLogged;
+                try {
+                    res = e.getValue().get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
+                    childLogged = beaconResponseMapper.mapEntityToEntity(res);
+                } catch (InterruptedException | ExecutionException | TimeoutException ex) {
+                    childLogged = BeaconResponse.builder().response(null).build();
+                }
+                childLogged.setBeacon(e.getKey());
+                childLogged.setQuery(q);
+                beaconResponseDao.save(childLogged);
+
+                if (res != null && res.getResponse() != null && res.getResponse()) {
+                    // hide everything other than reponses for aggregates
+                    total.setResponse(true);
+                }
+            }
+            logged = beaconResponseMapper.mapEntityToEntity(total);
+        } else {
+            try {
+                total = beaconProcessor.executeQuery(b, q).get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
+                logged = beaconResponseMapper.mapEntityToEntity(total);
+            } catch (InterruptedException | ExecutionException | TimeoutException ex) {
+                logged = BeaconResponse.builder().response(null).build();
+            }
+        }
+
+        logged.setBeacon(b);
+        logged.setQuery(q);
+        beaconResponseDao.save(logged);
+
+        return new AsyncResult<>(total);
+    }
+
     private Collection<BeaconResponse> queryMultipleBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref, UserDto u) throws ClassNotFoundException {
-        Query q = getQuery(chrom, pos, allele, ref, u);
+        Query q = setUpQuery(chrom, pos, allele, ref, u);
 
         // init to create a response for each beacon even if the query is invalid
         Map<Beacon, BeaconResponse> brs = setUpBeaconResponseMapForIds(beaconIds, q);
@@ -340,6 +401,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
         if (queryNotNormalizedOrValid(q, ref)) {
             return brs.values();
         }
+        q = saveQuery(q);
 
         // construct map of atomic nodes covered by aggregates
         Multimap<Beacon, Beacon> children = setUpChildrenMultimap(brs.keySet());
@@ -352,7 +414,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
 
     @Override
     public BeaconResponseDto queryBeacon(String beaconId, String chrom, Long pos, String allele, String ref, UserDto onBehalfOf) throws ClassNotFoundException {
-        Query q = getQuery(chrom, pos, allele, ref, onBehalfOf);
+        Query q = setUpQuery(chrom, pos, allele, ref, onBehalfOf);
 
         Beacon b = beaconDao.findById(beaconId);
         if (b == null || !b.getVisible()) {
@@ -365,13 +427,14 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
             beacon.setEnabled(false);
             beacon.setVisible(false);
             beacon.setAggregator(true);
-            return EntityDtoConverter.getBeaconResponseDto(BeaconResponse.builder().beacon(beacon).query(q).response(null).build());
+            return beaconResponseMapper.mapEntityToDto(BeaconResponse.builder().beacon(beacon).query(q).response(null).build(), false);
         }
 
         BeaconResponse br = BeaconResponse.builder().beacon(b).query(q).response(null).build();
         if (queryNotNormalizedOrValid(q, ref)) {
-            return EntityDtoConverter.getBeaconResponseDto(br);
+            return beaconResponseMapper.mapEntityToDto(br, false);
         }
+        q = saveQuery(q);
 
         try {
             BeaconResponse inter = queryBeacon(b, q).get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
@@ -381,7 +444,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
             // ignore, response already null
         }
 
-        return EntityDtoConverter.getBeaconResponseDto(br);
+        return beaconResponseMapper.mapEntityToDto(br, false);
     }
 
     @Override
@@ -390,12 +453,12 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
             return new HashSet<>();
         }
 
-        return EntityDtoConverter.getBeaconResponseDtos(queryMultipleBeacons(beaconIds, chrom, pos, allele, ref, onBehalfOf));
+        return beaconResponseMapper.mapEntitiesToDtos(queryMultipleBeacons(beaconIds, chrom, pos, allele, ref, onBehalfOf), false);
     }
 
     @Override
     public Collection<BeaconResponseDto> queryAll(String chrom, Long pos, String allele, String ref, UserDto onBehalfOf) throws ClassNotFoundException {
-        return EntityDtoConverter.getBeaconResponseDtos(queryMultipleBeacons(null, chrom, pos, allele, ref, onBehalfOf));
+        return beaconResponseMapper.mapEntitiesToDtos(queryMultipleBeacons(null, chrom, pos, allele, ref, onBehalfOf), false);
     }
 
 }
