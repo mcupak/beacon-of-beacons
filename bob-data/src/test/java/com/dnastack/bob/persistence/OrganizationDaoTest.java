@@ -25,9 +25,13 @@ package com.dnastack.bob.persistence;
 
 import com.dnastack.bob.persistence.api.GenericDao;
 import com.dnastack.bob.persistence.api.OrganizationDao;
+import com.dnastack.bob.persistence.entity.BasicEntity;
 import com.dnastack.bob.persistence.entity.Organization;
+import com.google.common.collect.ImmutableSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.inject.Inject;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.Cleanup;
@@ -95,9 +99,50 @@ public class OrganizationDaoTest extends GenericDaoTest<Organization, String> {
     }
 
     @Test
+    @UsingDataSet({"organization_1.json", "organization_2.json", "beacon_1.json"})
+    public void testFindWithBeaconsAndId() {
+        Organization o = (Organization) findById(Organization.class, "test");
+        Organization found = dao.findByIdAndVisibility(o.getId(), true);
+
+        assertThat(found).isNotNull();
+        assertThat(found).isEqualToComparingFieldByField(o);
+    }
+
+    @Test
+    @UsingDataSet({"organization_1.json", "organization_2.json", "beacon_1.json"})
+    public void testFindWithoutBeaconsAndId() {
+        Organization o = (Organization) findById(Organization.class, "test2");
+
+        Organization found = dao.findByIdAndVisibility(o.getId(), true);
+
+        assertThat(found).isNull();
+    }
+
+    @Test
+    @UsingDataSet({"organization_1.json", "organization_2.json", "beacon_1.json"})
+    public void testFindWithBeaconsAndIds() {
+        Organization o = (Organization) findById(Organization.class, "test");
+
+        List<Organization> found = dao.findByIdsAndVisibility(ImmutableSet.of(o.getId(), "test2"), true);
+
+        assertThat(found.size()).isEqualTo(1);
+        assertThat(found).contains(o);
+    }
+
+    @Test
+    @UsingDataSet({"organization_1.json", "organization_2.json"})
+    public void testFindByIds() {
+        Set<Organization> all = findAll(Organization.class).stream().map((BasicEntity e) -> (Organization) e).collect(Collectors.toSet());
+
+        List<Organization> found = dao.findByIds(ImmutableSet.of("test", "test2"));
+
+        assertThat(found.size()).isEqualTo(2);
+        assertThat(found).containsAll(all);
+    }
+
+    @Test
     @UsingDataSet({"organization_1.json", "organization_2.json", "beacon_2.json"})
     public void testFindVisible() {
-        Organization o = (Organization) findById(Organization.class, "test");
         List<Organization> found = dao.findByVisibility(true);
 
         assertThat(found).isEmpty();

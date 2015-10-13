@@ -23,7 +23,9 @@
  */
 package com.dnastack.bob.rest.util;
 
-import com.google.common.collect.ImmutableMap;
+import java.util.HashMap;
+import java.util.Map;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;
 
 /**
@@ -34,7 +36,16 @@ import javax.ws.rs.core.Response;
  */
 public class ResponseStatusMapper {
 
-    private static final ImmutableMap<String, Response.Status> mapping = ImmutableMap.of();
+    private static final Map<String, Response.Status> mapping;
+
+    static {
+        mapping = new HashMap<>();
+        mapping.put(NotFoundException.class.getCanonicalName(), Response.Status.NOT_FOUND);
+        mapping.put(SecurityException.class.getCanonicalName(), Response.Status.UNAUTHORIZED);
+        mapping.put(IllegalArgumentException.class.getCanonicalName(), Response.Status.BAD_REQUEST);
+        mapping.put(UnsupportedOperationException.class.getCanonicalName(), Response.Status.METHOD_NOT_ALLOWED);
+        mapping.put(SecurityException.class.getCanonicalName(), Response.Status.FORBIDDEN);
+    }
 
     private ResponseStatusMapper() {
         // prevent instantiation

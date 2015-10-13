@@ -24,6 +24,7 @@
 package com.dnastack.bob.persistence.api;
 
 import com.dnastack.bob.persistence.entity.Organization;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -35,6 +36,12 @@ import java.util.List;
 public interface OrganizationDao extends GenericDao<Organization, String> {
 
     Organization findByName(String name);
+
+    Organization findByIdAndVisibility(String id, boolean visible);
+
+    List<Organization> findByIdsAndVisibility(Collection<String> ids, boolean visible);
+
+    List<Organization> findByIds(Collection<String> ids);
 
     List<Organization> findByVisibility(boolean visible);
 }

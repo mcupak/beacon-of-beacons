@@ -24,6 +24,7 @@
 package com.dnastack.bob.persistence.api;
 
 import com.dnastack.bob.persistence.entity.Beacon;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -52,6 +53,35 @@ public interface BeaconDao extends GenericDao<Beacon, String> {
      * @return collection of beacons
      */
     List<Beacon> findByVisibility(boolean visible);
+
+    /**
+     * Retrieves beacons by their IDs.
+     *
+     * @param ids IDs
+     *
+     * @return collection of beacons
+     */
+    List<Beacon> findByIds(Collection<String> ids);
+
+    /**
+     * Retrieves beacons by visibility.
+     *
+     * @param ids     IDs
+     * @param visible true if looking for visible beacons, false if looking for invisible/anonymous beacons
+     *
+     * @return collection of beacons
+     */
+    List<Beacon> findByIdsAndVisibility(Collection<String> ids, boolean visible);
+
+    /**
+     * Retrieves a beacon by its ID and visibility.
+     *
+     * @param id      ID
+     * @param visible true if looking for visible beacons, false if looking for invisible/anonymous beacons
+     *
+     * @return collection of beacons
+     */
+    Beacon findByIdAndVisibility(String id, boolean visible);
 
     /**
      * Checks existence of a parent-child association.

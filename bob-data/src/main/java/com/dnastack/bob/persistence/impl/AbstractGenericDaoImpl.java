@@ -31,6 +31,8 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
+import javax.persistence.TypedQuery;
 
 /**
  * Default generic DAO implementation.
@@ -73,6 +75,26 @@ public abstract class AbstractGenericDaoImpl<T extends BasicEntity<I>, I> implem
         }
     }
 
+    protected T getSingleResult(TypedQuery<T> query) {
+        T e;
+        try {
+            e = query.getSingleResult();
+        } catch (PersistenceException ex) {
+            e = null;
+        }
+        return e;
+    }
+
+    protected List<T> getResultList(TypedQuery<T> query) {
+        List<T> e;
+        try {
+            e = query.getResultList();
+        } catch (PersistenceException ex) {
+            e = null;
+        }
+        return e;
+    }
+
     @Override
     public long countAll() {
         return em.createQuery(String.format("SELECT COUNT(e.id) FROM %s e", entityClass.getSimpleName()), Long.class).getSingleResult();
@@ -96,7 +118,7 @@ public abstract class AbstractGenericDaoImpl<T extends BasicEntity<I>, I> implem
 
     @Override
     public List<T> findAll() {
-        return em.createQuery(String.format("SELECT e FROM %s e", entityClass.getSimpleName()), entityClass).getResultList();
+        return getResultList(em.createQuery(String.format("SELECT e FROM %s e", entityClass.getSimpleName()), entityClass));
     }
 
     @Override

@@ -29,7 +29,6 @@ import com.dnastack.bob.service.api.OrganizationService;
 import com.dnastack.bob.service.dto.OrganizationDto;
 import com.dnastack.bob.service.mapper.api.OrganizationMapper;
 import java.util.Collection;
-import java.util.stream.Collectors;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -66,8 +65,13 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
+    public Collection<OrganizationDto> findWithVisibleBeacons() {
+        return organizationMapper.mapEntitiesToDtos(organizationDao.findByVisibility(true), false);
+    }
+
+    @Override
     public Collection<OrganizationDto> find(Collection<String> ids) {
-        return ids.stream().map((id) -> find(id)).filter((b) -> (b != null)).collect(Collectors.toList());
+        return organizationMapper.mapEntitiesToDtos(organizationDao.findByIds(ids), false);
     }
 
     @Override
@@ -76,7 +80,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
-    public OrganizationDto update(String id, @NonNull OrganizationDto organization) {
+    public OrganizationDto update(@NonNull String id, @NonNull OrganizationDto organization) {
         Organization o = organizationDao.findById(id);
         if (organization.getId() != null) {
             o.setId(organization.getId());
@@ -100,6 +104,16 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     public void delete(@NonNull String id) {
         organizationDao.delete(id);
+    }
+
+    @Override
+    public OrganizationDto findWithVisibleBeacons(@NonNull String id) {
+        return organizationMapper.mapEntityToDto(organizationDao.findByIdAndVisibility(id, true), false);
+    }
+
+    @Override
+    public Collection<OrganizationDto> findWithVisibleBeacons(Collection<String> ids) {
+        return organizationMapper.mapEntitiesToDtos(organizationDao.findByIdsAndVisibility(ids, true), false);
     }
 
 }

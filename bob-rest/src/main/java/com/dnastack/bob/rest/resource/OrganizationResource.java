@@ -27,7 +27,6 @@ import com.dnastack.bob.rest.comparator.NameComparator;
 import com.dnastack.bob.rest.comparator.OrganizationDtoComparator;
 import com.dnastack.bob.service.api.OrganizationService;
 import com.dnastack.bob.service.dto.OrganizationDto;
-import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.Collection;
 import java.util.Set;
@@ -38,13 +37,13 @@ import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -82,9 +81,9 @@ public class OrganizationResource {
     @GET
     @Path("/{organizationId}")
     public OrganizationDto showOrganization(@PathParam("organizationId") String organizationId) {
-        OrganizationDto b = organizationService.find(organizationId);
+        OrganizationDto b = organizationService.findWithVisibleBeacons(organizationId);
         if (b == null) {
-            throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
+            throw new NotFoundException("Cannot find organization with ID: " + organizationId);
         }
         return b;
     }
@@ -100,9 +99,9 @@ public class OrganizationResource {
     public Collection<OrganizationDto> show(@QueryParam("organization") String organizationIds) {
         Set<OrganizationDto> bs = new TreeSet<>(organizationComparator);
         if (organizationIds == null) {
-            bs.addAll(organizationService.findAll());
+            bs.addAll(organizationService.findWithVisibleBeacons());
         } else {
-            bs.addAll(organizationService.find(parseMultipleParameterValues(organizationIds)));
+            bs.addAll(organizationService.findWithVisibleBeacons(parseMultipleParameterValues(organizationIds)));
         }
 
         return bs;

@@ -25,6 +25,7 @@ package com.dnastack.bob.persistence.impl;
 
 import com.dnastack.bob.persistence.api.BeaconDao;
 import com.dnastack.bob.persistence.entity.Beacon;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Queue;
@@ -47,12 +48,12 @@ public class BeaconDaoImpl extends AbstractGenericDaoImpl<Beacon, String> implem
 
     @Override
     public List<Beacon> findByAggregation(boolean aggregator) {
-        return em.createNamedQuery("findBeaconsByAggregation", Beacon.class).setParameter("aggregator", aggregator).getResultList();
+        return getResultList(em.createNamedQuery("findBeaconsByAggregation", Beacon.class).setParameter("aggregator", aggregator));
     }
 
     @Override
     public List<Beacon> findByVisibility(boolean visible) {
-        return em.createNamedQuery("findBeaconsByVisibility", Beacon.class).setParameter("visible", visible).getResultList();
+        return getResultList(em.createNamedQuery("findBeaconsByVisibility", Beacon.class).setParameter("visible", visible));
     }
 
     @Override
@@ -115,6 +116,21 @@ public class BeaconDaoImpl extends AbstractGenericDaoImpl<Beacon, String> implem
     @Override
     public boolean haveRelationship(Beacon child, Beacon parent) {
         return child.getParents().contains(parent);
+    }
+
+    @Override
+    public List<Beacon> findByIdsAndVisibility(Collection<String> ids, boolean visible) {
+        return getResultList(em.createNamedQuery("findBeaconsByIdsAndVisibility", Beacon.class).setParameter("ids", ids).setParameter("visible", visible));
+    }
+
+    @Override
+    public Beacon findByIdAndVisibility(String id, boolean visible) {
+        return getSingleResult(em.createNamedQuery("findBeaconByIdAndVisibility", Beacon.class).setParameter("id", id).setParameter("visible", visible));
+    }
+
+    @Override
+    public List<Beacon> findByIds(Collection<String> ids) {
+        return getResultList(em.createNamedQuery("findBeaconsByIds", Beacon.class).setParameter("ids", ids));
     }
 
 }

@@ -44,6 +44,15 @@ public interface BeaconService {
     BeaconDto find(String id);
 
     /**
+     * Retrieves beacon details, if visible.
+     *
+     * @param id id of the beacon
+     *
+     * @return beacon
+     */
+    BeaconDto findVisible(String id);
+
+    /**
      * Creates a new beacon.
      *
      * @param beacon
@@ -62,6 +71,11 @@ public interface BeaconService {
      */
     BeaconDto update(String id, BeaconDto beacon);
 
+    /**
+     * Removes a beacon.
+     *
+     * @param id ID of the beacon to remove
+     */
     void delete(String id);
 
     /**
@@ -74,10 +88,26 @@ public interface BeaconService {
     Collection<BeaconDto> find(Collection<String> ids);
 
     /**
+     * Retrieves visible beacons with specified IDs.
+     *
+     * @param ids collection of beacon ids
+     *
+     * @return collection of beacons
+     */
+    Collection<BeaconDto> findVisible(Collection<String> ids);
+
+    /**
      * Retrieves all the beacons.
      *
      * @return collection of beacons
      */
     Collection<BeaconDto> findAll();
+
+    /**
+     * Retrieves visible beacons.
+     *
+     * @return collection of beacons
+     */
+    Collection<BeaconDto> findVisible();
 
 }

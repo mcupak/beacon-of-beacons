@@ -25,10 +25,10 @@ package com.dnastack.bob.persistence.impl;
 
 import com.dnastack.bob.persistence.api.OrganizationDao;
 import com.dnastack.bob.persistence.entity.Organization;
+import java.util.Collection;
 import java.util.List;
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
-import javax.persistence.PersistenceException;
 import lombok.NonNull;
 
 /**
@@ -45,19 +45,27 @@ public class OrganizationDaoImpl extends AbstractGenericDaoImpl<Organization, St
 
     @Override
     public Organization findByName(@NonNull String name) {
-        Organization o;
-        try {
-            o = em.createNamedQuery("findOrganizationByName", Organization.class).setParameter("name", name).getSingleResult();
-        } catch (PersistenceException ex) {
-            o = null;
-        }
-
-        return o;
+        return getSingleResult(em.createNamedQuery("findOrganizationByName", Organization.class).setParameter("name", name));
     }
 
     @Override
     public List<Organization> findByVisibility(boolean visible) {
-        return em.createNamedQuery("findOrganizationsByVisibility", Organization.class).setParameter("visible", visible).getResultList();
+        return getResultList(em.createNamedQuery("findOrganizationsByVisibility", Organization.class).setParameter("visible", visible));
     }
 
+    @Override
+    public Organization findByIdAndVisibility(String id, boolean visible) {
+        return getSingleResult(em.createNamedQuery("findOrganizationByIdAndVisibility", Organization.class).setParameter("id", id).setParameter("visible", visible));
+    }
+
+    @Override
+    public List<Organization> findByIdsAndVisibility(Collection<String> ids, boolean visible) {
+        return getResultList(em.createNamedQuery("findOrganizationsByIdsAndVisibility", Organization.class).setParameter("ids", ids).setParameter("visible", visible));
+    }
+
+    @Override
+    public List<Organization> findByIds(Collection<String> ids) {
+        return getResultList(em.createNamedQuery("findOrganizationsByIds", Organization.class).setParameter("ids", ids));
+    }
+    
 }

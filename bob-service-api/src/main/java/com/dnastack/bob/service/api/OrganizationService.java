@@ -44,6 +44,15 @@ public interface OrganizationService {
     OrganizationDto find(String id);
 
     /**
+     * Retrieves organization details, provided it has visible beacons.
+     *
+     * @param id id of the organization
+     *
+     * @return organization
+     */
+    OrganizationDto findWithVisibleBeacons(String id);
+
+    /**
      * Creates a new organization.
      *
      * @param organization
@@ -62,6 +71,11 @@ public interface OrganizationService {
      */
     OrganizationDto update(String id, OrganizationDto organization);
 
+    /**
+     * Removes organization.
+     *
+     * @param id ID of the organization to delete
+     */
     void delete(String id);
 
     /**
@@ -74,10 +88,26 @@ public interface OrganizationService {
     Collection<OrganizationDto> find(Collection<String> ids);
 
     /**
+     * Retrieves organizations with specified IDs and visible beacons.
+     *
+     * @param ids collection of organization ids
+     *
+     * @return collection of organizations
+     */
+    Collection<OrganizationDto> findWithVisibleBeacons(Collection<String> ids);
+
+    /**
      * Retrieves all the organizations.
      *
      * @return collection of organizations
      */
     Collection<OrganizationDto> findAll();
+
+    /**
+     * Retrieves organizations with visible beacons.
+     *
+     * @return collection of organizations
+     */
+    Collection<OrganizationDto> findWithVisibleBeacons();
 
 }

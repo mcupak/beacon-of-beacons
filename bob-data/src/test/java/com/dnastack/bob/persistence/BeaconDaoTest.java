@@ -29,6 +29,7 @@ import com.dnastack.bob.persistence.entity.BasicEntity;
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.persistence.entity.Organization;
 import com.dnastack.bob.persistence.enumerated.Reference;
+import com.google.common.collect.ImmutableSet;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -99,6 +100,35 @@ public class BeaconDaoTest extends GenericDaoTest<Beacon, String> {
         assertThat(inVisible).extracting("visible").containsOnly(false);
 
         assertThat(visible.size() + (long) inVisible.size()).isEqualTo(countAll(Beacon.class));
+    }
+
+    @Test
+    public void testFindByIds() {
+        Set<Beacon> all = findAll(Beacon.class).stream().map((BasicEntity e) -> (Beacon) e).collect(Collectors.toSet());
+
+        List<Beacon> found = dao.findByIds(ImmutableSet.of("test", "test2"));
+
+        assertThat(found.size()).isEqualTo(2);
+        assertThat(found).containsAll(all);
+    }
+
+    @Test
+    public void testFindByIdsAndVisibility() {
+        Beacon b = (Beacon) findById(Beacon.class, "test");
+
+        List<Beacon> found = dao.findByIdsAndVisibility(ImmutableSet.of(b.getId(), "test2"), true);
+
+        assertThat(found.size()).isEqualTo(1);
+        assertThat(found).contains(b);
+    }
+
+    @Test
+    public void testFindByIdAndVisibility() {
+        Beacon b = (Beacon) findById(Beacon.class, "test");
+        Beacon found = dao.findByIdAndVisibility(b.getId(), true);
+
+        assertThat(found).isNotNull();
+        assertThat(found).isEqualToComparingFieldByField(b);
     }
 
     @Test

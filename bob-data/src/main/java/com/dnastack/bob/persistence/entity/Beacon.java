@@ -62,6 +62,9 @@ import lombok.experimental.Builder;
 @Entity
 @NamedQueries({
     @NamedQuery(name = "findBeaconsByAggregation", query = "SELECT b FROM Beacon b WHERE b.aggregator=:aggregator"),
+    @NamedQuery(name = "findBeaconByIdAndVisibility", query = "SELECT b FROM Beacon b WHERE b.id=:id AND b.visible=:visible"),
+    @NamedQuery(name = "findBeaconsByIdsAndVisibility", query = "SELECT b FROM Beacon b WHERE b.id IN :ids AND b.visible=:visible"),
+    @NamedQuery(name = "findBeaconsByIds", query = "SELECT b FROM Beacon b WHERE b.id IN :ids"),
     @NamedQuery(name = "findBeaconsByVisibility", query = "SELECT b FROM Beacon b WHERE b.visible=:visible")
 })
 public class Beacon implements BasicEntity<String> {

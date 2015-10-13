@@ -45,7 +45,6 @@ import com.google.common.collect.ImmutableSet;
 import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -127,18 +126,17 @@ public class BeaconServiceImpl implements BeaconService {
 
     @Override
     public BeaconDto find(String beaconId) {
-        Beacon b = beaconDao.findById(beaconId);
-        return beaconMapper.mapEntityToDto((b == null || !b.getVisible()) ? null : b, false);
+        return beaconMapper.mapEntityToDto(beaconDao.findById(beaconId), false);
     }
 
     @Override
     public Collection<BeaconDto> find(Collection<String> beaconIds) {
-        return beaconIds.stream().map((id) -> find(id)).filter((b) -> (b != null)).collect(Collectors.toList());
+        return beaconMapper.mapEntitiesToDtos(beaconDao.findByIds(beaconIds), false);
     }
 
     @Override
     public Set<BeaconDto> findAll() {
-        return beaconMapper.mapEntitiesToDtos(beaconDao.findByVisibility(true), false);
+        return beaconMapper.mapEntitiesToDtos(beaconDao.findAll(), false);
     }
 
     @Override
@@ -166,6 +164,21 @@ public class BeaconServiceImpl implements BeaconService {
     @Override
     public void delete(@NonNull String id) {
         beaconDao.delete(id);
+    }
+
+    @Override
+    public BeaconDto findVisible(String id) {
+        return beaconMapper.mapEntityToDto(beaconDao.findByIdAndVisibility(id, true), false);
+    }
+
+    @Override
+    public Collection<BeaconDto> findVisible(Collection<String> ids) {
+        return beaconMapper.mapEntitiesToDtos(beaconDao.findByIdsAndVisibility(ids, true), false);
+    }
+
+    @Override
+    public Collection<BeaconDto> findVisible() {
+        return beaconMapper.mapEntitiesToDtos(beaconDao.findByVisibility(true), false);
     }
 
 }

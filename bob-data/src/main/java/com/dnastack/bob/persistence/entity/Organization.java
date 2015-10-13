@@ -57,6 +57,9 @@ import lombok.experimental.Builder;
 @Entity
 @NamedQueries({
     @NamedQuery(name = "findOrganizationByName", query = "SELECT b FROM Organization b WHERE b.name=:name"),
+    @NamedQuery(name = "findOrganizationsByIds", query = "SELECT b FROM Organization b WHERE b.id IN :ids"),
+    @NamedQuery(name = "findOrganizationByIdAndVisibility", query = "SELECT o FROM Organization o LEFT OUTER JOIN o.beacons b WHERE o.id=:id AND b.visible=:visible"),
+    @NamedQuery(name = "findOrganizationsByIdsAndVisibility", query = "SELECT DISTINCT o FROM Organization o LEFT OUTER JOIN o.beacons b WHERE o.id IN :ids AND b.visible=:visible"),
     @NamedQuery(name = "findOrganizationsByVisibility", query = "SELECT DISTINCT b.organization FROM Beacon b WHERE b.visible=:visible")
 })
 public class Organization implements BasicEntity<String> {

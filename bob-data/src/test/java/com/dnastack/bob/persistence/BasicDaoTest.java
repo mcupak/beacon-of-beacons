@@ -63,7 +63,7 @@ public abstract class BasicDaoTest {
     @Deployment
     public static WebArchive createDeployment() {
         WebArchive war = ShrinkWrap.create(WebArchive.class, "test.war")
-            .addPackages(true, "com.dnastack.bob.persistence", "org.assertj.core")
+            .addPackages(true, "com.dnastack.bob.persistence", "org.assertj.core", "com.google.common")
             .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
             .addAsWebInfResource("jbossas-ds.xml")
             .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");

@@ -27,7 +27,6 @@ import com.dnastack.bob.rest.comparator.BeaconDtoComparator;
 import com.dnastack.bob.rest.comparator.NameComparator;
 import com.dnastack.bob.service.api.BeaconService;
 import com.dnastack.bob.service.dto.BeaconDto;
-import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.Collection;
 import java.util.Set;
@@ -38,13 +37,13 @@ import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -82,9 +81,9 @@ public class BeaconResource {
     @GET
     @Path("/{beaconId}")
     public BeaconDto showBeacon(@PathParam("beaconId") String beaconId) {
-        BeaconDto b = beaconService.find(beaconId);
+        BeaconDto b = beaconService.findVisible(beaconId);
         if (b == null) {
-            throw new WebApplicationException(HttpURLConnection.HTTP_NOT_FOUND);
+            throw new NotFoundException("Cannot find beacon with ID: " + beaconId);
         }
         return b;
     }
@@ -100,9 +99,9 @@ public class BeaconResource {
     public Collection<BeaconDto> show(@QueryParam("beacon") String beaconIds) {
         Set<BeaconDto> bs = new TreeSet<>(beaconComparator);
         if (beaconIds == null) {
-            bs.addAll(beaconService.findAll());
+            bs.addAll(beaconService.findVisible());
         } else {
-            bs.addAll(beaconService.find(parseMultipleParameterValues(beaconIds)));
+            bs.addAll(beaconService.findVisible(parseMultipleParameterValues(beaconIds)));
         }
 
         return bs;
