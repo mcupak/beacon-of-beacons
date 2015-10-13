@@ -151,7 +151,6 @@ public class BeaconServiceImpl implements BeaconService {
     public BeaconDto update(@NonNull String id, @NonNull BeaconDto beacon) {
         Beacon b = beaconDao.findById(id);
         if (b == null) {
-            log.info(String.format("Beacon NOT updated: %s", id));
             throw new IllegalArgumentException("Could not find beacon with ID: " + id);
         }
 
@@ -163,7 +162,14 @@ public class BeaconServiceImpl implements BeaconService {
 
     @Override
     public void delete(@NonNull String id) {
-        beaconDao.delete(id);
+        Beacon b = beaconDao.findById(id);
+        if (b == null) {
+            throw new IllegalArgumentException("Could not find beacon with ID: " + id);
+        }
+        b.setEnabled(false);
+        b.setVisible(false);
+        beaconDao.update(b);
+        log.info(String.format("Beacon disabled: %s", b.getId()));
     }
 
     @Override
