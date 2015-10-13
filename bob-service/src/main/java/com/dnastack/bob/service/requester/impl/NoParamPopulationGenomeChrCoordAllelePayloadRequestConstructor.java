@@ -30,13 +30,14 @@ import java.util.Map;
 import javax.inject.Named;
 
 /**
- * Request constructor using base beacon URL with custom payload.
+ * Request constructor using base beacon URL with custom payload based on population, genome, chromosome, coordinates
+ * and alleles.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
 @Named
-public class NoParamCustomPayloadRequestConstructor implements RequestConstructor, Serializable {
+public class NoParamPopulationGenomeChrCoordAllelePayloadRequestConstructor implements RequestConstructor, Serializable {
 
     private static final long serialVersionUID = -1948686874610313749L;
 

@@ -68,6 +68,7 @@ public class PostResponseFetcher implements ResponseFetcher, Serializable {
     public Future<String> getQueryResponse(String url, Map<String, String> payload, String requester) {
         String res = null;
         try {
+            System.out.println(getQueryPayload(payload).toString());
             res = httpUtils.executeRequest(httpUtils.createRequest(url, true, getQueryPayload(payload), requester));
         } catch (UnsupportedEncodingException ex) {
             // ignore, already null
