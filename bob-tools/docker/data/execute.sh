@@ -42,9 +42,9 @@ module add --name=com.mysql --resources=/opt/jboss/wildfly/customization/mysql-c
 data-source add --name=bob --driver-name=mysql --jndi-name=java:jboss/datasources/bob --connection-url=jdbc:mysql://$DB_PORT_3306_TCP_ADDR:$DB_PORT_3306_TCP_PORT/bob?useUnicode=true&amp;characterEncoding=UTF-8 --user-name=mysql --password=mysql --use-ccm=false --jta=true --max-pool-size=25 --blocking-timeout-wait-millis=5000 --enabled=true
 
 # Set up thread and bean pools
-/subsystem=ejb3/thread-pool=default:write-attribute(name="max-threads", value="100")
+/subsystem=ejb3/thread-pool=default:write-attribute(name="max-threads", value="500")
 
-/subsystem=ejb3/strict-max-bean-instance-pool=slsb-strict-max-pool:write-attribute(name="max-pool-size", value="100")
+/subsystem=ejb3/strict-max-bean-instance-pool=slsb-strict-max-pool:write-attribute(name="max-pool-size", value="500")
 
 # Execute the batch
 run-batch
