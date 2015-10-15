@@ -1971,6 +1971,168 @@
         "response": false
     },
     {
+        "beacon": "cosmic-all",
+        "chromosome": "7",
+        "position": 140753335,
+        "allele": "A",
+        "reference": null,
+        "description": "all references found/all datasets",
+        "response": true
+    },
+    {
+        "beacon": "cosmic",
+        "chromosome": "7",
+        "position": 140753335,
+        "allele": "A",
+        "reference": null,
+        "description": "all references found",
+        "response": true
+    },
+    {
+        "beacon": "wgs",
+        "chromosome": "7",
+        "position": 140753335,
+        "allele": "A",
+        "reference": null,
+        "description": "all references found",
+        "response": true
+    },
+    {
+        "beacon": "cell_lines",
+        "chromosome": "7",
+        "position": 140753335,
+        "allele": "A",
+        "reference": null,
+        "description": "all references found",
+        "response": true
+    },
+    {
+        "beacon": "cosmic",
+        "chromosome": "7",
+        "position": 140753335,
+        "allele": "A",
+        "reference": "hg38",
+        "description": "specific reference found",
+        "response": true
+    },
+    {
+        "beacon": "cosmic",
+        "chromosome": "7",
+        "position": 140753335,
+        "allele": "A",
+        "reference": "hg19",
+        "description": "specific reference not found",
+        "response": false
+    },
+    {
+        "beacon": "cosmic",
+        "chromosome": "7",
+        "position": 140753335,
+        "allele": "A",
+        "reference": "hg100",
+        "description": "invalid reference",
+        "response": null
+    },
+    {
+        "beacon": "cosmic",
+        "chromosome": "7",
+        "position": 140753335,
+        "allele": "A",
+        "reference": "grch38",
+        "description": "reference conversion",
+        "response": true
+    },
+    {
+        "beacon": "cosmic",
+        "chromosome": "1",
+        "position": 46402,
+        "allele": "TGT",
+        "reference": null,
+        "description": "string allele/not supported",
+        "response": false
+    },
+    {
+        "beacon": "cosmic",
+        "chromosome": "1",
+        "position": 1002920,
+        "allele": "D",
+        "reference": null,
+        "description": "del",
+        "response": false
+    },
+    {
+        "beacon": "cosmic",
+        "chromosome": "1",
+        "position": 46402,
+        "allele": "I",
+        "reference": null,
+        "description": "ins",
+        "response": false
+    },
+    {
+        "beacon": "cosmic",
+        "chromosome": "13",
+        "position": 32888799,
+        "allele": "A",
+        "reference": null,
+        "description": "no reference found",
+        "response": false
+    },
+    {
+        "beacon": "cosmic",
+        "chromosome": "15",
+        "position": 41087870,
+        "allele": "DC",
+        "reference": null,
+        "description": "invalid allele",
+        "response": null
+    },
+    {
+        "beacon": "cosmic",
+        "chromosome": "1",
+        "position": 1002922,
+        "allele": "DEL",
+        "reference": null,
+        "description": "allele conversion",
+        "response": false
+    },
+    {
+        "beacon": "cosmic",
+        "chromosome": "chrom7",
+        "position": 140753335,
+        "allele": "A",
+        "reference": null,
+        "description": "chromosome conversion",
+        "response": true
+    },
+    {
+        "beacon": "cosmic",
+        "chromosome": "30",
+        "position": 106833421,
+        "allele": "A",
+        "reference": null,
+        "description": "invalid chromosome",
+        "response": null
+    },
+    {
+        "beacon": "cosmic",
+        "chromosome": "X",
+        "position": 41087870,
+        "allele": "C",
+        "reference": null,
+        "description": "x",
+        "response": false
+    },
+    {
+        "beacon": "cosmic",
+        "chromosome": "MT",
+        "position": 1,
+        "allele": "A",
+        "reference": null,
+        "description": "mt",
+        "response": null
+    },
+    {
         "beacon": "bioreference",
         "chromosome": "1",
         "position": 808921,
