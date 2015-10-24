@@ -60,8 +60,6 @@ import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
-import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
-
 /**
  * Base test class to be extended by other tests.
  *
@@ -71,6 +69,7 @@ import static com.dnastack.bob.service.util.Constants.REQUEST_TIMEOUT;
 @Log4j
 public abstract class BasicTest {
 
+    private static final int REQUEST_TIMEOUT = 15;
     private static final CloseableHttpClient httpClient;
 
     static {

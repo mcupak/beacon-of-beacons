@@ -3,16 +3,25 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.dnastack</groupId>
-    <artifactId>bob</artifactId>
-    <name>bob</name>
+    <artifactId>bob-parent</artifactId>
     <description>Beacon Network parent module</description>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
 
     <modules>
-        <module>bob-data</module>
-        <module>bob-service</module>
+        <module>bob-data-api</module>
+        <module>bob-data-impl</module>
         <module>bob-service-api</module>
+        <module>bob-service-impl</module>
+        <module>bob-service-converter-api</module>
+        <module>bob-service-converter-impl</module>
+        <module>bob-service-fetcher-api</module>
+        <module>bob-service-fetcher-impl</module>
+        <module>bob-service-mapper-api</module>
+        <module>bob-service-mapper-impl</module>
+        <module>bob-service-parser-api</module>
+        <module>bob-service-requester-api</module>
+        <module>bob-service-processor-api</module>
         <module>bob-rest</module>
         <module>beacon-adapters</module>
     </modules>

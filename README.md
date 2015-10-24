@@ -45,7 +45,7 @@ To undeploy when you're done, run:
 
 ##How to test it
 
-To run tests for the persistence layer, execute the following in `bob-data` module:
+To run tests for the persistence layer, execute the following in `bob-data-impl` module:
 
     mvn test -Pall-tests-managed
 
