@@ -10,7 +10,7 @@
     <artifactId>bob-service-mapper-impl</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <description>Beacon of Beacons service module</description>
+    <description>Beacon of Beacons mapper implementation module</description>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
@@ -25,12 +25,7 @@
         </dependency>
         <dependency>
             <groupId>com.dnastack</groupId>
-            <artifactId>bob-data-impl</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.dnastack</groupId>
-            <artifactId>bob-service-converter-api</artifactId>
+            <artifactId>bob-service-mapper-api</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

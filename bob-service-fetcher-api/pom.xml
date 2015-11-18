@@ -8,7 +8,7 @@
     </parent>
     <artifactId>bob-service-fetcher-api</artifactId>
     <packaging>jar</packaging>
-    <description>Beacon of Beacons service API module</description>
+    <description>Beacon of Beacons fetcher API module</description>
 
     <build>
         <plugins>

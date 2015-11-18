@@ -8,7 +8,7 @@
     </parent>
     <artifactId>bob-service-converter-api</artifactId>
     <packaging>jar</packaging>
-    <description>Beacon of Beacons service API module</description>
+    <description>Beacon of Beacons converter API module</description>
 
     <dependencies>
         <dependency>

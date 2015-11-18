@@ -26,6 +26,7 @@ package com.dnastack.bob.persistence;
 import com.dnastack.bob.persistence.api.GenericDao;
 import com.dnastack.bob.persistence.api.QueryDao;
 import com.dnastack.bob.persistence.entity.Query;
+import com.dnastack.bob.persistence.entity.User;
 import com.dnastack.bob.persistence.enumerated.Chromosome;
 import com.dnastack.bob.persistence.enumerated.Reference;
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Arquillian.class)
 @Transactional
-@UsingDataSet("query.json")
+@UsingDataSet({"user_ip.json", "query.json"})
 @Cleanup(strategy = CleanupStrategy.USED_TABLES_ONLY) // this is important in order to prevent foreign-key violations
 public class QueryDaoTest extends GenericDaoTest<Query, Long> {
 
@@ -68,6 +69,7 @@ public class QueryDaoTest extends GenericDaoTest<Query, Long> {
         o.setReference(Reference.HG38);
         o.setPosition(10L);
         o.setSubmitted(new Date());
+        o.setUser((User) findOne(User.class));
         res.add(o);
 
         return res;

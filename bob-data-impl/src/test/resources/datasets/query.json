@@ -7,7 +7,8 @@
                     "reference": "HG19",
                     "allele": "A",
                     "position": 1,
-                    "submitted": "2015-01-01 00:00:00"
+                    "submitted": "2015-01-01 00:00:00",
+                    "user_id": 5
                 }
             ]
 }

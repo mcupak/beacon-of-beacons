@@ -20,8 +20,11 @@
         <module>bob-service-mapper-api</module>
         <module>bob-service-mapper-impl</module>
         <module>bob-service-parser-api</module>
+        <module>bob-service-parser-impl</module>
         <module>bob-service-requester-api</module>
+        <module>bob-service-requester-impl</module>
         <module>bob-service-processor-api</module>
+        <module>bob-service-processor-impl</module>
         <module>bob-rest</module>
         <module>beacon-adapters</module>
     </modules>
