@@ -53,10 +53,10 @@ public class BeaconMapperImpl implements BeaconMapper {
             return null;
         }
 
-        BeaconDto.BeaconDtoBuilder builder = BeaconDto.builder().id(b.getId()).name(b.getName()).aggregator(b.getAggregator()).organization(b.getOrganization() == null ? null : b.getOrganization().getName()).description(b.getDescription()).enabled(b.getEnabled()).visible(b.getVisible());
+        BeaconDto.BeaconDtoBuilder builder = BeaconDto.builder().id(b.getId()).name(b.getName()).aggregator(b.getAggregator()).organization(b.getOrganization() == null ? null : b.getOrganization().getName()).description(b.getDescription()).enabled(b.getEnabled()).visible(b.getVisible()).supportedReferences(referenceMapper.mapEntitiesToDtos(b.getSupportedReferences(), showInternal));
 
         if (showInternal) {
-            builder.email(b.getEmail()).homePage(b.getHomePage()).url(b.getUrl()).supportedReferences(referenceMapper.mapEntitiesToDtos(b.getSupportedReferences(), showInternal));
+            builder.email(b.getEmail()).homePage(b.getHomePage()).url(b.getUrl());
         }
 
         return builder.build();
