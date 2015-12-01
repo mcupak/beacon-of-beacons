@@ -25,7 +25,8 @@
         <module>bob-service-requester-impl</module>
         <module>bob-service-processor-api</module>
         <module>bob-service-processor-impl</module>
-        <module>bob-rest</module>
+        <module>bob-rest-api</module>
+        <module>bob-rest-impl</module>
         <module>beacon-adapters</module>
     </modules>
 
