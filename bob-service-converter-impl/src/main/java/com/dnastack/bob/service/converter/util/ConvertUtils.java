@@ -52,7 +52,7 @@ public class ConvertUtils {
      * @param from start index
      * @param to   end index
      *
-     * @return
+     * @return string
      */
     public static String extractSubstringFromBeaconId(Beacon b, Integer from, Integer to) {
         String res;
@@ -71,7 +71,7 @@ public class ConvertUtils {
      * @param b  beacon
      * @param to end index
      *
-     * @return
+     * @return string
      */
     public static String extractPrefixFromBeaconId(Beacon b, Integer to) {
         return extractSubstringFromBeaconId(b, null, to);
@@ -83,7 +83,7 @@ public class ConvertUtils {
      * @param b    beacon
      * @param from start index
      *
-     * @return
+     * @return string
      */
     public static String extractSuffixFromBeaconId(Beacon b, Integer from) {
         return extractSubstringFromBeaconId(b, from, null);
@@ -95,7 +95,7 @@ public class ConvertUtils {
      *
      * @param b beacon
      *
-     * @return
+     * @return string
      */
     public static String extractIdWithoutOrganizationFromBeaconId(Beacon b) {
         String res;

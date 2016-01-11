@@ -41,7 +41,7 @@ import static com.dnastack.bob.service.parser.util.ParseUtils.REQUEST_TIMEOUT;
 import static com.dnastack.bob.service.parser.util.ParseUtils.parseBooleanFromJson;
 
 /**
- * Parses response->exists field from JSON.
+ * Parses response-exists field from JSON.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0

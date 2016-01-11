@@ -28,7 +28,7 @@ import java.io.Serializable;
 import javax.inject.Named;
 
 /**
- * Allele converter with indels converted to long strings and wrapped in <> (url encoded).
+ * Allele converter with indels converted to long strings and wrapped in angled brackets (url encoded).
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0

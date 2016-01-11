@@ -42,7 +42,7 @@ import static com.dnastack.bob.service.parser.util.ParseUtils.parseBooleanFromJs
 import static com.dnastack.bob.service.parser.util.ParseUtils.parseStringFromJson;
 
 /**
- * Parses response->exists field from JSON with null conversion.
+ * Parses response-exists field from JSON with null conversion.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
