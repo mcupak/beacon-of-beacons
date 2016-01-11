@@ -12,9 +12,9 @@
     
     <dependencies>
         <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>jaxrs-api</artifactId>
-            <scope>provided</scope>
+            <groupId>com.dnastack</groupId>
+            <artifactId>bob-service-mapper-api</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency> 
             <groupId>org.projectlombok</groupId>

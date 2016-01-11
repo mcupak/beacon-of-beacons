@@ -36,7 +36,7 @@ import java.util.Collection;
 public interface BeaconResponseService {
 
     /**
-     * Query a given beacon
+     * Queries a given beacon.
      *
      * @param beaconId   beacon to query
      * @param chrom      chromosome
@@ -52,7 +52,7 @@ public interface BeaconResponseService {
     BeaconResponseDto queryBeacon(String beaconId, String chrom, Long pos, String allele, String ref, UserDto onBehalfOf) throws ClassNotFoundException;
 
     /**
-     * Query specified beacons.
+     * Queries specified beacons.
      *
      * @param beaconIds  collection of beacon IDs
      * @param chrom      chromosome
@@ -68,7 +68,7 @@ public interface BeaconResponseService {
     Collection<BeaconResponseDto> queryBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref, UserDto onBehalfOf) throws ClassNotFoundException;
 
     /**
-     * Query all the beacons.
+     * Queries all the beacons.
      *
      * @param chrom      chromosome
      * @param pos        position

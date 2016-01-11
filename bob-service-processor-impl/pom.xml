@@ -50,16 +50,6 @@
         </dependency>
         <dependency>
             <groupId>com.dnastack</groupId>
-            <artifactId>bob-service-mapper-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.dnastack</groupId>
-            <artifactId>bob-service-mapper-impl</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.dnastack</groupId>
             <artifactId>bob-service-parser-api</artifactId>
             <version>${project.version}</version>
         </dependency>

@@ -81,7 +81,7 @@
         <version.guava>18.0</version.guava>
         <version.log4j>1.2.16</version.log4j>
         <version.lombok>1.14.8</version.lombok>
-        <version.swagger>2.1.0</version.swagger>
+        <version.swagger>1.5.4</version.swagger>
         <version.war.plugin>2.3</version.war.plugin>
         <version.surefire.plugin>2.17</version.surefire.plugin>
         <version.compiler.plugin>2.3.2</version.compiler.plugin>
@@ -131,6 +131,12 @@
                 <artifactId>lombok</artifactId>
                 <version>${version.lombok}</version>
                 <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-jaxrs</artifactId>
+                <version>${version.swagger}</version>
+                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.jboss.arquillian.extension</groupId>

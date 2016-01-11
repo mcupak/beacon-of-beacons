@@ -20,12 +20,12 @@
     <dependencies>
         <dependency>
             <groupId>com.dnastack</groupId>
-            <artifactId>bob-data-api</artifactId>
+            <artifactId>bob-service-mapper-api</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.dnastack</groupId>
-            <artifactId>bob-data-impl</artifactId>
+            <artifactId>bob-service-mapper-impl</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

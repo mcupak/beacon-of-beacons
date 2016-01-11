@@ -17,9 +17,14 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.dnastack</groupId>
-            <artifactId>bob-service-api</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>jaxrs-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
