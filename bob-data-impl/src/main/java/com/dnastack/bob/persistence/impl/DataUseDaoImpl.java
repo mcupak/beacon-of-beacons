@@ -25,6 +25,7 @@ package com.dnastack.bob.persistence.impl;
 
 import com.dnastack.bob.persistence.api.DataUseDao;
 import com.dnastack.bob.persistence.entity.DataUse;
+
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
 

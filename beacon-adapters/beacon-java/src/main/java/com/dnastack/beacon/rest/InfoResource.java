@@ -25,6 +25,7 @@ package com.dnastack.beacon.rest;
 
 import com.dnastack.beacon.entity.Beacon;
 import com.dnastack.beacon.service.BeaconService;
+
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -43,7 +44,7 @@ public class InfoResource {
 
     @Inject
     private BeaconService service;
-    
+
     @GET
     public Beacon show() {
         return service.info();

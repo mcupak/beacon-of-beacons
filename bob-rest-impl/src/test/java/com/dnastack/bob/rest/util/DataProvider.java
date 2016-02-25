@@ -25,19 +25,16 @@ package com.dnastack.bob.rest.util;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import lombok.extern.log4j.Log4j;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
-import lombok.extern.log4j.Log4j;
 
 /**
  * Data holder.

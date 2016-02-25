@@ -25,8 +25,9 @@ package com.dnastack.bob.service.converter.impl;
 
 import com.dnastack.bob.persistence.enumerated.Chromosome;
 import com.dnastack.bob.service.converter.api.ChromosomeConverter;
-import java.io.Serializable;
+
 import javax.inject.Named;
+import java.io.Serializable;
 
 /**
  * Converter of chromosomes to their lowercase string representations.

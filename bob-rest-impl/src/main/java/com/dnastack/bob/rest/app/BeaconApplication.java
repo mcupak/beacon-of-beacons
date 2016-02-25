@@ -23,22 +23,17 @@
  */
 package com.dnastack.bob.rest.app;
 
-import com.dnastack.bob.rest.resource.AlleleResourceImpl;
-import com.dnastack.bob.rest.resource.BeaconResourceImpl;
-import com.dnastack.bob.rest.resource.BeaconResponseResourceImpl;
-import com.dnastack.bob.rest.resource.ChromosomeResourceImpl;
-import com.dnastack.bob.rest.resource.OrganizationResourceImpl;
-import com.dnastack.bob.rest.resource.ReferenceResourceImpl;
-import com.dnastack.bob.rest.resource.RestEndPointResourceImpl;
+import com.dnastack.bob.rest.resource.*;
 import com.dnastack.bob.rest.util.ExceptionHandler;
 import com.dnastack.bob.rest.util.LoggingFilter;
+import org.jboss.resteasy.plugins.interceptors.CorsFilter;
+
+import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Application;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
-import org.jboss.resteasy.plugins.interceptors.CorsFilter;
 
 /**
  * REST application.

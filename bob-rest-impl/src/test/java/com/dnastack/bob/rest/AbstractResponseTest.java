@@ -29,9 +29,10 @@ import com.dnastack.bob.service.dto.ChromosomeDto;
 import com.dnastack.bob.service.dto.QueryDto;
 import com.dnastack.bob.service.dto.ReferenceDto;
 import com.google.common.collect.ImmutableList;
+
+import javax.xml.bind.JAXBException;
 import java.net.MalformedURLException;
 import java.util.List;
-import javax.xml.bind.JAXBException;
 
 import static com.dnastack.bob.rest.util.DataProvider.isQueryForMultipleBeacons;
 

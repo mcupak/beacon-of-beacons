@@ -28,30 +28,27 @@ import com.dnastack.bob.persistence.api.OrganizationDao;
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.persistence.entity.Organization;
 import com.dnastack.bob.service.api.BeaconService;
-import com.dnastack.bob.service.converter.impl.BeaconIdBeaconConverter;
-import com.dnastack.bob.service.converter.impl.EmptyAlleleConverter;
-import com.dnastack.bob.service.converter.impl.EmptyChromosomeConverter;
-import com.dnastack.bob.service.converter.impl.EmptyPositionConverter;
-import com.dnastack.bob.service.converter.impl.EmptyReferenceConverter;
+import com.dnastack.bob.service.converter.impl.*;
 import com.dnastack.bob.service.dto.BeaconDto;
 import com.dnastack.bob.service.fetcher.impl.GetResponseFetcher;
 import com.dnastack.bob.service.mapper.api.BeaconMapper;
 import com.dnastack.bob.service.parser.impl.JsonResponseExistsResponseParser;
 import com.dnastack.bob.service.parser.impl.JsonResponseExternalUrlParser;
-import com.dnastack.bob.service.requester.impl.RefChromPosAlleleRequestConstructor;
 import com.dnastack.bob.service.processor.util.CdiBeanResolver;
 import com.dnastack.bob.service.processor.util.EjbResolver;
+import com.dnastack.bob.service.requester.impl.RefChromPosAlleleRequestConstructor;
 import com.google.common.collect.ImmutableSet;
-import java.util.Collection;
-import java.util.Set;
-import java.util.UUID;
+import lombok.NonNull;
+import lombok.extern.log4j.Log4j;
+
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
-import lombok.NonNull;
-import lombok.extern.log4j.Log4j;
+import java.util.Collection;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * Implementation of a service managing beacons.

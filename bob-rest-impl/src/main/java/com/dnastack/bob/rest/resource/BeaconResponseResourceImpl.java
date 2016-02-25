@@ -28,9 +28,7 @@ import com.dnastack.bob.rest.comparator.BeaconResponseDtoComparator;
 import com.dnastack.bob.service.api.BeaconResponseService;
 import com.dnastack.bob.service.dto.BeaconResponseDto;
 import com.dnastack.bob.service.dto.UserDto;
-import java.util.Collection;
-import java.util.Set;
-import java.util.TreeSet;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -38,6 +36,9 @@ import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
+import java.util.Collection;
+import java.util.Set;
+import java.util.TreeSet;
 
 import static com.dnastack.bob.rest.util.IpExtractor.extractIpAddress;
 import static com.dnastack.bob.rest.util.ParameterParser.parseMultipleParameterValues;

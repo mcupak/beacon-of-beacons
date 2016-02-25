@@ -24,8 +24,9 @@
 package com.dnastack.bob.service.converter.impl;
 
 import com.dnastack.bob.service.converter.api.AlleleConverter;
-import java.io.Serializable;
+
 import javax.inject.Named;
+import java.io.Serializable;
 
 /**
  * Allele converter with indels converted to long strings and wrapped in angled brackets (url encoded).

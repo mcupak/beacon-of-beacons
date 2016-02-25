@@ -26,10 +26,11 @@ package com.dnastack.bob.service.mapper.impl;
 import com.dnastack.bob.persistence.entity.Organization;
 import com.dnastack.bob.service.dto.OrganizationDto;
 import com.dnastack.bob.service.mapper.api.OrganizationMapper;
+
+import javax.enterprise.context.ApplicationScoped;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.enterprise.context.ApplicationScoped;
 
 /**
  * Default implementation of a mapper of organizations to their DTOs.

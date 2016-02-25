@@ -28,13 +28,14 @@ import com.dnastack.bob.persistence.entity.Organization;
 import com.dnastack.bob.service.api.OrganizationService;
 import com.dnastack.bob.service.dto.OrganizationDto;
 import com.dnastack.bob.service.mapper.api.OrganizationMapper;
-import java.util.Collection;
+import lombok.NonNull;
+
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
-import lombok.NonNull;
+import java.util.Collection;
 
 /**
  * Implementation of a service managing organizations.

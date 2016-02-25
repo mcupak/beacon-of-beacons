@@ -26,10 +26,6 @@ package com.dnastack.bob.rest;
 import com.dnastack.bob.rest.util.Parameter;
 import com.dnastack.bob.rest.util.ParameterRule;
 import com.dnastack.bob.rest.util.QueryEntry;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.List;
-import javax.xml.bind.JAXBException;
 import lombok.extern.log4j.Log4j;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
@@ -37,6 +33,11 @@ import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import javax.xml.bind.JAXBException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
 
 import static com.dnastack.bob.rest.util.DataProvider.getQueries;
 import static org.hamcrest.CoreMatchers.equalTo;

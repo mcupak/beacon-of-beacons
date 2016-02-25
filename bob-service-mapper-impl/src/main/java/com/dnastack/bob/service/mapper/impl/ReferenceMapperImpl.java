@@ -26,10 +26,11 @@ package com.dnastack.bob.service.mapper.impl;
 import com.dnastack.bob.persistence.enumerated.Reference;
 import com.dnastack.bob.service.dto.ReferenceDto;
 import com.dnastack.bob.service.mapper.api.ReferenceMapper;
+
+import javax.enterprise.context.ApplicationScoped;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.enterprise.context.ApplicationScoped;
 
 /**
  * Default implementation of a mapper of references to their DTOs.

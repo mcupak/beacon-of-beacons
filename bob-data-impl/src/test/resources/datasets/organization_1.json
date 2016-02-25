@@ -1,10 +1,9 @@
 {
-    "organization":
-            [
-                {
-                    "id": "test",
-                    "name": "test",
-                    "description": "test"
-                }
-            ]
+    "organization": [
+        {
+            "id": "test",
+            "name": "test",
+            "description": "test"
+        }
+    ]
 }

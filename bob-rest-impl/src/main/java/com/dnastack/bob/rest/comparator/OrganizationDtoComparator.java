@@ -24,6 +24,7 @@
 package com.dnastack.bob.rest.comparator;
 
 import com.dnastack.bob.service.dto.OrganizationDto;
+
 import java.util.Comparator;
 
 /**

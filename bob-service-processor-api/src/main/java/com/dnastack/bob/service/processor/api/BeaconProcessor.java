@@ -23,9 +23,10 @@
  */
 package com.dnastack.bob.service.processor.api;
 
-import com.dnastack.bob.persistence.entity.BeaconResponse;
 import com.dnastack.bob.persistence.entity.Beacon;
+import com.dnastack.bob.persistence.entity.BeaconResponse;
 import com.dnastack.bob.persistence.entity.Query;
+
 import java.util.concurrent.Future;
 
 /**
@@ -41,7 +42,6 @@ public interface BeaconProcessor {
      *
      * @param beacon beacon
      * @param query  query
-     *
      * @return response
      */
     Future<BeaconResponse> executeQuery(Beacon beacon, Query query);

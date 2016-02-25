@@ -25,9 +25,10 @@ package com.dnastack.bob.rest.util;
 
 import com.dnastack.bob.service.dto.BeaconDto;
 import com.dnastack.bob.service.dto.QueryDto;
+import lombok.NonNull;
+
 import java.util.HashSet;
 import java.util.Set;
-import lombok.NonNull;
 
 /**
  * Utils for beacon response testing.
@@ -49,7 +50,6 @@ public class BeaconResponseTestUtils {
      *
      * @param b  beacon
      * @param id id
-     *
      * @return true if the ids match, false otherwise
      */
     public static boolean beaconsMatch(@NonNull BeaconDto b, @NonNull String id) {
@@ -61,7 +61,6 @@ public class BeaconResponseTestUtils {
      *
      * @param q  query
      * @param qe queryEntry
-     *
      * @return true if the queries match, false otherwise
      */
     public static boolean queriesMatch(QueryDto q, QueryEntry qe) {
@@ -74,7 +73,6 @@ public class BeaconResponseTestUtils {
      *
      * @param q  query
      * @param qe queryEntry
-     *
      * @return list of indices of nonmatching query attributes
      */
     public static Set<Integer> getNonMachingFields(@NonNull QueryDto q, @NonNull QueryEntry qe) {

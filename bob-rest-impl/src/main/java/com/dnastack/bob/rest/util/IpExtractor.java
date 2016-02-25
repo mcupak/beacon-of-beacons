@@ -41,7 +41,6 @@ public class IpExtractor {
      * Extracts client's IP address from HTTP headers.
      *
      * @param request HTTP request
-     *
      * @return IP address
      */
     public static String extractIpAddress(HttpServletRequest request) {

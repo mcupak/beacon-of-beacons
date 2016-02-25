@@ -23,20 +23,10 @@
  */
 package com.dnastack.bob.persistence.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.Builder;
+
+import javax.persistence.*;
 
 /**
  * User.
@@ -53,12 +43,7 @@ import lombok.experimental.Builder;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@NamedQueries({
-    @NamedQuery(name = "findUserByUserName", query = "SELECT b FROM User b WHERE b.userName=:userName"),
-    @NamedQuery(name = "findUserByUserNameNull", query = "SELECT b FROM User b WHERE b.userName IS NULL"),
-    @NamedQuery(name = "findUserByIp", query = "SELECT b FROM User b WHERE b.ip=:ip"),
-    @NamedQuery(name = "findUserByIpNull", query = "SELECT b FROM User b WHERE b.ip IS NULL")
-})
+@NamedQueries({@NamedQuery(name = "findUserByUserName", query = "SELECT b FROM User b WHERE b.userName=:userName"), @NamedQuery(name = "findUserByUserNameNull", query = "SELECT b FROM User b WHERE b.userName IS NULL"), @NamedQuery(name = "findUserByIp", query = "SELECT b FROM User b WHERE b.ip=:ip"), @NamedQuery(name = "findUserByIpNull", query = "SELECT b FROM User b WHERE b.ip IS NULL")})
 public class User implements BasicEntity<Long> {
 
     private static final long serialVersionUID = 7621625748088389070L;

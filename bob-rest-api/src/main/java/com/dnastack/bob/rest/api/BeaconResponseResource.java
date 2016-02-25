@@ -24,16 +24,12 @@
 package com.dnastack.bob.rest.api;
 
 import com.dnastack.bob.service.dto.BeaconResponseDto;
-import java.util.Collection;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.Collection;
 
 /**
- *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
@@ -48,9 +44,7 @@ public interface BeaconResponseResource {
      * @param pos       position
      * @param allele    allele
      * @param ref       reference genome (optional)
-     *
      * @return list of beacon responses
-     *
      * @throws java.lang.ClassNotFoundException
      */
     @GET
@@ -64,9 +58,7 @@ public interface BeaconResponseResource {
      * @param pos      position
      * @param allele   allele
      * @param ref      reference genome (optional)
-     *
      * @return list of beacon responses
-     *
      * @throws java.lang.ClassNotFoundException
      */
     @GET

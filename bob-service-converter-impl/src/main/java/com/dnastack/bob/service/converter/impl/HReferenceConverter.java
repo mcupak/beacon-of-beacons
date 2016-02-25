@@ -25,8 +25,9 @@ package com.dnastack.bob.service.converter.impl;
 
 import com.dnastack.bob.persistence.enumerated.Reference;
 import com.dnastack.bob.service.converter.api.ReferenceConverter;
-import java.io.Serializable;
+
 import javax.inject.Named;
+import java.io.Serializable;
 
 import static com.dnastack.bob.service.converter.util.ConvertUtils.replaceHgPrefix;
 

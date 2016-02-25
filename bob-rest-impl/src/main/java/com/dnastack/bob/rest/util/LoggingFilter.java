@@ -23,16 +23,17 @@
  */
 package com.dnastack.bob.rest.util;
 
-import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import lombok.extern.log4j.Log4j;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
-import lombok.extern.log4j.Log4j;
+import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static com.dnastack.bob.rest.util.IpExtractor.extractIpAddress;
 

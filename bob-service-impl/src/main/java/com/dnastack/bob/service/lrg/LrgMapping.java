@@ -23,11 +23,12 @@
  */
 package com.dnastack.bob.service.lrg;
 
-import java.util.Objects;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
+
+import java.util.Objects;
 
 /**
  * LRG mapping.

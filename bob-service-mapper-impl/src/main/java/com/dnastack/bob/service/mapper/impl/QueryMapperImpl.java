@@ -26,12 +26,13 @@ package com.dnastack.bob.service.mapper.impl;
 import com.dnastack.bob.persistence.entity.Query;
 import com.dnastack.bob.service.dto.QueryDto;
 import com.dnastack.bob.service.mapper.api.QueryMapper;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 /**
  * Default implementation of a mapper of queries to their DTOs.

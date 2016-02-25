@@ -25,31 +25,30 @@ package com.dnastack.bob.persistence.impl;
 
 import com.dnastack.bob.persistence.api.GenericDao;
 import com.dnastack.bob.persistence.entity.BasicEntity;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.List;
 
 /**
  * Default generic DAO implementation.
  *
- * @author Miroslav Cupak (mirocupak@gmail.com)
- * @version 1.0
  * @param <T> entity type
  * @param <I> ID type
+ * @author Miroslav Cupak (mirocupak@gmail.com)
+ * @version 1.0
  */
 public abstract class AbstractGenericDaoImpl<T extends BasicEntity<I>, I> implements GenericDao<T, I> {
 
     private static final long serialVersionUID = 8059580643827478476L;
-
-    private Class<T> entityClass;
-
     @PersistenceContext
     protected EntityManager em;
+    private Class<T> entityClass;
 
     @PostConstruct
     @SuppressWarnings("unchecked")

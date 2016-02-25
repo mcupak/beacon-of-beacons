@@ -25,9 +25,10 @@ package com.dnastack.bob.service.converter.impl;
 
 import com.dnastack.bob.persistence.enumerated.Reference;
 import com.dnastack.bob.service.converter.api.ReferenceConverter;
+
+import javax.inject.Named;
 import java.io.Serializable;
 import java.util.Map;
-import javax.inject.Named;
 
 import static com.dnastack.bob.service.converter.util.ConvertUtils.REFERENCE_MAPPING;
 

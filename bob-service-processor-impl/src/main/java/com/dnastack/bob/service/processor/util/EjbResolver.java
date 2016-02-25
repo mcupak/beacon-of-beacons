@@ -23,11 +23,11 @@
  */
 package com.dnastack.bob.service.processor.util;
 
-import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import java.io.Serializable;
 
 /**
  * EJB lookup executor.

@@ -26,8 +26,9 @@ package com.dnastack.bob.service.converter.util;
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.persistence.enumerated.Reference;
 import com.google.common.collect.ImmutableMap;
-import java.util.Map;
 import lombok.NonNull;
+
+import java.util.Map;
 
 /**
  * Utility methods for requesters.
@@ -37,13 +38,7 @@ import lombok.NonNull;
  */
 public class ConvertUtils {
 
-    public static final Map<Reference, String> REFERENCE_MAPPING = ImmutableMap.of(
-        Reference.HG38, "GRCh38",
-        Reference.HG19, "GRCh37",
-        Reference.HG18, "NCBI36",
-        Reference.HG17, "NCBI35",
-        Reference.HG16, "NCBI34"
-    );
+    public static final Map<Reference, String> REFERENCE_MAPPING = ImmutableMap.of(Reference.HG38, "GRCh38", Reference.HG19, "GRCh37", Reference.HG18, "NCBI36", Reference.HG17, "NCBI35", Reference.HG16, "NCBI34");
 
     /**
      * Returns a substring of an ID of the given beacon.
@@ -51,7 +46,6 @@ public class ConvertUtils {
      * @param b    beacon
      * @param from start index
      * @param to   end index
-     *
      * @return string
      */
     public static String extractSubstringFromBeaconId(Beacon b, Integer from, Integer to) {
@@ -70,7 +64,6 @@ public class ConvertUtils {
      *
      * @param b  beacon
      * @param to end index
-     *
      * @return string
      */
     public static String extractPrefixFromBeaconId(Beacon b, Integer to) {
@@ -82,7 +75,6 @@ public class ConvertUtils {
      *
      * @param b    beacon
      * @param from start index
-     *
      * @return string
      */
     public static String extractSuffixFromBeaconId(Beacon b, Integer from) {
@@ -94,7 +86,6 @@ public class ConvertUtils {
      * separator.
      *
      * @param b beacon
-     *
      * @return string
      */
     public static String extractIdWithoutOrganizationFromBeaconId(Beacon b) {
@@ -119,7 +110,6 @@ public class ConvertUtils {
      *
      * @param r         reference
      * @param newPrefix prefix
-     *
      * @return string representation of the reference
      */
     public static String replaceHgPrefix(@NonNull Reference r, @NonNull String newPrefix) {

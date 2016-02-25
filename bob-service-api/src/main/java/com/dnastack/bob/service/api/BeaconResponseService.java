@@ -25,6 +25,7 @@ package com.dnastack.bob.service.api;
 
 import com.dnastack.bob.service.dto.BeaconResponseDto;
 import com.dnastack.bob.service.dto.UserDto;
+
 import java.util.Collection;
 
 /**
@@ -44,9 +45,7 @@ public interface BeaconResponseService {
      * @param allele     allele
      * @param ref        reference genome (optional)
      * @param onBehalfOf user
-     *
      * @return list of beacon responses
-     *
      * @throws java.lang.ClassNotFoundException
      */
     BeaconResponseDto queryBeacon(String beaconId, String chrom, Long pos, String allele, String ref, UserDto onBehalfOf) throws ClassNotFoundException;
@@ -60,9 +59,7 @@ public interface BeaconResponseService {
      * @param allele     allele
      * @param ref        reference genome (optional)
      * @param onBehalfOf user
-     *
      * @return collection of beacon responses
-     *
      * @throws java.lang.ClassNotFoundException
      */
     Collection<BeaconResponseDto> queryBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref, UserDto onBehalfOf) throws ClassNotFoundException;
@@ -75,9 +72,7 @@ public interface BeaconResponseService {
      * @param allele     allele
      * @param ref        reference genome (optional)
      * @param onBehalfOf user
-     *
      * @return collection of beacon responses
-     *
      * @throws java.lang.ClassNotFoundException
      */
     Collection<BeaconResponseDto> queryAll(String chrom, Long pos, String allele, String ref, UserDto onBehalfOf) throws ClassNotFoundException;

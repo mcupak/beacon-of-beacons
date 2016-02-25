@@ -29,11 +29,11 @@ import com.dnastack.bob.service.mapper.api.BeaconMapper;
 import com.dnastack.bob.service.mapper.api.BeaconResponseMapper;
 import com.dnastack.bob.service.mapper.api.QueryMapper;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 /**
  * Default implementation of a mapper of beacon responses to their DTOs.

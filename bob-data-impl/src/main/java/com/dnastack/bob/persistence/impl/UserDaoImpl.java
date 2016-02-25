@@ -25,11 +25,12 @@ package com.dnastack.bob.persistence.impl;
 
 import com.dnastack.bob.persistence.api.UserDao;
 import com.dnastack.bob.persistence.entity.User;
-import java.util.List;
+
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
 import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
+import java.util.List;
 
 /**
  * JPA-based implementation of user DAO.

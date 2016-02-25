@@ -25,18 +25,19 @@ package com.dnastack.bob.service.parser.impl;
 
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.service.parser.api.ResponseParser;
-import java.io.Serializable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import org.json.JSONException;
+
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
-import org.json.JSONException;
+import java.io.Serializable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import static com.dnastack.bob.service.parser.util.ParseUtils.REQUEST_TIMEOUT;
 import static com.dnastack.bob.service.parser.util.ParseUtils.parseYesNoFromJson;

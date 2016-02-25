@@ -23,17 +23,13 @@
  */
 package com.dnastack.bob.service.dto;
 
-import java.io.Serializable;
-import java.util.Set;
+import lombok.*;
+import lombok.experimental.Builder;
+
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.Builder;
+import java.io.Serializable;
+import java.util.Set;
 
 /**
  * Beacon DTO.

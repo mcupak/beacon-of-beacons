@@ -26,15 +26,16 @@ package com.dnastack.bob.persistence;
 import com.dnastack.bob.persistence.api.DataUseDao;
 import com.dnastack.bob.persistence.api.GenericDao;
 import com.dnastack.bob.persistence.entity.DataUse;
-import java.util.ArrayList;
-import java.util.List;
-import javax.inject.Inject;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.Cleanup;
 import org.jboss.arquillian.persistence.CleanupStrategy;
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.jboss.arquillian.transaction.api.annotation.Transactional;
 import org.junit.runner.RunWith;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Data use DAO test.

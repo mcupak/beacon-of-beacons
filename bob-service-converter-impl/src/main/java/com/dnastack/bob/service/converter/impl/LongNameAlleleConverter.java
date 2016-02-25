@@ -24,8 +24,9 @@
 package com.dnastack.bob.service.converter.impl;
 
 import com.dnastack.bob.service.converter.api.AlleleConverter;
-import java.io.Serializable;
+
 import javax.inject.Named;
+import java.io.Serializable;
 
 /**
  * Allele converter generating domain-specific allele string with long allele names like DEL and INS.

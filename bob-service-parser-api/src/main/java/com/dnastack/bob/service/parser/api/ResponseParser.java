@@ -24,6 +24,7 @@
 package com.dnastack.bob.service.parser.api;
 
 import com.dnastack.bob.persistence.entity.Beacon;
+
 import java.util.concurrent.Future;
 
 /**
@@ -39,7 +40,6 @@ public interface ResponseParser extends BeaconParser<Boolean> {
      *
      * @param beacon   beacon
      * @param response response
-     *
      * @return true/false for valid values, null otherwise
      */
     @Override

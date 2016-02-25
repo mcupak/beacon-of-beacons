@@ -25,13 +25,6 @@ package com.dnastack.beacon.rest;
 
 import com.dnastack.beacon.entity.BeaconResponse;
 import com.dnastack.beacon.entity.Response;
-import java.net.MalformedURLException;
-import java.net.URL;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.transform.stream.StreamSource;
 import org.eclipse.persistence.jaxb.JAXBContextProperties;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.RunAsClient;
@@ -47,6 +40,14 @@ import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.stream.StreamSource;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -59,8 +60,15 @@ import static org.junit.Assert.assertTrue;
 @RunAsClient
 public class BeaconResourceTest {
 
-    private static final String BEACON = "foo";
     public static final String QUERY_BEACON_TEMPLATE = "query?chrom=%s&pos=%s&allele=%s&ref=%s";
+    private static final String BEACON = "foo";
+    @Rule
+    public TestRule watcher = new TestWatcher() {
+        @Override
+        protected void starting(Description description) {
+            System.out.println("Starting test: " + description.getClassName() + " - " + description.getMethodName() + "()");
+        }
+    };
 
     protected static String getUrl(String beacon, String[] params) {
         String res = null;
@@ -71,18 +79,9 @@ public class BeaconResourceTest {
         return res;
     }
 
-    @Rule
-    public TestRule watcher = new TestWatcher() {
-        @Override
-        protected void starting(Description description) {
-            System.out.println("Starting test: " + description.getClassName() + " - " + description.getMethodName() + "()");
-        }
-    };
-
     @Deployment
     public static WebArchive createDeployment() {
-        WebArchive war = ShrinkWrap.create(MavenImporter.class)
-                .loadPomFromFile("pom.xml").importBuildOutput().as(WebArchive.class);
+        WebArchive war = ShrinkWrap.create(MavenImporter.class).loadPomFromFile("pom.xml").importBuildOutput().as(WebArchive.class);
         System.out.println("WAR name: " + war.getName());
 
         return war;

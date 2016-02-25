@@ -28,8 +28,6 @@ import com.dnastack.bob.persistence.entity.BeaconResponse;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Basic DAO of beacon responses.

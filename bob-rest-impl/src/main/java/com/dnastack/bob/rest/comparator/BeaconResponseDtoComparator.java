@@ -24,11 +24,12 @@
 package com.dnastack.bob.rest.comparator;
 
 import com.dnastack.bob.service.dto.BeaconResponseDto;
-import java.util.Comparator;
+import lombok.NonNull;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import lombok.NonNull;
+import java.util.Comparator;
 
 /**
  * Comparator of BeaconResponseDto objects. Performs comparison of BeaconDto objects in the responses.

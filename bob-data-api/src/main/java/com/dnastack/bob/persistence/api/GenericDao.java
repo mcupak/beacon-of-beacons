@@ -24,16 +24,17 @@
 package com.dnastack.bob.persistence.api;
 
 import com.dnastack.bob.persistence.entity.BasicEntity;
+
 import java.io.Serializable;
 import java.util.List;
 
 /**
  * DAO for generic entities.
  *
- * @author Miroslav Cupak (mirocupak@gmail.com)
- * @version 1.0
  * @param <T> entity type
  * @param <I> ID type
+ * @author Miroslav Cupak (mirocupak@gmail.com)
+ * @version 1.0
  */
 public interface GenericDao<T extends BasicEntity<I>, I> extends Serializable {
 

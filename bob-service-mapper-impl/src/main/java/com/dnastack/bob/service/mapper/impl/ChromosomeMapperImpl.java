@@ -26,10 +26,11 @@ package com.dnastack.bob.service.mapper.impl;
 import com.dnastack.bob.persistence.enumerated.Chromosome;
 import com.dnastack.bob.service.dto.ChromosomeDto;
 import com.dnastack.bob.service.mapper.api.ChromosomeMapper;
+
+import javax.enterprise.context.ApplicationScoped;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.enterprise.context.ApplicationScoped;
 
 /**
  * Default implementation of a mapper of chromosomes to their DTOs.

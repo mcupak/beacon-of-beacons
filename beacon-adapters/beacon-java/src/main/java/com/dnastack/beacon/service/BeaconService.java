@@ -28,7 +28,7 @@ import com.dnastack.beacon.entity.BeaconResponse;
 
 /**
  * Beacon service.
- * 
+ *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
@@ -37,19 +37,18 @@ public interface BeaconService {
     /**
      * Executes a query.
      *
-     * @param chrom  chromosome
-     * @param pos    position
-     * @param allele allele
-     * @param ref    reference genome (optional)
+     * @param chrom   chromosome
+     * @param pos     position
+     * @param allele  allele
+     * @param ref     reference genome (optional)
      * @param dataset dataset
-     *
      * @return list of beacon responses
      */
     BeaconResponse query(String chrom, Long pos, String allele, String ref, String dataset);
-    
+
     /**
      * Obtains beacon information.
-     * 
+     *
      * @return beacon
      */
     Beacon info();

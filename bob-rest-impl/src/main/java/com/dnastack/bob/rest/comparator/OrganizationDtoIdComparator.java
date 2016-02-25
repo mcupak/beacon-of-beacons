@@ -24,9 +24,10 @@
 package com.dnastack.bob.rest.comparator;
 
 import com.dnastack.bob.service.dto.OrganizationDto;
+import lombok.NonNull;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
-import lombok.NonNull;
 
 /**
  * Comparator of OrganizationDto objects. Performs case-insensitive comparison of IDs of OrganizationDto objects.

@@ -1,11 +1,10 @@
 {
-    "dataset":
-            [
-                {
-                    "id": "test",
-                    "name": "test",
-                    "description": "test",
-                    "reference": "HG19"
-                }
-            ]
+    "dataset": [
+        {
+            "id": "test",
+            "name": "test",
+            "description": "test",
+            "reference": "HG19"
+        }
+    ]
 }

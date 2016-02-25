@@ -27,11 +27,12 @@ import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.service.dto.BeaconDto;
 import com.dnastack.bob.service.mapper.api.BeaconMapper;
 import com.dnastack.bob.service.mapper.api.ReferenceMapper;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 /**
  * Default implementation of a mapper of beacons to their DTOs.
@@ -42,10 +43,9 @@ import javax.inject.Inject;
 @ApplicationScoped
 public class BeaconMapperImpl implements BeaconMapper {
 
+    private static final long serialVersionUID = 3074778941535018981L;
     @Inject
     private ReferenceMapper referenceMapper;
-
-    private static final long serialVersionUID = 3074778941535018981L;
 
     @Override
     public BeaconDto mapEntityToDto(Beacon b, boolean showInternal) {

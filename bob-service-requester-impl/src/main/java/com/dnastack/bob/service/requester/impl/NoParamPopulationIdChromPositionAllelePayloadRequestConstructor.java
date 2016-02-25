@@ -24,10 +24,11 @@
 package com.dnastack.bob.service.requester.impl;
 
 import com.dnastack.bob.service.requester.api.RequestConstructor;
+
+import javax.inject.Named;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import javax.inject.Named;
 
 /**
  * Request constructor using base beacon URL with custom payload based on population, chromosome, position

@@ -23,17 +23,17 @@
  */
 package com.dnastack.bob.rest.util;
 
-import java.util.Arrays;
-import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * List wrapper used for serialization into XML.
  *
+ * @param <T> type
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
- * @param <T> type
  */
 @XmlRootElement(name = "list")
 public class JaxbList<T> {

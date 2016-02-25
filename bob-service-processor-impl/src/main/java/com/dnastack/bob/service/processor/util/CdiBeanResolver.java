@@ -23,14 +23,14 @@
  */
 package com.dnastack.bob.service.processor.util;
 
-import java.io.Serializable;
-import java.util.Set;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Inject;
+import java.io.Serializable;
+import java.util.Set;
 
 /**
  * Computes string identifier for a processor and vice-versa.

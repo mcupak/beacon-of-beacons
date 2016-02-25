@@ -25,13 +25,14 @@ package com.dnastack.bob.service.lrg;
 
 import com.dnastack.bob.persistence.enumerated.Chromosome;
 import com.dnastack.bob.persistence.enumerated.Reference;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 
 /**
  * BRCA convertor.
- * 
+ *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */

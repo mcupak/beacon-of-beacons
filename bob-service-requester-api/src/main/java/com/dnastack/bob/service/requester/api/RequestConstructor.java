@@ -43,7 +43,6 @@ public interface RequestConstructor {
      * @param pos      position
      * @param allele   allele
      * @param dataset  dataset
-     *
      * @return URL
      */
     String getUrl(String template, String beacon, String ref, String chrom, Long pos, String allele, String dataset);
@@ -58,7 +57,6 @@ public interface RequestConstructor {
      * @param pos      position
      * @param allele   allele
      * @param dataset  dataset
-     *
      * @return payload key-value pairs
      */
     Map<String, String> getPayload(String template, String beacon, String ref, String chrom, Long pos, String allele, String dataset);

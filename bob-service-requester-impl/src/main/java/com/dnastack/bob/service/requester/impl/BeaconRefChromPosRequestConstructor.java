@@ -24,9 +24,10 @@
 package com.dnastack.bob.service.requester.impl;
 
 import com.dnastack.bob.service.requester.api.RequestConstructor;
+
+import javax.inject.Named;
 import java.io.Serializable;
 import java.util.Map;
-import javax.inject.Named;
 
 /**
  * Request constructor using URL with chrom, pos and beacon ID params. Useful for beacons which don't support filtering

@@ -25,14 +25,11 @@ package com.dnastack.bob.persistence.impl;
 
 import com.dnastack.bob.persistence.api.BeaconDao;
 import com.dnastack.bob.persistence.entity.Beacon;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
-import java.util.concurrent.LinkedBlockingQueue;
+
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
+import java.util.*;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Basic beacon DAO implementation..

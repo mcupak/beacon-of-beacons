@@ -27,33 +27,20 @@ import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.persistence.entity.BeaconResponse;
 import com.dnastack.bob.persistence.entity.Query;
 import com.dnastack.bob.persistence.enumerated.Reference;
-import com.dnastack.bob.service.converter.api.AlleleConverter;
-import com.dnastack.bob.service.converter.api.BeaconConverter;
-import com.dnastack.bob.service.converter.api.ChromosomeConverter;
-import com.dnastack.bob.service.converter.api.PositionConverter;
-import com.dnastack.bob.service.converter.api.ReferenceConverter;
-import com.dnastack.bob.service.converter.impl.BeaconIdBeaconConverter;
-import com.dnastack.bob.service.converter.impl.EmptyAlleleConverter;
-import com.dnastack.bob.service.converter.impl.EmptyChromosomeConverter;
-import com.dnastack.bob.service.converter.impl.EmptyPositionConverter;
-import com.dnastack.bob.service.converter.impl.EmptyReferenceConverter;
+import com.dnastack.bob.service.converter.api.*;
+import com.dnastack.bob.service.converter.impl.*;
 import com.dnastack.bob.service.fetcher.api.ResponseFetcher;
 import com.dnastack.bob.service.parser.api.ExternalUrlParser;
 import com.dnastack.bob.service.parser.api.MetadataParser;
 import com.dnastack.bob.service.parser.api.ResponseParser;
 import com.dnastack.bob.service.processor.api.BeaconProcessor;
-import com.dnastack.bob.service.requester.api.RequestConstructor;
 import com.dnastack.bob.service.processor.util.CdiBeanResolver;
 import com.dnastack.bob.service.processor.util.EjbResolver;
+import com.dnastack.bob.service.requester.api.RequestConstructor;
+import lombok.*;
+import lombok.experimental.Builder;
+import lombok.extern.log4j.Log4j;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
 import javax.ejb.Local;
@@ -62,15 +49,14 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.naming.NamingException;
-
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.Builder;
-import lombok.extern.log4j.Log4j;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import static com.dnastack.bob.service.processor.util.ErrorUtils.getErrorMessage;
 
@@ -95,21 +81,6 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
 
     @Inject
     private EjbResolver ejbResolver;
-
-    @ToString
-    @EqualsAndHashCode
-    @Builder
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @SuppressWarnings("deprecation")
-    private static class FutureBeaconResponse {
-
-        private Future<Boolean> response = null;
-        private Future<String> externalUrl = null;
-        private Future<Map<String, String>> info = null;
-    }
 
     private List<Future<String>> executeQueriesInParallel(Beacon beacon, Query query) {
         List<Future<String>> fs = new ArrayList<>();
@@ -227,5 +198,20 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
         }
 
         return new AsyncResult<>(res);
+    }
+
+    @ToString
+    @EqualsAndHashCode
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @SuppressWarnings("deprecation")
+    private static class FutureBeaconResponse {
+
+        private Future<Boolean> response = null;
+        private Future<String> externalUrl = null;
+        private Future<Map<String, String>> info = null;
     }
 }

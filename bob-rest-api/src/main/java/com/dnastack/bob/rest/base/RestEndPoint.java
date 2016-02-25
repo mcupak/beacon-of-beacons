@@ -23,15 +23,11 @@
  */
 package com.dnastack.bob.rest.base;
 
-import java.io.Serializable;
-import javax.xml.bind.annotation.XmlRootElement;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.Builder;
+
+import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 
 /**
  * Rest endpoint representation.

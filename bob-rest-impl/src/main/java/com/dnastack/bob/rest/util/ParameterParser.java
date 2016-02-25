@@ -23,11 +23,12 @@
  */
 package com.dnastack.bob.rest.util;
 
+import lombok.NonNull;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import lombok.NonNull;
 
 /**
  * Parsing utils for request parameters.
@@ -45,7 +46,6 @@ public class ParameterParser {
      * Checks if there are multiple values given as a parameter.
      *
      * @param param values
-     *
      * @return true/false
      */
     public static boolean parameterHasMultipleValidValue(@NonNull String param) {
@@ -56,7 +56,6 @@ public class ParameterParser {
      * Checks if there is a single value given for the specified parameter.
      *
      * @param param parameter value
-     *
      * @return true/false
      */
     public static boolean parameterHasSingleValidValue(@NonNull String param) {
@@ -67,7 +66,6 @@ public class ParameterParser {
      * Extract multiple values of a single parameter using "," as a delimiter and "[]" as borders.
      *
      * @param param parameter value
-     *
      * @return collection of individual values
      */
     public static Collection<String> parseMultipleParameterValues(@NonNull String param) {

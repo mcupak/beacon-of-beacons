@@ -23,20 +23,21 @@
  */
 package com.dnastack.bob.rest.util;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.List;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.List;
+
 /**
  * JUnit rule.
  *
+ * @param <T>
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
- * @param <T>
  */
 public class ParameterRule<T> implements MethodRule {
 

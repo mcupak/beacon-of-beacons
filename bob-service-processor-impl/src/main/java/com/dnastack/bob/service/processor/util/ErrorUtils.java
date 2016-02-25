@@ -41,7 +41,6 @@ public class ErrorUtils {
      * Constructs a message to log from a throwable.
      *
      * @param t throwable
-     *
      * @return message
      */
     public static String getErrorMessage(Throwable t) {

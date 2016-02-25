@@ -24,15 +24,16 @@
 package com.dnastack.bob.rest;
 
 import com.dnastack.bob.rest.base.RestEndPoint;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.List;
-import javax.xml.bind.JAXBException;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import javax.xml.bind.JAXBException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 

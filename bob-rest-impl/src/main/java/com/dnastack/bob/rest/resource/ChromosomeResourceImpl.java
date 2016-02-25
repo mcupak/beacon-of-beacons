@@ -27,8 +27,7 @@ import com.dnastack.bob.rest.api.ChromosomeResource;
 import com.dnastack.bob.rest.util.JaxbList;
 import com.dnastack.bob.rest.util.MediaTypeResolver;
 import com.dnastack.bob.service.dto.ChromosomeDto;
-import java.util.Arrays;
-import java.util.stream.Collectors;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import javax.ws.rs.GET;
@@ -37,6 +36,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  * Chromosome rest resource.
@@ -55,8 +56,6 @@ public class ChromosomeResourceImpl implements ChromosomeResource {
     @GET
     @Override
     public Response showAll() {
-        return (MediaType.APPLICATION_XML.equals(MediaTypeResolver.getMediaType(headers)))
-            ? Response.ok().entity(new JaxbList<>(ChromosomeDto.values())).build()
-            : Response.ok().entity(Arrays.asList(ChromosomeDto.values()).stream().map(c -> c.toString()).collect(Collectors.toList())).build();
+        return (MediaType.APPLICATION_XML.equals(MediaTypeResolver.getMediaType(headers))) ? Response.ok().entity(new JaxbList<>(ChromosomeDto.values())).build() : Response.ok().entity(Arrays.asList(ChromosomeDto.values()).stream().map(c -> c.toString()).collect(Collectors.toList())).build();
     }
 }

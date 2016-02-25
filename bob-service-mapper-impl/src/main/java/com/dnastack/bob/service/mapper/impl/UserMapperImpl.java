@@ -26,10 +26,11 @@ package com.dnastack.bob.service.mapper.impl;
 import com.dnastack.bob.persistence.entity.User;
 import com.dnastack.bob.service.dto.UserDto;
 import com.dnastack.bob.service.mapper.api.UserMapper;
+
+import javax.enterprise.context.ApplicationScoped;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.enterprise.context.ApplicationScoped;
 
 /**
  * Default implementation of a mapper of users to their DTOs.

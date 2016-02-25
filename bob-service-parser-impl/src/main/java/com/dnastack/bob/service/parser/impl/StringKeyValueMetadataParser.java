@@ -24,7 +24,6 @@
 package com.dnastack.bob.service.parser.impl;
 
 import com.dnastack.bob.persistence.entity.Beacon;
-import com.dnastack.bob.service.parser.api.ExternalUrlParser;
 import com.dnastack.bob.service.parser.api.MetadataParser;
 
 import javax.ejb.AsyncResult;
@@ -41,7 +40,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import static com.dnastack.bob.service.parser.util.ParseUtils.REQUEST_TIMEOUT;
-import static com.dnastack.bob.service.parser.util.ParseUtils.parseStringFromJson;
 import static com.dnastack.bob.service.parser.util.ParseUtils.parseStringMapFromJson;
 
 /**
@@ -56,9 +54,9 @@ import static com.dnastack.bob.service.parser.util.ParseUtils.parseStringMapFrom
 @Local(MetadataParser.class)
 public class StringKeyValueMetadataParser implements MetadataParser, Serializable {
 
-    private static final long serialVersionUID = 8452209038693882540L;
     public static final String METADATA_FIELD = "info";
     public static final String RESPONSE_FIELD = "response";
+    private static final long serialVersionUID = 8452209038693882540L;
 
     @Asynchronous
     @Override

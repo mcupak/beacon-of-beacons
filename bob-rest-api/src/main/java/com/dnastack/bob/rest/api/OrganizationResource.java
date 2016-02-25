@@ -24,23 +24,15 @@
 package com.dnastack.bob.rest.api;
 
 import com.dnastack.bob.service.dto.OrganizationDto;
-import java.util.Collection;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.Collection;
 
 /**
- *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
@@ -59,7 +51,6 @@ public interface OrganizationResource {
      * Shows all the organizations or a specific organization as determined by a param.
      *
      * @param organizationIds organization ID
-     *
      * @return set of organizations
      */
     @GET
@@ -69,7 +60,6 @@ public interface OrganizationResource {
      * Shows organization details.
      *
      * @param organizationId id of the organization
-     *
      * @return organization
      */
     @GET

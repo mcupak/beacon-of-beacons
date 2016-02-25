@@ -1,10 +1,9 @@
 {
-    "dataUse":
-            [
-                {
-                    "id": 5,
-                    "category": "test",
-                    "description": "test"
-                }
-            ]
+    "dataUse": [
+        {
+            "id": 5,
+            "category": "test",
+            "description": "test"
+        }
+    ]
 }

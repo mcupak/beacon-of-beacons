@@ -28,8 +28,8 @@ import java.io.Serializable;
 /**
  * Parent of all the entities.
  *
- * @author mcupak
  * @param <I> ID type
+ * @author mcupak
  */
 public interface BasicEntity<I> extends Serializable {
 

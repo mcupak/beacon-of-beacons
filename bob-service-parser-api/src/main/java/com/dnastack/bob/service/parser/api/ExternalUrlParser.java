@@ -24,6 +24,7 @@
 package com.dnastack.bob.service.parser.api;
 
 import com.dnastack.bob.persistence.entity.Beacon;
+
 import java.util.concurrent.Future;
 
 /**
@@ -39,7 +40,6 @@ public interface ExternalUrlParser extends BeaconParser<String> {
      *
      * @param beacon   beacon
      * @param response response
-     *
      * @return URL
      */
     @Override

@@ -23,23 +23,18 @@
  */
 package com.dnastack.beacon.service;
 
-import com.dnastack.beacon.entity.Beacon;
-import com.dnastack.beacon.entity.BeaconResponse;
-import com.dnastack.beacon.entity.Chromosome;
-import com.dnastack.beacon.entity.Dataset;
+import com.dnastack.beacon.entity.*;
 import com.dnastack.beacon.entity.Error;
-import com.dnastack.beacon.entity.Query;
-import com.dnastack.beacon.entity.Reference;
-import com.dnastack.beacon.entity.Response;
 import com.dnastack.beacon.util.QueryUtils;
-import java.util.ArrayList;
-import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Sample implementation of a beacon service.
- *
+ * <p>
  * TODO: Replace this class with your actual beacon.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)

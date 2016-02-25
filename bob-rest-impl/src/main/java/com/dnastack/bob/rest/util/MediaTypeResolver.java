@@ -23,9 +23,9 @@
  */
 package com.dnastack.bob.rest.util;
 
-import java.util.List;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 /**
  * Utility determining the media type to use in a response.
@@ -43,7 +43,6 @@ public class MediaTypeResolver {
      * Determines whether to use JSON (default) or XML.
      *
      * @param headers headers
-     *
      * @return media type
      */
     public static String getMediaType(HttpHeaders headers) {

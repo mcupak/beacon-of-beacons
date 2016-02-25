@@ -25,8 +25,9 @@ package com.dnastack.bob.service.converter.impl;
 
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.service.converter.api.BeaconConverter;
-import java.io.Serializable;
+
 import javax.inject.Named;
+import java.io.Serializable;
 
 import static com.dnastack.bob.service.converter.util.ConvertUtils.extractIdWithoutOrganizationFromBeaconId;
 

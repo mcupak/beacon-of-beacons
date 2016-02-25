@@ -28,11 +28,6 @@ import com.dnastack.bob.persistence.api.OrganizationDao;
 import com.dnastack.bob.persistence.entity.BasicEntity;
 import com.dnastack.bob.persistence.entity.Organization;
 import com.google.common.collect.ImmutableSet;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import javax.inject.Inject;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.Cleanup;
 import org.jboss.arquillian.persistence.CleanupStrategy;
@@ -40,6 +35,12 @@ import org.jboss.arquillian.persistence.UsingDataSet;
 import org.jboss.arquillian.transaction.api.annotation.Transactional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

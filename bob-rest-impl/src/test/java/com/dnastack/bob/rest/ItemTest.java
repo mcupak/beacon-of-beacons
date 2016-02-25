@@ -26,18 +26,19 @@ package com.dnastack.bob.rest;
 import com.dnastack.bob.service.dto.AlleleDto;
 import com.dnastack.bob.service.dto.ChromosomeDto;
 import com.dnastack.bob.service.dto.ReferenceDto;
+import org.jboss.arquillian.container.test.api.RunAsClient;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.test.api.ArquillianResource;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.xml.bind.JAXBException;
-import org.jboss.arquillian.container.test.api.RunAsClient;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.arquillian.test.api.ArquillianResource;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;

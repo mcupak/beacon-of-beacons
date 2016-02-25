@@ -24,14 +24,15 @@
 package com.dnastack.bob.service.parser.api;
 
 import com.dnastack.bob.persistence.entity.Beacon;
+
 import java.util.concurrent.Future;
 
 /**
  * Generic parser.
  *
+ * @param <T> parsed type
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
- * @param <T> parsed type
  */
 public interface BeaconParser<T> {
 
@@ -40,7 +41,6 @@ public interface BeaconParser<T> {
      *
      * @param beacon   beacon
      * @param response response
-     *
      * @return true/false for valid values, null otherwise
      */
     Future<T> parse(Beacon beacon, Future<String> response);

@@ -1,14 +1,13 @@
 {
-    "beaconResponse":
-            [
-                {
-                    "id": 5,
-                    "response": true,
-                    "frequency": 0.5,
-                    "info": "DP: 10",
-                    "externalUrl": "http://localhost/",
-                    "beacon_id": "test",
-                    "query_id": 5
-                }
-            ]
+    "beaconResponse": [
+        {
+            "id": 5,
+            "response": true,
+            "frequency": 0.5,
+            "info": "DP: 10",
+            "externalUrl": "http://localhost/",
+            "beacon_id": "test",
+            "query_id": 5
+        }
+    ]
 }

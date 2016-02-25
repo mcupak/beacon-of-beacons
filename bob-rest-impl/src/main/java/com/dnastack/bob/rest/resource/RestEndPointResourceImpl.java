@@ -25,16 +25,17 @@ package com.dnastack.bob.rest.resource;
 
 import com.dnastack.bob.rest.api.RestEndPointResource;
 import com.dnastack.bob.rest.base.RestEndPoint;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Information/help rest resource.

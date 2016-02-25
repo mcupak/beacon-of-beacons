@@ -24,23 +24,15 @@
 package com.dnastack.bob.rest.api;
 
 import com.dnastack.bob.service.dto.BeaconDto;
-import java.util.Collection;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.util.Collection;
 
 /**
- *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
@@ -59,7 +51,6 @@ public interface BeaconResource {
      * Shows all the beacons or a specific beacon as determined by a param.
      *
      * @param beaconIds beacon ID
-     *
      * @return set of beacons
      */
     @GET
@@ -69,7 +60,6 @@ public interface BeaconResource {
      * Shows beacon details.
      *
      * @param beaconId id of the beacon
-     *
      * @return beacon
      */
     @GET

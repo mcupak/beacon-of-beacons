@@ -24,9 +24,10 @@
 package com.dnastack.bob.rest.comparator;
 
 import com.dnastack.bob.service.dto.BeaconDto;
+import lombok.NonNull;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
-import lombok.NonNull;
 
 /**
  * Comparator of BeaconDto objects. Performs case-insensitive comparison of IDs of BeaconDto objects.

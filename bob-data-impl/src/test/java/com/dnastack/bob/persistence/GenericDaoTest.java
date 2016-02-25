@@ -25,13 +25,14 @@ package com.dnastack.bob.persistence;
 
 import com.dnastack.bob.persistence.api.GenericDao;
 import com.dnastack.bob.persistence.entity.BasicEntity;
+import org.junit.Test;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Fail.fail;
@@ -40,10 +41,10 @@ import static org.junit.Assert.assertEquals;
 /**
  * Tests for methods in GenericDao.
  *
- * @author Miroslav Cupak (mirocupak@gmail.com)
- * @version 1.0
  * @param <T> entity type
  * @param <I> ID type
+ * @author Miroslav Cupak (mirocupak@gmail.com)
+ * @version 1.0
  */
 public abstract class GenericDaoTest<T extends BasicEntity<I>, I> extends BasicDaoTest {
 
@@ -53,10 +54,6 @@ public abstract class GenericDaoTest<T extends BasicEntity<I>, I> extends BasicD
     private Class<T> entityClass;
 
     private Class<I> idClass;
-
-    private static String getTableName(Class<? extends BasicEntity> entity) {
-        return entity.getSimpleName();
-    }
 
     @SuppressWarnings("unchecked")
     protected GenericDaoTest() {
@@ -87,6 +84,10 @@ public abstract class GenericDaoTest<T extends BasicEntity<I>, I> extends BasicD
         }
     }
 
+    private static String getTableName(Class<? extends BasicEntity> entity) {
+        return entity.getSimpleName();
+    }
+
     public abstract GenericDao<T, I> getDao();
 
     public abstract T getEntityForUpdate(T e);
@@ -113,14 +114,12 @@ public abstract class GenericDaoTest<T extends BasicEntity<I>, I> extends BasicD
     }
 
     protected BasicEntity findOneByAttribute(Class<? extends BasicEntity> entity, String attribute, String value) {
-        @SuppressWarnings("unchecked")
-        List<BasicEntity> res = em.createQuery("SELECT e FROM " + getTableName(entity) + " e WHERE e." + attribute + "=" + value).getResultList();
+        @SuppressWarnings("unchecked") List<BasicEntity> res = em.createQuery("SELECT e FROM " + getTableName(entity) + " e WHERE e." + attribute + "=" + value).getResultList();
         return (res.isEmpty()) ? null : res.get(0);
     }
 
     protected BasicEntity findOne(Class<? extends BasicEntity> entity) {
-        @SuppressWarnings("unchecked")
-        List<BasicEntity> res = em.createQuery(String.format("SELECT e FROM %s e", getTableName(entity))).getResultList();
+        @SuppressWarnings("unchecked") List<BasicEntity> res = em.createQuery(String.format("SELECT e FROM %s e", getTableName(entity))).getResultList();
 
         return (res.isEmpty()) ? null : res.get(0);
     }

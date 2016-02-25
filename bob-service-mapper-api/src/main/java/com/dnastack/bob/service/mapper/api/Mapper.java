@@ -30,10 +30,10 @@ import java.util.Set;
 /**
  * Mapper of entities to their DTOs.
  *
- * @author Miroslav Cupak (mirocupak@gmail.com)
- * @version 1.0
  * @param <E> entity type
  * @param <D> dto type
+ * @author Miroslav Cupak (mirocupak@gmail.com)
+ * @version 1.0
  */
 public interface Mapper<E, D> extends Serializable {
 
@@ -42,7 +42,6 @@ public interface Mapper<E, D> extends Serializable {
      *
      * @param e            entity
      * @param showInternal true if internal fields should be included in the DTO, false otherwise
-     *
      * @return dto
      */
     D mapEntityToDto(E e, boolean showInternal);
@@ -51,7 +50,6 @@ public interface Mapper<E, D> extends Serializable {
      * Maps a DTO to an entity.
      *
      * @param d dto
-     *
      * @return entity
      */
     E mapDtoToEntity(D d);
@@ -60,7 +58,6 @@ public interface Mapper<E, D> extends Serializable {
      * Clones an entity to a new entity.
      *
      * @param e entity
-     *
      * @return entity
      */
     E mapEntityToEntity(E e);
@@ -69,7 +66,6 @@ public interface Mapper<E, D> extends Serializable {
      * Clones a DTO to a new DTO.
      *
      * @param d dto
-     *
      * @return dto
      */
     D mapDtoToDto(D d);
@@ -79,7 +75,6 @@ public interface Mapper<E, D> extends Serializable {
      *
      * @param es           entities
      * @param showInternal true if internal fields should be included in the DTO, false otherwise
-     *
      * @return dtos
      */
     Set<D> mapEntitiesToDtos(Collection<E> es, boolean showInternal);
@@ -88,7 +83,6 @@ public interface Mapper<E, D> extends Serializable {
      * Maps a collection of DTOs to a collection of entities.
      *
      * @param ds dtos
-     *
      * @return entities
      */
     Set<E> mapDtosToEntities(Collection<D> ds);

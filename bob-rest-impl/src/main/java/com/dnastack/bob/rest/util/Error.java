@@ -23,17 +23,13 @@
  */
 package com.dnastack.bob.rest.util;
 
-import java.io.Serializable;
+import lombok.*;
+import lombok.experimental.Builder;
+
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.Builder;
+import java.io.Serializable;
 
 /**
  * Application error.

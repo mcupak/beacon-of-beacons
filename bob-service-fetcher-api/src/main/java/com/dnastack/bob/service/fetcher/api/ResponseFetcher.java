@@ -40,7 +40,6 @@ public interface ResponseFetcher {
      * @param url       query URL
      * @param payload   request data (for POST)
      * @param requester client's IP
-     *
      * @return raw result of the query from the beacon
      */
     Future<String> getQueryResponse(String url, Map<String, String> payload, String requester);

@@ -28,10 +28,7 @@ import com.dnastack.bob.rest.comparator.NameComparator;
 import com.dnastack.bob.rest.comparator.OrganizationDtoComparator;
 import com.dnastack.bob.service.api.OrganizationService;
 import com.dnastack.bob.service.dto.OrganizationDto;
-import java.net.URI;
-import java.util.Collection;
-import java.util.Set;
-import java.util.TreeSet;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -39,6 +36,10 @@ import javax.ws.rs.NotFoundException;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.net.URI;
+import java.util.Collection;
+import java.util.Set;
+import java.util.TreeSet;
 
 import static com.dnastack.bob.rest.util.ParameterParser.parseMultipleParameterValues;
 

@@ -23,10 +23,10 @@
  */
 package com.dnastack.bob.rest.util;
 
-import java.util.HashMap;
-import java.util.Map;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.Response;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Maps DAO exceptions to JAX-RS response codes.
@@ -56,7 +56,6 @@ public class ResponseStatusMapper {
      * the exception, INTERNAL_SERVER_ERROR is returned.
      *
      * @param ex exception
-     *
      * @return response status
      */
     public static Response.Status getStatus(Exception ex) {

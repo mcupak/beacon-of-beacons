@@ -24,6 +24,7 @@
 package com.dnastack.bob.persistence.api;
 
 import com.dnastack.bob.persistence.entity.User;
+
 import java.util.List;
 
 /**

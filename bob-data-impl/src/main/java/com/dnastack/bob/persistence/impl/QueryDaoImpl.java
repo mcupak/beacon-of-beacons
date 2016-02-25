@@ -25,6 +25,7 @@ package com.dnastack.bob.persistence.impl;
 
 import com.dnastack.bob.persistence.api.QueryDao;
 import com.dnastack.bob.persistence.entity.Query;
+
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
 

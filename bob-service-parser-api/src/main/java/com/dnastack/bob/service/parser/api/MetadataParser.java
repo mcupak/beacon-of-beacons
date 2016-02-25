@@ -26,7 +26,6 @@ package com.dnastack.bob.service.parser.api;
 import com.dnastack.bob.persistence.entity.Beacon;
 
 import java.util.Map;
-import java.util.StringJoiner;
 import java.util.concurrent.Future;
 
 /**

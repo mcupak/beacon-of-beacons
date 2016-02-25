@@ -23,12 +23,13 @@
  */
 package com.dnastack.bob.service.lrg;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashMap;
 
 /**
  * Service processing mapping based on lrg-sequence.org.

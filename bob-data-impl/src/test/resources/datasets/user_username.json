@@ -1,10 +1,11 @@
 {
-    "user":
-            [
-                {
-                    "id": 5,
-                    "userName": "test",
-                    "ip": [null]
-                }
+    "user": [
+        {
+            "id": 5,
+            "userName": "test",
+            "ip": [
+                null
             ]
+        }
+    ]
 }

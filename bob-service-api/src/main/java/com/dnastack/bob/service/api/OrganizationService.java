@@ -24,6 +24,7 @@
 package com.dnastack.bob.service.api;
 
 import com.dnastack.bob.service.dto.OrganizationDto;
+
 import java.util.Collection;
 
 /**
@@ -38,7 +39,6 @@ public interface OrganizationService {
      * Retrieves organization details.
      *
      * @param id id of the organization
-     *
      * @return organization
      */
     OrganizationDto find(String id);
@@ -47,7 +47,6 @@ public interface OrganizationService {
      * Retrieves organization details, provided it has visible beacons.
      *
      * @param id id of the organization
-     *
      * @return organization
      */
     OrganizationDto findWithVisibleBeacons(String id);
@@ -56,7 +55,6 @@ public interface OrganizationService {
      * Creates a new organization.
      *
      * @param organization
-     *
      * @return
      */
     OrganizationDto create(OrganizationDto organization);
@@ -66,7 +64,6 @@ public interface OrganizationService {
      *
      * @param id           ID of the organization to update
      * @param organization template
-     *
      * @return
      */
     OrganizationDto update(String id, OrganizationDto organization);
@@ -82,7 +79,6 @@ public interface OrganizationService {
      * Retrieves organizations with specified IDs.
      *
      * @param ids collection of organization ids
-     *
      * @return collection of organizations
      */
     Collection<OrganizationDto> find(Collection<String> ids);
@@ -91,7 +87,6 @@ public interface OrganizationService {
      * Retrieves organizations with specified IDs and visible beacons.
      *
      * @param ids collection of organization ids
-     *
      * @return collection of organizations
      */
     Collection<OrganizationDto> findWithVisibleBeacons(Collection<String> ids);

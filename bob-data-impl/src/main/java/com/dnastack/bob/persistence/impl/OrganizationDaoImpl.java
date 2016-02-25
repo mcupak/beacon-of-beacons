@@ -25,11 +25,12 @@ package com.dnastack.bob.persistence.impl;
 
 import com.dnastack.bob.persistence.api.OrganizationDao;
 import com.dnastack.bob.persistence.entity.Organization;
-import java.util.Collection;
-import java.util.List;
+import lombok.NonNull;
+
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
-import lombok.NonNull;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * JPA-based implementation of organization DAO.
@@ -67,5 +68,5 @@ public class OrganizationDaoImpl extends AbstractGenericDaoImpl<Organization, St
     public List<Organization> findByIds(Collection<String> ids) {
         return getResultList(em.createNamedQuery("findOrganizationsByIds", Organization.class).setParameter("ids", ids));
     }
-    
+
 }

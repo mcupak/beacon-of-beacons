@@ -26,6 +26,7 @@ THE SOFTWARE.
 
 from flask import Flask, jsonify, request
 
+
 class IncompleteQuery(Exception):
     status_code = 400
 
@@ -41,15 +42,15 @@ class IncompleteQuery(Exception):
 
     def to_dict(self):
         rv = dict(self.payload or ())
-        rv["beacon"] =  self.beacon_id
+        rv["beacon"] = self.beacon_id
         rv["query"] = self.query
         rv['error'] = self.ErrorResource
         return rv
 
+
 app = Flask(__name__)
 
-
-#--------------- Information endpont (start) --------------------#
+# --------------- Information endpont (start) --------------------#
 
 # TODO: override with the details of your beacon
 
@@ -63,8 +64,8 @@ DataUseRequirementResource = {
 
 # required field(s): variants
 DataSizeResource = {
-    'variants': 1, # integer
-    'samples': 1 # integer
+    'variants': 1,  # integer
+    'samples': 1  # integer
 }
 
 # required field(s): category
@@ -83,7 +84,7 @@ DataSetResource = {
     'reference': u'reference genome',
     'size': DataSizeResource,  # Dimensions of the data set (required if the beacon reports allele frequencies)
     'data_uses': [
-        DataUseResource # Data use limitations
+        DataUseResource  # Data use limitations
     ]
 }
 
@@ -93,7 +94,7 @@ DataSetResource = {
 QueryResource = {
     'allele': u'allele string',
     'chromosome': u'chromosome Id',
-    'position': 1, # integer
+    'position': 1,  # integer
     'reference': u'genome Id',
     'dataset_id': u'dataset Id'
 }
@@ -118,12 +119,14 @@ beacon = {
     ]
 }
 
-#--------------- Information endpoint (end) ----------------------#
+
+# --------------- Information endpoint (end) ----------------------#
 
 # info function
 @app.route('/beacon-python/info', methods=['GET'])
 def info():
     return jsonify(beacon)
+
 
 # query function
 # TODO: plug in the functionality of your beacon
@@ -136,18 +139,17 @@ def query():
     reference = request.args.get('ref')
     dataset = request.args.get('dataset') if 'dataset' in request.args else beacon['datasets'][0]['id']
 
-    
-#---- TODO: override with the necessary response details  ----#
+    # ---- TODO: override with the necessary response details  ----#
 
-############## AlleleResource for response ###############
+    ############## AlleleResource for response ###############
 
     # required field(s): allele
     AlleleResource = {
         'allele': allele,
-        'frequency': 0.5 # double between 0 & 1
+        'frequency': 0.5  # double between 0 & 1
     }
 
-############# ErrorResource for response #################
+    ############# ErrorResource for response #################
 
     # required field(s): name
     ErrorResource = {
@@ -155,8 +157,8 @@ def query():
         'description': u'error message'
     }
 
-################### Response object #########################
-    
+    ################### Response object #########################
+
     # generate response
     # required field(s): exists
     response = {
@@ -165,31 +167,34 @@ def query():
         'alleles': [
             AlleleResource
         ],
-        'info': u'response information', 
+        'info': u'response information',
     }
 
     query = {
-        'chromosome' : chromosome,
-        'position' : position,
-        'allele' : allele,
-        'reference' : reference,
+        'chromosome': chromosome,
+        'position': position,
+        'allele': allele,
+        'reference': reference,
         'dataset_id': dataset
     }
 
-    if query['chromosome'] is None or query['position'] is None or query['allele'] is None or query['reference'] is None:
+    if query['chromosome'] is None or query['position'] is None or query['allele'] is None or query[
+        'reference'] is None:
         ErrorResource['description'] = 'Required parameters are missing'
         ErrorResource['name'] = 'Incomplete Query'
-        raise IncompleteQuery('IncompleteQuery', status_code=410, ErrorResource=ErrorResource, query=query, beacon_id=beacon["id"])
+        raise IncompleteQuery('IncompleteQuery', status_code=410, ErrorResource=ErrorResource, query=query,
+                              beacon_id=beacon["id"])
 
+    # --------------------------------------------------------------#
 
-#--------------------------------------------------------------#
-    
-    return jsonify({ "beacon" : beacon['id'], "query" : query, "response" : response })
+    return jsonify({"beacon": beacon['id'], "query": query, "response": response})
+
 
 # info function
 @app.route('/beacon-python/', methods=['GET'])
 def welcome():
     return 'WELCOME!!! Beacon of Beacons Project (BoB) provides a unified REST API to publicly available GA4GH Beacons. BoB standardizes the way beacons are accessed and aggregates their results, thus addressing one of the missing parts of the Beacon project itself. BoB was designed with ease of programmatic access in mind. It provides XML, JSON and plaintext responses to accommodate needs of all the clients across all the programming languages. The API to use is determined using the header supplied by the client in its GET request, e.g.: "Accept: application/json".'
+
 
 # required parameters missing
 @app.errorhandler(IncompleteQuery)
@@ -197,10 +202,12 @@ def handle_invalid_usage(error):
     response = jsonify(error.to_dict())
     return response
 
+
 # page not found
 @app.errorhandler(404)
 def not_found(error):
     return 'Page not found (Bad URL)', 404
+
 
 if __name__ == '__main__':
     app.run()

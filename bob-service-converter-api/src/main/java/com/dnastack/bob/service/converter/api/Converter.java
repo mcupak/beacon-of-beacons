@@ -26,10 +26,10 @@ package com.dnastack.bob.service.converter.api;
 /**
  * Generic converter.
  *
- * @author Miroslav Cupak (mirocupak@gmail.com)
- * @version 1.0
  * @param <I> input
  * @param <O> output
+ * @author Miroslav Cupak (mirocupak@gmail.com)
+ * @version 1.0
  */
 public interface Converter<I, O> {
 
@@ -37,7 +37,6 @@ public interface Converter<I, O> {
      * Converts input to output.
      *
      * @param input input
-     *
      * @return output
      */
     O convert(I input);

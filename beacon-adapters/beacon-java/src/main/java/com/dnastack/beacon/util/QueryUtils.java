@@ -26,6 +26,7 @@ package com.dnastack.beacon.util;
 import com.dnastack.beacon.entity.Chromosome;
 import com.dnastack.beacon.entity.Query;
 import com.dnastack.beacon.entity.Reference;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -54,7 +55,6 @@ public class QueryUtils {
      * Generates a canonical chrom ID.
      *
      * @param chrom chromosome
-     *
      * @return normalized chromosome value
      */
     public static Chromosome normalizeChromosome(String chrom) {
@@ -75,7 +75,6 @@ public class QueryUtils {
      * Converts 0-based position to 1-based position.
      *
      * @param pos 0-based position
-     *
      * @return 1-based position
      */
     public static Long normalizePosition(Long pos) {
@@ -89,7 +88,6 @@ public class QueryUtils {
      * Generate a canonical allele string.
      *
      * @param allele denormalized allele
-     *
      * @return normalized allele
      */
     public static String normalizeAllele(String allele) {
@@ -112,7 +110,6 @@ public class QueryUtils {
      * Generate a canonical genome representation (hg*).
      *
      * @param ref denormalized genome
-     *
      * @return normalized genome
      */
     public static Reference normalizeReference(String ref) {
@@ -142,7 +139,6 @@ public class QueryUtils {
      * @param allele  allele
      * @param ref     genome
      * @param dataset dataset
-     *
      * @return normalized query
      */
     public static Query getQuery(String chrom, Long pos, String allele, String ref, String dataset) {

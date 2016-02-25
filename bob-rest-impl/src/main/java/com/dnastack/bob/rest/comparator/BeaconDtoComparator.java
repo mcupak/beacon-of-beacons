@@ -24,6 +24,7 @@
 package com.dnastack.bob.rest.comparator;
 
 import com.dnastack.bob.service.dto.BeaconDto;
+
 import java.util.Comparator;
 
 /**

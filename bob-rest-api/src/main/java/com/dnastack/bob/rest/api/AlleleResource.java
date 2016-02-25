@@ -29,7 +29,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */

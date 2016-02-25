@@ -24,6 +24,7 @@
 package com.dnastack.bob.persistence.api;
 
 import com.dnastack.bob.persistence.entity.Beacon;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -40,7 +41,6 @@ public interface BeaconDao extends GenericDao<Beacon, String> {
      * Retrieves beacons by aggregation flag.
      *
      * @param aggregator true if looking for aggregating beacons, false if looking for regular beacons
-     *
      * @return collection of beacons
      */
     List<Beacon> findByAggregation(boolean aggregator);
@@ -49,7 +49,6 @@ public interface BeaconDao extends GenericDao<Beacon, String> {
      * Retrieves beacons by visibility.
      *
      * @param visible true if looking for visible beacons, false if looking for invisible/anonymous beacons
-     *
      * @return collection of beacons
      */
     List<Beacon> findByVisibility(boolean visible);
@@ -58,7 +57,6 @@ public interface BeaconDao extends GenericDao<Beacon, String> {
      * Retrieves beacons by their IDs.
      *
      * @param ids IDs
-     *
      * @return collection of beacons
      */
     List<Beacon> findByIds(Collection<String> ids);
@@ -68,7 +66,6 @@ public interface BeaconDao extends GenericDao<Beacon, String> {
      *
      * @param ids     IDs
      * @param visible true if looking for visible beacons, false if looking for invisible/anonymous beacons
-     *
      * @return collection of beacons
      */
     List<Beacon> findByIdsAndVisibility(Collection<String> ids, boolean visible);
@@ -78,7 +75,6 @@ public interface BeaconDao extends GenericDao<Beacon, String> {
      *
      * @param id      ID
      * @param visible true if looking for visible beacons, false if looking for invisible/anonymous beacons
-     *
      * @return collection of beacons
      */
     Beacon findByIdAndVisibility(String id, boolean visible);
@@ -88,7 +84,6 @@ public interface BeaconDao extends GenericDao<Beacon, String> {
      *
      * @param parent parent
      * @param child  child
-     *
      * @return true if the child did not have that parent already, false otherwise
      */
     boolean haveRelationship(Beacon child, Beacon parent);
@@ -98,7 +93,6 @@ public interface BeaconDao extends GenericDao<Beacon, String> {
      *
      * @param parent parent
      * @param child  child
-     *
      * @return true if the child did not have that parent already, false otherwise
      */
     boolean addRelationship(Beacon child, Beacon parent);
@@ -108,7 +102,6 @@ public interface BeaconDao extends GenericDao<Beacon, String> {
      *
      * @param parent parent
      * @param child  child
-     *
      * @return true if the child had that parent already, false otherwise
      */
     boolean removeRelationship(Beacon child, Beacon parent);
@@ -121,7 +114,6 @@ public interface BeaconDao extends GenericDao<Beacon, String> {
      * @param includeInvisible   true if invisible beacons should be included in the results
      * @param includeDisabled    true if disabled beacons should be included as well
      * @param includeSelf        true if self should be included in the results
-     *
      * @return set of nodes
      */
     Set<Beacon> findDescendants(Beacon parent, boolean includeAggregators, boolean includeInvisible, boolean includeDisabled, boolean includeSelf);

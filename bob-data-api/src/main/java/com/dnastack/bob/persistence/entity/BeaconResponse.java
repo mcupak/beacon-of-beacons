@@ -29,7 +29,6 @@ import lombok.experimental.Builder;
 import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Representation of a query result provided by a beacon.
@@ -48,9 +47,8 @@ import java.util.stream.Collectors;
 @Entity
 public class BeaconResponse implements BasicEntity<Long> {
 
-    private static final long serialVersionUID = 2318476024983822938L;
     public static final int STRING_MAX_LENGTH = 512;
-
+    private static final long serialVersionUID = 2318476024983822938L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;

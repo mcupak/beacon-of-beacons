@@ -23,21 +23,7 @@
  */
 package com.dnastack.bob.rest;
 
-import com.dnastack.bob.rest.util.ArquillianUtils;
-import com.dnastack.bob.rest.util.BeaconResponseTestUtils;
-import com.dnastack.bob.rest.util.DataProvider;
-import com.dnastack.bob.rest.util.Parameter;
-import com.dnastack.bob.rest.util.ParameterRule;
-import com.dnastack.bob.rest.util.QueryEntry;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.List;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.transform.stream.StreamSource;
+import com.dnastack.bob.rest.util.*;
 import lombok.extern.log4j.Log4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
@@ -59,6 +45,16 @@ import org.junit.rules.ErrorCollector;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.stream.StreamSource;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Base test class to be extended by other tests.
@@ -90,12 +86,7 @@ public abstract class BasicTest {
 
     @Deployment(testable = false)
     public static WebArchive createDeployment() {
-        WebArchive war = ShrinkWrap.create(MavenImporter.class)
-            .loadPomFromFile("pom.xml")
-            .importBuildOutput()
-            .as(WebArchive.class)
-            .addClasses(BasicTest.class, AbstractResponseTest.class, ParameterRule.class, ArquillianUtils.class, Parameter.class, BeaconResponseTestUtils.class, DataProvider.class, QueryEntry.class)
-            .addAsResource("queries.json");
+        WebArchive war = ShrinkWrap.create(MavenImporter.class).loadPomFromFile("pom.xml").importBuildOutput().as(WebArchive.class).addClasses(BasicTest.class, AbstractResponseTest.class, ParameterRule.class, ArquillianUtils.class, Parameter.class, BeaconResponseTestUtils.class, DataProvider.class, QueryEntry.class).addAsResource("queries.json");
         log.info(String.format("WAR name: %s", war.getName()));
 
         return war;

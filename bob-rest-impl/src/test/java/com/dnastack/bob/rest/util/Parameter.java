@@ -30,7 +30,7 @@ import java.lang.annotation.Target;
 
 /**
  * Parameter.
- * 
+ *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */

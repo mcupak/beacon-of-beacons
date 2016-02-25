@@ -57,8 +57,7 @@ var DataSetResource = {
     'reference': 'reference',
     'size': DataSetSizeResource, // Dimensions of the data set (required if the beacon reports allele frequencies)
     'multiple': false,
-    'datasets': [
-    ],
+    'datasets': [],
     'data_use': [
         DataUseResource // Data use limitations
     ]
@@ -153,7 +152,7 @@ function query(req, res, next) {
     };
 
     if (query['chromosome'] == undefined || query['position'] == undefined || query['referenceBases'] == undefined ||
-            query['alternateBases'] == undefined || query['reference'] == undefined) {
+        query['alternateBases'] == undefined || query['reference'] == undefined) {
 
         ErrorResource['name'] = 'Incomplete Query';
         ErrorResource['description'] = 'Required parameters are missing';

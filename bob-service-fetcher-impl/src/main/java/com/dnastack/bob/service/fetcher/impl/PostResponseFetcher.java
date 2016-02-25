@@ -25,13 +25,9 @@ package com.dnastack.bob.service.fetcher.impl;
 
 import com.dnastack.bob.service.fetcher.api.ResponseFetcher;
 import com.dnastack.bob.service.fetcher.util.HttpUtils;
-import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.concurrent.Future;
-import java.util.stream.Collectors;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
 import javax.ejb.Local;
@@ -39,8 +35,13 @@ import javax.ejb.Stateless;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
+import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 /**
  * Fetcher of beacon responses via HTTP POST.

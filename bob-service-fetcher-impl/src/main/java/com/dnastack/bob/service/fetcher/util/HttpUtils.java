@@ -23,13 +23,6 @@
  */
 package com.dnastack.bob.service.fetcher.util;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.List;
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.enterprise.context.Dependent;
-import javax.inject.Named;
 import lombok.extern.log4j.Log4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -42,6 +35,14 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.enterprise.context.Dependent;
+import javax.inject.Named;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 /**
  * Util methods for querying over HTTP.
@@ -113,9 +114,7 @@ public class HttpUtils {
      * @param post      true if we want to create a POST, false for GET
      * @param data      payload (only needed for POST)
      * @param requester client's IP
-     *
      * @return request
-     *
      * @throws UnsupportedEncodingException
      */
     public HttpRequestBase createRequest(String url, boolean post, List<NameValuePair> data, String requester) throws UnsupportedEncodingException {
@@ -129,7 +128,6 @@ public class HttpUtils {
      * Executes GET/POST and obtain the response.
      *
      * @param request request
-     *
      * @return response
      */
     public String executeRequest(HttpRequestBase request) {

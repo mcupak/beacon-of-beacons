@@ -1,42 +1,40 @@
 {
-    "beacon":
-            [
-                {
-                    "id": "parent",
-                    "name": "parent",
-                    "description": "parent",
-                    "visible": true,
-                    "aggregator": true,
-                    "enabled": true,
-                    "url": "http://foo.bar",
-                    "organization_id": "test"
-                },
-                {
-                    "id": "childWithParent",
-                    "name": "childWithParent",
-                    "description": "childWithParent",
-                    "visible": true,
-                    "enabled": true,
-                    "aggregator": false,
-                    "url": "http://foo.bar",
-                    "organization_id": "test"
-                },
-                {
-                    "id": "childWithoutParent",
-                    "name": "childWithoutParent",
-                    "description": "childWithoutParent",
-                    "visible": true,
-                    "enabled": true,
-                    "aggregator": false,
-                    "url": "http://foo.bar",
-                    "organization_id": "test"
-                }
-            ],
-    "beacon_beacon":
-            [
-                {
-                    "parents_id": "parent",
-                    "children_id": "childWithParent"
-                }
-            ]
+    "beacon": [
+        {
+            "id": "parent",
+            "name": "parent",
+            "description": "parent",
+            "visible": true,
+            "aggregator": true,
+            "enabled": true,
+            "url": "http://foo.bar",
+            "organization_id": "test"
+        },
+        {
+            "id": "childWithParent",
+            "name": "childWithParent",
+            "description": "childWithParent",
+            "visible": true,
+            "enabled": true,
+            "aggregator": false,
+            "url": "http://foo.bar",
+            "organization_id": "test"
+        },
+        {
+            "id": "childWithoutParent",
+            "name": "childWithoutParent",
+            "description": "childWithoutParent",
+            "visible": true,
+            "enabled": true,
+            "aggregator": false,
+            "url": "http://foo.bar",
+            "organization_id": "test"
+        }
+    ],
+    "beacon_beacon": [
+        {
+            "parents_id": "parent",
+            "children_id": "childWithParent"
+        }
+    ]
 }
