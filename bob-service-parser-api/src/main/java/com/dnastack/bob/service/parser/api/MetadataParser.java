@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 DNAstack.
+ * Copyright 2014 Miroslav Cupak (mirocupak@gmail.com).
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,26 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.persistence.impl;
+package com.dnastack.bob.service.parser.api;
 
-import com.dnastack.bob.persistence.api.BeaconResponseDao;
-import com.dnastack.bob.persistence.entity.BeaconResponse;
+import com.dnastack.bob.persistence.entity.Beacon;
 
-import javax.enterprise.context.Dependent;
-import javax.inject.Named;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.StringJoiner;
+import java.util.concurrent.Future;
 
 /**
- * Basic DAO of beacon responses.
+ * Beacon metadata parser.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Named
-@Dependent
-public class BeaconResponseDaoImpl extends AbstractGenericDaoImpl<BeaconResponse, Long> implements BeaconResponseDao {
+public interface MetadataParser extends BeaconParser<Map<String, String>> {
 
-    private static final long serialVersionUID = -2612774747789431430L;
+    /**
+     * Asynchronously extracts metadata from the given raw query response.
+     *
+     * @param beacon   beacon
+     * @param response response
+     * @return string key-value pairs
+     */
+    @Override
+    Future<Map<String, String>> parse(Beacon beacon, Future<String> response);
 
 }

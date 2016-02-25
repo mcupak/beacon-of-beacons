@@ -39,11 +39,13 @@ import com.dnastack.bob.service.converter.impl.EmptyPositionConverter;
 import com.dnastack.bob.service.converter.impl.EmptyReferenceConverter;
 import com.dnastack.bob.service.fetcher.api.ResponseFetcher;
 import com.dnastack.bob.service.parser.api.ExternalUrlParser;
+import com.dnastack.bob.service.parser.api.MetadataParser;
 import com.dnastack.bob.service.parser.api.ResponseParser;
 import com.dnastack.bob.service.processor.api.BeaconProcessor;
 import com.dnastack.bob.service.requester.api.RequestConstructor;
 import com.dnastack.bob.service.processor.util.CdiBeanResolver;
 import com.dnastack.bob.service.processor.util.EjbResolver;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +62,7 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.naming.NamingException;
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -105,6 +108,7 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
 
         private Future<Boolean> response = null;
         private Future<String> externalUrl = null;
+        private Future<Map<String, String>> info = null;
     }
 
     private List<Future<String>> executeQueriesInParallel(Beacon beacon, Query query) {
@@ -169,11 +173,9 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
                 try {
                     ResponseParser rp = (ResponseParser) ejbResolver.resolve(b.getResponseParser());
                     ExternalUrlParser eup = (ExternalUrlParser) ejbResolver.resolve(b.getExternalUrlParser());
+                    MetadataParser mp = (MetadataParser) ejbResolver.resolve(b.getMetadataParser());
 
-                    FutureBeaconResponse fbr = FutureBeaconResponse.builder()
-                        .response(rp == null ? null : rp.parse(b, f))
-                        .externalUrl(eup == null ? null : eup.parse(b, f))
-                        .build();
+                    FutureBeaconResponse fbr = FutureBeaconResponse.builder().response(rp == null ? null : rp.parse(b, f)).externalUrl(eup == null ? null : eup.parse(b, f)).info(mp == null ? null : mp.parse(b, f)).build();
                     bs.add(fbr);
                 } catch (Exception ex) {
                     log.error(getErrorMessage(ex));
@@ -190,9 +192,11 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
         for (FutureBeaconResponse fbr : bs) {
             Boolean response = null;
             String url = null;
+            Map<String, String> info = null;
             try {
                 response = fbr.getResponse() == null ? null : fbr.getResponse().get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
                 url = fbr.getExternalUrl() == null ? null : fbr.getExternalUrl().get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
+                info = fbr.getInfo() == null ? null : fbr.getInfo().get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
             } catch (InterruptedException | ExecutionException | TimeoutException ex) {
                 log.error(getErrorMessage(ex));
             }
@@ -200,11 +204,12 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
                 if (response) {
                     res.setResponse(response);
                     res.setExternalUrl(url);
-                    break;
+                    res.setInfo(info);
                 } else {
                     if (res.getResponse() == null) {
                         res.setResponse(response);
                         res.setExternalUrl(url);
+                        res.setInfo(info);
                     }
                 }
             }

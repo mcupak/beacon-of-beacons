@@ -72,7 +72,7 @@ public class BeaconResponseDaoTest extends GenericDaoTest<BeaconResponse, Long> 
 
     @Override
     public BeaconResponse getEntityForUpdate(BeaconResponse e) {
-        e.setInfo("updated");
+        e.setFrequency(1.0);
         return e;
     }
 

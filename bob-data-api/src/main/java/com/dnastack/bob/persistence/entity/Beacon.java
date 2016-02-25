@@ -94,6 +94,7 @@ public class Beacon implements BasicEntity<String> {
 
     private String responseParser;
     private String externalUrlParser;
+    private String metadataParser;
     private String fetcher;
     private String requester;
     private String chromosomeConverter;

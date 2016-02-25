@@ -24,6 +24,8 @@
 package com.dnastack.bob.service.dto;
 
 import java.io.Serializable;
+import java.io.StringReader;
+import java.util.Map;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import lombok.AllArgsConstructor;
@@ -58,7 +60,7 @@ public class BeaconResponseDto implements Serializable {
     private QueryDto query;
     private Boolean response = null;
     private Double frequency = null;
-    private String info = null;
     private String externalUrl = null;
+    private Map<String, String> info = null;
 
 }

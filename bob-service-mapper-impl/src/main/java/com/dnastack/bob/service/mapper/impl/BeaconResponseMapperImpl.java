@@ -28,6 +28,7 @@ import com.dnastack.bob.service.dto.BeaconResponseDto;
 import com.dnastack.bob.service.mapper.api.BeaconMapper;
 import com.dnastack.bob.service.mapper.api.BeaconResponseMapper;
 import com.dnastack.bob.service.mapper.api.QueryMapper;
+
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -53,7 +54,7 @@ public class BeaconResponseMapperImpl implements BeaconResponseMapper {
 
     @Override
     public BeaconResponseDto mapEntityToDto(BeaconResponse br, boolean showInternal) {
-        return (br == null) ? null : BeaconResponseDto.builder().beacon(beaconMapper.mapEntityToDto(br.getBeacon(), showInternal)).query(queryMapper.mapEntityToDto(br.getQuery(), showInternal)).response(br.getResponse()).externalUrl(br.getExternalUrl()).build();
+        return (br == null) ? null : BeaconResponseDto.builder().beacon(beaconMapper.mapEntityToDto(br.getBeacon(), showInternal)).query(queryMapper.mapEntityToDto(br.getQuery(), showInternal)).response(br.getResponse()).externalUrl(br.getExternalUrl()).info(br.getInfo()).build();
     }
 
     @Override

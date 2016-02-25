@@ -23,18 +23,13 @@
  */
 package com.dnastack.bob.persistence.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.Builder;
+
+import javax.persistence.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Representation of a query result provided by a beacon.
@@ -54,6 +49,7 @@ import lombok.experimental.Builder;
 public class BeaconResponse implements BasicEntity<Long> {
 
     private static final long serialVersionUID = 2318476024983822938L;
+    public static final int STRING_MAX_LENGTH = 512;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -64,7 +60,24 @@ public class BeaconResponse implements BasicEntity<Long> {
     private Query query;
     private Boolean response = null;
     private Double frequency = null;
-    private String info = null;
+    @Column(length = STRING_MAX_LENGTH)
     private String externalUrl = null;
+    @ElementCollection(fetch = FetchType.LAZY)
+    @Column(length = STRING_MAX_LENGTH)
+    private Map<String, String> info = null;
 
+    @PrePersist
+    @PreUpdate
+    private void truncate() {
+        if (getExternalUrl() != null && getExternalUrl().length() > STRING_MAX_LENGTH) {
+            setExternalUrl(getExternalUrl() == null ? null : getExternalUrl().substring(0, STRING_MAX_LENGTH - 1));
+        }
+        if (getInfo() != null) {
+            Map<String, String> newInfo = new HashMap<>();
+            for (Map.Entry<String, String> e : getInfo().entrySet()) {
+                newInfo.put(e.getKey(), e.getValue().substring(0, Integer.min(STRING_MAX_LENGTH - 1, e.getValue().length())));
+            }
+            setInfo(newInfo);
+        }
+    }
 }

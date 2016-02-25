@@ -27,6 +27,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 /**
  * Utilities for parsing query responses.
  *
@@ -47,7 +53,6 @@ public class ParseUtils {
      * @param response    response
      * @param trueString  string reporting a positive query result
      * @param falseString string reporting a negative query result
-     *
      * @return true if the response contains trueString, false if the response contains falseString, null otherwise
      */
     public static Boolean parseContainsStringCaseInsensitive(String response, String trueString, String falseString) {
@@ -72,7 +77,6 @@ public class ParseUtils {
      * @param response    response
      * @param trueString  string reporting a positive query result
      * @param falseString string reporting a negative query result
-     *
      * @return true if the response contains trueString, false if the response contains falseString, null otherwise
      */
     public static Boolean parseStartsWithStringCaseInsensitive(String response, String trueString, String falseString) {
@@ -97,7 +101,6 @@ public class ParseUtils {
      * @param response    response
      * @param trueString  string reporting a positive query result
      * @param falseString string reporting a negative query result
-     *
      * @return true if the response contains trueString, false if the response contains falseString, null otherwise
      */
     public static Boolean parseIsStringCaseInsensitive(String response, String trueString, String falseString) {
@@ -119,7 +122,6 @@ public class ParseUtils {
      * Checks whether the response starts with yes or no.
      *
      * @param response response
-     *
      * @return true if the response is yes, false if the response is no, null otherwise
      */
     public static Boolean parseStartsWithYesNoCaseInsensitive(String response) {
@@ -130,7 +132,6 @@ public class ParseUtils {
      * Checks whether the response is yes or no.
      *
      * @param response response
-     *
      * @return true if the response is yes, false if the response is no, null otherwise
      */
     public static Boolean parseIsYesNoCaseInsensitive(String response) {
@@ -141,7 +142,6 @@ public class ParseUtils {
      * Checks whether the response is "ref", i.e. this is the reference allele at the given location.
      *
      * @param response response
-     *
      * @return true if the response is ref, false otherwise, null if there are problems
      */
     public static Boolean parseRef(String response) {
@@ -157,7 +157,6 @@ public class ParseUtils {
      *
      * @param response response in JSON format
      * @param path     list of JSON keys determining the path to the searched value
-     *
      * @return field value if it is true/false, null otherwise
      */
     public static Boolean parseBooleanFromJson(String response, String... path) {
@@ -204,7 +203,6 @@ public class ParseUtils {
      *
      * @param response response in JSON format
      * @param path     list of JSON keys determining the path to the searched value
-     *
      * @return field value if it is true/false, null otherwise
      */
     public static String parseStringFromJson(String response, String... path) {
@@ -247,11 +245,56 @@ public class ParseUtils {
     }
 
     /**
+     * Parses string map out of the given field in a JSON response.
+     *
+     * @param response response in JSON format
+     * @param path     list of JSON keys determining the path to the searched value
+     * @return string key-value map
+     */
+    public static Map<String, String> parseStringMapFromJson(String response, String... path) {
+        if (response == null) {
+            return null;
+        }
+
+        Map<String, String> res = new HashMap<>();
+        try {
+            JSONObject jo = new JSONObject(response);
+            JSONObject current;
+            for (String s : path) {
+                current = jo.optJSONObject(s);
+                if (current == null) {
+                    JSONArray a = jo.optJSONArray(s);
+                    if (a != null) {
+                        current = a.optJSONObject(0);
+                    }
+                }
+                if (current == null) {
+                    try {
+                    } catch (JSONException jex) {
+                        return null;
+                    }
+                }
+                jo = current;
+            }
+            if (jo != null) {
+                Iterator keys = jo.keys();
+                while (keys.hasNext()) {
+                    String key = keys.next().toString();
+                    res.put(key, jo.getString(key));
+                }
+            }
+        } catch (JSONException ex) {
+            return null;
+        }
+
+        return res;
+    }
+
+    /**
      * Parses yes/no value out of the given field in a JSON response, case-insensitive.
      *
      * @param response
      * @param path
-     *
      * @return true if the response is yes, false otherwise
      */
     public static Boolean parseYesNoFromJson(String response, String... path) {

@@ -441,6 +441,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
             BeaconResponse inter = queryBeacon(b, q).get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
             br.setResponse(inter.getResponse());
             br.setExternalUrl(inter.getExternalUrl());
+            br.setInfo(inter.getInfo());
         } catch (InterruptedException | ExecutionException | TimeoutException ex) {
             // ignore, response already null
         }
