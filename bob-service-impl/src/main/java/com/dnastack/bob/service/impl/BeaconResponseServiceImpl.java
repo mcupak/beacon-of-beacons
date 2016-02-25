@@ -46,6 +46,7 @@ import com.dnastack.bob.service.mapper.api.UserMapper;
 import com.dnastack.bob.service.processor.api.BeaconProcessor;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
@@ -69,6 +70,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
 import javax.validation.Validator;
+
 import lombok.NonNull;
 
 import static com.dnastack.bob.service.converter.util.ConvertUtils.REFERENCE_MAPPING;
@@ -178,7 +180,6 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
      * @param pos    position
      * @param allele allele
      * @param ref    genome
-     *
      * @return normalized query
      */
     private Query prepareQuery(String chrom, Long pos, String allele, String ref, User u) {
@@ -287,6 +288,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
             if (b != null) {
                 brs.get(e.getKey()).setResponse(b.getResponse());
                 brs.get(e.getKey()).setExternalUrl(b.getExternalUrl());
+                brs.get(e.getKey()).setInfo(b.getInfo());
             }
         });
 
@@ -317,11 +319,13 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
             Collection<Beacon> cs = children.get(e.getKey());
             boolean notAllResponsesNull = false;
             String externalUrl = null;
+            Map<String, String> info = null;
             for (Beacon c : cs) {
                 BeaconResponse cr = childrenResponses.get(c);
                 if (cr != null && cr.getResponse() != null) {
                     notAllResponsesNull = true;
                     externalUrl = cr.getExternalUrl();
+                    info = cr.getInfo();
                     if (cr.getResponse()) {
                         response.setResponse(true);
                         break;
@@ -333,6 +337,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
             }
             if (e.getKey().getAggregator() == null || !e.getKey().getAggregator()) {
                 response.setExternalUrl(externalUrl);
+                response.setInfo(info);
             }
 
             e.setValue(response);
