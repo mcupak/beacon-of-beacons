@@ -63,7 +63,8 @@ public class Organization implements BasicEntity<String> {
     private String description;
     private String url;
     private String address;
-    private String logoUrl;
+    @Lob
+    private byte[] logo;
     @OneToMany(mappedBy = "organization")
     private Set<Beacon> beacons;
 

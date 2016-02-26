@@ -45,22 +45,22 @@ public class OrganizationMapperImpl implements OrganizationMapper {
 
     @Override
     public Organization mapDtoToEntity(OrganizationDto o) {
-        return (o == null) ? null : Organization.builder().id(o.getId()).name(o.getName()).description(o.getDescription()).url(o.getUrl()).address(o.getAddress()).logoUrl(o.getLogoUrl()).build();
+        return (o == null) ? null : Organization.builder().id(o.getId()).name(o.getName()).description(o.getDescription()).url(o.getUrl()).address(o.getAddress()).logo(o.getLogo()).build();
     }
 
     @Override
     public OrganizationDto mapEntityToDto(Organization o, boolean showInternal) {
-        return (o == null) ? null : OrganizationDto.builder().id(o.getId()).name(o.getName()).address(o.getAddress()).description(o.getDescription()).url(o.getUrl()).logoUrl(o.getLogoUrl()).build();
+        return (o == null) ? null : OrganizationDto.builder().id(o.getId()).name(o.getName()).address(o.getAddress()).description(o.getDescription()).url(o.getUrl()).logo(o.getLogo()).build();
     }
 
     @Override
     public Organization mapEntityToEntity(Organization o) {
-        return (o == null) ? null : Organization.builder().id(o.getId()).name(o.getName()).address(o.getAddress()).description(o.getDescription()).url(o.getUrl()).logoUrl(o.getLogoUrl()).build();
+        return (o == null) ? null : Organization.builder().id(o.getId()).name(o.getName()).address(o.getAddress()).description(o.getDescription()).url(o.getUrl()).logo(o.getLogo()).build();
     }
 
     @Override
     public OrganizationDto mapDtoToDto(OrganizationDto o) {
-        return (o == null) ? null : OrganizationDto.builder().id(o.getId()).name(o.getName()).address(o.getAddress()).description(o.getDescription()).url(o.getUrl()).logoUrl(o.getLogoUrl()).build();
+        return (o == null) ? null : OrganizationDto.builder().id(o.getId()).name(o.getName()).address(o.getAddress()).description(o.getDescription()).url(o.getUrl()).logo(o.getLogo()).build();
     }
 
     @Override
