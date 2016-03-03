@@ -33,7 +33,7 @@ $JBOSS_CLI -c << EOF
 batch
 
 # Add MySQL module
-module add --name=com.mysql --resources=/opt/jboss/wildfly/customization/mysql-connector-java-5.1.31-bin.jar --dependencies=javax.api,javax.transaction.api
+module add --name=com.mysql --resources=/opt/jboss/wildfly/customization/mysql-connector-java.jar --dependencies=javax.api,javax.transaction.api
 
 # Add MySQL driver
 /subsystem=datasources/jdbc-driver=mysql:add(driver-name=mysql,driver-module-name=com.mysql,driver-xa-datasource-class-name=com.mysql.jdbc.jdbc2.optional.MysqlXADataSource)
@@ -51,7 +51,7 @@ run-batch
 EOF
 
 # Deploy the WAR
-cp /opt/jboss/wildfly/customization/bob-rest.war $JBOSS_HOME/$JBOSS_MODE/deployments/bob-rest.war
+cp /opt/jboss/wildfly/customization/bob-rest-impl.war $JBOSS_HOME/$JBOSS_MODE/deployments/bob-rest.war
 
 echo "=> Shutting down WildFly"
 if [ "$JBOSS_MODE" = "standalone" ]; then
