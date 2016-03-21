@@ -1,4 +1,5 @@
 FROM jboss/wildfly:8.2.1.Final
+MAINTAINER Miro Cupak <mirocupak@gmail.com>
 
 # prepare wildfly
 ENV JBOSS_HOME /opt/jboss/wildfly
@@ -7,6 +8,7 @@ ADD data $JBOSS_HOME/customization/
 USER root
 
 # install necessary packages
+RUN yes | yum update
 RUN yes | yum install patch wget
 
 # update nss and java to work around a bug with Diffie-Hellman key agreement of more than 1024 bits
@@ -22,7 +24,11 @@ RUN find $JBOSS_HOME/customization/crt/ -type f -exec keytool -import -trustcace
 
 # customize wildfly
 USER jboss
-RUN patch $JBOSS_HOME/bin/standalone.conf < $JBOSS_HOME/customization/opts.patch
 RUN /opt/jboss/wildfly/bin/add-user.sh admin admin --silent
+ENV JAVA_OPTS "-Xms256m -Xmx1280m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true"
 
-CMD ["/opt/jboss/wildfly/customization/execute.sh"]
+# expose ports
+EXPOSE 8080
+EXPOSE 9990
+
+ENTRYPOINT ["/opt/jboss/wildfly/customization/execute.sh"]

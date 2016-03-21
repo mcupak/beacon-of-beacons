@@ -49,3 +49,12 @@ local.properties
 # IntelliJ
 *.iml
 .idea
+
+# certificate files
+crt
+*.crt
+*.pem
+*.key
+
+# deployments
+docker/httpd/data/client/*

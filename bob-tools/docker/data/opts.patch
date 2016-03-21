@@ -1,4 +1,0 @@
-50c50
-<    JAVA_OPTS="-Xms64m -Xmx512m -XX:MaxPermSize=256m -Djava.net.preferIPv4Stack=true"
----
->    JAVA_OPTS="-Xms256m -Xmx1280m -XX:MaxPermSize=256m -Djava.net.preferIPv4Stack=true"

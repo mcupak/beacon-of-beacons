@@ -1,0 +1,26 @@
+version: '2.0'
+services:
+  mysql:
+    image: mysql:5.7.11
+    environment:
+      MYSQL_DATABASE: bob
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: mysql
+      MYSQL_ROOT_PASSWORD: supersecret
+    expose:
+      - 3306
+  bob:
+    build:
+      context: bob
+    image: mcupak/bob:latest
+    links:
+      - mysql
+  httpd:
+    build:
+      context: httpd
+    image: mcupak/httpd:latest
+    links:
+      - bob
+    ports:
+      - 80:80
+      - 443:443
