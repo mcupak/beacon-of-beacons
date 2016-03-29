@@ -28,7 +28,6 @@
         <module>bob-service-processor-impl</module>
         <module>bob-rest-api</module>
         <module>bob-rest-impl</module>
-        <module>beacon-adapters</module>
     </modules>
 
     <scm>
