@@ -25,7 +25,7 @@ RUN find $JBOSS_HOME/customization/crt/ -type f -exec keytool -import -trustcace
 # customize wildfly
 USER jboss
 RUN /opt/jboss/wildfly/bin/add-user.sh admin admin --silent
-ENV JAVA_OPTS "-Xms256m -Xmx1280m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true"
+ENV JAVA_OPTS "-Xms256m -Xmx2048m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true"
 
 # expose ports
 EXPOSE 8080

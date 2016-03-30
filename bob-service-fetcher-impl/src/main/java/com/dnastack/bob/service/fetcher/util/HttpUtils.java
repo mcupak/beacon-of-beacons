@@ -55,7 +55,7 @@ import java.util.List;
 @Log4j
 public class HttpUtils {
 
-    private static final int REQUEST_TIMEOUT = 15;
+    private static final int REQUEST_TIMEOUT = 30;
     private CloseableHttpClient httpClient;
 
     @PostConstruct
@@ -138,14 +138,14 @@ public class HttpUtils {
             HttpEntity entity = res.getEntity();
             response = (entity == null) ? null : EntityUtils.toString(entity);
         } catch (IOException ex) {
-            log.error(ex.getMessage());
+            log.error(ex.getStackTrace().toString());
         } finally {
             try {
                 if (res != null) {
                     res.close();
                 }
             } catch (IOException ex) {
-                log.error(ex.getMessage());
+                log.error(ex.getStackTrace().toString());
             }
         }
         return response;

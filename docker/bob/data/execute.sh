@@ -42,12 +42,12 @@ module add --name=com.mysql --resources=/opt/jboss/wildfly/customization/mysql-c
 /subsystem=datasources/jdbc-driver=mysql:add(driver-name=mysql,driver-module-name=com.mysql,driver-xa-datasource-class-name=com.mysql.jdbc.jdbc2.optional.MysqlXADataSource)
 
 # Add the datasource
-data-source add --name=bob --driver-name=mysql --jndi-name=java:jboss/datasources/bob --connection-url=jdbc:mysql://mysql:3306/bob?useUnicode=true&amp;characterEncoding=UTF-8 --user-name=mysql --password=mysql --use-ccm=false --jta=true --max-pool-size=25 --blocking-timeout-wait-millis=5000 --enabled=true
+data-source add --name=bob --driver-name=mysql --jndi-name=java:jboss/datasources/bob --connection-url=jdbc:mysql://mysql:3306/bob?useUnicode=true&amp;characterEncoding=UTF-8 --user-name=mysql --password=mysql --use-ccm=false --jta=true --max-pool-size=50 --blocking-timeout-wait-millis=5000 --enabled=true
 
 # Set up thread and bean pools
-/subsystem=ejb3/thread-pool=default:write-attribute(name="max-threads", value="500")
+/subsystem=ejb3/thread-pool=default:write-attribute(name="max-threads", value="1000")
 
-/subsystem=ejb3/strict-max-bean-instance-pool=slsb-strict-max-pool:write-attribute(name="max-pool-size", value="500")
+/subsystem=ejb3/strict-max-bean-instance-pool=slsb-strict-max-pool:write-attribute(name="max-pool-size", value="1000")
 
 # Execute the batch
 run-batch

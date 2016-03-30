@@ -79,7 +79,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
 
     private static final long serialVersionUID = 103L;
 
-    private static final int REQUEST_TIMEOUT = 15;
+    private static final int REQUEST_TIMEOUT = 30;
 
     @Inject
     private BeaconDao beaconDao;
