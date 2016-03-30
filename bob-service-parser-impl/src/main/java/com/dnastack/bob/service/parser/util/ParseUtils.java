@@ -39,7 +39,7 @@ import java.util.Map;
  */
 public class ParseUtils {
 
-    public static final int REQUEST_TIMEOUT = 20;
+    public static final int REQUEST_TIMEOUT = 30;
 
     private ParseUtils() {
         // prevent instantiation

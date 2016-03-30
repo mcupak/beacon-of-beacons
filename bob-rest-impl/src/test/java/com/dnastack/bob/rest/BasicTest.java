@@ -65,7 +65,7 @@ import java.util.List;
 @Log4j
 public abstract class BasicTest {
 
-    private static final int REQUEST_TIMEOUT = 20;
+    private static final int REQUEST_TIMEOUT = 30;
     private static final CloseableHttpClient httpClient;
 
     static {

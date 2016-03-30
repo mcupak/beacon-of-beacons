@@ -74,7 +74,7 @@ import static com.dnastack.bob.service.processor.util.ErrorUtils.getErrorMessage
 public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
 
     private static final long serialVersionUID = 10L;
-    private static final int REQUEST_TIMEOUT = 20;
+    private static final int REQUEST_TIMEOUT = 30;
 
     @Inject
     private CdiBeanResolver cdiResolver;

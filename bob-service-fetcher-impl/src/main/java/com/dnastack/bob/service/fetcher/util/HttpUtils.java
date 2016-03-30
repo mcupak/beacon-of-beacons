@@ -56,7 +56,7 @@ import java.util.List;
 @Log4j
 public class HttpUtils {
 
-    private static final int REQUEST_TIMEOUT = 20;
+    private static final int REQUEST_TIMEOUT = 30;
     private CloseableHttpClient httpClient;
 
     @PostConstruct
