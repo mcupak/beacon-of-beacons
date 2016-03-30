@@ -49,7 +49,7 @@ public class ParameterParser {
      * @return true/false
      */
     public static boolean parameterHasMultipleValidValue(@NonNull String param) {
-        return param.matches("\\[(((\\w)*-(\\w)*)*(\\w)*,)*((\\w)*-(\\w)*)*(\\w)*\\]");
+        return param.matches("\\[((([a-zA-Z_0-9\\.\\+])*-([a-zA-Z_0-9\\.\\+])*)*([a-zA-Z_0-9\\.\\+])*,)*(([a-zA-Z_0-9\\.\\+])*-([a-zA-Z_0-9\\.\\+])*)*([a-zA-Z_0-9\\.\\+])*\\]");
     }
 
     /**
