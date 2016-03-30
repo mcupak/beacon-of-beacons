@@ -45,10 +45,11 @@ public interface BeaconResponseService {
      * @param allele     allele
      * @param ref        reference genome (optional)
      * @param onBehalfOf user
+     * @param ip         ip
      * @return list of beacon responses
      * @throws java.lang.ClassNotFoundException
      */
-    BeaconResponseDto queryBeacon(String beaconId, String chrom, Long pos, String allele, String ref, UserDto onBehalfOf) throws ClassNotFoundException;
+    BeaconResponseDto queryBeacon(String beaconId, String chrom, Long pos, String allele, String ref, UserDto onBehalfOf, String ip) throws ClassNotFoundException;
 
     /**
      * Queries specified beacons.
@@ -59,10 +60,11 @@ public interface BeaconResponseService {
      * @param allele     allele
      * @param ref        reference genome (optional)
      * @param onBehalfOf user
+     * @param ip         ip
      * @return collection of beacon responses
      * @throws java.lang.ClassNotFoundException
      */
-    Collection<BeaconResponseDto> queryBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref, UserDto onBehalfOf) throws ClassNotFoundException;
+    Collection<BeaconResponseDto> queryBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref, UserDto onBehalfOf, String ip) throws ClassNotFoundException;
 
     /**
      * Queries all the beacons.
@@ -72,9 +74,10 @@ public interface BeaconResponseService {
      * @param allele     allele
      * @param ref        reference genome (optional)
      * @param onBehalfOf user
+     * @param ip         ip
      * @return collection of beacon responses
      * @throws java.lang.ClassNotFoundException
      */
-    Collection<BeaconResponseDto> queryAll(String chrom, Long pos, String allele, String ref, UserDto onBehalfOf) throws ClassNotFoundException;
+    Collection<BeaconResponseDto> queryAll(String chrom, Long pos, String allele, String ref, UserDto onBehalfOf, String ip) throws ClassNotFoundException;
 
 }

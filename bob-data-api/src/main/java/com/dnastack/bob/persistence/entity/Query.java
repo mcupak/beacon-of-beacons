@@ -72,9 +72,9 @@ public class Query implements BasicEntity<Long> {
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     private Date submitted;
+    private String ip;
     @ManyToOne
     private Dataset dataSet;
-    @NotNull
     @ManyToOne
     private User user;
 

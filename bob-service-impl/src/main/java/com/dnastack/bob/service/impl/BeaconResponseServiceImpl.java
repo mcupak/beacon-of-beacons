@@ -42,7 +42,6 @@ import com.dnastack.bob.service.mapper.api.UserMapper;
 import com.dnastack.bob.service.processor.api.BeaconProcessor;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import lombok.NonNull;
 
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
@@ -79,7 +78,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
 
     private static final long serialVersionUID = 103L;
 
-    private static final int REQUEST_TIMEOUT = 30;
+    private static final int REQUEST_TIMEOUT = 20;
 
     @Inject
     private BeaconDao beaconDao;
@@ -171,18 +170,22 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
      * @param ref    genome
      * @return normalized query
      */
-    private Query prepareQuery(String chrom, Long pos, String allele, String ref, User u) {
+    private Query prepareQuery(String chrom, Long pos, String allele, String ref, User u, String ip) {
         Chromosome c = normalizeChromosome(chrom);
         Reference r = normalizeReference(ref);
 
-        return Query.builder().chromosome(c == null ? null : c).position(pos).allele(normalizeAllele(allele)).reference(r == null ? null : r).user(u).submitted(new Date()).build();
+        return Query.builder().chromosome(c == null ? null : c).position(pos).allele(normalizeAllele(allele)).reference(r == null ? null : r).user(u).ip(ip).submitted(new Date()).build();
     }
 
     private boolean queryNotNormalizedOrValid(Query q, String ref) {
         return (!(ref == null || ref.isEmpty()) && q.getReference() == null) || !validator.validate(q).isEmpty();
     }
 
-    private User setUpUser(@NonNull UserDto u) {
+    private User setUpUser(UserDto u) {
+        if (u == null) {
+            return null;
+        }
+
         User user = null;
         if (u.getUserName() != null || u.getIp() != null) {
             List<User> found = null;
@@ -200,11 +203,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
         return user;
     }
 
-    private User saveUser(@NonNull User u) {
-        return u.getId() == null ? userDao.save(u) : userDao.update(u);
-    }
-
-    private Query setUpQuery(String chrom, Long pos, String allele, String ref, UserDto u) {
+    private Query setUpQuery(String chrom, Long pos, String allele, String ref, UserDto u, String ip) {
         LrgConvertor l = null;
         String c = chrom;
         Long p = pos;
@@ -225,11 +224,10 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
             }
         }
 
-        return prepareQuery(c, p, a, r, setUpUser(u));
+        return prepareQuery(c, p, a, r, setUpUser(u), ip);
     }
 
     private Query saveQuery(Query q) {
-        saveUser(q.getUser());
         return queryDao.save(q);
     }
 
@@ -386,8 +384,8 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
         return new AsyncResult<>(total);
     }
 
-    private Collection<BeaconResponse> queryMultipleBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref, UserDto u) throws ClassNotFoundException {
-        Query q = setUpQuery(chrom, pos, allele, ref, u);
+    private Collection<BeaconResponse> queryMultipleBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref, UserDto u, String ip) throws ClassNotFoundException {
+        Query q = setUpQuery(chrom, pos, allele, ref, u, ip);
 
         // init to create a response for each beacon even if the query is invalid
         Map<Beacon, BeaconResponse> brs = setUpBeaconResponseMapForIds(beaconIds, q);
@@ -408,8 +406,8 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
     }
 
     @Override
-    public BeaconResponseDto queryBeacon(String beaconId, String chrom, Long pos, String allele, String ref, UserDto onBehalfOf) throws ClassNotFoundException {
-        Query q = setUpQuery(chrom, pos, allele, ref, onBehalfOf);
+    public BeaconResponseDto queryBeacon(String beaconId, String chrom, Long pos, String allele, String ref, UserDto onBehalfOf, String ip) throws ClassNotFoundException {
+        Query q = setUpQuery(chrom, pos, allele, ref, onBehalfOf, ip);
 
         Beacon b = beaconDao.findById(beaconId);
         if (b == null || !b.getVisible()) {
@@ -444,17 +442,17 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
     }
 
     @Override
-    public Collection<BeaconResponseDto> queryBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref, UserDto onBehalfOf) throws ClassNotFoundException {
+    public Collection<BeaconResponseDto> queryBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref, UserDto onBehalfOf, String ip) throws ClassNotFoundException {
         if (beaconIds == null) {
             return new HashSet<>();
         }
 
-        return beaconResponseMapper.mapEntitiesToDtos(queryMultipleBeacons(beaconIds, chrom, pos, allele, ref, onBehalfOf), false);
+        return beaconResponseMapper.mapEntitiesToDtos(queryMultipleBeacons(beaconIds, chrom, pos, allele, ref, onBehalfOf, ip), false);
     }
 
     @Override
-    public Collection<BeaconResponseDto> queryAll(String chrom, Long pos, String allele, String ref, UserDto onBehalfOf) throws ClassNotFoundException {
-        return beaconResponseMapper.mapEntitiesToDtos(queryMultipleBeacons(null, chrom, pos, allele, ref, onBehalfOf), false);
+    public Collection<BeaconResponseDto> queryAll(String chrom, Long pos, String allele, String ref, UserDto onBehalfOf, String ip) throws ClassNotFoundException {
+        return beaconResponseMapper.mapEntitiesToDtos(queryMultipleBeacons(null, chrom, pos, allele, ref, onBehalfOf, ip), false);
     }
 
 }

@@ -42,6 +42,7 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Named;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -55,7 +56,7 @@ import java.util.List;
 @Log4j
 public class HttpUtils {
 
-    private static final int REQUEST_TIMEOUT = 30;
+    private static final int REQUEST_TIMEOUT = 20;
     private CloseableHttpClient httpClient;
 
     @PostConstruct
@@ -138,14 +139,14 @@ public class HttpUtils {
             HttpEntity entity = res.getEntity();
             response = (entity == null) ? null : EntityUtils.toString(entity);
         } catch (IOException ex) {
-            log.error(ex.getStackTrace().toString());
+            log.error(Arrays.asList(ex.getStackTrace()).toString());
         } finally {
             try {
                 if (res != null) {
                     res.close();
                 }
             } catch (IOException ex) {
-                log.error(ex.getStackTrace().toString());
+                log.error(Arrays.asList(ex.getStackTrace()).toString());
             }
         }
         return response;

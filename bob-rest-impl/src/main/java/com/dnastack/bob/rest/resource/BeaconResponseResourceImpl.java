@@ -65,23 +65,26 @@ public class BeaconResponseResourceImpl implements BeaconResponseResource {
 
     private UserDto user;
 
+    private String ip;
+
     @PostConstruct
     private void init() {
-        user = new UserDto(null, extractIpAddress(request));
+        user = null;
+        ip = extractIpAddress(request);
     }
 
     @Override
     public BeaconResponseDto queryBeacon(String beaconId, String chrom, Long pos, String allele, String ref) throws ClassNotFoundException {
-        return beaconResponseService.queryBeacon(beaconId, chrom, pos, allele, ref, user);
+        return beaconResponseService.queryBeacon(beaconId, chrom, pos, allele, ref, user, ip);
     }
 
     @Override
     public Collection<BeaconResponseDto> query(String beaconIds, String chrom, Long pos, String allele, String ref) throws ClassNotFoundException {
         Set<BeaconResponseDto> brs = new TreeSet<>(beaconResponseComparator);
         if (beaconIds == null) {
-            brs.addAll(beaconResponseService.queryAll(chrom, pos, allele, ref, user));
+            brs.addAll(beaconResponseService.queryAll(chrom, pos, allele, ref, user, ip));
         } else {
-            brs.addAll(beaconResponseService.queryBeacons(parseMultipleParameterValues(beaconIds), chrom, pos, allele, ref, user));
+            brs.addAll(beaconResponseService.queryBeacons(parseMultipleParameterValues(beaconIds), chrom, pos, allele, ref, user, ip));
         }
 
         return brs;
