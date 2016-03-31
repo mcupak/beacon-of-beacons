@@ -57,17 +57,4 @@ public class UserDaoImpl extends AbstractGenericDaoImpl<User, Long> implements U
         return us;
     }
 
-    @Override
-    public List<User> findByIp(String ip) {
-        List<User> us;
-        try {
-            TypedQuery<User> q = ip == null ? em.createNamedQuery("findUserByIpNull", User.class) : em.createNamedQuery("findUserByIp", User.class).setParameter("ip", ip);
-            us = q.getResultList();
-        } catch (PersistenceException ex) {
-            us = null;
-        }
-
-        return us;
-    }
-
 }

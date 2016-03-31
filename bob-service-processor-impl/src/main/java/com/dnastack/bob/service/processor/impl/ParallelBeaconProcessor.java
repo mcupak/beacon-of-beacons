@@ -119,7 +119,7 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
             return fs;
         }
 
-        String ip = query.getUser() == null ? null : query.getUser().getIp();
+        String ip = query.getIp();
         if (query.getReference() == null) {
             // query all refs
             for (Reference ref : beacon.getSupportedReferences()) {

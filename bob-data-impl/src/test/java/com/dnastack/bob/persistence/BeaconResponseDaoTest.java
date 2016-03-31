@@ -47,7 +47,7 @@ import java.util.List;
  */
 @RunWith(Arquillian.class)
 @Transactional
-@UsingDataSet({"organization_1.json", "beacon_1.json", "user_ip.json", "query.json", "beacon_response.json"})
+@UsingDataSet({"organization_1.json", "beacon_1.json", "user.json", "query.json", "beacon_response.json"})
 @Cleanup(strategy = CleanupStrategy.USED_TABLES_ONLY) // this is important in order to prevent foreign-key violations
 public class BeaconResponseDaoTest extends GenericDaoTest<BeaconResponse, Long> {
 

@@ -49,7 +49,7 @@ import java.util.List;
  */
 @RunWith(Arquillian.class)
 @Transactional
-@UsingDataSet({"user_ip.json", "query.json"})
+@UsingDataSet({"user.json", "query.json"})
 @Cleanup(strategy = CleanupStrategy.USED_TABLES_ONLY) // this is important in order to prevent foreign-key violations
 public class QueryDaoTest extends GenericDaoTest<Query, Long> {
 

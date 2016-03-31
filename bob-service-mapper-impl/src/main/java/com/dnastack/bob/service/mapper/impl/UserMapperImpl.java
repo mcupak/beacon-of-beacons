@@ -45,22 +45,22 @@ public class UserMapperImpl implements UserMapper {
 
     @Override
     public User mapDtoToEntity(UserDto o) {
-        return (o == null) ? null : User.builder().userName(o.getUserName()).ip(o.getIp()).build();
+        return (o == null) ? null : User.builder().userName(o.getUserName()).build();
     }
 
     @Override
     public UserDto mapEntityToDto(User u, boolean showInternal) {
-        return (u == null) ? null : UserDto.builder().userName(u.getUserName()).ip(u.getIp()).build();
+        return (u == null) ? null : UserDto.builder().userName(u.getUserName()).build();
     }
 
     @Override
     public User mapEntityToEntity(User u) {
-        return (u == null) ? null : User.builder().userName(u.getUserName()).ip(u.getIp()).build();
+        return (u == null) ? null : User.builder().userName(u.getUserName()).build();
     }
 
     @Override
     public UserDto mapDtoToDto(UserDto u) {
-        return (u == null) ? null : UserDto.builder().userName(u.getUserName()).ip(u.getIp()).build();
+        return (u == null) ? null : UserDto.builder().userName(u.getUserName()).build();
     }
 
     @Override

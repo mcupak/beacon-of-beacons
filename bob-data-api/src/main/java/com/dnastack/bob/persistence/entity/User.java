@@ -27,6 +27,7 @@ import lombok.*;
 import lombok.experimental.Builder;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * User.
@@ -43,7 +44,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@NamedQueries({@NamedQuery(name = "findUserByUserName", query = "SELECT b FROM User b WHERE b.userName=:userName"), @NamedQuery(name = "findUserByUserNameNull", query = "SELECT b FROM User b WHERE b.userName IS NULL"), @NamedQuery(name = "findUserByIp", query = "SELECT b FROM User b WHERE b.ip=:ip"), @NamedQuery(name = "findUserByIpNull", query = "SELECT b FROM User b WHERE b.ip IS NULL")})
+@NamedQueries({@NamedQuery(name = "findUserByUserName", query = "SELECT b FROM User b WHERE b.userName=:userName"), @NamedQuery(name = "findUserByUserNameNull", query = "SELECT b FROM User b WHERE b.userName IS NULL")})
 public class User implements BasicEntity<Long> {
 
     private static final long serialVersionUID = 7621625748088389070L;
@@ -51,9 +52,7 @@ public class User implements BasicEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    @Column(unique = true, nullable = true)
+    @NotNull
+    @Column(unique = true, nullable = false)
     private String userName;
-    @Column(unique = true, nullable = true)
-    private String ip;
-
 }

@@ -42,8 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * User DAO test.
@@ -53,7 +52,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  */
 @RunWith(Arquillian.class)
 @Transactional
-@UsingDataSet("user_ip.json")
+@UsingDataSet("user.json")
 @Cleanup(strategy = CleanupStrategy.USED_TABLES_ONLY) // this is important in order to prevent foreign-key violations
 public class UserDaoTest extends GenericDaoTest<User, Long> {
 
@@ -71,19 +70,18 @@ public class UserDaoTest extends GenericDaoTest<User, Long> {
     @Override
     public List<User> getEntitiesForSave() {
         List<User> res = new ArrayList<>();
-        res.add(User.builder().ip("0.0.0.0").userName(null).build());
+        res.add(User.builder().userName("new").build());
 
         return res;
     }
 
     @Override
     public User getEntityForUpdate(User e) {
-        e.setIp("unknown");
+        e.setUserName("unknown");
         return e;
     }
 
     @Test
-    @UsingDataSet("user_username.json")
     public void testFindByUserName() {
         User u = (User) findOne(User.class);
         List<User> found = dao.findByUserName(u.getUserName());
@@ -93,39 +91,11 @@ public class UserDaoTest extends GenericDaoTest<User, Long> {
     }
 
     @Test
-    public void testFindByUserNameNull() {
-        User u = (User) findOne(User.class);
-        List<User> found = dao.findByUserName(u.getUserName());
-
-        assertThat(found.size()).isEqualTo(1);
-        assertThat(found.get(0)).isEqualToComparingOnlyGivenFields(u, "userName");
-    }
-
-    @Test
-    public void testFindByIp() {
-        User u = (User) findOne(User.class);
-        List<User> found = dao.findByIp(u.getIp());
-
-        assertThat(found.size()).isEqualTo(1);
-        assertThat(found.get(0)).isEqualToComparingOnlyGivenFields(u, "ip");
-    }
-
-    @Test
-    @UsingDataSet("user_username.json")
-    public void testFindByIpNull() {
-        User u = (User) findOne(User.class);
-        List<User> found = dao.findByIp(u.getIp());
-
-        assertThat(found.size()).isEqualTo(1);
-        assertThat(found.get(0)).isEqualToComparingOnlyGivenFields(u, "ip");
-    }
-
-    @Test
     @Transactional(TransactionMode.DISABLED)
-    @UsingDataSet("user_username.json")
+    @UsingDataSet("user.json")
     public void testSaveDuplicateUserName() throws NotSupportedException, SystemException {
         User u = (User) findOne(User.class);
-        User u2 = User.builder().ip(u.getIp()).userName(u.getUserName()).build();
+        User u2 = User.builder().userName(u.getUserName()).build();
 
         utx.begin();
         assertThatThrownBy(() -> {
@@ -135,52 +105,24 @@ public class UserDaoTest extends GenericDaoTest<User, Long> {
     }
 
     @Test
+    @UsingDataSet("user.json")
     @Transactional(TransactionMode.DISABLED)
-    public void testSaveDuplicateIp() throws NotSupportedException, SystemException {
-        User u = (User) findOne(User.class);
-        User u2 = User.builder().ip(u.getIp()).userName(u.getUserName()).build();
-
-        utx.begin();
-        assertThatThrownBy(() -> {
-            dao.save(u2);
-            utx.commit();
-        }).isInstanceOf(RollbackException.class);
-    }
-
-    @Test
-    @Transactional(TransactionMode.DISABLED)
-    public void testSaveNullUserNameDifferentIp() throws NotSupportedException, SystemException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
-        User u = (User) findOne(User.class);
-        User u2 = User.builder().ip("192.168.0.1").userName(u.getUserName()).build();
-
-        utx.begin();
-        u2 = getDao().save(u2);
-        utx.commit();
-
-        List<User> findAll = findAll(User.class).parallelStream().map((BasicEntity e) -> (User) e).collect(Collectors.toList());
-        assertThat(findAll.size()).isEqualTo(2);
-        assertThat(findAll).contains(u, u2);
-    }
-
-    @Test
-    @UsingDataSet("user_username.json")
-    @Transactional(TransactionMode.DISABLED)
-    public void testSaveNullIpDifferentUserName() throws NotSupportedException, SystemException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
-        User u = (User) findOne(User.class);
-        User u2 = User.builder().ip(u.getIp()).userName("different").build();
-
-        utx.begin();
-        u2 = getDao().save(u2);
-        utx.commit();
-
-        List<User> findAll = findAll(User.class).parallelStream().map((BasicEntity e) -> (User) e).collect(Collectors.toList());
-        assertThat(findAll.size()).isEqualTo(2);
-        assertThat(findAll).contains(u, u2);
-    }
-
     @Override
     public void testSave() {
-        // testing saves separately
+        User u = (User) findOne(User.class);
+        User u2 = User.builder().userName("different").build();
+
+        try {
+            utx.begin();
+            u2 = getDao().save(u2);
+            utx.commit();
+        } catch (NotSupportedException | SystemException | HeuristicMixedException | RollbackException | HeuristicRollbackException e) {
+            fail("Could not handle transaction");
+        }
+
+        List<User> findAll = findAll(User.class).parallelStream().map((BasicEntity e) -> (User) e).collect(Collectors.toList());
+        assertThat(findAll.size()).isEqualTo(2);
+        assertThat(findAll).contains(u, u2);
     }
 
 }

@@ -47,7 +47,8 @@ import java.util.Map;
 @Entity
 public class BeaconResponse implements BasicEntity<Long> {
 
-    public static final int STRING_MAX_LENGTH = 512;
+    public static final int STRING_MAX_LENGTH = 511;
+    public static final int STRING_DEFAULT_LENGTH = 255;
     private static final long serialVersionUID = 2318476024983822938L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -71,11 +72,15 @@ public class BeaconResponse implements BasicEntity<Long> {
             setExternalUrl(getExternalUrl() == null ? null : getExternalUrl().substring(0, STRING_MAX_LENGTH - 1));
         }
         if (getInfo() != null) {
-            Map<String, String> newInfo = new HashMap<>();
-            for (Map.Entry<String, String> e : getInfo().entrySet()) {
-                newInfo.put(e.getKey(), e.getValue().substring(0, Integer.min(STRING_MAX_LENGTH - 1, e.getValue().length())));
+            Map<String, String> tmp = new HashMap<>(getInfo());
+            for (Map.Entry<String, String> e : tmp.entrySet()) {
+                String key = e.getKey();
+                if (e.getKey().length() > STRING_DEFAULT_LENGTH) {
+                    getInfo().remove(key);
+                    key = key.substring(0, STRING_DEFAULT_LENGTH);
+                }
+                getInfo().put(key, e.getValue().substring(0, Integer.min(STRING_MAX_LENGTH - 1, e.getValue().length())));
             }
-            setInfo(newInfo);
         }
     }
 }

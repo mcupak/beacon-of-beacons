@@ -36,6 +36,4 @@ import java.util.List;
 public interface UserDao extends GenericDao<User, Long> {
 
     List<User> findByUserName(String userName);
-
-    List<User> findByIp(String ip);
 }

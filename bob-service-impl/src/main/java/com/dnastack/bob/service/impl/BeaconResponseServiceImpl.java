@@ -187,13 +187,8 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
         }
 
         User user = null;
-        if (u.getUserName() != null || u.getIp() != null) {
-            List<User> found = null;
-            if (u.getUserName() != null) {
-                found = userDao.findByUserName(u.getUserName());
-            } else if (u.getIp() != null) {
-                found = userDao.findByIp(u.getIp());
-            }
+        if (u.getUserName() != null) {
+            List<User> found = userDao.findByUserName(u.getUserName());
             user = found == null || found.isEmpty() ? null : found.get(0);
         }
         if (user == null) {
