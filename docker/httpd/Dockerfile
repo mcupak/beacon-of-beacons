@@ -4,9 +4,9 @@ MAINTAINER Miro Cupak <mirocupak@gmail.com>
 # set up env vars
 ENV CONFIGURE_SSL false
 ENV CONFIGURE_CLIENT true
-ENV CONFIGURE_BEACONIZER false
+ENV CONFIGURE_BEACONIZER true
 ENV SERVER_NAME localhost
-ENV BECONIZER_URL https://beacon-network.org/beaconizer
+ENV BEACONIZER_URL http://localhost:10080
 
 ENV HTTPD_HOME /usr/local/apache2
 ENV HTTPD_CONF $HTTPD_HOME/conf/httpd.conf
@@ -29,9 +29,9 @@ RUN sed -i "s/^#LoadModule proxy_module/LoadModule proxy_module/" $HTTPD_CONF
 RUN sed -i "s/^#LoadModule proxy_http_module/LoadModule proxy_http_module/" $HTTPD_CONF
 RUN if [ "$CONFIGURE_CLIENT" = true ] ; then cp -r client $HTTPD_CLIENT; fi
 RUN cat base.conf >> $HTTPD_CONF
-RUN if [ "$CONFIGURE_SSL" = true ] ; then sed -i "s/^#LoadModule ssl_module/LoadModule ssl_module/" $HTTPD_CONF; sed -i "s/^#LoadModule socache_shmcb_module/LoadModule socache_shmcb_module/" $HTTPD_CONF; cat ssl.conf >> $HTTPD_CONF; sed -i "s/^# RewriteRule/RewriteRule/g" $HTTPD_CONF; cp crt/*.crt $HTTPD_SSL/crt.crt; cp crt/*.key $HTTPD_SSL/key.key; cp crt/*.pem $HTTPD_SSL/chain.pem; fi
+RUN if [ "$CONFIGURE_SSL" = true ] ; then sed -i "s/^#Listen 12.34.56.78:80/Listen 443/" $HTTPD_CONF; sed -i "s/^#LoadModule ssl_module/LoadModule ssl_module/" $HTTPD_CONF; sed -i "s/^#LoadModule socache_shmcb_module/LoadModule socache_shmcb_module/" $HTTPD_CONF; cat ssl.conf >> $HTTPD_CONF; sed -i "s/^# RewriteRule/RewriteRule/g" $HTTPD_CONF; cp crt/*.crt $HTTPD_SSL/crt.crt; cp crt/*.key $HTTPD_SSL/key.key; cp crt/*.pem $HTTPD_SSL/chain.pem; fi
 RUN sed -i "s/SERVER_NAME/$SERVER_NAME/g" $HTTPD_CONF
-RUN if [ "$CONFIGURE_BEACONIZER" = true ] ; then sed -i "s/^# ProxyPass \/beaconizer/ProxyPass \/beaconizer/g" $HTTPD_CONF; sed -i "s/^# ProxyPassReverse \/beaconizer/ProxyPassReverse \/beaconizer/g" $HTTPD_CONF; sed -i "s/BEACONIZER_URL/$BEACONIZER_URL/g" $HTTPD_CONF; fi
+RUN if [ "$CONFIGURE_BEACONIZER" = true ] ; then sed -i "s/^# ProxyPass \/beaconizer/ProxyPass \/beaconizer/g" $HTTPD_CONF; sed -i "s/^# ProxyPassReverse \/beaconizer/ProxyPassReverse \/beaconizer/g" $HTTPD_CONF; sed -i "s BEACONIZER_URL $BEACONIZER_URL g" $HTTPD_CONF; fi
 WORKDIR $HTTPD_HOME
 
 # expose ports
