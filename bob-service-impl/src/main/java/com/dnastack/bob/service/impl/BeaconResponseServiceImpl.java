@@ -63,6 +63,7 @@ import java.util.regex.Pattern;
 
 import static com.dnastack.bob.service.converter.util.ConvertUtils.REFERENCE_MAPPING;
 
+
 /**
  * Implementation of a service for managing beacon responses.
  *

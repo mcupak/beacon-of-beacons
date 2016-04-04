@@ -23,6 +23,7 @@
             <groupId>com.dnastack</groupId>
             <artifactId>bob-service-requester-api</artifactId>
             <version>${project.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>javax</groupId>

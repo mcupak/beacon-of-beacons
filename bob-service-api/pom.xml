@@ -16,6 +16,7 @@
             <groupId>com.dnastack</groupId>
             <artifactId>bob-service-mapper-api</artifactId>
             <version>${project.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -25,6 +26,7 @@
         <dependency>
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>org.eclipse.persistence.moxy</artifactId>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 

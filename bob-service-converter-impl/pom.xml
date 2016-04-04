@@ -23,16 +23,24 @@
             <groupId>com.dnastack</groupId>
             <artifactId>bob-data-api</artifactId>
             <version>${project.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.dnastack</groupId>
             <artifactId>bob-data-impl</artifactId>
             <version>${project.version}</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>com.dnastack</groupId>
             <artifactId>bob-service-converter-api</artifactId>
             <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>javax</groupId>

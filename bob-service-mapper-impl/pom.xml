@@ -23,11 +23,13 @@
             <groupId>com.dnastack</groupId>
             <artifactId>bob-data-api</artifactId>
             <version>${project.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.dnastack</groupId>
             <artifactId>bob-service-mapper-api</artifactId>
             <version>${project.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>javax</groupId>

@@ -32,6 +32,7 @@ import java.util.Map;
 
 import static com.dnastack.bob.service.converter.util.ConvertUtils.REFERENCE_MAPPING;
 
+
 /**
  * Converter of references to their non-HG string representations ((GRCh*, NCBI*).
  *

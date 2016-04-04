@@ -23,56 +23,67 @@
             <groupId>com.dnastack</groupId>
             <artifactId>bob-data-api</artifactId>
             <version>${project.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.dnastack</groupId>
             <artifactId>bob-data-impl</artifactId>
             <version>${project.version}</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>com.dnastack</groupId>
             <artifactId>bob-service-converter-api</artifactId>
             <version>${project.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.dnastack</groupId>
             <artifactId>bob-service-converter-impl</artifactId>
             <version>${project.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.dnastack</groupId>
             <artifactId>bob-service-fetcher-api</artifactId>
             <version>${project.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.dnastack</groupId>
             <artifactId>bob-service-fetcher-impl</artifactId>
             <version>${project.version}</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>com.dnastack</groupId>
             <artifactId>bob-service-parser-api</artifactId>
             <version>${project.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.dnastack</groupId>
             <artifactId>bob-service-parser-impl</artifactId>
             <version>${project.version}</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>com.dnastack</groupId>
             <artifactId>bob-service-requester-api</artifactId>
             <version>${project.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.dnastack</groupId>
             <artifactId>bob-service-requester-impl</artifactId>
             <version>${project.version}</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>com.dnastack</groupId>
             <artifactId>bob-service-processor-api</artifactId>
             <version>${project.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>javax</groupId>
