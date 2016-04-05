@@ -36,20 +36,12 @@ import java.util.Collection;
 public interface BeaconService {
 
     /**
-     * Retrieves beacon details.
+     * Retrieves a visible beacon.
      *
      * @param id id of the beacon
      * @return beacon
      */
     BeaconDto find(String id);
-
-    /**
-     * Retrieves beacon details, if visible.
-     *
-     * @param id id of the beacon
-     * @return beacon
-     */
-    BeaconDto findVisible(String id);
 
     /**
      * Creates a new beacon.
@@ -76,7 +68,7 @@ public interface BeaconService {
     void delete(String id);
 
     /**
-     * Retrieves beacons with specified IDs.
+     * Retrieves visible beacons with specified IDs.
      *
      * @param ids collection of beacon ids
      * @return collection of beacons
@@ -84,25 +76,10 @@ public interface BeaconService {
     Collection<BeaconDto> find(Collection<String> ids);
 
     /**
-     * Retrieves visible beacons with specified IDs.
-     *
-     * @param ids collection of beacon ids
-     * @return collection of beacons
-     */
-    Collection<BeaconDto> findVisible(Collection<String> ids);
-
-    /**
-     * Retrieves all the beacons.
+     * Retrieves all the visible beacons.
      *
      * @return collection of beacons
      */
-    Collection<BeaconDto> findAll();
-
-    /**
-     * Retrieves visible beacons.
-     *
-     * @return collection of beacons
-     */
-    Collection<BeaconDto> findVisible();
+    Collection<BeaconDto> find();
 
 }

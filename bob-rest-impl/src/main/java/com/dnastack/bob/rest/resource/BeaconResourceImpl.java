@@ -63,7 +63,7 @@ public class BeaconResourceImpl implements BeaconResource {
 
     @Override
     public BeaconDto showBeacon(String beaconId) {
-        BeaconDto b = beaconService.findVisible(beaconId);
+        BeaconDto b = beaconService.find(beaconId);
         if (b == null) {
             throw new NotFoundException("Cannot find beacon with ID: " + beaconId);
         }
@@ -74,9 +74,9 @@ public class BeaconResourceImpl implements BeaconResource {
     public Collection<BeaconDto> show(String beaconIds) {
         Set<BeaconDto> bs = new TreeSet<>(beaconComparator);
         if (beaconIds == null) {
-            bs.addAll(beaconService.findVisible());
+            bs.addAll(beaconService.find());
         } else {
-            bs.addAll(beaconService.findVisible(parseMultipleParameterValues(beaconIds)));
+            bs.addAll(beaconService.find(parseMultipleParameterValues(beaconIds)));
         }
 
         return bs;

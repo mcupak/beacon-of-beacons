@@ -31,6 +31,7 @@ import com.dnastack.bob.service.mapper.api.ReferenceMapper;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -49,6 +50,16 @@ public class BeaconMapperImpl implements BeaconMapper {
 
     @Override
     public BeaconDto mapEntityToDto(Beacon b, boolean showInternal) {
+        return mapEntityToDto(b, null, showInternal);
+    }
+
+    @Override
+    public Set<BeaconDto> mapEntitiesToDtos(Collection<Beacon> bs, boolean showInternal) {
+        return (bs == null) ? null : bs.parallelStream().map((Beacon br) -> mapEntityToDto(br, null, showInternal)).collect(Collectors.toSet());
+    }
+
+    @Override
+    public BeaconDto mapEntityToDto(Beacon b, Set<Beacon> descendants, boolean showInternal) {
         if (b == null) {
             return null;
         }
@@ -57,6 +68,10 @@ public class BeaconMapperImpl implements BeaconMapper {
 
         if (showInternal) {
             builder.email(b.getEmail()).homePage(b.getHomePage()).url(b.getUrl());
+        }
+
+        if (b.getAggregator() != null && b.getAggregator() == true) {
+            builder.aggregatedBeacons(mapEntitiesToDtos(descendants, showInternal));
         }
 
         return builder.build();
@@ -68,8 +83,8 @@ public class BeaconMapperImpl implements BeaconMapper {
     }
 
     @Override
-    public Set<BeaconDto> mapEntitiesToDtos(Collection<Beacon> bs, boolean showInternal) {
-        return (bs == null) ? null : bs.parallelStream().map((Beacon br) -> mapEntityToDto(br, showInternal)).collect(Collectors.toSet());
+    public Set<BeaconDto> mapEntitiesToDtos(Map<Beacon, Set<Beacon>> beaconsWithDescendants, boolean showInternal) {
+        return (beaconsWithDescendants == null) ? null : beaconsWithDescendants.entrySet().parallelStream().map((Map.Entry<Beacon, Set<Beacon>> e) -> mapEntityToDto(e.getKey(), e.getValue(), showInternal)).collect(Collectors.toSet());
     }
 
     @Override
@@ -84,7 +99,7 @@ public class BeaconMapperImpl implements BeaconMapper {
 
     @Override
     public BeaconDto mapDtoToDto(BeaconDto b) {
-        return b == null ? null : BeaconDto.builder().id(b.getId()).name(b.getName()).aggregator(b.isAggregator()).organization(b.getOrganization()).description(b.getDescription()).enabled(b.isEnabled()).visible(b.isVisible()).email(b.getEmail()).homePage(b.getHomePage()).url(b.getUrl()).supportedReferences(b.getSupportedReferences()).build();
+        return b == null ? null : BeaconDto.builder().id(b.getId()).name(b.getName()).aggregator(b.isAggregator()).organization(b.getOrganization()).description(b.getDescription()).enabled(b.isEnabled()).visible(b.isVisible()).email(b.getEmail()).homePage(b.getHomePage()).url(b.getUrl()).supportedReferences(b.getSupportedReferences()).aggregatedBeacons(b.getAggregatedBeacons()).build();
     }
 
 }

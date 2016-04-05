@@ -56,24 +56,20 @@ public class OrganizationServiceImpl implements OrganizationService {
     private OrganizationMapper organizationMapper;
 
     @Override
-    public OrganizationDto find(String organizationId) {
-        return organizationMapper.mapEntityToDto(organizationDao.findById(organizationId), false);
+    public OrganizationDto find(@NonNull String id) {
+        return organizationMapper.mapEntityToDto(organizationDao.findByIdAndVisibility(id, true), false);
     }
 
     @Override
-    public Collection<OrganizationDto> findAll() {
-        return organizationMapper.mapEntitiesToDtos(organizationDao.findAll(), false);
-    }
-
-    @Override
-    public Collection<OrganizationDto> findWithVisibleBeacons() {
+    public Collection<OrganizationDto> find() {
         return organizationMapper.mapEntitiesToDtos(organizationDao.findByVisibility(true), false);
     }
 
     @Override
     public Collection<OrganizationDto> find(Collection<String> ids) {
-        return organizationMapper.mapEntitiesToDtos(organizationDao.findByIds(ids), false);
+        return organizationMapper.mapEntitiesToDtos(organizationDao.findByIdsAndVisibility(ids, true), false);
     }
+
 
     @Override
     public OrganizationDto create(@NonNull OrganizationDto organization) {
@@ -105,16 +101,6 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     public void delete(@NonNull String id) {
         organizationDao.delete(id);
-    }
-
-    @Override
-    public OrganizationDto findWithVisibleBeacons(@NonNull String id) {
-        return organizationMapper.mapEntityToDto(organizationDao.findByIdAndVisibility(id, true), false);
-    }
-
-    @Override
-    public Collection<OrganizationDto> findWithVisibleBeacons(Collection<String> ids) {
-        return organizationMapper.mapEntitiesToDtos(organizationDao.findByIdsAndVisibility(ids, true), false);
     }
 
 }

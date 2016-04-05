@@ -62,5 +62,6 @@ public class BeaconDto implements Serializable {
     private boolean visible;
     private boolean enabled;
     private Set<ReferenceDto> supportedReferences;
+    private Set<BeaconDto> aggregatedBeacons;
 
 }

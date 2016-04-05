@@ -26,6 +26,9 @@ package com.dnastack.bob.service.mapper.api;
 import com.dnastack.bob.persistence.entity.Beacon;
 import com.dnastack.bob.service.dto.BeaconDto;
 
+import java.util.Map;
+import java.util.Set;
+
 /**
  * Mapper of beacons to their DTOs.
  *
@@ -33,5 +36,24 @@ import com.dnastack.bob.service.dto.BeaconDto;
  * @version 1.0
  */
 public interface BeaconMapper extends Mapper<Beacon, BeaconDto> {
+
+    /**
+     * Maps a beacon and its descendants to its DTO.
+     *
+     * @param b            beacon
+     * @param descendants  descendants
+     * @param showInternal true if internal fields should be included in the DTO, false otherwise
+     * @return DTO
+     */
+    BeaconDto mapEntityToDto(Beacon b, Set<Beacon> descendants, boolean showInternal);
+
+    /**
+     * Maps beacons and their descendants to their DTOs.
+     *
+     * @param beaconsWithDescendants map of beacons to their descendants
+     * @param showInternal           true if internal fields should be included in the DTO, false otherwise
+     * @return DTOs
+     */
+    Set<BeaconDto> mapEntitiesToDtos(Map<Beacon, Set<Beacon>> beaconsWithDescendants, boolean showInternal);
 
 }

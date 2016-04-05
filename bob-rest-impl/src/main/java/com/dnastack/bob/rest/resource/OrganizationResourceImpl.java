@@ -63,7 +63,7 @@ public class OrganizationResourceImpl implements OrganizationResource {
 
     @Override
     public OrganizationDto showOrganization(String organizationId) {
-        OrganizationDto b = organizationService.findWithVisibleBeacons(organizationId);
+        OrganizationDto b = organizationService.find(organizationId);
         if (b == null) {
             throw new NotFoundException("Cannot find organization with ID: " + organizationId);
         }
@@ -74,9 +74,9 @@ public class OrganizationResourceImpl implements OrganizationResource {
     public Collection<OrganizationDto> show(String organizationIds) {
         Set<OrganizationDto> bs = new TreeSet<>(organizationComparator);
         if (organizationIds == null) {
-            bs.addAll(organizationService.findWithVisibleBeacons());
+            bs.addAll(organizationService.find());
         } else {
-            bs.addAll(organizationService.findWithVisibleBeacons(parseMultipleParameterValues(organizationIds)));
+            bs.addAll(organizationService.find(parseMultipleParameterValues(organizationIds)));
         }
 
         return bs;

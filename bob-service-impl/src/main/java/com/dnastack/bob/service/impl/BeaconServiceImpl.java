@@ -47,8 +47,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
 import java.util.Collection;
-import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of a service managing beacons.
@@ -122,18 +122,19 @@ public class BeaconServiceImpl implements BeaconService {
     }
 
     @Override
-    public BeaconDto find(String beaconId) {
-        return beaconMapper.mapEntityToDto(beaconDao.findById(beaconId), false);
+    public BeaconDto find(String id) {
+        Beacon b = beaconDao.findByIdAndVisibility(id, true);
+        return beaconMapper.mapEntityToDto(b, beaconDao.findDescendants(b, false, false, false, false), false);
     }
 
     @Override
-    public Collection<BeaconDto> find(Collection<String> beaconIds) {
-        return beaconMapper.mapEntitiesToDtos(beaconDao.findByIds(beaconIds), false);
+    public Collection<BeaconDto> find(Collection<String> ids) {
+        return beaconDao.findByIdsAndVisibility(ids, true).stream().map(b -> beaconMapper.mapEntityToDto(b, beaconDao.findDescendants(b, false, false, false, false), false)).collect(Collectors.toSet());
     }
 
     @Override
-    public Set<BeaconDto> findAll() {
-        return beaconMapper.mapEntitiesToDtos(beaconDao.findAll(), false);
+    public Collection<BeaconDto> find() {
+        return beaconDao.findByVisibility(true).stream().map(b -> beaconMapper.mapEntityToDto(b, beaconDao.findDescendants(b, false, false, false, false), false)).collect(Collectors.toSet());
     }
 
     @Override
@@ -167,21 +168,6 @@ public class BeaconServiceImpl implements BeaconService {
         b.setVisible(false);
         beaconDao.update(b);
         log.info(String.format("Beacon disabled: %s", b.getId()));
-    }
-
-    @Override
-    public BeaconDto findVisible(String id) {
-        return beaconMapper.mapEntityToDto(beaconDao.findByIdAndVisibility(id, true), false);
-    }
-
-    @Override
-    public Collection<BeaconDto> findVisible(Collection<String> ids) {
-        return beaconMapper.mapEntitiesToDtos(beaconDao.findByIdsAndVisibility(ids, true), false);
-    }
-
-    @Override
-    public Collection<BeaconDto> findVisible() {
-        return beaconMapper.mapEntitiesToDtos(beaconDao.findByVisibility(true), false);
     }
 
 }

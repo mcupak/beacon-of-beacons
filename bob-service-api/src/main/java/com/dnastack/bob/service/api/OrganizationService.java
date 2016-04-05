@@ -36,20 +36,12 @@ import java.util.Collection;
 public interface OrganizationService {
 
     /**
-     * Retrieves organization details.
-     *
-     * @param id id of the organization
-     * @return organization
-     */
-    OrganizationDto find(String id);
-
-    /**
      * Retrieves organization details, provided it has visible beacons.
      *
      * @param id id of the organization
      * @return organization
      */
-    OrganizationDto findWithVisibleBeacons(String id);
+    OrganizationDto find(String id);
 
     /**
      * Creates a new organization.
@@ -76,7 +68,7 @@ public interface OrganizationService {
     void delete(String id);
 
     /**
-     * Retrieves organizations with specified IDs.
+     * Retrieves organizations with specified IDs and visible beacons.
      *
      * @param ids collection of organization ids
      * @return collection of organizations
@@ -84,25 +76,10 @@ public interface OrganizationService {
     Collection<OrganizationDto> find(Collection<String> ids);
 
     /**
-     * Retrieves organizations with specified IDs and visible beacons.
-     *
-     * @param ids collection of organization ids
-     * @return collection of organizations
-     */
-    Collection<OrganizationDto> findWithVisibleBeacons(Collection<String> ids);
-
-    /**
-     * Retrieves all the organizations.
+     * Retrieves all the organizations with visible beacons.
      *
      * @return collection of organizations
      */
-    Collection<OrganizationDto> findAll();
-
-    /**
-     * Retrieves organizations with visible beacons.
-     *
-     * @return collection of organizations
-     */
-    Collection<OrganizationDto> findWithVisibleBeacons();
+    Collection<OrganizationDto> find();
 
 }
