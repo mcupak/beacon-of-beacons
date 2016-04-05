@@ -21,6 +21,8 @@ services:
     image: mcupak/httpd:latest
     links:
       - bob
+    external_links:
+      - beaconizer
     ports:
       - 80:80
       - 443:443

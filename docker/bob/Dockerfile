@@ -9,7 +9,7 @@ USER root
 
 # install necessary packages
 RUN yes | yum update
-RUN yes | yum install patch wget
+RUN yes | yum install patch wget tree curl zip unzip
 
 # update nss and java to work around a bug with Diffie-Hellman key agreement of more than 1024 bits
 RUN yes | yum upgrade nss java
