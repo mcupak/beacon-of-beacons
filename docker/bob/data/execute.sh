@@ -9,6 +9,7 @@ JBOSS_HOME=/opt/jboss/wildfly
 JBOSS_CLI=$JBOSS_HOME/bin/jboss-cli.sh
 JBOSS_MODE=${1:-"standalone"}
 JBOSS_CONFIG=${2:-"$JBOSS_MODE.xml"}
+JBOSS_USER=jboss
 
 function wait_for_server() {
   until `$JBOSS_CLI -c "ls /deployment" &> /dev/null`; do
@@ -23,6 +24,17 @@ function shut_down_server() {
     $JBOSS_CLI -c "/host=*:shutdown"
   fi
 }
+
+echo "=> Setting up permissions for the log volume"
+TARGET_GID=$(stat -c "%g" $JBOSS_HOME/standalone/log)
+EXISTS=$(cat /etc/group | grep $TARGET_GID | wc -l)
+if [ $EXISTS == "0" ]; then
+  groupadd -g $TARGET_GID bob
+  usermod -a -G bob jboss
+else
+  GROUP=$(getent group $TARGET_GID | cut -d: -f1)
+  usermod -a -G $GROUP $JBOSS_USER
+fi
 
 echo "=> Starting WildFly server"
 $JBOSS_HOME/bin/$JBOSS_MODE.sh -b 0.0.0.0 -c $JBOSS_CONFIG &

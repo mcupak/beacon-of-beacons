@@ -34,7 +34,3 @@ RUN if [ "$CONFIGURE_SSL" = true ] ; then sed -i "s/^#Listen 12.34.56.78:80/List
 RUN sed -i "s/SERVER_NAME/$SERVER_NAME/g" $HTTPD_CONF
 RUN sed -i "s/^# ProxyPass \/beaconizer/ProxyPass \/beaconizer/g" $HTTPD_CONF; sed -i "s/^# ProxyPassReverse \/beaconizer/ProxyPassReverse \/beaconizer/g" $HTTPD_CONF; sed -i "s BEACONIZER_URL $BEACONIZER_URL g" $HTTPD_CONF
 WORKDIR $HTTPD_HOME
-
-# expose ports
-EXPOSE 80
-EXPOSE 443

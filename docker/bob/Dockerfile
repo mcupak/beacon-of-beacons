@@ -23,12 +23,8 @@ RUN mv *.jar $JBOSS_HOME/customization/mysql-connector-java.jar
 RUN find $JBOSS_HOME/customization/crt/ -type f -exec keytool -import -trustcacerts -keystore $JAVA_HOME/jre/lib/security/cacerts -storepass changeit -noprompt -alias `basename {}` -file {} \;
 
 # customize wildfly
-USER jboss
+USER $JBOSS_USER
 RUN /opt/jboss/wildfly/bin/add-user.sh admin admin --silent
 ENV JAVA_OPTS "-Xms256m -Xmx2048m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true"
-
-# expose ports
-EXPOSE 8080
-EXPOSE 9990
 
 ENTRYPOINT ["/opt/jboss/wildfly/customization/execute.sh"]
