@@ -25,9 +25,6 @@ package com.dnastack.bob.rest.api;
 
 import com.dnastack.bob.service.dto.OrganizationDto;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.Collection;
@@ -36,16 +33,25 @@ import java.util.Collection;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public interface OrganizationResource {
 
-    @POST
-    Response create(@Context UriInfo uriInfo, OrganizationDto organization);
+    /**
+     * Creates an organization.
+     *
+     * @param uriInfo      URI info
+     * @param organization organization
+     * @return URI of the organization created
+     */
+    Response create(UriInfo uriInfo, OrganizationDto organization);
 
-    @DELETE
-    @Path(value = "/{organizationId}")
-    Response delete(@Context UriInfo uriInfo, @PathParam(value = "organizationId") String organizationId);
+    /**
+     * Removes an organization.
+     *
+     * @param uriInfo        URI info
+     * @param organizationId ID of the organization
+     * @return
+     */
+    Response delete(UriInfo uriInfo, String organizationId);
 
     /**
      * Shows all the organizations or a specific organization as determined by a param.
@@ -53,8 +59,7 @@ public interface OrganizationResource {
      * @param organizationIds organization ID
      * @return set of organizations
      */
-    @GET
-    Collection<OrganizationDto> show(@QueryParam(value = "organization") String organizationIds);
+    Collection<OrganizationDto> show(String organizationIds);
 
     /**
      * Shows organization details.
@@ -62,12 +67,16 @@ public interface OrganizationResource {
      * @param organizationId id of the organization
      * @return organization
      */
-    @GET
-    @Path(value = "/{organizationId}")
-    OrganizationDto showOrganization(@PathParam(value = "organizationId") String organizationId);
+    OrganizationDto showOrganization(String organizationId);
 
-    @PUT
-    @Path(value = "/{organizationId}")
-    Response update(@Context UriInfo uriInfo, @PathParam(value = "organizationId") String organizationId, OrganizationDto organization);
+    /**
+     * Updates an organization.
+     *
+     * @param uriInfo        URI info
+     * @param organizationId ID of the organization
+     * @param organization   organization
+     * @return updated organization
+     */
+    Response update(UriInfo uriInfo, String organizationId, OrganizationDto organization);
 
 }

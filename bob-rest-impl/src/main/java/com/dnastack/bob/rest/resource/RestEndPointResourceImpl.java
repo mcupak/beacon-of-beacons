@@ -29,8 +29,11 @@ import com.dnastack.bob.rest.base.RestEndPoint;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 import java.util.Collection;
 import java.util.Collections;
@@ -44,6 +47,7 @@ import java.util.Set;
  * @version 1.0
  */
 @Path("/")
+@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @RequestScoped
 @Named
 public class RestEndPointResourceImpl implements RestEndPointResource {
@@ -69,6 +73,7 @@ public class RestEndPointResourceImpl implements RestEndPointResource {
         }
     }
 
+    @GET
     @Override
     public Collection<RestEndPoint> showEndPoints() {
         Set<RestEndPoint> reps = new HashSet<>();

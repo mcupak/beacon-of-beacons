@@ -25,24 +25,19 @@ package com.dnastack.bob.rest.api;
 
 import com.dnastack.bob.rest.base.RestEndPoint;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import java.util.Collection;
 
 /**
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public interface RestEndPointResource {
 
     /**
-     * Shows REST welcome page.
+     * Lists all the supported endpoints.
      *
-     * @return response
+     * @return list of supported endpoints
      */
-    @GET
     Collection<RestEndPoint> showEndPoints();
 
 }

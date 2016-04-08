@@ -32,10 +32,13 @@ import javax.ws.rs.core.Response;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public interface ReferenceResource {
 
-    @GET
+    /**
+     * Lists all the supported references.
+     *
+     * @return list of supported references in canonical form
+     */
     Response showAll();
 
 }

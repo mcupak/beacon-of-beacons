@@ -23,9 +23,12 @@
  */
 package com.dnastack.bob.service.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.experimental.Builder;
 
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
@@ -46,16 +49,25 @@ import java.util.Map;
 @Setter
 @NoArgsConstructor // needed for JAXB
 @AllArgsConstructor
+@ApiModel(value = "BeaconResponse")
 @SuppressWarnings("deprecation")
 public class BeaconResponseDto implements Serializable {
 
     private static final long serialVersionUID = 7784232950079896515L;
 
+    @NotNull
+    @ApiModelProperty(value = "Beacon providing the response.")
     private BeaconDto beacon;
+    @NotNull
+    @ApiModelProperty(value = "Query as understood by the beacon.")
     private QueryDto query;
+    @ApiModelProperty(value = "Response to the query, null indicates an error.", example = "true")
     private Boolean response = null;
+    @ApiModelProperty(value = "Allele frequency.", example = "1.0")
     private Double frequency = null;
+    @ApiModelProperty(value = "URL to an external system providing more information about the given allele (RFC 1738 format).", example = "http://localhost/data?chromosome=1&position=1000allele=C")
     private String externalUrl = null;
+    @ApiModelProperty(value = "Custom information provided by the beacon in key-value string pairs.", example = "{\"foo\":\"bar\"}")
     private Map<String, String> info = null;
 
 }

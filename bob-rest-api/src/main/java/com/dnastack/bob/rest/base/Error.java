@@ -21,13 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.dnastack.bob.rest.util;
+package com.dnastack.bob.rest.base;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.experimental.Builder;
 
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
@@ -45,21 +46,22 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ApiModel(value = "Error")
 @XmlRootElement(name = "error")
 public class Error implements Serializable {
 
     private static final long serialVersionUID = 7211701892878610009L;
 
-    @XmlElement
     @NotNull
+    @ApiModelProperty(value = "Status code.", example = "400")
     private Integer status;
-    @XmlElement
     @NotNull
+    @ApiModelProperty(value = "Reason phrase.", example = "Bad request")
     private String reason;
-    @XmlElement
     @NotNull
+    @ApiModelProperty(value = "Error message.", example = "Unable to extract parameter from http request")
     private String message;
-    @XmlElement
+    @ApiModelProperty(value = "Stack trace.", example = "[org.jboss.resteasy.core.QueryParamInjector.throwProcessingException(QueryParamInjector.java:43)")
     private String stackTrace;
 
 }

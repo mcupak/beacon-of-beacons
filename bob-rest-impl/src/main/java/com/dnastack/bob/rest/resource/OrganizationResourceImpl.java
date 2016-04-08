@@ -24,16 +24,19 @@
 package com.dnastack.bob.rest.resource;
 
 import com.dnastack.bob.rest.api.OrganizationResource;
+import com.dnastack.bob.rest.base.Error;
 import com.dnastack.bob.rest.comparator.NameComparator;
 import com.dnastack.bob.rest.comparator.OrganizationDtoComparator;
 import com.dnastack.bob.service.api.OrganizationService;
 import com.dnastack.bob.service.dto.OrganizationDto;
+import io.swagger.annotations.*;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.ws.rs.NotFoundException;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
@@ -50,8 +53,11 @@ import static com.dnastack.bob.rest.util.ParameterParser.parseMultipleParameterV
  * @version 1.0
  */
 @Path("/organizations")
+@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @RequestScoped
 @Named
+@Api
 public class OrganizationResourceImpl implements OrganizationResource {
 
     @Inject
@@ -61,8 +67,13 @@ public class OrganizationResourceImpl implements OrganizationResource {
     @NameComparator
     private OrganizationDtoComparator organizationComparator;
 
+    @GET
+    @Path(value = "/{organizationId}")
+    @ApiOperation(value = "Find organization by ID", notes = "Finds organization with the given ID.",
+            response = OrganizationDto.class)
+    @ApiResponses(value = {@ApiResponse(code = 400, message = "bad request", response = Error.class), @ApiResponse(code = 404, message = "not found", response = Error.class), @ApiResponse(code = 500, message = "internal" + " server error", response = Error.class)})
     @Override
-    public OrganizationDto showOrganization(String organizationId) {
+    public OrganizationDto showOrganization(@ApiParam(value = "ID of the organization.", example = "wtsi") @PathParam(value = "organizationId") String organizationId) {
         OrganizationDto b = organizationService.find(organizationId);
         if (b == null) {
             throw new NotFoundException("Cannot find organization with ID: " + organizationId);
@@ -70,8 +81,12 @@ public class OrganizationResourceImpl implements OrganizationResource {
         return b;
     }
 
+    @GET
+    @ApiOperation(value = "List organizations", notes = "Lists organizations.",
+            response = OrganizationDto.class, responseContainer = "List")
+    @ApiResponses(value = {@ApiResponse(code = 400, message = "bad request", response = Error.class), @ApiResponse(code = 404, message = "not found", response = Error.class), @ApiResponse(code = 500, message = "internal" + " server error", response = Error.class)})
     @Override
-    public Collection<OrganizationDto> show(String organizationIds) {
+    public Collection<OrganizationDto> show(@ApiParam(value = "Filter containing a single organization ID or a list of comma-separated IDs enclosed in [].", example = "[wtsi,ebi]") @QueryParam(value = "organization") String organizationIds) {
         Set<OrganizationDto> bs = new TreeSet<>(organizationComparator);
         if (organizationIds == null) {
             bs.addAll(organizationService.find());
@@ -83,19 +98,24 @@ public class OrganizationResourceImpl implements OrganizationResource {
     }
 
     @Override
-    public Response create(UriInfo uriInfo, OrganizationDto organization) {
+    @POST
+    public Response create(@Context UriInfo uriInfo, OrganizationDto organization) {
         OrganizationDto o = organizationService.create(organization);
         return Response.created(URI.create(uriInfo.getAbsolutePath() + "/" + o.getId())).build();
     }
 
+    @PUT
+    @Path(value = "/{organizationId}")
     @Override
-    public Response update(UriInfo uriInfo, String organizationId, OrganizationDto organization) {
+    public Response update(@Context UriInfo uriInfo, @PathParam(value = "organizationId") String organizationId, OrganizationDto organization) {
         OrganizationDto o = organizationService.update(organizationId, organization);
         return Response.ok(o).build();
     }
 
+    @DELETE
+    @Path(value = "/{organizationId}")
     @Override
-    public Response delete(UriInfo uriInfo, String organizationId) {
+    public Response delete(@Context UriInfo uriInfo, @PathParam(value = "organizationId") String organizationId) {
         organizationService.delete(organizationId);
         return Response.ok().build();
     }

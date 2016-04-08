@@ -24,16 +24,19 @@
 package com.dnastack.bob.rest.resource;
 
 import com.dnastack.bob.rest.api.BeaconResource;
+import com.dnastack.bob.rest.base.Error;
 import com.dnastack.bob.rest.comparator.BeaconDtoComparator;
 import com.dnastack.bob.rest.comparator.NameComparator;
 import com.dnastack.bob.service.api.BeaconService;
 import com.dnastack.bob.service.dto.BeaconDto;
+import io.swagger.annotations.*;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.ws.rs.NotFoundException;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
@@ -50,8 +53,11 @@ import static com.dnastack.bob.rest.util.ParameterParser.parseMultipleParameterV
  * @version 1.0
  */
 @Path("/beacons")
+@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @RequestScoped
 @Named
+@Api
 public class BeaconResourceImpl implements BeaconResource {
 
     @Inject
@@ -61,8 +67,12 @@ public class BeaconResourceImpl implements BeaconResource {
     @NameComparator
     private BeaconDtoComparator beaconComparator;
 
+    @GET
+    @Path(value = "/{beaconId}")
+    @ApiOperation(value = "Find beacon by ID", notes = "Finds beacon with the given ID.", response = BeaconDto.class)
+    @ApiResponses(value = {@ApiResponse(code = 400, message = "bad request", response = Error.class), @ApiResponse(code = 404, message = "not found", response = Error.class), @ApiResponse(code = 500, message = "internal" + " server error", response = Error.class)})
     @Override
-    public BeaconDto showBeacon(String beaconId) {
+    public BeaconDto showBeacon(@ApiParam(value = "ID of the beacon.", example = "cosmic") @PathParam(value = "beaconId") String beaconId) {
         BeaconDto b = beaconService.find(beaconId);
         if (b == null) {
             throw new NotFoundException("Cannot find beacon with ID: " + beaconId);
@@ -70,8 +80,11 @@ public class BeaconResourceImpl implements BeaconResource {
         return b;
     }
 
+    @GET
+    @ApiOperation(value = "List beacons", notes = "Lists beacons.", response = BeaconDto.class, responseContainer = "List")
+    @ApiResponses(value = {@ApiResponse(code = 400, message = "bad request", response = Error.class), @ApiResponse(code = 404, message = "not found", response = Error.class), @ApiResponse(code = 500, message = "internal" + " server error", response = Error.class)})
     @Override
-    public Collection<BeaconDto> show(String beaconIds) {
+    public Collection<BeaconDto> show(@ApiParam(value = "Filter containing a single beacon ID or a list of comma-separated IDs enclosed in [].", example = "[cosmic,amplab]") @QueryParam(value = "beacon") String beaconIds) {
         Set<BeaconDto> bs = new TreeSet<>(beaconComparator);
         if (beaconIds == null) {
             bs.addAll(beaconService.find());
@@ -82,20 +95,25 @@ public class BeaconResourceImpl implements BeaconResource {
         return bs;
     }
 
+    @POST
     @Override
-    public Response create(UriInfo uriInfo, BeaconDto beacon) {
+    public Response create(@Context UriInfo uriInfo, BeaconDto beacon) {
         BeaconDto o = beaconService.create(beacon);
         return Response.created(URI.create(uriInfo.getAbsolutePath() + "/" + o.getId())).build();
     }
 
+    @PUT
+    @Path(value = "/{beaconId}")
     @Override
-    public Response update(UriInfo uriInfo, String beaconId, BeaconDto beacon) {
+    public Response update(@Context UriInfo uriInfo, @PathParam(value = "beaconId") String beaconId, BeaconDto beacon) {
         BeaconDto o = beaconService.update(beaconId, beacon);
         return Response.ok(o).build();
     }
 
+    @DELETE
+    @Path(value = "/{beaconId}")
     @Override
-    public Response delete(UriInfo uriInfo, String beaconId) {
+    public Response delete(@Context UriInfo uriInfo, @PathParam(value = "beaconId") String beaconId) {
         beaconService.delete(beaconId);
         return Response.noContent().build();
     }

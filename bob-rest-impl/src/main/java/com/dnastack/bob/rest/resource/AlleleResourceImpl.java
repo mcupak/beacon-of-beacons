@@ -27,10 +27,14 @@ import com.dnastack.bob.rest.api.AlleleResource;
 import com.dnastack.bob.rest.util.JaxbList;
 import com.dnastack.bob.rest.util.MediaTypeResolver;
 import com.dnastack.bob.service.dto.AlleleDto;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -45,13 +49,17 @@ import java.util.stream.Collectors;
  * @version 1.0
  */
 @Path("/alleles")
+@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @RequestScoped
 @Named
+@Api
 public class AlleleResourceImpl implements AlleleResource {
 
     @Context
     private HttpHeaders headers;
 
+    @GET
+    @ApiOperation(value = "List all alleles", notes = "Lists all the supported alleles in their canonical form.", response = AlleleDto.class, responseContainer = "List")
     @Override
     public Response showAll() {
         return (MediaType.APPLICATION_XML.equals(MediaTypeResolver.getMediaType(headers))) ? Response.ok().entity(new JaxbList<>(AlleleDto.values())).build() : Response.ok().entity(Arrays.asList(AlleleDto.values()).stream().map(c -> c.toString()).collect(Collectors.toList())).build();

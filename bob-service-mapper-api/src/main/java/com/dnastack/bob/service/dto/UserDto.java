@@ -23,9 +23,12 @@
  */
 package com.dnastack.bob.service.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.experimental.Builder;
 
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
@@ -45,10 +48,13 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor // needed for JAXB
 @AllArgsConstructor
+@ApiModel(value = "User")
 @SuppressWarnings("deprecation")
 public class UserDto implements Serializable {
 
     private static final long serialVersionUID = 729442166075465142L;
 
+    @NotNull
+    @ApiModelProperty(value = "User name.", example = "foobat")
     private String userName;
 }

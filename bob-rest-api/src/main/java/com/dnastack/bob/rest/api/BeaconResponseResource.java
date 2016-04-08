@@ -25,15 +25,12 @@ package com.dnastack.bob.rest.api;
 
 import com.dnastack.bob.service.dto.BeaconResponseDto;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import java.util.Collection;
 
 /**
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public interface BeaconResponseResource {
 
     /**
@@ -47,8 +44,7 @@ public interface BeaconResponseResource {
      * @return list of beacon responses
      * @throws java.lang.ClassNotFoundException
      */
-    @GET
-    Collection<BeaconResponseDto> query(@QueryParam(value = "beacon") String beaconIds, @QueryParam(value = "chrom") String chrom, @QueryParam(value = "pos") Long pos, @QueryParam(value = "allele") String allele, @QueryParam(value = "ref") String ref) throws ClassNotFoundException;
+    Collection<BeaconResponseDto> query(String beaconIds, String chrom, Long pos, String allele, String ref) throws ClassNotFoundException;
 
     /**
      * Query a given beacon
@@ -61,8 +57,6 @@ public interface BeaconResponseResource {
      * @return list of beacon responses
      * @throws java.lang.ClassNotFoundException
      */
-    @GET
-    @Path(value = "/{beaconId}")
-    BeaconResponseDto queryBeacon(@PathParam(value = "beaconId") String beaconId, @QueryParam(value = "chrom") String chrom, @QueryParam(value = "pos") Long pos, @QueryParam(value = "allele") String allele, @QueryParam(value = "ref") String ref) throws ClassNotFoundException;
+    BeaconResponseDto queryBeacon(String beaconId, String chrom, Long pos, String allele, String ref) throws ClassNotFoundException;
 
 }

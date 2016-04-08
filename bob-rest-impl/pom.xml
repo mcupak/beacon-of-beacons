@@ -87,11 +87,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-jaxrs</artifactId>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
@@ -121,6 +116,17 @@
             <artifactId>shrinkwrap-resolver-depchain</artifactId>
             <scope>test</scope>
             <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-core</artifactId>
+            <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.ws.rs</groupId>
+                    <artifactId>jsr311-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 
@@ -258,6 +264,56 @@
                     <systemPath>${path.tools}</systemPath>
                 </dependency>
             </dependencies>
+        </profile>
+        <profile>
+            <id>docs</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.github.kongchen</groupId>
+                        <artifactId>swagger-maven-plugin</artifactId>
+                        <configuration>
+                            <apiSources>
+                                <apiSource>
+                                    <springmvc>false</springmvc>
+                                    <locations>com.dnastack.bob.rest.resource</locations>
+                                    <schemes>https</schemes>
+                                    <host>beacon-network.org/api</host>
+                                    <basePath>/docs</basePath>
+                                    <info>
+                                        <title>Beacon Network API</title>
+                                        <version>${project.version}</version>
+                                        <description>Documentation for the Beacon Network REST API: http://beacon-network.org/api/.</description>
+                                        <termsOfService>
+                                            https://beacon-network.org/#/terms
+                                        </termsOfService>
+                                    </info>
+                                    <templatePath>${basedir}/src/main/resources/templates/strapdown.html.hbs
+                                    </templatePath>
+                                    <outputPath>${basedir}/target/docs/index.html</outputPath>
+                                    <swaggerDirectory>target/docs</swaggerDirectory>
+                                </apiSource>
+                            </apiSources>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 </project>

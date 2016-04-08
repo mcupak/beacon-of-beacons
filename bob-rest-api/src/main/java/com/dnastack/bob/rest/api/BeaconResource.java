@@ -25,9 +25,6 @@ package com.dnastack.bob.rest.api;
 
 import com.dnastack.bob.service.dto.BeaconDto;
 
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.Collection;
@@ -36,16 +33,25 @@ import java.util.Collection;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public interface BeaconResource {
 
-    @POST
-    Response create(@Context UriInfo uriInfo, BeaconDto beacon);
+    /**
+     * Creates a beacon.
+     *
+     * @param uriInfo URI info
+     * @param beacon  beacon
+     * @return URI of the beacon created
+     */
+    Response create(UriInfo uriInfo, BeaconDto beacon);
 
-    @DELETE
-    @Path(value = "/{beaconId}")
-    Response delete(@Context UriInfo uriInfo, @PathParam(value = "beaconId") String beaconId);
+    /**
+     * Removes a beacon.
+     *
+     * @param uriInfo  URI info
+     * @param beaconId ID of the beacon
+     * @return
+     */
+    Response delete(UriInfo uriInfo, String beaconId);
 
     /**
      * Shows all the beacons or a specific beacon as determined by a param.
@@ -53,8 +59,7 @@ public interface BeaconResource {
      * @param beaconIds beacon ID
      * @return set of beacons
      */
-    @GET
-    Collection<BeaconDto> show(@QueryParam(value = "beacon") String beaconIds);
+    Collection<BeaconDto> show(String beaconIds);
 
     /**
      * Shows beacon details.
@@ -62,12 +67,16 @@ public interface BeaconResource {
      * @param beaconId id of the beacon
      * @return beacon
      */
-    @GET
-    @Path(value = "/{beaconId}")
-    BeaconDto showBeacon(@PathParam(value = "beaconId") String beaconId);
+    BeaconDto showBeacon(String beaconId);
 
-    @PUT
-    @Path(value = "/{beaconId}")
-    Response update(@Context UriInfo uriInfo, @PathParam(value = "beaconId") String beaconId, BeaconDto beacon);
+    /**
+     * Updates a beacon.
+     *
+     * @param uriInfo  URI info
+     * @param beaconId ID of the beacon
+     * @param beacon   beacon
+     * @return updated beacon
+     */
+    Response update(UriInfo uriInfo, String beaconId, BeaconDto beacon);
 
 }

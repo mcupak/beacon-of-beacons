@@ -23,19 +23,19 @@
  */
 package com.dnastack.bob.rest.api;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 public interface ChromosomeResource {
 
-    @GET
+    /**
+     * Shows supported chromosomes.
+     *
+     * @return list of chromosome identifiers
+     */
     Response showAll();
 
 }

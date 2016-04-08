@@ -23,6 +23,8 @@
  */
 package com.dnastack.bob.service.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.experimental.Builder;
 
@@ -45,14 +47,19 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor // needed for JAXB
 @AllArgsConstructor
+@ApiModel(value = "Query")
 @SuppressWarnings("deprecation")
 public class QueryDto implements Serializable {
 
     private static final long serialVersionUID = 4711685616673439706L;
 
+    @ApiModelProperty(value = "Chromosome ID (1-22, X, Y, MT).", example = "1")
     private ChromosomeDto chromosome;
+    @ApiModelProperty(value = "Coordinate within a chromosome (0-based).", example = "1000")
     private Long position;
+    @ApiModelProperty(value = "String of nucleotides A,C,T,G or D, I for deletion and insertion, respectively.", example = "1000")
     private String allele;
+    @ApiModelProperty(value = "Genome/assembly ID (HG-based notation).", example = "HG19")
     private ReferenceDto reference;
 
 }
