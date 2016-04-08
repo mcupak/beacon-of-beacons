@@ -29,6 +29,7 @@ import lombok.experimental.Builder;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -59,8 +60,8 @@ public class BeaconDto implements Serializable {
     private String homePage;
     private String email;
     private boolean aggregator;
-    private boolean visible;
     private boolean enabled;
+    private Date createdDate;
     private Set<ReferenceDto> supportedReferences;
     private Set<BeaconDto> aggregatedBeacons;
 

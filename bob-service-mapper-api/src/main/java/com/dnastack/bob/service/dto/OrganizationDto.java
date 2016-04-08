@@ -29,6 +29,7 @@ import lombok.experimental.Builder;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Organization DTO.
@@ -53,6 +54,7 @@ public class OrganizationDto implements Serializable {
     private String id;
     private String name;
     private String description;
+    private Date createdDate;
     private String url;
     private String address;
     private byte[] logo;

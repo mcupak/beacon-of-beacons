@@ -28,7 +28,9 @@ import lombok.experimental.Builder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -60,6 +62,10 @@ public class Organization implements BasicEntity<String> {
     @Size(min = 1)
     @Column(nullable = false, unique = true)
     private String name;
+    @NotNull
+    @Past
+    @Temporal(TemporalType.DATE)
+    private Date createdDate;
     private String description;
     private String url;
     private String address;

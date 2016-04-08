@@ -29,7 +29,9 @@ import lombok.experimental.Builder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
+import java.util.Date;
 import java.util.Set;
 
 /**
@@ -61,10 +63,11 @@ public class Beacon implements BasicEntity<String> {
     @Size(min = 1)
     @Column(nullable = false)
     private String name;
-    private String url;
-    @ManyToOne
     @NotNull
-    private Organization organization;
+    @Past
+    @Temporal(TemporalType.DATE)
+    private Date createdDate;
+    private String url;
     @Size(max = 1000)
     @Column(length = 1000)
     private String description;
@@ -83,6 +86,9 @@ public class Beacon implements BasicEntity<String> {
     private String alleleConverter;
     private String referenceConverter;
     private String beaconConverter;
+    @NotNull
+    @ManyToOne
+    private Organization organization;
     // TODO: query from datasets or cache properly
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Reference> supportedReferences;

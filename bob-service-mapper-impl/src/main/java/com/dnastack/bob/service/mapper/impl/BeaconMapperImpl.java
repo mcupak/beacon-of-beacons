@@ -64,7 +64,7 @@ public class BeaconMapperImpl implements BeaconMapper {
             return null;
         }
 
-        BeaconDto.BeaconDtoBuilder builder = BeaconDto.builder().id(b.getId()).name(b.getName()).aggregator(b.getAggregator()).organization(b.getOrganization() == null ? null : b.getOrganization().getName()).description(b.getDescription()).enabled(b.getEnabled()).visible(b.getVisible()).supportedReferences(referenceMapper.mapEntitiesToDtos(b.getSupportedReferences(), showInternal));
+        BeaconDto.BeaconDtoBuilder builder = BeaconDto.builder().id(b.getId()).name(b.getName()).aggregator(b.getAggregator()).organization(b.getOrganization() == null ? null : b.getOrganization().getName()).description(b.getDescription()).enabled(b.getEnabled()).createdDate(b.getCreatedDate()).supportedReferences(referenceMapper.mapEntitiesToDtos(b.getSupportedReferences(), showInternal));
 
         if (showInternal) {
             builder.email(b.getEmail()).homePage(b.getHomePage()).url(b.getUrl());
@@ -79,7 +79,7 @@ public class BeaconMapperImpl implements BeaconMapper {
 
     @Override
     public Beacon mapDtoToEntity(BeaconDto b) {
-        return b == null ? null : Beacon.builder().id(b.getId()).name(b.getName()).aggregator(b.isAggregator()).description(b.getDescription()).enabled(b.isEnabled()).visible(b.isVisible()).email(b.getEmail()).homePage(b.getHomePage()).url(b.getUrl()).supportedReferences(referenceMapper.mapDtosToEntities(b.getSupportedReferences())).build();
+        return b == null ? null : Beacon.builder().id(b.getId()).name(b.getName()).aggregator(b.isAggregator()).description(b.getDescription()).enabled(b.isEnabled()).email(b.getEmail()).homePage(b.getHomePage()).url(b.getUrl()).supportedReferences(referenceMapper.mapDtosToEntities(b.getSupportedReferences())).createdDate(b.getCreatedDate()).build();
     }
 
     @Override
@@ -94,12 +94,12 @@ public class BeaconMapperImpl implements BeaconMapper {
 
     @Override
     public Beacon mapEntityToEntity(Beacon b) {
-        return b == null ? null : Beacon.builder().id(b.getId()).name(b.getName()).aggregator(b.getAggregator()).description(b.getDescription()).enabled(b.getEnabled()).visible(b.getVisible()).email(b.getEmail()).homePage(b.getHomePage()).url(b.getUrl()).supportedReferences(b.getSupportedReferences()).organization(b.getOrganization()).api(b.getApi()).auth(b.getAuth()).responseParser(b.getResponseParser()).externalUrlParser(b.getExternalUrlParser()).fetcher(b.getFetcher()).requester(b.getRequester()).chromosomeConverter(b.getChromosomeConverter()).positionConverter(b.getPositionConverter()).alleleConverter(b.getAlleleConverter()).referenceConverter(b.getReferenceConverter()).beaconConverter(b.getBeaconConverter()).parents(b.getParents()).children(b.getChildren()).datasets(b.getDatasets()).build();
+        return b == null ? null : Beacon.builder().id(b.getId()).name(b.getName()).aggregator(b.getAggregator()).description(b.getDescription()).enabled(b.getEnabled()).visible(b.getVisible()).email(b.getEmail()).homePage(b.getHomePage()).url(b.getUrl()).supportedReferences(b.getSupportedReferences()).organization(b.getOrganization()).api(b.getApi()).auth(b.getAuth()).responseParser(b.getResponseParser()).externalUrlParser(b.getExternalUrlParser()).fetcher(b.getFetcher()).requester(b.getRequester()).chromosomeConverter(b.getChromosomeConverter()).positionConverter(b.getPositionConverter()).alleleConverter(b.getAlleleConverter()).referenceConverter(b.getReferenceConverter()).beaconConverter(b.getBeaconConverter()).parents(b.getParents()).children(b.getChildren()).datasets(b.getDatasets()).createdDate(b.getCreatedDate()).build();
     }
 
     @Override
     public BeaconDto mapDtoToDto(BeaconDto b) {
-        return b == null ? null : BeaconDto.builder().id(b.getId()).name(b.getName()).aggregator(b.isAggregator()).organization(b.getOrganization()).description(b.getDescription()).enabled(b.isEnabled()).visible(b.isVisible()).email(b.getEmail()).homePage(b.getHomePage()).url(b.getUrl()).supportedReferences(b.getSupportedReferences()).aggregatedBeacons(b.getAggregatedBeacons()).build();
+        return b == null ? null : BeaconDto.builder().id(b.getId()).name(b.getName()).aggregator(b.isAggregator()).organization(b.getOrganization()).description(b.getDescription()).enabled(b.isEnabled()).email(b.getEmail()).homePage(b.getHomePage()).url(b.getUrl()).createdDate(b.getCreatedDate()).supportedReferences(b.getSupportedReferences()).aggregatedBeacons(b.getAggregatedBeacons()).build();
     }
 
 }
