@@ -267,8 +267,37 @@
         </profile>
         <profile>
             <id>docs</id>
+            <properties>
+                <docs.dir>target/docs</docs.dir>
+                <swagger.dir>${docs.dir}/swagger</swagger.dir>
+                <swagger.schema.dir>${swagger.dir}/schemas</swagger.schema.dir>
+                <asciidoc.dir>${docs.dir}/asciidoc</asciidoc.dir>
+                <asciidoc.generated.dir>${asciidoc.dir}/generated</asciidoc.generated.dir>
+            </properties>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-resources</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${basedir}/target/docs/asciidoc</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>src/main/resources/docs/asciidoc</directory>
+                                            <filtering>true</filtering>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
                     <plugin>
                         <groupId>com.github.kongchen</groupId>
                         <artifactId>swagger-maven-plugin</artifactId>
@@ -278,8 +307,8 @@
                                     <springmvc>false</springmvc>
                                     <locations>com.dnastack.bob.rest.resource</locations>
                                     <schemes>https</schemes>
-                                    <host>beacon-network.org/api</host>
-                                    <basePath>/docs</basePath>
+                                    <host>beacon-network.org</host>
+                                    <basePath>/api/docs</basePath>
                                     <info>
                                         <title>Beacon Network API</title>
                                         <version>${project.version}</version>
@@ -288,10 +317,10 @@
                                             https://beacon-network.org/#/terms
                                         </termsOfService>
                                     </info>
-                                    <templatePath>${basedir}/src/main/resources/templates/strapdown.html.hbs
-                                    </templatePath>
-                                    <outputPath>${basedir}/target/docs/index.html</outputPath>
-                                    <swaggerDirectory>target/docs</swaggerDirectory>
+                                    <templatePath>${basedir}/src/main/resources/docs/swagger/templates/strapdown.html.hbs</templatePath>
+                                    <outputPath>${basedir}/${swagger.dir}/html/index.html</outputPath>
+                                    <outputFormats>json,yaml</outputFormats>
+                                    <swaggerDirectory>${swagger.schema.dir}</swaggerDirectory>
                                 </apiSource>
                             </apiSources>
                         </configuration>
@@ -305,12 +334,82 @@
                         </executions>
                     </plugin>
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-war-plugin</artifactId>
+                        <groupId>io.github.robwin</groupId>
+                        <artifactId>swagger2markup-maven-plugin</artifactId>
+                        <dependencies>
+                            <dependency>
+                                <groupId>io.swagger</groupId>
+                                <artifactId>swagger-hibernate-validations</artifactId>
+                                <version>${version.swagger.hibernate.validations}</version>
+                            </dependency>
+                        </dependencies>
+                        <configuration>
+                            <inputDirectory>${swagger.schema.dir}</inputDirectory>
+                            <outputDirectory>${asciidoc.generated.dir}</outputDirectory>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>process-swagger</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                     </plugin>
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
+                        <groupId>org.asciidoctor</groupId>
+                        <artifactId>asciidoctor-maven-plugin</artifactId>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.asciidoctor</groupId>
+                                <artifactId>asciidoctorj-pdf</artifactId>
+                                <version>${version.asciidoctorj-pdf}</version>
+                            </dependency>
+                        </dependencies>
+                        <!-- Configure generic document generation settings -->
+                        <configuration>
+                            <sourceDirectory>${asciidoc.dir}</sourceDirectory>
+                            <preserveDirectories>true</preserveDirectories>
+                            <attributes>
+                                <doctype>book</doctype>
+                                <toc>left</toc>
+                                <toclevels>2</toclevels>
+                                <generated>${asciidoc.dir}</generated>
+                            </attributes>
+                        </configuration>
+                        <!-- Since each execution can only handle one backend, run
+                             separate executions for each desired output type -->
+                        <executions>
+                            <execution>
+                                <id>output-html</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>process-asciidoc</goal>
+                                </goals>
+                                <configuration>
+                                    <backend>html5</backend>
+                                    <outputDirectory>${docs.dir}/html</outputDirectory>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>output-pdf</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>process-asciidoc</goal>
+                                </goals>
+                                <configuration>
+                                    <backend>pdf</backend>
+                                    <outputDirectory>${docs.dir}/pdf</outputDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${version.surefire.plugin}</version>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
