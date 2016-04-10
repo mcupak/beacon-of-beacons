@@ -1,0 +1,593 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "version" : "1.0-SNAPSHOT",
+    "title" : "Beacon Network API",
+    "termsOfService" : "http://localhost:8080/#/terms"
+  },
+  "host" : "localhost:8080",
+  "basePath" : "/api",
+  "tags" : [ {
+    "name" : "Alleles"
+  }, {
+    "name" : "Beacons"
+  }, {
+    "name" : "Chromosomes"
+  }, {
+    "name" : "Organizations"
+  }, {
+    "name" : "References"
+  }, {
+    "name" : "Responses"
+  } ],
+  "schemes" : [ "http" ],
+  "paths" : {
+    "/alleles" : {
+      "get" : {
+        "tags" : [ "Alleles" ],
+        "summary" : "List alleles",
+        "description" : "Lists all the supported alleles in their canonical form.",
+        "operationId" : "showAll",
+        "produces" : [ "application/xml", "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "string",
+                "enum" : [ "A", "C", "G", "T", "D", "I" ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/beacons" : {
+      "get" : {
+        "tags" : [ "Beacons" ],
+        "summary" : "List beacons",
+        "description" : "Lists beacons.",
+        "operationId" : "show",
+        "consumes" : [ "application/xml", "application/json" ],
+        "produces" : [ "application/xml", "application/json" ],
+        "parameters" : [ {
+          "name" : "beacon",
+          "in" : "query",
+          "description" : "Filter containing a single beacon ID or a list of comma-separated IDs enclosed in [].",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Beacon"
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "not found",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "internal server error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/beacons/{beaconId}" : {
+      "get" : {
+        "tags" : [ "Beacons" ],
+        "summary" : "Find beacon by ID",
+        "description" : "Finds beacon with the given ID.",
+        "operationId" : "showBeacon",
+        "consumes" : [ "application/xml", "application/json" ],
+        "produces" : [ "application/xml", "application/json" ],
+        "parameters" : [ {
+          "name" : "beaconId",
+          "in" : "path",
+          "description" : "ID of the beacon.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/Beacon"
+            }
+          },
+          "400" : {
+            "description" : "bad request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "not found",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "internal server error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/chromosomes" : {
+      "get" : {
+        "tags" : [ "Chromosomes" ],
+        "summary" : "List all chromosomes",
+        "description" : "Lists all the supported chromosomes in their canonical form.",
+        "operationId" : "showAll",
+        "produces" : [ "application/xml", "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "string",
+                "enum" : [ "CHR22", "CHR21", "CHR20", "CHR19", "CHR18", "CHR17", "CHR16", "CHR15", "CHR14", "CHR13", "CHR12", "CHR11", "CHR10", "CHR9", "CHR8", "CHR7", "CHR6", "CHR5", "CHR4", "CHR3", "CHR2", "CHR1", "CHRX", "CHRY", "CHRMT" ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/organizations" : {
+      "get" : {
+        "tags" : [ "Organizations" ],
+        "summary" : "List organizations",
+        "description" : "Lists organizations.",
+        "operationId" : "show",
+        "consumes" : [ "application/xml", "application/json" ],
+        "produces" : [ "application/xml", "application/json" ],
+        "parameters" : [ {
+          "name" : "organization",
+          "in" : "query",
+          "description" : "Filter containing a single organization ID or a list of comma-separated IDs enclosed in [].",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Organization"
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "not found",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "internal server error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/organizations/{organizationId}" : {
+      "get" : {
+        "tags" : [ "Organizations" ],
+        "summary" : "Find organization by ID",
+        "description" : "Finds organization with the given ID.",
+        "operationId" : "showOrganization",
+        "consumes" : [ "application/xml", "application/json" ],
+        "produces" : [ "application/xml", "application/json" ],
+        "parameters" : [ {
+          "name" : "organizationId",
+          "in" : "path",
+          "description" : "ID of the organization.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/Organization"
+            }
+          },
+          "400" : {
+            "description" : "bad request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "not found",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "internal server error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/references" : {
+      "get" : {
+        "tags" : [ "References" ],
+        "summary" : "List all references",
+        "description" : "Lists all the supported references in their canonical form (hg-based notation).",
+        "operationId" : "showAll",
+        "produces" : [ "application/xml", "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "type" : "string",
+                "enum" : [ "HG38", "HG19", "HG18", "HG17", "HG16" ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/responses" : {
+      "get" : {
+        "tags" : [ "Responses" ],
+        "summary" : "Query beacons",
+        "description" : "Executes a query for a specific allele against beacons.",
+        "operationId" : "query",
+        "consumes" : [ "application/xml", "application/json" ],
+        "produces" : [ "application/xml", "application/json" ],
+        "parameters" : [ {
+          "name" : "beacon",
+          "in" : "query",
+          "description" : "ID of the beacon.",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "chrom",
+          "in" : "query",
+          "description" : "Chromosome ID. Accepted values: 1-22, X, Y, MT. Note: For compatibility with conventions set by some of the existing beacons, an arbitrary prefix is accepted as well (e.g. chr1 is equivalent to chrom1 and 1).",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "pos",
+          "in" : "query",
+          "description" : "Coordinate within a chromosome (0-based).",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int64"
+        }, {
+          "name" : "allele",
+          "in" : "query",
+          "description" : "Any string of nucleotides A,C,T,G or D, I for deletion and insertion, respectively. Note: For compatibility with conventions set by some of the existing beacons, DEL and INS identifiers are also accepted.",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "ref",
+          "in" : "query",
+          "description" : "Genome/assembly ID. If not specified, all the genomes supported by the given beacons are queried. Note: For compatibility with conventions set by some of the existing beacons, both GRC or HG notation are accepted, case insensitive. Optional parameter.",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/BeaconResponse"
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "not found",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "internal server error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/responses/{beaconId}" : {
+      "get" : {
+        "tags" : [ "Responses" ],
+        "summary" : "Query beacon",
+        "description" : "Executes a query for a specific allele against a specific beacon.",
+        "operationId" : "queryBeacon",
+        "consumes" : [ "application/xml", "application/json" ],
+        "produces" : [ "application/xml", "application/json" ],
+        "parameters" : [ {
+          "name" : "beaconId",
+          "in" : "path",
+          "description" : "ID of the beacon.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "chrom",
+          "in" : "query",
+          "description" : "Chromosome ID. Accepted values: 1-22, X, Y, MT. Note: For compatibility with conventions set by some of the existing beacons, an arbitrary prefix is accepted as well (e.g. chr1 is equivalent to chrom1 and 1).",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "pos",
+          "in" : "query",
+          "description" : "Coordinate within a chromosome (0-based).",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int64"
+        }, {
+          "name" : "allele",
+          "in" : "query",
+          "description" : "Any string of nucleotides A,C,T,G or D, I for deletion and insertion, respectively. Note: For compatibility with conventions set by some of the existing beacons, DEL and INS identifiers are also accepted.",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "ref",
+          "in" : "query",
+          "description" : "Genome/assembly ID. If not specified, all the genomes supported by the given beacons are queried. Note: For compatibility with conventions set by some of the existing beacons, both GRC or HG notation are accepted, case insensitive. Optional parameter.",
+          "required" : false,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/BeaconResponse"
+            }
+          },
+          "400" : {
+            "description" : "bad request",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "404" : {
+            "description" : "not found",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          },
+          "500" : {
+            "description" : "internal server error",
+            "schema" : {
+              "$ref" : "#/definitions/Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "Beacon" : {
+      "type" : "object",
+      "required" : [ "createdDate", "id", "name" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "ID of the beacon."
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "Name of the beacon."
+        },
+        "organization" : {
+          "type" : "string",
+          "description" : "Name of the organization."
+        },
+        "description" : {
+          "type" : "string",
+          "description" : "Description of the beacon."
+        },
+        "aggregator" : {
+          "type" : "boolean",
+          "description" : "true if the beacon is a virtual aggregator of beacons, false otherwise.",
+          "default" : false
+        },
+        "createdDate" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Date when the beacon was registered (ISO 8601 format).-06-23"
+        },
+        "supportedReferences" : {
+          "type" : "array",
+          "description" : "List of references supported by the beacon (HG-based notation).",
+          "uniqueItems" : true,
+          "items" : {
+            "type" : "string",
+            "enum" : [ "HG38", "HG19", "HG18", "HG17", "HG16" ]
+          }
+        },
+        "aggregatedBeacons" : {
+          "type" : "array",
+          "description" : "List of exposed non-aggregating beacons aggregated by this aggreagetor, or null if the beacon is not an aggreagator.",
+          "uniqueItems" : true,
+          "items" : {
+            "$ref" : "#/definitions/Beacon"
+          }
+        }
+      },
+      "xml" : {
+        "name" : "beacon"
+      }
+    },
+    "BeaconResponse" : {
+      "type" : "object",
+      "required" : [ "beacon", "query" ],
+      "properties" : {
+        "beacon" : {
+          "description" : "Beacon providing the response.",
+          "$ref" : "#/definitions/Beacon"
+        },
+        "query" : {
+          "description" : "Query as understood by the beacon.",
+          "$ref" : "#/definitions/Query"
+        },
+        "response" : {
+          "type" : "boolean",
+          "description" : "Response to the query, null indicates an error.",
+          "default" : false
+        },
+        "frequency" : {
+          "type" : "number",
+          "format" : "double",
+          "description" : "Allele frequency."
+        },
+        "externalUrl" : {
+          "type" : "string",
+          "description" : "URL to an external system providing more information about the given allele (RFC 1738 format)."
+        },
+        "info" : {
+          "type" : "object",
+          "description" : "Custom information provided by the beacon in key-value string pairs.",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        }
+      },
+      "xml" : {
+        "name" : "beacon-response"
+      }
+    },
+    "Error" : {
+      "type" : "object",
+      "required" : [ "message", "reason", "status" ],
+      "properties" : {
+        "status" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "Status code."
+        },
+        "reason" : {
+          "type" : "string",
+          "description" : "Reason phrase."
+        },
+        "message" : {
+          "type" : "string",
+          "description" : "Error message."
+        },
+        "stackTrace" : {
+          "type" : "string",
+          "description" : "Stack trace."
+        }
+      },
+      "xml" : {
+        "name" : "error"
+      }
+    },
+    "Organization" : {
+      "type" : "object",
+      "required" : [ "createdDate", "id", "name" ],
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "description" : "ID of the organization."
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "Name of the organization."
+        },
+        "description" : {
+          "type" : "string",
+          "description" : "Description of the organization."
+        },
+        "createdDate" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Date when the organization was registered in the system (ISO 8601 format)."
+        },
+        "url" : {
+          "type" : "string",
+          "description" : "Web of the organization (RFC 1738 format)."
+        },
+        "address" : {
+          "type" : "string",
+          "description" : "Address of the organization."
+        },
+        "logo" : {
+          "type" : "array",
+          "description" : "Logo of the organization (Base64 encoding as per RFC 4648).",
+          "items" : {
+            "type" : "string",
+            "format" : "byte"
+          }
+        }
+      },
+      "xml" : {
+        "name" : "organization"
+      }
+    },
+    "Query" : {
+      "type" : "object",
+      "properties" : {
+        "chromosome" : {
+          "type" : "string",
+          "description" : "Chromosome ID (1-22, X, Y, MT).",
+          "enum" : [ "CHR22", "CHR21", "CHR20", "CHR19", "CHR18", "CHR17", "CHR16", "CHR15", "CHR14", "CHR13", "CHR12", "CHR11", "CHR10", "CHR9", "CHR8", "CHR7", "CHR6", "CHR5", "CHR4", "CHR3", "CHR2", "CHR1", "CHRX", "CHRY", "CHRMT" ]
+        },
+        "position" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Coordinate within a chromosome (0-based)."
+        },
+        "allele" : {
+          "type" : "string",
+          "description" : "String of nucleotides A,C,T,G or D, I for deletion and insertion, respectively."
+        },
+        "reference" : {
+          "type" : "string",
+          "description" : "Genome/assembly ID (HG-based notation).",
+          "enum" : [ "HG38", "HG19", "HG18", "HG17", "HG16" ]
+        }
+      },
+      "xml" : {
+        "name" : "query"
+      }
+    }
+  }
+}

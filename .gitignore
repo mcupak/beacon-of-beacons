@@ -58,3 +58,4 @@ crt
 
 # deployments
 docker/httpd/data/client/*
+/Users/mcupak/Documents/dnastack/beacons/beacon-of-beacons/docker/httpd/data/docs/swagger.json
