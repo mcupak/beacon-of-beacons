@@ -61,13 +61,13 @@ public class BeaconResponseDto implements Serializable {
     @NotNull
     @ApiModelProperty(value = "Query as understood by the beacon.")
     private QueryDto query;
-    @ApiModelProperty(value = "Response to the query, null indicates an error.", example = "true")
+    @ApiModelProperty(value = "Response to the query, null indicates an error.")
     private Boolean response = null;
-    @ApiModelProperty(value = "Allele frequency.", example = "1.0")
+    @ApiModelProperty(value = "Allele frequency.")
     private Double frequency = null;
-    @ApiModelProperty(value = "URL to an external system providing more information about the given allele (RFC 1738 format).", example = "http://localhost/data?chromosome=1&position=1000allele=C")
+    @ApiModelProperty(value = "URL to an external system providing more information about the given allele (RFC 1738 format).")
     private String externalUrl = null;
-    @ApiModelProperty(value = "Custom information provided by the beacon in key-value string pairs.", example = "{\"foo\":\"bar\"}")
+    @ApiModelProperty(value = "Custom information provided by the beacon in key-value string pairs.")
     private Map<String, String> info = null;
 
 }

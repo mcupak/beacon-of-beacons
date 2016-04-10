@@ -72,7 +72,7 @@ public class BeaconResourceImpl implements BeaconResource {
     @ApiOperation(value = "Find beacon by ID", notes = "Finds beacon with the given ID.", response = BeaconDto.class)
     @ApiResponses(value = {@ApiResponse(code = 400, message = "bad request", response = Error.class), @ApiResponse(code = 404, message = "not found", response = Error.class), @ApiResponse(code = 500, message = "internal" + " server error", response = Error.class)})
     @Override
-    public BeaconDto showBeacon(@ApiParam(value = "ID of the beacon.", example = "cosmic") @PathParam(value = "beaconId") String beaconId) {
+    public BeaconDto showBeacon(@ApiParam(value = "ID of the beacon.") @PathParam(value = "beaconId") String beaconId) {
         BeaconDto b = beaconService.find(beaconId);
         if (b == null) {
             throw new NotFoundException("Cannot find beacon with ID: " + beaconId);
@@ -84,7 +84,7 @@ public class BeaconResourceImpl implements BeaconResource {
     @ApiOperation(value = "List beacons", notes = "Lists beacons.", response = BeaconDto.class, responseContainer = "List")
     @ApiResponses(value = {@ApiResponse(code = 400, message = "bad request", response = Error.class), @ApiResponse(code = 404, message = "not found", response = Error.class), @ApiResponse(code = 500, message = "internal" + " server error", response = Error.class)})
     @Override
-    public Collection<BeaconDto> show(@ApiParam(value = "Filter containing a single beacon ID or a list of comma-separated IDs enclosed in [].", example = "[cosmic,amplab]") @QueryParam(value = "beacon") String beaconIds) {
+    public Collection<BeaconDto> show(@ApiParam(value = "Filter containing a single beacon ID or a list of comma-separated IDs enclosed in [].") @QueryParam(value = "beacon") String beaconIds) {
         Set<BeaconDto> bs = new TreeSet<>(beaconComparator);
         if (beaconIds == null) {
             bs.addAll(beaconService.find());

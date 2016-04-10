@@ -56,20 +56,20 @@ public class OrganizationDto implements Serializable {
     private static final long serialVersionUID = 5579930786521160428L;
 
     @NotNull
-    @ApiModelProperty(value = "ID of the organization.", example = "wtsi")
+    @ApiModelProperty(value = "ID of the organization.")
     private String id;
     @NotNull
-    @ApiModelProperty(value = "Name of the organization.", example = "Wellcome Trust Sanger Institute")
+    @ApiModelProperty(value = "Name of the organization.")
     private String name;
-    @ApiModelProperty(value = "Description of the organization.", example = "")
+    @ApiModelProperty(value = "Description of the organization.")
     private String description;
     @NotNull
-    @ApiModelProperty(value = "Date when the organization was registered in the system (ISO 8601 format).", example = "2014-06-23")
+    @ApiModelProperty(value = "Date when the organization was registered in the system (ISO 8601 format).")
     private Date createdDate;
-    @ApiModelProperty(value = "Web of the organization (RFC 1738 format).", example = "https://www.sanger.ac.uk")
+    @ApiModelProperty(value = "Web of the organization (RFC 1738 format).")
     private String url;
-    @ApiModelProperty(value = "Address of the organization.", example = "Wellcome Trust Genome Campus, Hinxton, Cambridge. CB10 1SA, United Kingdom")
+    @ApiModelProperty(value = "Address of the organization.")
     private String address;
-    @ApiModelProperty(value = "Logo of the organization (Base64 encoding as per RFC 4648).", example = "iVBORw0KGg")
+    @ApiModelProperty(value = "Logo of the organization (Base64 encoding as per RFC 4648).")
     private byte[] logo;
 }

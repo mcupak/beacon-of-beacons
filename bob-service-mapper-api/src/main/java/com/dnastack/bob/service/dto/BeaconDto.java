@@ -57,31 +57,31 @@ public class BeaconDto implements Serializable {
     private static final long serialVersionUID = -3853326944626100071L;
 
     @NotNull
-    @ApiModelProperty(value = "ID of the beacon.", example = "cosmic")
+    @ApiModelProperty(value = "ID of the beacon.")
     private String id;
     @NotNull
-    @ApiModelProperty(value = "Name of the beacon.", example = "COSMIC")
+    @ApiModelProperty(value = "Name of the beacon.")
     private String name;
     @ApiModelProperty(hidden = true)
     private String url;
-    @ApiModelProperty(value = "Name of the organization.", example = "Wellcome Trust Sanger Institute")
+    @ApiModelProperty(value = "Name of the organization.")
     private String organization;
-    @ApiModelProperty(value = "Description of the beacon.", example = "")
+    @ApiModelProperty(value = "Description of the beacon.")
     private String description;
     @ApiModelProperty(hidden = true)
     private String homePage;
     @ApiModelProperty(hidden = true)
     private String email;
-    @ApiModelProperty(value = "true if the beacon is a virtual aggregator of beacons, false otherwise.", example = "false")
+    @ApiModelProperty(value = "true if the beacon is a virtual aggregator of beacons, false otherwise.")
     private boolean aggregator;
     @ApiModelProperty(hidden = true)
     private boolean enabled;
     @NotNull
     @ApiModelProperty(value = "Date when the beacon was registered (ISO 8601 format).-06-23")
     private Date createdDate;
-    @ApiModelProperty(value = "List of references supported by the beacon (HG-based notation).", example = "[\"HG19\",\"HG38\"]")
+    @ApiModelProperty(value = "List of references supported by the beacon (HG-based notation).")
     private Set<ReferenceDto> supportedReferences;
-    @ApiModelProperty(value = "List of exposed non-aggregating beacons aggregated by this aggreagetor, or null if the beacon is not an aggreagator.", example = "[]")
+    @ApiModelProperty(value = "List of exposed non-aggregating beacons aggregated by this aggreagetor, or null if the beacon is not an aggreagator.")
     private Set<BeaconDto> aggregatedBeacons;
 
 }

@@ -53,15 +53,15 @@ public class Error implements Serializable {
     private static final long serialVersionUID = 7211701892878610009L;
 
     @NotNull
-    @ApiModelProperty(value = "Status code.", example = "400")
+    @ApiModelProperty(value = "Status code.")
     private Integer status;
     @NotNull
-    @ApiModelProperty(value = "Reason phrase.", example = "Bad request")
+    @ApiModelProperty(value = "Reason phrase.")
     private String reason;
     @NotNull
-    @ApiModelProperty(value = "Error message.", example = "Unable to extract parameter from http request")
+    @ApiModelProperty(value = "Error message.")
     private String message;
-    @ApiModelProperty(value = "Stack trace.", example = "[org.jboss.resteasy.core.QueryParamInjector.throwProcessingException(QueryParamInjector.java:43)")
+    @ApiModelProperty(value = "Stack trace.")
     private String stackTrace;
 
 }

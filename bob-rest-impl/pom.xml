@@ -308,11 +308,11 @@
                                     <locations>com.dnastack.bob.rest.resource</locations>
                                     <schemes>https</schemes>
                                     <host>beacon-network.org</host>
-                                    <basePath>/api/docs</basePath>
+                                    <basePath>/api</basePath>
                                     <info>
                                         <title>Beacon Network API</title>
                                         <version>${project.version}</version>
-                                        <description>Documentation for the Beacon Network REST API: http://beacon-network.org/api/.</description>
+                                        <description>Documentation for the Beacon Network REST API.</description>
                                         <termsOfService>
                                             https://beacon-network.org/#/terms
                                         </termsOfService>

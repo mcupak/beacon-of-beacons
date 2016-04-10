@@ -55,6 +55,6 @@ public class UserDto implements Serializable {
     private static final long serialVersionUID = 729442166075465142L;
 
     @NotNull
-    @ApiModelProperty(value = "User name.", example = "foobat")
+    @ApiModelProperty(value = "User name.")
     private String userName;
 }

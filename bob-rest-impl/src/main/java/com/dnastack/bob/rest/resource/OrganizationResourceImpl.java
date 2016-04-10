@@ -73,7 +73,7 @@ public class OrganizationResourceImpl implements OrganizationResource {
             response = OrganizationDto.class)
     @ApiResponses(value = {@ApiResponse(code = 400, message = "bad request", response = Error.class), @ApiResponse(code = 404, message = "not found", response = Error.class), @ApiResponse(code = 500, message = "internal" + " server error", response = Error.class)})
     @Override
-    public OrganizationDto showOrganization(@ApiParam(value = "ID of the organization.", example = "wtsi") @PathParam(value = "organizationId") String organizationId) {
+    public OrganizationDto showOrganization(@ApiParam(value = "ID of the organization.") @PathParam(value = "organizationId") String organizationId) {
         OrganizationDto b = organizationService.find(organizationId);
         if (b == null) {
             throw new NotFoundException("Cannot find organization with ID: " + organizationId);
@@ -86,7 +86,7 @@ public class OrganizationResourceImpl implements OrganizationResource {
             response = OrganizationDto.class, responseContainer = "List")
     @ApiResponses(value = {@ApiResponse(code = 400, message = "bad request", response = Error.class), @ApiResponse(code = 404, message = "not found", response = Error.class), @ApiResponse(code = 500, message = "internal" + " server error", response = Error.class)})
     @Override
-    public Collection<OrganizationDto> show(@ApiParam(value = "Filter containing a single organization ID or a list of comma-separated IDs enclosed in [].", example = "[wtsi,ebi]") @QueryParam(value = "organization") String organizationIds) {
+    public Collection<OrganizationDto> show(@ApiParam(value = "Filter containing a single organization ID or a list of comma-separated IDs enclosed in [].") @QueryParam(value = "organization") String organizationIds) {
         Set<OrganizationDto> bs = new TreeSet<>(organizationComparator);
         if (organizationIds == null) {
             bs.addAll(organizationService.find());
