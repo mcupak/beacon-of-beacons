@@ -57,7 +57,7 @@ import static com.dnastack.bob.rest.util.ParameterParser.parseMultipleParameterV
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @RequestScoped
 @Named
-@Api
+@Api(value = "Organizations")
 public class OrganizationResourceImpl implements OrganizationResource {
 
     @Inject

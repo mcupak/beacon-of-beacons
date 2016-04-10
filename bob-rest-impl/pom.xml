@@ -306,16 +306,13 @@
                                 <apiSource>
                                     <springmvc>false</springmvc>
                                     <locations>com.dnastack.bob.rest.resource</locations>
-                                    <schemes>https</schemes>
-                                    <host>beacon-network.org</host>
+                                    <schemes>http</schemes>
+                                    <host>localhost:8080</host>
                                     <basePath>/api</basePath>
                                     <info>
                                         <title>Beacon Network API</title>
                                         <version>${project.version}</version>
-                                        <description>Documentation for the Beacon Network REST API.</description>
-                                        <termsOfService>
-                                            https://beacon-network.org/#/terms
-                                        </termsOfService>
+                                        <termsOfService>http://localhost:8080/#/terms</termsOfService>
                                     </info>
                                     <templatePath>${basedir}/src/main/resources/docs/swagger/templates/strapdown.html.hbs</templatePath>
                                     <outputPath>${basedir}/${swagger.dir}/html/index.html</outputPath>

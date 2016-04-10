@@ -52,7 +52,7 @@ import java.util.stream.Collectors;
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @RequestScoped
 @Named
-@Api
+@Api(value = "Chromosomes")
 public class ChromosomeResourceImpl implements ChromosomeResource {
 
     @Context

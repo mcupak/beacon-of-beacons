@@ -57,7 +57,7 @@ import static com.dnastack.bob.rest.util.ParameterParser.parseMultipleParameterV
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @RequestScoped
 @Named
-@Api
+@Api(value = "Responses")
 public class BeaconResponseResourceImpl implements BeaconResponseResource {
 
     @Context
@@ -92,7 +92,7 @@ public class BeaconResponseResourceImpl implements BeaconResponseResource {
     @ApiOperation(value = "Query beacons", notes = "Executes a query for a specific allele against beacons.", response = BeaconResponseDto.class, responseContainer = "List")
     @ApiResponses(value = {@ApiResponse(code = 400, message = "bad request", response = Error.class), @ApiResponse(code = 404, message = "not found", response = Error.class), @ApiResponse(code = 500, message = "internal" + " server error", response = Error.class)})
     @Override
-    public Collection<BeaconResponseDto> query(@ApiParam(value = "ID of the beacon.") @QueryParam(value = "beacon") String beaconIds, @ApiParam(value = "Chromosome ID. Accepted values: 1-22, X, Y, MT. Note: For compatibility with conventions set by some of the existing beacons, an arbitrary prefix is accepted as well (e.g. chr1 is equivalent to chrom1 and 1).") @QueryParam(value = "chrom") String chrom, @ApiParam(value = "Coordinate within a chromosome (0-based).", example = "1000") @QueryParam(value = "pos") Long pos, @ApiParam(value = "Any string of nucleotides A,C,T,G or D, I for deletion and insertion, respectively. Note: For compatibility with conventions set by some of the existing beacons, DEL and INS identifiers are also accepted.") @QueryParam(value = "allele") String allele, @ApiParam(value = "Genome/assembly ID. If not specified, all the genomes supported by the given beacons are queried. Note: For compatibility with conventions set by some of the existing beacons, both GRC or HG notation are accepted, case insensitive. Optional parameter.") @QueryParam(value = "ref") String ref) throws ClassNotFoundException {
+    public Collection<BeaconResponseDto> query(@ApiParam(value = "ID of the beacon.") @QueryParam(value = "beacon") String beaconIds, @ApiParam(value = "Chromosome ID. Accepted values: 1-22, X, Y, MT. Note: For compatibility with conventions set by some of the existing beacons, an arbitrary prefix is accepted as well (e.g. chr1 is equivalent to chrom1 and 1).") @QueryParam(value = "chrom") String chrom, @ApiParam(value = "Coordinate within a chromosome (0-based).") @QueryParam(value = "pos") Long pos, @ApiParam(value = "Any string of nucleotides A,C,T,G or D, I for deletion and insertion, respectively. Note: For compatibility with conventions set by some of the existing beacons, DEL and INS identifiers are also accepted.") @QueryParam(value = "allele") String allele, @ApiParam(value = "Genome/assembly ID. If not specified, all the genomes supported by the given beacons are queried. Note: For compatibility with conventions set by some of the existing beacons, both GRC or HG notation are accepted, case insensitive. Optional parameter.") @QueryParam(value = "ref") String ref) throws ClassNotFoundException {
         Set<BeaconResponseDto> brs = new TreeSet<>(beaconResponseComparator);
         if (beaconIds == null) {
             brs.addAll(beaconResponseService.queryAll(chrom, pos, allele, ref, user, ip));

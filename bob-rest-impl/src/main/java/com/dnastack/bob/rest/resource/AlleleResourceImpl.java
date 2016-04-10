@@ -52,14 +52,14 @@ import java.util.stream.Collectors;
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @RequestScoped
 @Named
-@Api
+@Api(value = "Alleles")
 public class AlleleResourceImpl implements AlleleResource {
 
     @Context
     private HttpHeaders headers;
 
     @GET
-    @ApiOperation(value = "List all alleles", notes = "Lists all the supported alleles in their canonical form.", response = AlleleDto.class, responseContainer = "List")
+    @ApiOperation(value = "List alleles", notes = "Lists all the supported alleles in their canonical form.", response = AlleleDto.class, responseContainer = "List")
     @Override
     public Response showAll() {
         return (MediaType.APPLICATION_XML.equals(MediaTypeResolver.getMediaType(headers))) ? Response.ok().entity(new JaxbList<>(AlleleDto.values())).build() : Response.ok().entity(Arrays.asList(AlleleDto.values()).stream().map(c -> c.toString()).collect(Collectors.toList())).build();

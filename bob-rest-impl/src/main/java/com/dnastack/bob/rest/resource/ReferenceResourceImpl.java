@@ -52,7 +52,7 @@ import java.util.stream.Collectors;
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @RequestScoped
 @Named
-@Api
+@Api(value = "References")
 public class ReferenceResourceImpl implements ReferenceResource {
 
     @Context
