@@ -44,6 +44,7 @@ import static com.dnastack.bob.rest.util.DataProvider.getBeacons;
 import static com.dnastack.bob.rest.util.DataProvider.getQueries;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.emptyCollectionOf;
 import static org.hamcrest.Matchers.isIn;
 
 /**
@@ -79,10 +80,13 @@ public class BeaconMultipleResponsesTest extends AbstractResponseTest {
             QueryEntry query = (QueryEntry) getQueries(b).toArray()[0];
 
             log.info(String.format("Testing query: %s", query));
-            Boolean res = readBeaconResponses(url.toExternalForm() + getUrl(query, true)).get(0).getResponse();
-            log.info(String.format("Beacon: " + query.getBeacon() + " - expected response: %s; actual response: %s", query.getResponse(), res));
-
-            collector.checkThat(query.toString(), res, equalTo(query.getResponse()));
+            List<BeaconResponseDto> brds = readBeaconResponses(url.toExternalForm() + getUrl(query, true));
+            collector.checkThat(brds, not(emptyCollectionOf(BeaconResponseDto.class)));
+            if (!brds.isEmpty()) {
+                Boolean res = brds.get(0).getResponse();
+                log.info(String.format("Beacon: " + query.getBeacon() + " - expected response: %s; actual response: %s", query.getResponse(), res));
+                collector.checkThat(query.toString(), res, equalTo(query.getResponse()));
+            }
         }
     }
 

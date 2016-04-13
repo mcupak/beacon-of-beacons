@@ -999,34 +999,34 @@
         "response": false
     },
     {
-        "beacon": "sfari",
+        "beacon": "conglomerate",
         "chromosome": "1",
         "position": 201958191,
         "allele": "T",
         "reference": null,
         "description": "all references found",
-        "response": true
+        "response": false
     },
     {
-        "beacon": "sfari",
+        "beacon": "conglomerate",
         "chromosome": "1",
         "position": 201958191,
         "allele": "T",
         "reference": "hg19",
         "description": "specific reference found",
-        "response": true
+        "response": false
     },
     {
-        "beacon": "sfari",
+        "beacon": "conglomerate",
         "chromosome": "17",
         "position": 7577119,
         "allele": "T",
         "reference": "hg38",
         "description": "specific reference not found/not supported",
-        "response": null
+        "response": false
     },
     {
-        "beacon": "sfari",
+        "beacon": "conglomerate",
         "chromosome": "17",
         "position": 7577119,
         "allele": "T",
@@ -1035,25 +1035,25 @@
         "response": null
     },
     {
-        "beacon": "sfari",
+        "beacon": "conglomerate",
         "chromosome": "1",
         "position": 201958191,
         "allele": "T",
         "reference": "grch37",
         "description": "reference conversion",
-        "response": true
+        "response": false
     },
     {
-        "beacon": "sfari",
+        "beacon": "conglomerate",
         "chromosome": "17",
         "position": 7577119,
         "allele": "TGT",
         "reference": null,
         "description": "string allele/not supported",
-        "response": null
+        "response": false
     },
     {
-        "beacon": "sfari",
+        "beacon": "conglomerate",
         "chromosome": "17",
         "position": 7577119,
         "allele": "D",
@@ -1062,16 +1062,16 @@
         "response": false
     },
     {
-        "beacon": "sfari",
+        "beacon": "conglomerate",
         "chromosome": "1",
         "position": 201958191,
         "allele": "I",
         "reference": null,
         "description": "ins/not supported",
-        "response": null
+        "response": false
     },
     {
-        "beacon": "sfari",
+        "beacon": "conglomerate",
         "chromosome": "17",
         "position": 7577119,
         "allele": "C",
@@ -1080,7 +1080,7 @@
         "response": false
     },
     {
-        "beacon": "sfari",
+        "beacon": "conglomerate",
         "chromosome": "17",
         "position": 7677120,
         "allele": "C",
@@ -1089,7 +1089,7 @@
         "response": false
     },
     {
-        "beacon": "sfari",
+        "beacon": "conglomerate",
         "chromosome": "15",
         "position": 41087869,
         "allele": "DC",
@@ -1098,7 +1098,7 @@
         "response": null
     },
     {
-        "beacon": "sfari",
+        "beacon": "conglomerate",
         "chromosome": "1",
         "position": 1002921,
         "allele": "DEL",
@@ -1107,16 +1107,16 @@
         "response": false
     },
     {
-        "beacon": "sfari",
+        "beacon": "conglomerate",
         "chromosome": "chrom1",
         "position": 201958191,
         "allele": "T",
         "reference": null,
         "description": "chromosome conversion",
-        "response": true
+        "response": false
     },
     {
-        "beacon": "sfari",
+        "beacon": "conglomerate",
         "chromosome": "30",
         "position": 41087869,
         "allele": "A",
@@ -1125,7 +1125,7 @@
         "response": null
     },
     {
-        "beacon": "sfari",
+        "beacon": "conglomerate",
         "chromosome": "X",
         "position": 41087869,
         "allele": "C",
@@ -1134,7 +1134,7 @@
         "response": false
     },
     {
-        "beacon": "sfari",
+        "beacon": "conglomerate",
         "chromosome": "mt",
         "position": 2,
         "allele": "A",
