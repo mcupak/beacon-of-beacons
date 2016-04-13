@@ -39,10 +39,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -76,6 +75,7 @@ public class BeaconDaoTest extends GenericDaoTest<Beacon, String> {
         b.setId("new");
         b.setName("new");
         b.setDescription("new");
+        b.setCreatedDate(Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
         b.setVisible(true);
         b.setEnabled(true);
         b.setAggregator(true);

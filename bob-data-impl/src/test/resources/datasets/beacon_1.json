@@ -4,6 +4,7 @@
             "id": "test",
             "name": "test",
             "description": "test",
+            "createdDate": "2016-01-01",
             "visible": true,
             "enabled": true,
             "aggregator": false,

@@ -37,7 +37,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -70,6 +73,7 @@ public class OrganizationDaoTest extends GenericDaoTest<Organization, String> {
         Organization o = new Organization();
         o.setId("new");
         o.setName("new");
+        o.setCreatedDate(Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
         res.add(o);
 
         return res;

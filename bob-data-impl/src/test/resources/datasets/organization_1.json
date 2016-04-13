@@ -3,7 +3,8 @@
         {
             "id": "test",
             "name": "test",
-            "description": "test"
+            "description": "test",
+            "createdDate": "2016-01-01"
         }
     ]
 }
