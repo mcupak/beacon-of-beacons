@@ -15,7 +15,7 @@
 Beacon Network (formerly known as the Beacon of Beacons, or BoB, for short) provides a unified REST API to publicly available GA4GH Beacons (see <http://ga4gh.org/#/beacon> for more details about the Beacon project itself). Beacon Network standardizes the way beacons are accessed and aggregates their results, thus addressing one of the missing parts of the Beacon project itself.
 
 ##System requirements
-Java 1.7 or newer, Maven 3.1 or newer, Java EE runtime (WildFly 8 recommended).
+Java 8, Maven 3.1 or newer, Java EE runtime (WildFly 8 recommended).
 
 ## How to set up the runtime
 Beacon Network needs access to a database through a JTA datasource (`java:/jboss/datasources/bob`). Make sure you have the required datasource on your application server or change the configuration in `persistence.xml`.
