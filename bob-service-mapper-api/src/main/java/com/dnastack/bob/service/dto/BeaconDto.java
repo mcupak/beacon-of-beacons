@@ -76,8 +76,9 @@ public class BeaconDto implements Serializable {
     private boolean aggregator;
     @ApiModelProperty(hidden = true)
     private boolean enabled;
-    @NotNull
-    @ApiModelProperty(value = "Date when the beacon was registered (ISO 8601 format).-06-23")
+    @ApiModelProperty(hidden = true)
+    private boolean visible;
+    @ApiModelProperty(value = "Date when the beacon was registered (ISO 8601 format).")
     private Date createdDate;
     @ApiModelProperty(value = "List of references supported by the beacon (HG-based notation).")
     private Set<ReferenceDto> supportedReferences;

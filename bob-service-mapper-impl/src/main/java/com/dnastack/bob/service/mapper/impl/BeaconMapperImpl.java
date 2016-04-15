@@ -64,10 +64,10 @@ public class BeaconMapperImpl implements BeaconMapper {
             return null;
         }
 
-        BeaconDto.BeaconDtoBuilder builder = BeaconDto.builder().id(b.getId()).name(b.getName()).aggregator(b.getAggregator()).organization(b.getOrganization() == null ? null : b.getOrganization().getName()).description(b.getDescription()).enabled(b.getEnabled()).createdDate(b.getCreatedDate()).supportedReferences(referenceMapper.mapEntitiesToDtos(b.getSupportedReferences(), showInternal));
+        BeaconDto.BeaconDtoBuilder builder = BeaconDto.builder().id(b.getId()).name(b.getName()).aggregator(b.getAggregator()).organization(b.getOrganization() == null ? null : b.getOrganization().getName()).description(b.getDescription()).createdDate(b.getCreatedDate()).supportedReferences(referenceMapper.mapEntitiesToDtos(b.getSupportedReferences(), showInternal));
 
         if (showInternal) {
-            builder.email(b.getEmail()).homePage(b.getHomePage()).url(b.getUrl());
+            builder.email(b.getEmail()).homePage(b.getHomePage()).enabled(b.getEnabled()).visible(b.getVisible()).url(b.getUrl());
         }
 
         if (b.getAggregator() != null && b.getAggregator() == true) {
@@ -79,7 +79,7 @@ public class BeaconMapperImpl implements BeaconMapper {
 
     @Override
     public Beacon mapDtoToEntity(BeaconDto b) {
-        return b == null ? null : Beacon.builder().id(b.getId()).name(b.getName()).aggregator(b.isAggregator()).description(b.getDescription()).enabled(b.isEnabled()).email(b.getEmail()).homePage(b.getHomePage()).url(b.getUrl()).supportedReferences(referenceMapper.mapDtosToEntities(b.getSupportedReferences())).createdDate(b.getCreatedDate()).build();
+        return b == null ? null : Beacon.builder().id(b.getId()).name(b.getName()).aggregator(b.isAggregator()).description(b.getDescription()).enabled(b.isEnabled()).visible(b.isVisible()).email(b.getEmail()).homePage(b.getHomePage()).url(b.getUrl()).supportedReferences(referenceMapper.mapDtosToEntities(b.getSupportedReferences())).createdDate(b.getCreatedDate()).build();
     }
 
     @Override
@@ -99,7 +99,7 @@ public class BeaconMapperImpl implements BeaconMapper {
 
     @Override
     public BeaconDto mapDtoToDto(BeaconDto b) {
-        return b == null ? null : BeaconDto.builder().id(b.getId()).name(b.getName()).aggregator(b.isAggregator()).organization(b.getOrganization()).description(b.getDescription()).enabled(b.isEnabled()).email(b.getEmail()).homePage(b.getHomePage()).url(b.getUrl()).createdDate(b.getCreatedDate()).supportedReferences(b.getSupportedReferences()).aggregatedBeacons(b.getAggregatedBeacons()).build();
+        return b == null ? null : BeaconDto.builder().id(b.getId()).name(b.getName()).aggregator(b.isAggregator()).organization(b.getOrganization()).description(b.getDescription()).enabled(b.isEnabled()).visible(b.isVisible()).email(b.getEmail()).homePage(b.getHomePage()).url(b.getUrl()).createdDate(b.getCreatedDate()).supportedReferences(b.getSupportedReferences()).aggregatedBeacons(b.getAggregatedBeacons()).build();
     }
 
 }

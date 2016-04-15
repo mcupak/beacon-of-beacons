@@ -46,6 +46,9 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -101,7 +104,10 @@ public class BeaconServiceImpl implements BeaconService {
         b.setOrganization(o);
         b.setAuth(AUTH);
         b.setUrl(beacon.getUrl() + QUERY_URL);
+        b.setEnabled(beacon.isEnabled());
+        b.setVisible(beacon.isVisible());
 
+        b.setCreatedDate(Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
         b.setResponseParser(ejbResolver.getClassId(JsonResponseExistsResponseParser.class));
         b.setExternalUrlParser(ejbResolver.getClassId(JsonResponseExternalUrlParser.class));
         b.setFetcher(ejbResolver.getClassId(GetResponseFetcher.class));
