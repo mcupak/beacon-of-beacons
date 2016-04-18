@@ -24,17 +24,12 @@
 package com.dnastack.bob.rest;
 
 import com.dnastack.bob.rest.util.QueryEntry;
-import com.dnastack.bob.service.dto.BeaconResponseDto;
-import com.dnastack.bob.service.dto.ChromosomeDto;
-import com.dnastack.bob.service.dto.QueryDto;
-import com.dnastack.bob.service.dto.ReferenceDto;
-import com.google.common.collect.ImmutableList;
 
-import javax.xml.bind.JAXBException;
-import java.net.MalformedURLException;
-import java.util.List;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import static com.dnastack.bob.rest.util.DataProvider.isQueryForMultipleBeacons;
+import static com.dnastack.bob.rest.util.RequestUtils.encode;
 
 /**
  * Test of a beacon service.
@@ -50,19 +45,23 @@ public abstract class AbstractResponseTest extends BasicTest {
     public static final String QUERY_WITH_REF_TEMPLATE = "responses?chrom=%s&pos=%s&allele=%s&ref=%s";
     public static final String QUERY_BEACON_TEMPLATE = "responses/%s?chrom=%s&pos=%s&allele=%s";
     public static final String QUERY_BEACON_WITH_REF_TEMPLATE = "responses/%s?chrom=%s&pos=%s&allele=%s&ref=%s";
-    // paths for jettisson (not jackson)
-    public static final String BEACON_RESPONSE = "beaconResponse";
-    public static final List<String> BEACON_PATH = ImmutableList.of(BEACON_RESPONSE, "beacon", "id");
-    public static final List<String> RESPONSE_PATH = ImmutableList.of(BEACON_RESPONSE, "response");
-    public static final String QUERY = "query";
-    public static final List<String> POS_PATH = ImmutableList.of(BEACON_RESPONSE, QUERY, "position");
-    public static final List<String> CHROM_PATH = ImmutableList.of(BEACON_RESPONSE, QUERY, "chromosome");
-    public static final List<String> ALLELE_PATH = ImmutableList.of(BEACON_RESPONSE, QUERY, "allele");
-    public static final List<String> REF_PATH = ImmutableList.of(BEACON_RESPONSE, QUERY, "reference");
+
+    private static String encodeBeaconIds(String beaconIds) {
+        String res;
+        if (beaconIds.startsWith("[") && beaconIds.endsWith("]")) {
+            String collect = Arrays.asList(beaconIds.substring(1, beaconIds.length() - 1).split(",")).stream().map((String b) -> encode(b)).collect(Collectors.joining(","));
+            res = "[" + collect + "]";
+        } else {
+            res = encode(beaconIds);
+        }
+
+        return res;
+    }
 
     protected static String getUrl(QueryEntry q, boolean filter) {
-        String res;
+        q.setBeacon(encodeBeaconIds(q.getBeacon()));
 
+        String res;
         if (q.getBeacon() == null || q.getBeacon().isEmpty()) {
             // query all beacons
             if (q.getReference() == null) {
@@ -86,43 +85,6 @@ public abstract class AbstractResponseTest extends BasicTest {
         }
 
         return res;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static List<BeaconResponseDto> readBeaconResponses(String url) throws JAXBException, MalformedURLException {
-        return (List<BeaconResponseDto>) readObject(BeaconResponseDto.class, url);
-    }
-
-    protected static BeaconResponseDto readBeaconResponse(String url) throws JAXBException, MalformedURLException {
-        return (BeaconResponseDto) readObject(BeaconResponseDto.class, url);
-    }
-
-    protected static String readBeaconId(String response) {
-        return readField(response, BEACON_PATH);
-    }
-
-    protected static Long readPos(String response) {
-        return Long.valueOf(readField(response, POS_PATH));
-    }
-
-    protected static ChromosomeDto readChrom(String response) {
-        return ChromosomeDto.fromString(readField(response, CHROM_PATH).substring(3));
-    }
-
-    protected static String readAllele(String response) {
-        return readField(response, ALLELE_PATH);
-    }
-
-    protected static ReferenceDto readRef(String response) {
-        return ReferenceDto.fromString(readField(response, REF_PATH));
-    }
-
-    protected static QueryDto readQuery(String response) {
-        return new QueryDto(readChrom(response), readPos(response), readAllele(response), readRef(response));
-    }
-
-    protected static Boolean readResponsePredicate(String response) {
-        return Boolean.valueOf(readField(response, RESPONSE_PATH));
     }
 
 }

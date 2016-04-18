@@ -23,7 +23,7 @@
  */
 package com.dnastack.bob.persistence;
 
-import lombok.extern.log4j.Log4j;
+import lombok.extern.java.Log;
 import org.assertj.core.api.Condition;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -38,7 +38,7 @@ import org.junit.runner.Description;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Log4j
+@Log
 public abstract class BasicDaoTest {
 
     @Rule

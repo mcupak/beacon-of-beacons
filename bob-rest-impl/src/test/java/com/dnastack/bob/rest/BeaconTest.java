@@ -24,25 +24,27 @@
 package com.dnastack.bob.rest;
 
 import com.dnastack.bob.service.dto.BeaconDto;
+import com.jayway.restassured.http.ContentType;
+import lombok.extern.java.Log;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static com.dnastack.bob.rest.util.DataProvider.getBeacons;
-import static org.hamcrest.CoreMatchers.everyItem;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.isIn;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.hamcrest.core.IsNull.notNullValue;
+import static com.dnastack.bob.rest.util.RequestUtils.encode;
+import static com.jayway.restassured.RestAssured.get;
+import static com.jayway.restassured.RestAssured.when;
+import static com.jayway.restassured.path.json.JsonPath.from;
+import static org.hamcrest.Matchers.*;
 
 /**
  * Test of beacons info.
@@ -52,45 +54,38 @@ import static org.hamcrest.core.IsNull.notNullValue;
  */
 @RunWith(Arquillian.class)
 @RunAsClient
-public class BeaconsTest extends BasicTest {
+@Log
+public class BeaconTest extends BasicTest {
 
     public static final String BEACONS_TEMPLATE = "beacons";
     public static final String BEACONS_FILTERED_TEMPLATE = "beacons?beacon=%s";
     public static final String BEACON_TEMPLATE = "beacons/%s";
 
-    public static String getUrl() {
+    private static String getUrl() {
         return BEACONS_TEMPLATE;
     }
 
-    public static String getUrl(String beaconId, boolean param) {
+    private static String getUrl(String beaconId, boolean param) {
         return String.format(param ? BEACONS_FILTERED_TEMPLATE : BEACON_TEMPLATE, beaconId);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static List<BeaconDto> readBeacons(String url) throws JAXBException, MalformedURLException {
-        return (List<BeaconDto>) readObject(BeaconDto.class, url);
-    }
-
-    public static BeaconDto readBeacon(String url) throws JAXBException, MalformedURLException {
-        return (BeaconDto) readObject(BeaconDto.class, url);
     }
 
     @Test
     public void testAllBeacons(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        List<BeaconDto> bs = readBeacons(url.toExternalForm() + getUrl());
-        Set<String> ids = bs.stream().map((BeaconDto b) -> b.getId()).collect(Collectors.toSet());
-
-        assertThat(getBeacons(), everyItem(isIn(ids)));
+        when().get((url.toExternalForm() + getUrl())).then().statusCode(Response.Status.OK.getStatusCode()).contentType(ContentType.JSON).body("id", hasItems(getBeacons().toArray()));
     }
 
     @Test
     public void testBeaconsFiltered(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        for (String id : getBeacons()) {
-            List<BeaconDto> beacons = readBeacons(url.toExternalForm() + getUrl(id, true));
+        getBeacons().stream().forEach((String id) -> {
+            log.info(String.format("Testing beacon: %s", id));
+            com.jayway.restassured.response.Response r = get((url.toExternalForm() + getUrl(encode(id), true)));
+            collector.checkThat(r.getStatusCode(), equalTo(Response.Status.OK.getStatusCode()));
+            collector.checkThat(r.getContentType(), equalTo(ContentType.JSON.toString()));
 
-            collector.checkThat(beacons, notNullValue());
-            collector.checkThat(beacons.get(0).getId(), equalTo(id));
-        }
+            List<String> ids = from(r.asString()).getList("id", String.class);
+            collector.checkThat(ids, hasSize(1));
+            collector.checkThat(ids, hasItem(id));
+        });
     }
 
     @Test
@@ -98,25 +93,29 @@ public class BeaconsTest extends BasicTest {
         Set<String> bs = getBeacons();
         String a = (String) bs.toArray()[0];
 
-        for (String b : bs) {
-            if (!a.equals(b)) {
-                List<BeaconDto> beacons = readBeacons(url.toExternalForm() + getUrl("[" + a + "," + b + "]", true));
+        bs.stream().filter((String b) -> !a.equals(b)).forEach((String b) -> {
+            log.info(String.format("Testing beacons: %s, %s", a, b));
+            com.jayway.restassured.response.Response r = get((url.toExternalForm() + getUrl("[" + encode(a) + "," + encode(b) + "]", true)));
+            collector.checkThat(r.getStatusCode(), equalTo(Response.Status.OK.getStatusCode()));
+            collector.checkThat(r.getContentType(), equalTo(ContentType.JSON.toString()));
 
-                collector.checkThat(beacons, notNullValue());
-                collector.checkThat(beacons.size(), equalTo(2));
-                collector.checkThat((beacons.get(0).getId().equals(a) || beacons.get(0).getId().equals(b)) && (beacons.get(1).getId().equals(a) || beacons.get(1).getId().equals(b)), equalTo(true));
-            }
-        }
-
+            List<String> ids = from(r.asString()).getList("id", String.class);
+            collector.checkThat(ids, hasSize(2));
+            collector.checkThat(ids, containsInAnyOrder(a, b));
+        });
     }
 
     @Test
     public void testBeacon(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        for (String id : getBeacons()) {
-            BeaconDto b = readBeacon(url.toExternalForm() + getUrl(id, false));
+        getBeacons().stream().forEach((String id) -> {
+            log.info(String.format("Testing beacon: %s", id));
+            com.jayway.restassured.response.Response r = get((url.toExternalForm() + getUrl(encode(id), false)));
+            collector.checkThat(r.getStatusCode(), equalTo(Response.Status.OK.getStatusCode()));
+            collector.checkThat(r.getContentType(), equalTo(ContentType.JSON.toString()));
 
+            BeaconDto b = r.as(BeaconDto.class);
             collector.checkThat(b, notNullValue());
             collector.checkThat(b.getId(), equalTo(id));
-        }
+        });
     }
 }

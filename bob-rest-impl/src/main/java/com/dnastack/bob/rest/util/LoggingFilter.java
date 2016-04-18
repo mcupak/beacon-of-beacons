@@ -23,7 +23,7 @@
  */
 package com.dnastack.bob.rest.util;
 
-import lombok.extern.log4j.Log4j;
+import lombok.extern.java.Log;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -44,7 +44,7 @@ import static com.dnastack.bob.rest.util.IpExtractor.extractIpAddress;
  * @version 1.0
  */
 @Provider
-@Log4j
+@Log
 public class LoggingFilter implements ContainerRequestFilter, Serializable {
 
     private static final DateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-YYYY HH:mm:ss Z");

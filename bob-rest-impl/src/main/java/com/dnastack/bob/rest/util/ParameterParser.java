@@ -59,7 +59,7 @@ public class ParameterParser {
      * @return true/false
      */
     public static boolean parameterHasSingleValidValue(@NonNull String param) {
-        return param.matches("[-a-zA-Z0-9]*");
+        return param.matches("([-a-zA-Z_0-9\\.\\+])*");
     }
 
     /**

@@ -39,7 +39,7 @@ import com.dnastack.bob.service.processor.util.EjbResolver;
 import com.dnastack.bob.service.requester.impl.RefChromPosAlleleRequestConstructor;
 import com.google.common.collect.ImmutableSet;
 import lombok.NonNull;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.java.Log;
 
 import javax.ejb.Local;
 import javax.ejb.Stateless;
@@ -63,7 +63,7 @@ import java.util.stream.Collectors;
 @Local(BeaconService.class)
 @Named
 @Transactional
-@Log4j
+@Log
 public class BeaconServiceImpl implements BeaconService {
 
     public static final String QUERY_URL = "/query?reference=%s&chromosome=%s&position=%d&referenceBases=&alternateBases=%s&dataset=";

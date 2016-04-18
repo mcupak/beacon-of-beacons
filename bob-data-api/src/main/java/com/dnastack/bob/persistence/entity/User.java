@@ -55,4 +55,5 @@ public class User implements BasicEntity<Long> {
     @NotNull
     @Column(unique = true, nullable = false)
     private String userName;
+
 }

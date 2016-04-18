@@ -23,19 +23,20 @@
  */
 package com.dnastack.bob.rest;
 
-import com.dnastack.bob.rest.base.RestEndPoint;
+import com.jayway.restassured.http.ContentType;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static com.jayway.restassured.RestAssured.when;
+import static org.hamcrest.Matchers.hasItems;
 
 /**
  * Test of help resource.
@@ -48,27 +49,10 @@ import static org.junit.Assert.assertEquals;
 public class HelpTest extends BasicTest {
 
     public static final String HELP_TEMPLATE = "";
-    public static final String BEACONS = "beacons";
-    public static final String RESPONSES = "responses";
-
-    public static String getUrl() {
-        return HELP_TEMPLATE;
-    }
-
-    @SuppressWarnings("unchecked")
-    public static List<RestEndPoint> readRestEndPoints(String url) throws JAXBException, MalformedURLException {
-        return (List<RestEndPoint>) readObject(RestEndPoint.class, url);
-    }
-
-    public static RestEndPoint readRestEndPoint(String url) throws JAXBException, MalformedURLException {
-        return (RestEndPoint) readObject(RestEndPoint.class, url);
-    }
 
     @Test
     public void testHelp(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        List<RestEndPoint> rs = readRestEndPoints(url.toExternalForm() + getUrl());
-
-        assertEquals(6, rs.size());
+        when().get((url.toExternalForm() + HELP_TEMPLATE)).then().statusCode(Response.Status.OK.getStatusCode()).contentType(ContentType.JSON).body("id", hasItems("alleles", "references", "chromosomes", "organizations", "beacons", "responses"));
     }
 
 }

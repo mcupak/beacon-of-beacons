@@ -39,7 +39,7 @@ import com.dnastack.bob.service.processor.util.EjbResolver;
 import com.dnastack.bob.service.requester.api.RequestConstructor;
 import lombok.*;
 import lombok.experimental.Builder;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.java.Log;
 
 import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
@@ -69,7 +69,7 @@ import static com.dnastack.bob.service.processor.util.ErrorUtils.getErrorMessage
 @Stateless
 @Named
 @Dependent
-@Log4j
+@Log
 @Local(BeaconProcessor.class)
 public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
 
@@ -149,7 +149,7 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
                     FutureBeaconResponse fbr = FutureBeaconResponse.builder().response(rp == null ? null : rp.parse(b, f)).externalUrl(eup == null ? null : eup.parse(b, f)).info(mp == null ? null : mp.parse(b, f)).build();
                     bs.add(fbr);
                 } catch (Exception ex) {
-                    log.error(getErrorMessage(ex));
+                    log.severe(getErrorMessage(ex));
                 }
             });
         }
@@ -169,7 +169,7 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
                 url = fbr.getExternalUrl() == null ? null : fbr.getExternalUrl().get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
                 info = fbr.getInfo() == null ? null : fbr.getInfo().get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
             } catch (InterruptedException | ExecutionException | TimeoutException ex) {
-                log.error(getErrorMessage(ex));
+                log.severe(getErrorMessage(ex));
             }
             if (response != null) {
                 if (response) {

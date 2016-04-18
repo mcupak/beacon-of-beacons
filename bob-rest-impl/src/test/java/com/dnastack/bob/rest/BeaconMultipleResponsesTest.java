@@ -24,28 +24,28 @@
 package com.dnastack.bob.rest;
 
 import com.dnastack.bob.rest.util.QueryEntry;
-import com.dnastack.bob.service.dto.BeaconResponseDto;
-import lombok.extern.log4j.Log4j;
+import com.jayway.restassured.http.ContentType;
+import lombok.extern.java.Log;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-import static com.dnastack.bob.rest.util.BeaconResponseTestUtils.queriesMatch;
 import static com.dnastack.bob.rest.util.DataProvider.getBeacons;
 import static com.dnastack.bob.rest.util.DataProvider.getQueries;
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.emptyCollectionOf;
-import static org.hamcrest.Matchers.isIn;
+import static com.jayway.restassured.RestAssured.get;
+import static com.jayway.restassured.RestAssured.when;
+import static com.jayway.restassured.path.json.JsonPath.from;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.everyItem;
+import static org.hamcrest.Matchers.*;
 
 /**
  * Test of responses.
@@ -55,63 +55,65 @@ import static org.hamcrest.Matchers.isIn;
  */
 @RunWith(Arquillian.class)
 @RunAsClient
-@Log4j
+@Log
 public class BeaconMultipleResponsesTest extends AbstractResponseTest {
 
     @Test
     public void testAllResponses(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         QueryEntry q = new QueryEntry(getQueries().get(0));
         q.setBeacon(null);
-        List<BeaconResponseDto> brs = readBeaconResponses(url.toExternalForm() + getUrl(q, true));
 
-        Set<String> ids = brs.stream().map((BeaconResponseDto br) -> br.getBeacon().getId()).collect(Collectors.toSet());
-        assertThat(getBeacons(), everyItem(isIn(ids)));
-
-        brs.stream().forEach((BeaconResponseDto br) -> {
-            assertThat(queriesMatch(br.getQuery(), q), is(true));
-        });
+        when().get((url.toExternalForm() + getUrl(q, true))).then().statusCode(Response.Status.OK.getStatusCode()).contentType(ContentType.JSON).body("beacon.id", hasItems(getBeacons().toArray())).body("query.chromosome", everyItem(containsString(q.getChromosome()))).body("query.position", everyItem(equalTo(q.getPosition().intValue()))).body("query.allele", everyItem(equalTo(q.getAllele()))).body("query.reference", everyItem(equalTo(q.getReference())));
     }
 
     @Test
     public void testResponsesFiltered(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        Set<String> beacons = getBeacons();
-
-        for (String b : beacons) {
+        getBeacons().stream().forEach((String b) -> {
             QueryEntry query = (QueryEntry) getQueries(b).toArray()[0];
-
             log.info(String.format("Testing query: %s", query));
-            List<BeaconResponseDto> brds = readBeaconResponses(url.toExternalForm() + getUrl(query, true));
-            collector.checkThat(brds, not(emptyCollectionOf(BeaconResponseDto.class)));
-            if (!brds.isEmpty()) {
-                Boolean res = brds.get(0).getResponse();
-                log.info(String.format("Beacon: " + query.getBeacon() + " - expected response: %s; actual response: %s", query.getResponse(), res));
-                collector.checkThat(query.toString(), res, equalTo(query.getResponse()));
-            }
-        }
+
+            com.jayway.restassured.response.Response r = get(url.toExternalForm() + getUrl(query, true));
+            collector.checkThat(r.getStatusCode(), equalTo(Response.Status.OK.getStatusCode()));
+            collector.checkThat(r.getContentType(), equalTo(ContentType.JSON.toString()));
+
+            List<String> beaconIds = from(r.asString()).getList("beacon.id", String.class);
+            collector.checkThat(beaconIds, hasSize(1));
+            collector.checkThat(beaconIds, hasItem(query.getBeacon()));
+
+            List<Boolean> responses = from(r.asString()).getList("response", Boolean.class);
+            collector.checkThat(responses, hasSize(1));
+            collector.checkThat(responses, hasItem(query.getResponse()));
+
+            log.info(String.format("Beacon: " + query.getBeacon() + " - expected response: %s; actual response: %s", query.getResponse(), responses.get(0)));
+        });
     }
 
     @Test
     public void testMultipleResponsesFiltered(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        QueryEntry query = new QueryEntry(getQueries().get(0));
-        Set<String> beacons = getBeacons();
-        String a = query.getBeacon();
+        QueryEntry q = new QueryEntry(getQueries().get(0));
+        String a = q.getBeacon();
 
-        for (String b : beacons) {
-            if (!a.equals(b)) {
-                query.setBeacon(String.format("[%s,%s]", a, b));
-                log.info(String.format("Testing query: %s", query));
+        getBeacons().stream().filter((String b) -> !a.equals(b)).forEach((String b) -> {
+            q.setBeacon(String.format("[%s,%s]", a, b));
+            log.info(String.format("Testing query: %s", q));
+            System.out.println(url.toExternalForm() + getUrl(q, true));
 
-                List<BeaconResponseDto> brs = readBeaconResponses(url.toExternalForm() + getUrl(query, true));
+            com.jayway.restassured.response.Response r = get(url.toExternalForm() + getUrl(q, true));
+            collector.checkThat(r.getStatusCode(), equalTo(Response.Status.OK.getStatusCode()));
+            collector.checkThat(r.getContentType(), equalTo(ContentType.JSON.toString()));
 
-                Set<String> ids = brs.stream().map((BeaconResponseDto br) -> br.getBeacon().getId()).collect(Collectors.toSet());
-                collector.checkThat(query.toString(), a, isIn(ids));
-                collector.checkThat(query.toString(), b, isIn(ids));
-                collector.checkThat(query.toString(), ids.size(), equalTo(2));
+            List<String> beaconIds = from(r.asString()).getList("beacon.id", String.class);
+            collector.checkThat(beaconIds, hasSize(2));
+            collector.checkThat(beaconIds, containsInAnyOrder(a, b));
 
-                brs.stream().forEach((BeaconResponseDto br) -> {
-                    collector.checkThat(query.toString(), queriesMatch(br.getQuery(), query), is(true));
-                });
-            }
-        }
+            List<String> chromosomes = from(r.asString()).getList("query.chromosome", String.class);
+            collector.checkThat(chromosomes, everyItem(containsString(q.getChromosome())));
+            List<Long> positions = from(r.asString()).getList("query.position", Long.class);
+            collector.checkThat(positions, everyItem(equalTo(q.getPosition())));
+            List<String> alleles = from(r.asString()).getList("query.allele", String.class);
+            collector.checkThat(alleles, everyItem(equalTo(q.getAllele())));
+            List<String> references = from(r.asString()).getList("query.reference", String.class);
+            collector.checkThat(references, everyItem(equalTo(q.getReference())));
+        });
     }
 }

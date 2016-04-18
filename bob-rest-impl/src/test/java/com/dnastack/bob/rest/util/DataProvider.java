@@ -25,7 +25,7 @@ package com.dnastack.bob.rest.util;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.java.Log;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
-@Log4j
+@Log
 public class DataProvider {
 
     private static final String FILE = "/queries.json";
@@ -57,10 +57,10 @@ public class DataProvider {
             try (BufferedReader b = new BufferedReader(new InputStreamReader(DataProvider.class.getResourceAsStream(FILE), StandardCharsets.UTF_8))) {
                 res = new Gson().fromJson(b, collectionType);
             } catch (FileNotFoundException ex) {
-                log.info("Could not find file with test data.", ex);
+                log.info("Could not find file with test data.");
             }
         } catch (IOException ex) {
-            log.info("Could not open file with test data.", ex);
+            log.info("Could not open file with test data.");
         }
 
         queries = res;

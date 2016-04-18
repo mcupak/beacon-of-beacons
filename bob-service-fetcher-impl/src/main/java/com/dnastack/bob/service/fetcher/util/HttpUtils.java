@@ -23,7 +23,7 @@
  */
 package com.dnastack.bob.service.fetcher.util;
 
-import lombok.extern.log4j.Log4j;
+import lombok.extern.java.Log;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
@@ -53,7 +53,7 @@ import java.util.List;
  */
 @Named
 @Dependent
-@Log4j
+@Log
 public class HttpUtils {
 
     private static final int REQUEST_TIMEOUT = 30;
@@ -71,7 +71,7 @@ public class HttpUtils {
             try {
                 httpClient.close();
             } catch (IOException ex) {
-                log.error(ex.getMessage());
+                log.severe(ex.getMessage());
             }
         }
     }
@@ -139,14 +139,14 @@ public class HttpUtils {
             HttpEntity entity = res.getEntity();
             response = (entity == null) ? null : EntityUtils.toString(entity);
         } catch (IOException ex) {
-            log.error(Arrays.asList(ex.getStackTrace()).toString());
+            log.severe(Arrays.asList(ex.getStackTrace()).toString());
         } finally {
             try {
                 if (res != null) {
                     res.close();
                 }
             } catch (IOException ex) {
-                log.error(Arrays.asList(ex.getStackTrace()).toString());
+                log.severe(Arrays.asList(ex.getStackTrace()).toString());
             }
         }
         return response;
