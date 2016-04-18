@@ -96,7 +96,6 @@ public class BeaconMultipleResponsesTest extends AbstractResponseTest {
         getBeacons().stream().filter((String b) -> !a.equals(b)).forEach((String b) -> {
             q.setBeacon(String.format("[%s,%s]", a, b));
             log.info(String.format("Testing query: %s", q));
-            System.out.println(url.toExternalForm() + getUrl(q, true));
 
             com.jayway.restassured.response.Response r = get(url.toExternalForm() + getUrl(q, true));
             collector.checkThat(r.getStatusCode(), equalTo(Response.Status.OK.getStatusCode()));

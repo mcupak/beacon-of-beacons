@@ -47,6 +47,10 @@ public abstract class AbstractResponseTest extends BasicTest {
     public static final String QUERY_BEACON_WITH_REF_TEMPLATE = "responses/%s?chrom=%s&pos=%s&allele=%s&ref=%s";
 
     private static String encodeBeaconIds(String beaconIds) {
+        if (beaconIds == null) {
+            return null;
+        }
+
         String res;
         if (beaconIds.startsWith("[") && beaconIds.endsWith("]")) {
             String collect = Arrays.asList(beaconIds.substring(1, beaconIds.length() - 1).split(",")).stream().map((String b) -> encode(b)).collect(Collectors.joining(","));
