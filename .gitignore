@@ -50,6 +50,9 @@ local.properties
 *.iml
 .idea
 
+#jrebel
+rebel.xml
+
 # certificate files
 crt
 *.crt

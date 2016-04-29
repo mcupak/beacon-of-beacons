@@ -114,12 +114,14 @@ public abstract class GenericDaoTest<T extends BasicEntity<I>, I> extends BasicD
     }
 
     protected BasicEntity findOneByAttribute(Class<? extends BasicEntity> entity, String attribute, String value) {
-        @SuppressWarnings("unchecked") List<BasicEntity> res = em.createQuery("SELECT e FROM " + getTableName(entity) + " e WHERE e." + attribute + "=" + value).getResultList();
+        @SuppressWarnings("unchecked")
+        List<BasicEntity> res = em.createQuery("SELECT e FROM " + getTableName(entity) + " e WHERE e." + attribute + "=" + value).getResultList();
         return (res.isEmpty()) ? null : res.get(0);
     }
 
     protected BasicEntity findOne(Class<? extends BasicEntity> entity) {
-        @SuppressWarnings("unchecked") List<BasicEntity> res = em.createQuery(String.format("SELECT e FROM %s e", getTableName(entity))).getResultList();
+        @SuppressWarnings("unchecked")
+        List<BasicEntity> res = em.createQuery(String.format("SELECT e FROM %s e", getTableName(entity))).getResultList();
 
         return (res.isEmpty()) ? null : res.get(0);
     }

@@ -57,5 +57,5 @@ public class DataUseRequirement implements BasicEntity<Long> {
     private String description;
     @ManyToMany(mappedBy = "requirements")
     private List<DataUse> dataUses;
-    
+
 }
