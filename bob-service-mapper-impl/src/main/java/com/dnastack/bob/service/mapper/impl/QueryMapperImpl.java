@@ -53,32 +53,67 @@ public class QueryMapperImpl implements QueryMapper {
 
     @Override
     public QueryDto mapEntityToDto(Query q, boolean showInternal) {
-        return (q == null) ? null : QueryDto.builder().chromosome(chromosomeMapper.mapEntityToDto(q.getChromosome(), showInternal)).position(q.getPosition()).allele(q.getAllele()).reference(referenceMapper.mapEntityToDto(q.getReference(), showInternal)).build();
+        return (q == null)
+               ? null
+               : QueryDto.builder()
+                         .chromosome(chromosomeMapper.mapEntityToDto(q.getChromosome(), showInternal))
+                         .position(q.getPosition())
+                         .allele(q.getAllele())
+                         .reference(referenceMapper.mapEntityToDto(q.getReference(), showInternal))
+                         .build();
     }
 
     @Override
     public Query mapDtoToEntity(QueryDto q) {
-        return (q == null) ? null : Query.builder().chromosome(chromosomeMapper.mapDtoToEntity(q.getChromosome())).position(q.getPosition()).allele(q.getAllele()).reference(referenceMapper.mapDtoToEntity(q.getReference())).build();
+        return (q == null)
+               ? null
+               : Query.builder()
+                      .chromosome(chromosomeMapper.mapDtoToEntity(q.getChromosome()))
+                      .position(q.getPosition())
+                      .allele(q.getAllele())
+                      .reference(referenceMapper.mapDtoToEntity(q.getReference()))
+                      .build();
     }
 
     @Override
     public Set<QueryDto> mapEntitiesToDtos(Collection<Query> qs, boolean showInternal) {
-        return (qs == null) ? null : qs.parallelStream().map((Query q) -> mapEntityToDto(q, showInternal)).collect(Collectors.toSet());
+        return (qs == null)
+               ? null
+               : qs.parallelStream().map((Query q) -> mapEntityToDto(q, showInternal)).collect(Collectors.toSet());
     }
 
     @Override
     public Set<Query> mapDtosToEntities(Collection<QueryDto> qs) {
-        return (qs == null) ? null : qs.parallelStream().map((QueryDto q) -> mapDtoToEntity(q)).collect(Collectors.toSet());
+        return (qs == null)
+               ? null
+               : qs.parallelStream().map((QueryDto q) -> mapDtoToEntity(q)).collect(Collectors.toSet());
     }
 
     @Override
     public Query mapEntityToEntity(Query q) {
-        return (q == null) ? null : Query.builder().chromosome(q.getChromosome()).position(q.getPosition()).allele(q.getAllele()).reference(q.getReference()).dataSet(q.getDataSet()).user(q.getUser()).submitted(new Date()).build();
+        return (q == null)
+               ? null
+               : Query.builder()
+                      .chromosome(q.getChromosome())
+                      .position(q.getPosition())
+                      .allele(q.getAllele())
+                      .reference(q.getReference())
+                      .dataSet(q.getDataSet())
+                      .user(q.getUser())
+                      .submitted(new Date())
+                      .build();
     }
 
     @Override
     public QueryDto mapDtoToDto(QueryDto q) {
-        return (q == null) ? null : QueryDto.builder().chromosome(q.getChromosome()).position(q.getPosition()).allele(q.getAllele()).reference(q.getReference()).build();
+        return (q == null)
+               ? null
+               : QueryDto.builder()
+                         .chromosome(q.getChromosome())
+                         .position(q.getPosition())
+                         .allele(q.getAllele())
+                         .reference(q.getReference())
+                         .build();
     }
 
 }

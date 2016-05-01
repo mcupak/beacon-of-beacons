@@ -48,7 +48,15 @@ public class BeaconApplication extends Application {
 
     @Override
     public Set<Class<?>> getClasses() {
-        return new HashSet<>(Arrays.asList(RestEndPointResourceImpl.class, BeaconResourceImpl.class, BeaconResponseResourceImpl.class, ReferenceResourceImpl.class, ChromosomeResourceImpl.class, AlleleResourceImpl.class, OrganizationResourceImpl.class, LoggingFilter.class, ExceptionHandler.class));
+        return new HashSet<>(Arrays.asList(RestEndPointResourceImpl.class,
+                                           BeaconResourceImpl.class,
+                                           BeaconResponseResourceImpl.class,
+                                           ReferenceResourceImpl.class,
+                                           ChromosomeResourceImpl.class,
+                                           AlleleResourceImpl.class,
+                                           OrganizationResourceImpl.class,
+                                           LoggingFilter.class,
+                                           ExceptionHandler.class));
     }
 
     @Override
@@ -58,7 +66,7 @@ public class BeaconApplication extends Application {
             corsFilter.getAllowedOrigins().add("*");
             corsFilter.setAllowCredentials(true);
             corsFilter.setAllowedMethods("GET, POST, PUT, DELETE, OPTIONS, HEAD");
-//            corsFilter.setAllowedHeaders("origin, content-type, accept, authorization");
+            //            corsFilter.setAllowedHeaders("origin, content-type, accept, authorization");
             corsFilter.setCorsMaxAge(1209600);
 
             singletons = new HashSet<>();

@@ -53,7 +53,10 @@ public abstract class AbstractResponseTest extends BasicTest {
 
         String res;
         if (beaconIds.startsWith("[") && beaconIds.endsWith("]")) {
-            String collect = Arrays.asList(beaconIds.substring(1, beaconIds.length() - 1).split(",")).stream().map((String b) -> encode(b)).collect(Collectors.joining(","));
+            String collect = Arrays.asList(beaconIds.substring(1, beaconIds.length() - 1).split(","))
+                                   .stream()
+                                   .map((String b) -> encode(b))
+                                   .collect(Collectors.joining(","));
             res = "[" + collect + "]";
         } else {
             res = encode(beaconIds);
@@ -71,20 +74,42 @@ public abstract class AbstractResponseTest extends BasicTest {
             if (q.getReference() == null) {
                 res = String.format(QUERY_TEMPLATE, q.getChromosome(), q.getPosition(), q.getAllele());
             } else {
-                res = String.format(QUERY_WITH_REF_TEMPLATE, q.getChromosome(), q.getPosition(), q.getAllele(), q.getReference());
+                res = String.format(QUERY_WITH_REF_TEMPLATE,
+                                    q.getChromosome(),
+                                    q.getPosition(),
+                                    q.getAllele(),
+                                    q.getReference());
             }
         } else if (isQueryForMultipleBeacons(q) || filter) {
             // filtering
             if (q.getReference() == null) {
-                res = String.format(QUERY_BEACON_FILTER_TEMPLATE, q.getBeacon(), q.getChromosome(), q.getPosition(), q.getAllele());
+                res = String.format(QUERY_BEACON_FILTER_TEMPLATE,
+                                    q.getBeacon(),
+                                    q.getChromosome(),
+                                    q.getPosition(),
+                                    q.getAllele());
             } else {
-                res = String.format(QUERY_BEACON_FILTER_WITH_REF_TEMPLATE, q.getBeacon(), q.getChromosome(), q.getPosition(), q.getAllele(), q.getReference());
+                res = String.format(QUERY_BEACON_FILTER_WITH_REF_TEMPLATE,
+                                    q.getBeacon(),
+                                    q.getChromosome(),
+                                    q.getPosition(),
+                                    q.getAllele(),
+                                    q.getReference());
             }
         } else {
             if (q.getReference() == null) {
-                res = String.format(QUERY_BEACON_TEMPLATE, q.getBeacon(), q.getChromosome(), q.getPosition(), q.getAllele());
+                res = String.format(QUERY_BEACON_TEMPLATE,
+                                    q.getBeacon(),
+                                    q.getChromosome(),
+                                    q.getPosition(),
+                                    q.getAllele());
             } else {
-                res = String.format(QUERY_BEACON_WITH_REF_TEMPLATE, q.getBeacon(), q.getChromosome(), q.getPosition(), q.getAllele(), q.getReference());
+                res = String.format(QUERY_BEACON_WITH_REF_TEMPLATE,
+                                    q.getBeacon(),
+                                    q.getChromosome(),
+                                    q.getPosition(),
+                                    q.getAllele(),
+                                    q.getReference());
             }
         }
 

@@ -1,0 +1,20 @@
+[
+    {
+        "beacon": "amplab",
+        "chromosome": "15",
+        "position": 41087869,
+        "allele": "A",
+        "reference": null,
+        "description": "all references found",
+        "response": true
+    },
+    {
+        "beacon": "icgc",
+        "chromosome": "17",
+        "position": 7577119,
+        "allele": "T",
+        "reference": null,
+        "description": "all references found",
+        "response": true
+    }
+]

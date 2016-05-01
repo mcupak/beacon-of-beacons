@@ -46,27 +46,34 @@ public class OrganizationDaoImpl extends AbstractGenericDaoImpl<Organization, St
 
     @Override
     public Organization findByName(@NonNull String name) {
-        return getSingleResult(em.createNamedQuery("findOrganizationByName", Organization.class).setParameter("name", name));
+        return getSingleResult(em.createNamedQuery("findOrganizationByName", Organization.class)
+                                 .setParameter("name", name));
     }
 
     @Override
     public List<Organization> findByVisibility(boolean visible) {
-        return getResultList(em.createNamedQuery("findOrganizationsByVisibility", Organization.class).setParameter("visible", visible));
+        return getResultList(em.createNamedQuery("findOrganizationsByVisibility", Organization.class)
+                               .setParameter("visible", visible));
     }
 
     @Override
     public Organization findByIdAndVisibility(String id, boolean visible) {
-        return getSingleResult(em.createNamedQuery("findOrganizationByIdAndVisibility", Organization.class).setParameter("id", id).setParameter("visible", visible));
+        return getSingleResult(em.createNamedQuery("findOrganizationByIdAndVisibility", Organization.class)
+                                 .setParameter("id", id)
+                                 .setParameter("visible", visible));
     }
 
     @Override
     public List<Organization> findByIdsAndVisibility(Collection<String> ids, boolean visible) {
-        return getResultList(em.createNamedQuery("findOrganizationsByIdsAndVisibility", Organization.class).setParameter("ids", ids).setParameter("visible", visible));
+        return getResultList(em.createNamedQuery("findOrganizationsByIdsAndVisibility", Organization.class)
+                               .setParameter("ids", ids)
+                               .setParameter("visible", visible));
     }
 
     @Override
     public List<Organization> findByIds(Collection<String> ids) {
-        return getResultList(em.createNamedQuery("findOrganizationsByIds", Organization.class).setParameter("ids", ids));
+        return getResultList(em.createNamedQuery("findOrganizationsByIds", Organization.class)
+                               .setParameter("ids", ids));
     }
 
 }

@@ -62,6 +62,15 @@ public class ChromosomeResourceImpl implements ChromosomeResource {
     @ApiOperation(value = "List all chromosomes", notes = "Lists all the supported chromosomes in their canonical form.", response = ChromosomeDto.class, responseContainer = "List")
     @Override
     public Response showAll() {
-        return (MediaType.APPLICATION_XML.equals(MediaTypeResolver.getMediaType(headers))) ? Response.ok().entity(new JaxbList<>(ChromosomeDto.values())).build() : Response.ok().entity(Arrays.asList(ChromosomeDto.values()).stream().map(c -> c.toString()).collect(Collectors.toList())).build();
+        return (MediaType.APPLICATION_XML.equals(MediaTypeResolver.getMediaType(headers)))
+               ? Response.ok()
+                         .entity(new JaxbList<>(ChromosomeDto.values()))
+                         .build()
+               : Response.ok()
+                         .entity(Arrays.asList(ChromosomeDto.values())
+                                       .stream()
+                                       .map(c -> c.toString())
+                                       .collect(Collectors.toList()))
+                         .build();
     }
 }

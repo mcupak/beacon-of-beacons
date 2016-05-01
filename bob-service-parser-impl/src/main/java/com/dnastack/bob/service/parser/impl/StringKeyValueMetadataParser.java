@@ -63,7 +63,9 @@ public class StringKeyValueMetadataParser implements MetadataParser, Serializabl
     public Future<Map<String, String>> parse(Beacon b, Future<String> response) {
         Map<String, String> res = null;
         try {
-            res = parseStringMapFromJson(response.get(REQUEST_TIMEOUT, TimeUnit.SECONDS), RESPONSE_FIELD, METADATA_FIELD);
+            res = parseStringMapFromJson(response.get(REQUEST_TIMEOUT, TimeUnit.SECONDS),
+                                         RESPONSE_FIELD,
+                                         METADATA_FIELD);
         } catch (InterruptedException | ExecutionException | TimeoutException ex) {
             // ignore
         }

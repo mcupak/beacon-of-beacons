@@ -54,31 +54,72 @@ public class BeaconResponseMapperImpl implements BeaconResponseMapper {
 
     @Override
     public BeaconResponseDto mapEntityToDto(BeaconResponse br, boolean showInternal) {
-        return (br == null) ? null : BeaconResponseDto.builder().beacon(beaconMapper.mapEntityToDto(br.getBeacon(), showInternal)).query(queryMapper.mapEntityToDto(br.getQuery(), showInternal)).response(br.getResponse()).externalUrl(br.getExternalUrl()).info(br.getInfo()).build();
+        return (br == null)
+               ? null
+               : BeaconResponseDto.builder()
+                                  .beacon(beaconMapper.mapEntityToDto(br.getBeacon(), showInternal))
+                                  .query(queryMapper.mapEntityToDto(br.getQuery(), showInternal))
+                                  .response(br.getResponse())
+                                  .externalUrl(br.getExternalUrl())
+                                  .info(br.getInfo())
+                                  .build();
     }
 
     @Override
     public BeaconResponse mapDtoToEntity(BeaconResponseDto br) {
-        return (br == null) ? null : BeaconResponse.builder().beacon(beaconMapper.mapDtoToEntity(br.getBeacon())).query(queryMapper.mapDtoToEntity(br.getQuery())).response(br.getResponse()).externalUrl(br.getExternalUrl()).frequency(br.getFrequency()).info(br.getInfo()).build();
+        return (br == null)
+               ? null
+               : BeaconResponse.builder()
+                               .beacon(beaconMapper.mapDtoToEntity(br.getBeacon()))
+                               .query(queryMapper.mapDtoToEntity(br.getQuery()))
+                               .response(br.getResponse())
+                               .externalUrl(br.getExternalUrl())
+                               .frequency(br.getFrequency())
+                               .info(br.getInfo())
+                               .build();
     }
 
     @Override
     public BeaconResponse mapEntityToEntity(BeaconResponse br) {
-        return (br == null) ? null : BeaconResponse.builder().beacon(br.getBeacon()).query(br.getQuery()).response(br.getResponse()).externalUrl(br.getExternalUrl()).frequency(br.getFrequency()).info(br.getInfo()).build();
+        return (br == null)
+               ? null
+               : BeaconResponse.builder()
+                               .beacon(br.getBeacon())
+                               .query(br.getQuery())
+                               .response(br.getResponse())
+                               .externalUrl(br.getExternalUrl())
+                               .frequency(br.getFrequency())
+                               .info(br.getInfo())
+                               .build();
     }
 
     @Override
     public BeaconResponseDto mapDtoToDto(BeaconResponseDto br) {
-        return (br == null) ? null : BeaconResponseDto.builder().beacon(br.getBeacon()).query(br.getQuery()).response(br.getResponse()).externalUrl(br.getExternalUrl()).frequency(br.getFrequency()).info(br.getInfo()).build();
+        return (br == null)
+               ? null
+               : BeaconResponseDto.builder()
+                                  .beacon(br.getBeacon())
+                                  .query(br.getQuery())
+                                  .response(br.getResponse())
+                                  .externalUrl(br.getExternalUrl())
+                                  .frequency(br.getFrequency())
+                                  .info(br.getInfo())
+                                  .build();
     }
 
     @Override
     public Set<BeaconResponseDto> mapEntitiesToDtos(Collection<BeaconResponse> brs, boolean showInternal) {
-        return (brs == null) ? null : brs.parallelStream().map((BeaconResponse br) -> mapEntityToDto(br, showInternal)).collect(Collectors.toSet());
+        return (brs == null)
+               ? null
+               : brs.parallelStream()
+                    .map((BeaconResponse br) -> mapEntityToDto(br, showInternal))
+                    .collect(Collectors.toSet());
     }
 
     @Override
     public Set<BeaconResponse> mapDtosToEntities(Collection<BeaconResponseDto> brs) {
-        return (brs == null) ? null : brs.parallelStream().map((BeaconResponseDto br) -> mapDtoToEntity(br)).collect(Collectors.toSet());
+        return (brs == null)
+               ? null
+               : brs.parallelStream().map((BeaconResponseDto br) -> mapDtoToEntity(br)).collect(Collectors.toSet());
     }
 }

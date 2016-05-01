@@ -175,7 +175,15 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
         Chromosome c = normalizeChromosome(chrom);
         Reference r = normalizeReference(ref);
 
-        return Query.builder().chromosome(c == null ? null : c).position(pos).allele(normalizeAllele(allele)).reference(r == null ? null : r).user(u).ip(ip).submitted(new Date()).build();
+        return Query.builder()
+                    .chromosome(c == null ? null : c)
+                    .position(pos)
+                    .allele(normalizeAllele(allele))
+                    .reference(r == null ? null : r)
+                    .user(u)
+                    .ip(ip)
+                    .submitted(new Date())
+                    .build();
     }
 
     private boolean queryNotNormalizedOrValid(Query q, String ref) {
@@ -246,9 +254,12 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
         }
 
         Set<Beacon> bs = new HashSet<>();
-        beaconIds.stream().map((String id) -> beaconDao.findById(id)).filter((b) -> (b != null && b.getVisible())).forEach((b) -> {
-            bs.add(b);
-        });
+        beaconIds.stream()
+                 .map((String id) -> beaconDao.findById(id))
+                 .filter((b) -> (b != null && b.getVisible()))
+                 .forEach((b) -> {
+                     bs.add(b);
+                 });
 
         return setUpBeaconResponseMapForBeacons(bs, q);
     }
@@ -395,7 +406,8 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
         // construct map of atomic nodes covered by aggregates
         Multimap<Beacon, Beacon> children = setUpChildrenMultimap(brs.keySet());
         // obtain children's responses
-        Map<Beacon, BeaconResponse> childrenResponses = fillBeaconResponseMap(setUpBeaconResponseMapForBeacons(new HashSet<>(children.values()), q), q);
+        Map<Beacon, BeaconResponse> childrenResponses = fillBeaconResponseMap(setUpBeaconResponseMapForBeacons(new HashSet<>(
+                children.values()), q), q);
 
         // aggregate
         return fillAggregateResponses(brs, childrenResponses, children, q).values();
@@ -416,7 +428,11 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
             beacon.setEnabled(false);
             beacon.setVisible(false);
             beacon.setAggregator(true);
-            return beaconResponseMapper.mapEntityToDto(BeaconResponse.builder().beacon(beacon).query(q).response(null).build(), false);
+            return beaconResponseMapper.mapEntityToDto(BeaconResponse.builder()
+                                                                     .beacon(beacon)
+                                                                     .query(q)
+                                                                     .response(null)
+                                                                     .build(), false);
         }
 
         BeaconResponse br = BeaconResponse.builder().beacon(b).query(q).response(null).build();
@@ -443,12 +459,24 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
             return new HashSet<>();
         }
 
-        return beaconResponseMapper.mapEntitiesToDtos(queryMultipleBeacons(beaconIds, chrom, pos, allele, ref, onBehalfOf, ip), false);
+        return beaconResponseMapper.mapEntitiesToDtos(queryMultipleBeacons(beaconIds,
+                                                                           chrom,
+                                                                           pos,
+                                                                           allele,
+                                                                           ref,
+                                                                           onBehalfOf,
+                                                                           ip), false);
     }
 
     @Override
     public Collection<BeaconResponseDto> queryAll(String chrom, Long pos, String allele, String ref, UserDto onBehalfOf, String ip) throws ClassNotFoundException {
-        return beaconResponseMapper.mapEntitiesToDtos(queryMultipleBeacons(null, chrom, pos, allele, ref, onBehalfOf, ip), false);
+        return beaconResponseMapper.mapEntitiesToDtos(queryMultipleBeacons(null,
+                                                                           chrom,
+                                                                           pos,
+                                                                           allele,
+                                                                           ref,
+                                                                           onBehalfOf,
+                                                                           ip), false);
     }
 
 }

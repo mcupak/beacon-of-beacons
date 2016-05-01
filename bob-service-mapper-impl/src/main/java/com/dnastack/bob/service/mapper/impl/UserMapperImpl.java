@@ -65,12 +65,16 @@ public class UserMapperImpl implements UserMapper {
 
     @Override
     public Set<UserDto> mapEntitiesToDtos(Collection<User> us, boolean showInternal) {
-        return (us == null) ? null : us.parallelStream().map((User u) -> mapEntityToDto(u, showInternal)).collect(Collectors.toSet());
+        return (us == null)
+               ? null
+               : us.parallelStream().map((User u) -> mapEntityToDto(u, showInternal)).collect(Collectors.toSet());
     }
 
     @Override
     public Set<User> mapDtosToEntities(Collection<UserDto> us) {
-        return (us == null) ? null : us.parallelStream().map((UserDto u) -> mapDtoToEntity(u)).collect(Collectors.toSet());
+        return (us == null)
+               ? null
+               : us.parallelStream().map((UserDto u) -> mapDtoToEntity(u)).collect(Collectors.toSet());
     }
 
 }

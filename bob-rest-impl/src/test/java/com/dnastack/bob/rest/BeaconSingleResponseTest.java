@@ -27,6 +27,9 @@ import com.dnastack.bob.rest.util.Parameter;
 import com.dnastack.bob.rest.util.ParameterRule;
 import com.dnastack.bob.rest.util.QueryEntry;
 import com.jayway.restassured.http.ContentType;
+import com.jayway.restassured.path.json.JsonPath;
+import com.jayway.restassured.path.xml.XmlPath;
+import com.jayway.restassured.response.Response;
 import lombok.extern.java.Log;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
@@ -35,15 +38,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.xml.bind.JAXBException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
 import static com.dnastack.bob.rest.util.DataProvider.getQueries;
-import static com.jayway.restassured.RestAssured.get;
-import static com.jayway.restassured.path.json.JsonPath.from;
+import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
@@ -61,7 +63,7 @@ public class BeaconSingleResponseTest extends AbstractResponseTest {
     public static final List<QueryEntry> QUERIES = getQueries();
 
     @Rule
-    public final ParameterRule<QueryEntry> rule = new ParameterRule<>(QUERIES);
+    public final ParameterRule<QueryEntry> queryRule = new ParameterRule<>(QUERIES);
 
     @Parameter
     private QueryEntry query;
@@ -70,17 +72,27 @@ public class BeaconSingleResponseTest extends AbstractResponseTest {
     public void testResponse(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         log.info(String.format("Testing query: %s", query));
 
-        com.jayway.restassured.response.Response r = get((url.toExternalForm() + getUrl(query, false)));
-        collector.checkThat(r.getStatusCode(), equalTo(Response.Status.OK.getStatusCode()));
-        collector.checkThat(r.getContentType(), equalTo(ContentType.JSON.toString()));
+        Response r = given().baseUri(url.toExternalForm()).accept(contentType).when().get(getUrl(query, false));
+        collector.checkThat(r.getStatusCode(), equalTo(Status.OK.getStatusCode()));
+        collector.checkThat(r.getContentType(), equalTo(contentType.toString()));
 
-        String beaconId = from(r.asString()).getString("beacon.id");
+        String beaconId;
+        Boolean response;
+        if (ContentType.JSON.equals(contentType)) {
+            beaconId = JsonPath.from(r.asString()).getString("beacon.id");
+            response = JsonPath.from(r.asString()).getObject("response", Boolean.class);
+        } else {
+            beaconId = XmlPath.from(r.asString()).getString("beacon-response.beacon.id");
+            response = XmlPath.from(r.asString()).getObject("beacon-response.response", Boolean.class);
+        }
+
         collector.checkThat(beaconId, notNullValue());
         collector.checkThat(beaconId, equalTo(query.getBeacon()));
 
-        Boolean response = from(r.asString()).getObject("response", Boolean.class);
         collector.checkThat(response, equalTo(query.getResponse()));
 
-        log.info(String.format("Beacon: " + query.getBeacon() + " - expected response: %s; actual response: %s", query.getResponse(), response));
+        log.info(String.format("Beacon: " + query.getBeacon() + " - expected response: %s; actual response: %s",
+                               query.getResponse(),
+                               response));
     }
 }

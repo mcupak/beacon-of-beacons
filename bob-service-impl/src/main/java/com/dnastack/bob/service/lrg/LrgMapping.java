@@ -78,7 +78,11 @@ public class LrgMapping {
             remappedEnd = toCoordinates.getEnd() - endDiff;
         }
 
-        LrgCoordinates remappedCoords = new LrgCoordinates(remappedName, remappedLocus, remappedStart, remappedEnd, remappedStrand);
+        LrgCoordinates remappedCoords = new LrgCoordinates(remappedName,
+                                                           remappedLocus,
+                                                           remappedStart,
+                                                           remappedEnd,
+                                                           remappedStrand);
         checkInBounds(toCoordinates, remappedCoords);
 
         return remappedCoords;
@@ -87,27 +91,34 @@ public class LrgMapping {
     private void checkInBounds(LrgCoordinates target, LrgCoordinates query) throws IndexOutOfBoundsException {
         // check name
         if (!query.getName().equals(target.getName())) {
-            throw new IndexOutOfBoundsException("Name mismatch: " + query.getName() + " does not match target name " + target.getName());
+            throw new IndexOutOfBoundsException("Name mismatch: " + query.getName() + " does not match target name " + target
+                    .getName());
         }
 
         // check locus
         if (!query.getLocus().equals(target.getLocus())) {
-            throw new IndexOutOfBoundsException("Locus mismatch: " + query.getLocus() + " does not match target locus " + target.getLocus());
+            throw new IndexOutOfBoundsException("Locus mismatch: " + query.getLocus() + " does not match target locus " + target
+                    .getLocus());
         }
 
         // check start
         if (query.getStart() < target.getStart()) {
-            throw new IndexOutOfBoundsException("Position out of range: " + query.getStart() + " is before target start " + target.getStart());
+            throw new IndexOutOfBoundsException("Position out of range: " + query.getStart() + " is before target start " + target
+                    .getStart());
         }
 
         // check end
         if (query.getEnd() > target.getEnd()) {
-            throw new IndexOutOfBoundsException("Position out of range: " + query.getEnd() + " is after target end " + target.getEnd());
+            throw new IndexOutOfBoundsException("Position out of range: " + query.getEnd() + " is after target end " + target
+                    .getEnd());
         }
 
         // check strand
-        if (query.getPositiveStrand() == null ? target.getPositiveStrand() != null : !query.getPositiveStrand().equals(target.getPositiveStrand())) {
-            throw new IndexOutOfBoundsException("Strand mismatch: " + query.getPositiveStrand() + " does not match " + target.getPositiveStrand());
+        if (query.getPositiveStrand() == null
+            ? target.getPositiveStrand() != null
+            : !query.getPositiveStrand().equals(target.getPositiveStrand())) {
+            throw new IndexOutOfBoundsException("Strand mismatch: " + query.getPositiveStrand() + " does not match " + target
+                    .getPositiveStrand());
         }
     }
 

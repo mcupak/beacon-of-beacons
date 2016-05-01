@@ -60,7 +60,9 @@ public class StringFoundResponseParser implements ResponseParser, Serializable {
     public Future<Boolean> parse(Beacon b, Future<String> response) {
         Boolean res = null;
         try {
-            res = parseContainsStringCaseInsensitive(response.get(REQUEST_TIMEOUT, TimeUnit.SECONDS), "beacon found", "beacon cannot find");
+            res = parseContainsStringCaseInsensitive(response.get(REQUEST_TIMEOUT, TimeUnit.SECONDS),
+                                                     "beacon found",
+                                                     "beacon cannot find");
         } catch (InterruptedException | ExecutionException | TimeoutException ex) {
             // ignore
         }

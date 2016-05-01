@@ -79,7 +79,8 @@ public class BeaconResponse implements BasicEntity<Long> {
                     getInfo().remove(key);
                     key = key.substring(0, STRING_DEFAULT_LENGTH);
                 }
-                getInfo().put(key, e.getValue().substring(0, Integer.min(STRING_MAX_LENGTH - 1, e.getValue().length())));
+                getInfo().put(key,
+                              e.getValue().substring(0, Integer.min(STRING_MAX_LENGTH - 1, e.getValue().length())));
             }
         }
     }

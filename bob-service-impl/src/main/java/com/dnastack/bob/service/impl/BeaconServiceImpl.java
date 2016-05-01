@@ -135,12 +135,22 @@ public class BeaconServiceImpl implements BeaconService {
 
     @Override
     public Collection<BeaconDto> find(Collection<String> ids) {
-        return beaconDao.findByIdsAndVisibility(ids, true).stream().map(b -> beaconMapper.mapEntityToDto(b, beaconDao.findDescendants(b, false, false, false, false), false)).collect(Collectors.toSet());
+        return beaconDao.findByIdsAndVisibility(ids, true)
+                        .stream()
+                        .map(b -> beaconMapper.mapEntityToDto(b,
+                                                              beaconDao.findDescendants(b, false, false, false, false),
+                                                              false))
+                        .collect(Collectors.toSet());
     }
 
     @Override
     public Collection<BeaconDto> find() {
-        return beaconDao.findByVisibility(true).stream().map(b -> beaconMapper.mapEntityToDto(b, beaconDao.findDescendants(b, false, false, false, false), false)).collect(Collectors.toSet());
+        return beaconDao.findByVisibility(true)
+                        .stream()
+                        .map(b -> beaconMapper.mapEntityToDto(b,
+                                                              beaconDao.findDescendants(b, false, false, false, false),
+                                                              false))
+                        .collect(Collectors.toSet());
     }
 
     @Override

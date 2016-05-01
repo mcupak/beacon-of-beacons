@@ -97,7 +97,13 @@ public class BeaconResponseResourceImpl implements BeaconResponseResource {
         if (beaconIds == null) {
             brs.addAll(beaconResponseService.queryAll(chrom, pos, allele, ref, user, ip));
         } else {
-            brs.addAll(beaconResponseService.queryBeacons(parseMultipleParameterValues(beaconIds), chrom, pos, allele, ref, user, ip));
+            brs.addAll(beaconResponseService.queryBeacons(parseMultipleParameterValues(beaconIds),
+                                                          chrom,
+                                                          pos,
+                                                          allele,
+                                                          ref,
+                                                          user,
+                                                          ip));
         }
 
         return brs;

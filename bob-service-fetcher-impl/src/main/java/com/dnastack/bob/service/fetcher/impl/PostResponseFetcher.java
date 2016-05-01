@@ -61,7 +61,10 @@ public class PostResponseFetcher implements ResponseFetcher, Serializable {
     private HttpUtils httpUtils;
 
     private List<NameValuePair> getQueryPayload(Map<String, String> payload) {
-        return payload.entrySet().stream().map((Entry<String, String> e) -> new BasicNameValuePair(e.getKey(), e.getValue())).collect(Collectors.toList());
+        return payload.entrySet()
+                      .stream()
+                      .map((Entry<String, String> e) -> new BasicNameValuePair(e.getKey(), e.getValue()))
+                      .collect(Collectors.toList());
     }
 
     @Override

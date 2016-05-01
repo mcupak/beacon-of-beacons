@@ -26,22 +26,20 @@ package com.dnastack.bob.rest;
 import com.dnastack.bob.service.dto.AlleleDto;
 import com.dnastack.bob.service.dto.ChromosomeDto;
 import com.dnastack.bob.service.dto.ReferenceDto;
-import com.jayway.restassured.http.ContentType;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import static com.jayway.restassured.RestAssured.when;
+import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 
 /**
@@ -59,18 +57,54 @@ public class ItemTest extends BasicTest {
     public static final String ALLELES_TEMPLATE = "alleles";
 
     @Test
-    public void testAllChromosomes(@ArquillianResource URL url) throws JAXBException, MalformedURLException, IOException {
-        when().get((url.toExternalForm() + CHROMOSOMES_TEMPLATE)).then().statusCode(Response.Status.OK.getStatusCode()).contentType(ContentType.JSON).body("", containsInAnyOrder(Arrays.asList(ChromosomeDto.values()).parallelStream().map(chr -> chr.toString()).collect(Collectors.toSet()).toArray()));
+    public void testAllChromosomes(@ArquillianResource URL url) throws JAXBException, IOException {
+        given().baseUri(url.toExternalForm())
+               .accept(contentType)
+               .when()
+               .get((CHROMOSOMES_TEMPLATE))
+               .then()
+               .statusCode(Status.OK.getStatusCode())
+               .contentType(contentType)
+               .body("",
+                     containsInAnyOrder(Arrays.asList(ChromosomeDto.values())
+                                              .parallelStream()
+                                              .map(chr -> chr.toString())
+                                              .collect(Collectors.toSet())
+                                              .toArray()));
     }
 
     @Test
-    public void testAllReferences(@ArquillianResource URL url) throws JAXBException, MalformedURLException, IOException {
-        when().get((url.toExternalForm() + REFERENCES_TEMPLATE)).then().statusCode(Response.Status.OK.getStatusCode()).contentType(ContentType.JSON).body("", containsInAnyOrder(Arrays.asList(ReferenceDto.values()).parallelStream().map(r -> r.toString()).collect(Collectors.toSet()).toArray()));
+    public void testAllReferences(@ArquillianResource URL url) throws JAXBException, IOException {
+        given().baseUri(url.toExternalForm())
+               .accept(contentType)
+               .when()
+               .get((REFERENCES_TEMPLATE))
+               .then()
+               .statusCode(Status.OK.getStatusCode())
+               .contentType(contentType)
+               .body("",
+                     containsInAnyOrder(Arrays.asList(ReferenceDto.values())
+                                              .parallelStream()
+                                              .map(r -> r.toString())
+                                              .collect(Collectors.toSet())
+                                              .toArray()));
     }
 
     @Test
-    public void testAllAlleles(@ArquillianResource URL url) throws JAXBException, MalformedURLException, IOException {
-        when().get((url.toExternalForm() + ALLELES_TEMPLATE)).then().statusCode(Response.Status.OK.getStatusCode()).contentType(ContentType.JSON).body("", containsInAnyOrder(Arrays.asList(AlleleDto.values()).parallelStream().map(a -> a.toString()).collect(Collectors.toSet()).toArray()));
+    public void testAllAlleles(@ArquillianResource URL url) throws JAXBException, IOException {
+        given().baseUri(url.toExternalForm())
+               .accept(contentType)
+               .when()
+               .get((ALLELES_TEMPLATE))
+               .then()
+               .statusCode(Status.OK.getStatusCode())
+               .contentType(contentType)
+               .body("",
+                     containsInAnyOrder(Arrays.asList(AlleleDto.values())
+                                              .parallelStream()
+                                              .map(a -> a.toString())
+                                              .collect(Collectors.toSet())
+                                              .toArray()));
     }
 
 }

@@ -62,6 +62,15 @@ public class ReferenceResourceImpl implements ReferenceResource {
     @ApiOperation(value = "List all references", notes = "Lists all the supported references in their canonical form (hg-based notation).", response = ReferenceDto.class, responseContainer = "List")
     @Override
     public Response showAll() {
-        return (MediaType.APPLICATION_XML.equals(MediaTypeResolver.getMediaType(headers))) ? Response.ok().entity(new JaxbList<>(ReferenceDto.values())).build() : Response.ok().entity(Arrays.asList(ReferenceDto.values()).stream().map(c -> c.toString()).collect(Collectors.toList())).build();
+        return (MediaType.APPLICATION_XML.equals(MediaTypeResolver.getMediaType(headers)))
+               ? Response.ok()
+                         .entity(new JaxbList<>(ReferenceDto.values()))
+                         .build()
+               : Response.ok()
+                         .entity(Arrays.asList(ReferenceDto.values())
+                                       .stream()
+                                       .map(c -> c.toString())
+                                       .collect(Collectors.toList()))
+                         .build();
     }
 }

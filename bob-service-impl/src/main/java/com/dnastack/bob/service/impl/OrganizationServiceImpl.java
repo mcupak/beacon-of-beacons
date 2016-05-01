@@ -73,7 +73,8 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     public OrganizationDto create(@NonNull OrganizationDto organization) {
-        return organizationMapper.mapEntityToDto(organizationDao.save(organizationMapper.mapDtoToEntity(organization)), false);
+        return organizationMapper.mapEntityToDto(organizationDao.save(organizationMapper.mapDtoToEntity(organization)),
+                                                 false);
     }
 
     @Override

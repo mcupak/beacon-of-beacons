@@ -45,12 +45,14 @@ public class BeaconDaoImpl extends AbstractGenericDaoImpl<Beacon, String> implem
 
     @Override
     public List<Beacon> findByAggregation(boolean aggregator) {
-        return getResultList(em.createNamedQuery("findBeaconsByAggregation", Beacon.class).setParameter("aggregator", aggregator));
+        return getResultList(em.createNamedQuery("findBeaconsByAggregation", Beacon.class)
+                               .setParameter("aggregator", aggregator));
     }
 
     @Override
     public List<Beacon> findByVisibility(boolean visible) {
-        return getResultList(em.createNamedQuery("findBeaconsByVisibility", Beacon.class).setParameter("visible", visible));
+        return getResultList(em.createNamedQuery("findBeaconsByVisibility", Beacon.class)
+                               .setParameter("visible", visible));
     }
 
     @Override
@@ -117,12 +119,16 @@ public class BeaconDaoImpl extends AbstractGenericDaoImpl<Beacon, String> implem
 
     @Override
     public List<Beacon> findByIdsAndVisibility(Collection<String> ids, boolean visible) {
-        return getResultList(em.createNamedQuery("findBeaconsByIdsAndVisibility", Beacon.class).setParameter("ids", ids).setParameter("visible", visible));
+        return getResultList(em.createNamedQuery("findBeaconsByIdsAndVisibility", Beacon.class)
+                               .setParameter("ids", ids)
+                               .setParameter("visible", visible));
     }
 
     @Override
     public Beacon findByIdAndVisibility(String id, boolean visible) {
-        return getSingleResult(em.createNamedQuery("findBeaconByIdAndVisibility", Beacon.class).setParameter("id", id).setParameter("visible", visible));
+        return getSingleResult(em.createNamedQuery("findBeaconByIdAndVisibility", Beacon.class)
+                                 .setParameter("id", id)
+                                 .setParameter("visible", visible));
     }
 
     @Override

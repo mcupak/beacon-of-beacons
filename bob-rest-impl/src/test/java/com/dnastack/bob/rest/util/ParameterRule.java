@@ -30,7 +30,10 @@ import org.junit.runners.model.Statement;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * JUnit rule.
@@ -65,7 +68,7 @@ public class ParameterRule<T> implements MethodRule {
         };
     }
 
-    private Method getDeploymentMethod(Object target) throws NoSuchMethodException {
+    private Method getDeploymentMethod(Object target) {
         Class<?> clazz = target.getClass();
         while (clazz != null) {
             Method[] methods = clazz.getDeclaredMethods();
@@ -106,14 +109,31 @@ public class ParameterRule<T> implements MethodRule {
         }
     }
 
-    private Field getTargetField(Object target) throws NoSuchFieldException {
-        Field[] allFields = target.getClass().getDeclaredFields();
-        for (Field field : allFields) {
-            if (field.getAnnotation(Parameter.class) != null) {
-                return field;
-            }
+    private List<Class<?>> getClasses(Object o) {
+        List<Class<?>> classes = new ArrayList<>();
+        Class current = o.getClass();
+        while (current.getSuperclass() != null) {
+            classes.add(current);
+            current = current.getSuperclass();
         }
-        throw new IllegalStateException("No field with @Parameter annotation found! Forgot to add it?");
+
+        return classes;
+    }
+
+    private String getTargetTypeName() {
+        return params.stream().findAny().get().getClass().getTypeName();
+    }
+
+    private Field getTargetField(Object target) {
+        Optional<Field> field = getClasses(target).stream()
+                                                  .map(c -> Arrays.asList(c.getDeclaredFields()))
+                                                  .flatMap(l -> l.stream())
+                                                  .filter(f -> (f.getAnnotation(Parameter.class) != null && f.getType()
+                                                                                                             .getTypeName()
+                                                                                                             .equals(getTargetTypeName())))
+                                                  .findFirst();
+
+        return field.get();
     }
 
     private void ignoreStatementExecution(Statement base) {

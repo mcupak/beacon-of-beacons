@@ -54,8 +54,12 @@ public class RestEndPointResourceImpl implements RestEndPointResource {
 
     private static final String SEPARATOR = "/";
     private static final RestEndPoint BEACONS = new RestEndPoint("beacons", "beacons", "beacons");
-    private static final RestEndPoint ORGANIZATIONS = new RestEndPoint("organizations", "organizations", "organizations");
-    private static final RestEndPoint RESPONSES = new RestEndPoint("responses", "responses", "responses?chrom=14&pos=106833421&allele=A");
+    private static final RestEndPoint ORGANIZATIONS = new RestEndPoint("organizations",
+                                                                       "organizations",
+                                                                       "organizations");
+    private static final RestEndPoint RESPONSES = new RestEndPoint("responses",
+                                                                   "responses",
+                                                                   "responses?chrom=14&pos=106833421&allele=A");
     private static final RestEndPoint ALLELES = new RestEndPoint("alleles", "alleles", "alleles");
     private static final RestEndPoint CHROMOSOMES = new RestEndPoint("chromosomes", "chromosomes", "chromosomes");
     private static final RestEndPoint REFERENCES = new RestEndPoint("references", "references", "references");
@@ -78,11 +82,19 @@ public class RestEndPointResourceImpl implements RestEndPointResource {
     public Collection<RestEndPoint> showEndPoints() {
         Set<RestEndPoint> reps = new HashSet<>();
         reps.add(new RestEndPoint(BEACONS.getId(), baseUrl + BEACONS.getBaseUrl(), baseUrl + BEACONS.getExample()));
-        reps.add(new RestEndPoint(ORGANIZATIONS.getId(), baseUrl + ORGANIZATIONS.getBaseUrl(), baseUrl + ORGANIZATIONS.getExample()));
-        reps.add(new RestEndPoint(RESPONSES.getId(), baseUrl + RESPONSES.getBaseUrl(), baseUrl + RESPONSES.getExample()));
+        reps.add(new RestEndPoint(ORGANIZATIONS.getId(),
+                                  baseUrl + ORGANIZATIONS.getBaseUrl(),
+                                  baseUrl + ORGANIZATIONS.getExample()));
+        reps.add(new RestEndPoint(RESPONSES.getId(),
+                                  baseUrl + RESPONSES.getBaseUrl(),
+                                  baseUrl + RESPONSES.getExample()));
         reps.add(new RestEndPoint(ALLELES.getId(), baseUrl + ALLELES.getBaseUrl(), baseUrl + ALLELES.getExample()));
-        reps.add(new RestEndPoint(CHROMOSOMES.getId(), baseUrl + CHROMOSOMES.getBaseUrl(), baseUrl + CHROMOSOMES.getExample()));
-        reps.add(new RestEndPoint(REFERENCES.getId(), baseUrl + REFERENCES.getBaseUrl(), baseUrl + REFERENCES.getExample()));
+        reps.add(new RestEndPoint(CHROMOSOMES.getId(),
+                                  baseUrl + CHROMOSOMES.getBaseUrl(),
+                                  baseUrl + CHROMOSOMES.getExample()));
+        reps.add(new RestEndPoint(REFERENCES.getId(),
+                                  baseUrl + REFERENCES.getBaseUrl(),
+                                  baseUrl + REFERENCES.getExample()));
 
         return Collections.unmodifiableSet(reps);
     }

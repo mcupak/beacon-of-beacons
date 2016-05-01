@@ -66,7 +66,11 @@ public class LrgMappingProvider {
                     otherIsPositiveStrand = false;
                 }
 
-                LrgCoordinates otherCoords = new LrgCoordinates(targetAssembly, otherName, otherStart, otherEnd, otherIsPositiveStrand);
+                LrgCoordinates otherCoords = new LrgCoordinates(targetAssembly,
+                                                                otherName,
+                                                                otherStart,
+                                                                otherEnd,
+                                                                otherIsPositiveStrand);
 
                 Object[] mapping = (Object[]) otherMap.get("mapping_span");
 

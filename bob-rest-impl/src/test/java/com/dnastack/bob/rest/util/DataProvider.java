@@ -45,22 +45,27 @@ import java.util.stream.Collectors;
 @Log
 public class DataProvider {
 
-    private static final String FILE = "/queries.json";
+    private static final String QUERIES_FULL = "/queries.json";
+    private static final String QUERIES_QUICK = "/queries-quick.json";
     private static final List<QueryEntry> queries;
 
     static {
+        // use small test file if quick system property is passed
+        String fileName = Boolean.parseBoolean(System.getProperty("quick", "true")) ? QUERIES_QUICK : QUERIES_FULL;
+
         Type collectionType = new TypeToken<Collection<QueryEntry>>() {
         }.getType();
 
         List<QueryEntry> res = new ArrayList<>();
         try {
-            try (BufferedReader b = new BufferedReader(new InputStreamReader(DataProvider.class.getResourceAsStream(FILE), StandardCharsets.UTF_8))) {
+            try (BufferedReader b = new BufferedReader(new InputStreamReader(DataProvider.class.getResourceAsStream(
+                    fileName), StandardCharsets.UTF_8))) {
                 res = new Gson().fromJson(b, collectionType);
             } catch (FileNotFoundException ex) {
-                log.info("Could not find file with test data.");
+                log.info("Could not find file: " + fileName);
             }
         } catch (IOException ex) {
-            log.info("Could not open file with test data.");
+            log.info("Could not open file: " + fileName);
         }
 
         queries = res;
@@ -71,14 +76,22 @@ public class DataProvider {
     }
 
     public static Set<QueryEntry> getQueries(String beacon) {
-        return queries.stream().filter((QueryEntry q) -> ((q.getBeacon() == null && beacon == null) || q.getBeacon().equals(beacon))).collect(Collectors.toSet());
+        return queries.stream()
+                      .filter((QueryEntry q) -> ((q.getBeacon() == null && beacon == null) || q.getBeacon()
+                                                                                               .equals(beacon)))
+                      .collect(Collectors.toSet());
     }
 
     public static Set<String> getBeacons() {
-        return queries.stream().filter((QueryEntry q) -> (q.getBeacon() != null && !q.getBeacon().isEmpty() && !isQueryForMultipleBeacons(q))).map((QueryEntry q) -> q.getBeacon()).collect(Collectors.toSet());
+        return queries.stream()
+                      .filter((QueryEntry q) -> (q.getBeacon() != null && !q.getBeacon()
+                                                                            .isEmpty() && !isQueryForMultipleBeacons(q)))
+                      .map((QueryEntry q) -> q.getBeacon())
+                      .collect(Collectors.toSet());
     }
 
     public static boolean isQueryForMultipleBeacons(QueryEntry q) {
         return q.getBeacon().startsWith("[");
     }
+
 }

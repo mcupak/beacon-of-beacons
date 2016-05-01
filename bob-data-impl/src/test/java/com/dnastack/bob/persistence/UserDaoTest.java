@@ -120,7 +120,9 @@ public class UserDaoTest extends GenericDaoTest<User, Long> {
             fail("Could not handle transaction");
         }
 
-        List<User> findAll = findAll(User.class).parallelStream().map((BasicEntity e) -> (User) e).collect(Collectors.toList());
+        List<User> findAll = findAll(User.class).parallelStream()
+                                                .map((BasicEntity e) -> (User) e)
+                                                .collect(Collectors.toList());
         assertThat(findAll.size()).isEqualTo(2);
         assertThat(findAll).contains(u, u2);
     }

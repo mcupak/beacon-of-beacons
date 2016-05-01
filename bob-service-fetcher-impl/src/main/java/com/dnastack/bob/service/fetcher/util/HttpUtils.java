@@ -61,7 +61,11 @@ public class HttpUtils {
 
     @PostConstruct
     private void init() {
-        RequestConfig config = RequestConfig.custom().setSocketTimeout(REQUEST_TIMEOUT * 1000).setConnectTimeout(REQUEST_TIMEOUT * 1000).setConnectionRequestTimeout(REQUEST_TIMEOUT * 1000).build();
+        RequestConfig config = RequestConfig.custom()
+                                            .setSocketTimeout(REQUEST_TIMEOUT * 1000)
+                                            .setConnectTimeout(REQUEST_TIMEOUT * 1000)
+                                            .setConnectionRequestTimeout(REQUEST_TIMEOUT * 1000)
+                                            .build();
         httpClient = HttpClients.custom().setDefaultRequestConfig(config).build();
     }
 

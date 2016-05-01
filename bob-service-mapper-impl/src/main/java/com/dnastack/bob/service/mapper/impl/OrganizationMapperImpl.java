@@ -45,32 +45,78 @@ public class OrganizationMapperImpl implements OrganizationMapper {
 
     @Override
     public Organization mapDtoToEntity(OrganizationDto o) {
-        return (o == null) ? null : Organization.builder().id(o.getId()).name(o.getName()).description(o.getDescription()).url(o.getUrl()).address(o.getAddress()).logo(o.getLogo()).createdDate(o.getCreatedDate()).build();
+        return (o == null)
+               ? null
+               : Organization.builder()
+                             .id(o.getId())
+                             .name(o.getName())
+                             .description(o.getDescription())
+                             .url(o.getUrl())
+                             .address(o.getAddress())
+                             .logo(o.getLogo())
+                             .createdDate(o.getCreatedDate())
+                             .build();
     }
 
     @Override
     public OrganizationDto mapEntityToDto(Organization o, boolean showInternal) {
-        return (o == null) ? null : OrganizationDto.builder().id(o.getId()).name(o.getName()).address(o.getAddress()).description(o.getDescription()).url(o.getUrl()).logo(o.getLogo()).createdDate(o.getCreatedDate()).build();
+        return (o == null)
+               ? null
+               : OrganizationDto.builder()
+                                .id(o.getId())
+                                .name(o.getName())
+                                .address(o.getAddress())
+                                .description(o.getDescription())
+                                .url(o.getUrl())
+                                .logo(o.getLogo())
+                                .createdDate(o.getCreatedDate())
+                                .build();
     }
 
     @Override
     public Organization mapEntityToEntity(Organization o) {
-        return (o == null) ? null : Organization.builder().id(o.getId()).name(o.getName()).address(o.getAddress()).description(o.getDescription()).url(o.getUrl()).logo(o.getLogo()).createdDate(o.getCreatedDate()).build();
+        return (o == null)
+               ? null
+               : Organization.builder()
+                             .id(o.getId())
+                             .name(o.getName())
+                             .address(o.getAddress())
+                             .description(o.getDescription())
+                             .url(o.getUrl())
+                             .logo(o.getLogo())
+                             .createdDate(o.getCreatedDate())
+                             .build();
     }
 
     @Override
     public OrganizationDto mapDtoToDto(OrganizationDto o) {
-        return (o == null) ? null : OrganizationDto.builder().id(o.getId()).name(o.getName()).address(o.getAddress()).description(o.getDescription()).url(o.getUrl()).logo(o.getLogo()).createdDate(o.getCreatedDate()).build();
+        return (o == null)
+               ? null
+               : OrganizationDto.builder()
+                                .id(o.getId())
+                                .name(o.getName())
+                                .address(o.getAddress())
+                                .description(o.getDescription())
+                                .url(o.getUrl())
+                                .logo(o.getLogo())
+                                .createdDate(o.getCreatedDate())
+                                .build();
     }
 
     @Override
     public Set<OrganizationDto> mapEntitiesToDtos(Collection<Organization> os, boolean showInternal) {
-        return (os == null) ? null : os.parallelStream().map((Organization o) -> mapEntityToDto(o, showInternal)).collect(Collectors.toSet());
+        return (os == null)
+               ? null
+               : os.parallelStream()
+                   .map((Organization o) -> mapEntityToDto(o, showInternal))
+                   .collect(Collectors.toSet());
     }
 
     @Override
     public Set<Organization> mapDtosToEntities(Collection<OrganizationDto> os) {
-        return (os == null) ? null : os.parallelStream().map((OrganizationDto o) -> mapDtoToEntity(o)).collect(Collectors.toSet());
+        return (os == null)
+               ? null
+               : os.parallelStream().map((OrganizationDto o) -> mapDtoToEntity(o)).collect(Collectors.toSet());
     }
 
 }

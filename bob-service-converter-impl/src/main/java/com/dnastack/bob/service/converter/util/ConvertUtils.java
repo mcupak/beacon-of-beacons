@@ -38,7 +38,16 @@ import java.util.Map;
  */
 public class ConvertUtils {
 
-    public static final Map<Reference, String> REFERENCE_MAPPING = ImmutableMap.of(Reference.HG38, "GRCh38", Reference.HG19, "GRCh37", Reference.HG18, "NCBI36", Reference.HG17, "NCBI35", Reference.HG16, "NCBI34");
+    public static final Map<Reference, String> REFERENCE_MAPPING = ImmutableMap.of(Reference.HG38,
+                                                                                   "GRCh38",
+                                                                                   Reference.HG19,
+                                                                                   "GRCh37",
+                                                                                   Reference.HG18,
+                                                                                   "NCBI36",
+                                                                                   Reference.HG17,
+                                                                                   "NCBI35",
+                                                                                   Reference.HG16,
+                                                                                   "NCBI34");
 
     /**
      * Returns a substring of an ID of the given beacon.

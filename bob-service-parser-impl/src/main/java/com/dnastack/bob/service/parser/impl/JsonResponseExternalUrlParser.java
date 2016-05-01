@@ -62,7 +62,9 @@ public class JsonResponseExternalUrlParser implements ExternalUrlParser, Seriali
     public Future<String> parse(Beacon b, Future<String> response) {
         String res = null;
         try {
-            res = parseStringFromJson(response.get(REQUEST_TIMEOUT, TimeUnit.SECONDS), RESPONSE_FIELD, EXTERNAL_URL_FIELD);
+            res = parseStringFromJson(response.get(REQUEST_TIMEOUT, TimeUnit.SECONDS),
+                                      RESPONSE_FIELD,
+                                      EXTERNAL_URL_FIELD);
         } catch (InterruptedException | ExecutionException | TimeoutException ex) {
             // ignore
         }

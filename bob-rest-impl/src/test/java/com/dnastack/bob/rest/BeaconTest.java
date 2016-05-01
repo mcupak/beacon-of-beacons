@@ -25,6 +25,9 @@ package com.dnastack.bob.rest;
 
 import com.dnastack.bob.service.dto.BeaconDto;
 import com.jayway.restassured.http.ContentType;
+import com.jayway.restassured.path.json.JsonPath;
+import com.jayway.restassured.path.xml.XmlPath;
+import com.jayway.restassured.response.Response;
 import lombok.extern.java.Log;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
@@ -32,7 +35,7 @@ import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.xml.bind.JAXBException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -41,9 +44,7 @@ import java.util.Set;
 
 import static com.dnastack.bob.rest.util.DataProvider.getBeacons;
 import static com.dnastack.bob.rest.util.RequestUtils.encode;
-import static com.jayway.restassured.RestAssured.get;
-import static com.jayway.restassured.RestAssured.when;
-import static com.jayway.restassured.path.json.JsonPath.from;
+import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
 /**
@@ -71,18 +72,30 @@ public class BeaconTest extends BasicTest {
 
     @Test
     public void testAllBeacons(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        when().get((url.toExternalForm() + getUrl())).then().statusCode(Response.Status.OK.getStatusCode()).contentType(ContentType.JSON).body("id", hasItems(getBeacons().toArray()));
+        given().baseUri(url.toExternalForm())
+               .accept(contentType)
+               .when()
+               .get((getUrl()))
+               .then()
+               .statusCode(Status.OK.getStatusCode())
+               .contentType(contentType)
+               .body(ContentType.JSON.equals(contentType) ? "id" : "collection.beacon.id",
+                     hasItems(getBeacons().toArray()));
     }
 
     @Test
     public void testBeaconsFiltered(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         getBeacons().stream().forEach((String id) -> {
             log.info(String.format("Testing beacon: %s", id));
-            com.jayway.restassured.response.Response r = get((url.toExternalForm() + getUrl(encode(id), true)));
-            collector.checkThat(r.getStatusCode(), equalTo(Response.Status.OK.getStatusCode()));
-            collector.checkThat(r.getContentType(), equalTo(ContentType.JSON.toString()));
+            Response r = given().baseUri(url.toExternalForm()).accept(contentType).when().get(getUrl(encode(id), true));
+            collector.checkThat(r.getStatusCode(), equalTo(Status.OK.getStatusCode()));
+            collector.checkThat(r.getContentType(), equalTo(contentType.toString()));
 
-            List<String> ids = from(r.asString()).getList("id", String.class);
+
+            List<String> ids = ContentType.JSON.equals(contentType)
+                               ? JsonPath.from(r.asString())
+                                         .getList("id", String.class)
+                               : XmlPath.from(r.asString()).getList("collection.beacon.id", String.class);
             collector.checkThat(ids, hasSize(1));
             collector.checkThat(ids, hasItem(id));
         });
@@ -95,11 +108,17 @@ public class BeaconTest extends BasicTest {
 
         bs.stream().filter((String b) -> !a.equals(b)).forEach((String b) -> {
             log.info(String.format("Testing beacons: %s, %s", a, b));
-            com.jayway.restassured.response.Response r = get((url.toExternalForm() + getUrl("[" + encode(a) + "," + encode(b) + "]", true)));
-            collector.checkThat(r.getStatusCode(), equalTo(Response.Status.OK.getStatusCode()));
-            collector.checkThat(r.getContentType(), equalTo(ContentType.JSON.toString()));
+            Response r = given().baseUri(url.toExternalForm())
+                                .accept(contentType)
+                                .when()
+                                .get(getUrl("[" + encode(a) + "," + encode(b) + "]", true));
+            collector.checkThat(r.getStatusCode(), equalTo(Status.OK.getStatusCode()));
+            collector.checkThat(r.getContentType(), equalTo(contentType.toString()));
 
-            List<String> ids = from(r.asString()).getList("id", String.class);
+            List<String> ids = ContentType.JSON.equals(contentType)
+                               ? JsonPath.from(r.asString())
+                                         .getList("id", String.class)
+                               : XmlPath.from(r.asString()).getList("collection.beacon.id", String.class);
             collector.checkThat(ids, hasSize(2));
             collector.checkThat(ids, containsInAnyOrder(a, b));
         });
@@ -109,9 +128,12 @@ public class BeaconTest extends BasicTest {
     public void testBeacon(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
         getBeacons().stream().forEach((String id) -> {
             log.info(String.format("Testing beacon: %s", id));
-            com.jayway.restassured.response.Response r = get((url.toExternalForm() + getUrl(encode(id), false)));
-            collector.checkThat(r.getStatusCode(), equalTo(Response.Status.OK.getStatusCode()));
-            collector.checkThat(r.getContentType(), equalTo(ContentType.JSON.toString()));
+            Response r = given().baseUri(url.toExternalForm())
+                                .accept(contentType)
+                                .when()
+                                .get(getUrl(encode(id), false));
+            collector.checkThat(r.getStatusCode(), equalTo(Status.OK.getStatusCode()));
+            collector.checkThat(r.getContentType(), equalTo(contentType.toString()));
 
             BeaconDto b = r.as(BeaconDto.class);
             collector.checkThat(b, notNullValue());

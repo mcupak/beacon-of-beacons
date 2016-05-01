@@ -50,7 +50,9 @@ public class ReferenceMapperImpl implements ReferenceMapper {
 
     @Override
     public Set<Reference> mapDtosToEntities(Collection<ReferenceDto> rs) {
-        return (rs == null) ? null : rs.parallelStream().map((ReferenceDto br) -> mapDtoToEntity(br)).collect(Collectors.toSet());
+        return (rs == null)
+               ? null
+               : rs.parallelStream().map((ReferenceDto br) -> mapDtoToEntity(br)).collect(Collectors.toSet());
     }
 
     @Override
@@ -70,7 +72,11 @@ public class ReferenceMapperImpl implements ReferenceMapper {
 
     @Override
     public Set<ReferenceDto> mapEntitiesToDtos(Collection<Reference> rs, boolean showInternal) {
-        return (rs == null) ? null : rs.parallelStream().map((Reference br) -> mapEntityToDto(br, showInternal)).collect(Collectors.toSet());
+        return (rs == null)
+               ? null
+               : rs.parallelStream()
+                   .map((Reference br) -> mapEntityToDto(br, showInternal))
+                   .collect(Collectors.toSet());
     }
 
 }

@@ -30,12 +30,12 @@ import org.jboss.arquillian.test.api.ArquillianResource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.xml.bind.JAXBException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import static com.jayway.restassured.RestAssured.when;
+import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.hasItems;
 
 /**
@@ -52,7 +52,15 @@ public class HelpTest extends BasicTest {
 
     @Test
     public void testHelp(@ArquillianResource URL url) throws JAXBException, MalformedURLException {
-        when().get((url.toExternalForm() + HELP_TEMPLATE)).then().statusCode(Response.Status.OK.getStatusCode()).contentType(ContentType.JSON).body("id", hasItems("alleles", "references", "chromosomes", "organizations", "beacons", "responses"));
+        given().baseUri(url.toExternalForm())
+               .accept(contentType)
+               .when()
+               .get(HELP_TEMPLATE)
+               .then()
+               .statusCode(Status.OK.getStatusCode())
+               .contentType(contentType)
+               .body(ContentType.JSON.equals(contentType) ? "id" : "collection.rest-end-point.id",
+                     hasItems("alleles", "references", "chromosomes", "organizations", "beacons", "responses"));
     }
 
 }

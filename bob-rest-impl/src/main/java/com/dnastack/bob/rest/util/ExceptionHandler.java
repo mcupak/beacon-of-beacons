@@ -47,7 +47,12 @@ public class ExceptionHandler implements ExceptionMapper<Exception> {
     @Override
     public Response toResponse(Exception exception) {
         Response.Status s = ResponseStatusMapper.getStatus(exception);
-        Error error = Error.builder().status(s.getStatusCode()).reason(s.getReasonPhrase()).message(exception.getMessage()).stackTrace(Arrays.deepToString(exception.getStackTrace())).build();
+        Error error = Error.builder()
+                           .status(s.getStatusCode())
+                           .reason(s.getReasonPhrase())
+                           .message(exception.getMessage())
+                           .stackTrace(Arrays.deepToString(exception.getStackTrace()))
+                           .build();
 
         return Response.status(s).entity(error).type(MediaTypeResolver.getMediaType(headers)).build();
     }

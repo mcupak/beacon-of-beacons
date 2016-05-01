@@ -100,7 +100,8 @@ public abstract class GenericDaoTest<T extends BasicEntity<I>, I> extends BasicD
     }
 
     protected Long countAll(Class<? extends BasicEntity> entity) {
-        return (Long) em.createQuery(String.format("SELECT COUNT(e) FROM %s e", getTableName(entity))).getSingleResult();
+        return (Long) em.createQuery(String.format("SELECT COUNT(e) FROM %s e", getTableName(entity)))
+                        .getSingleResult();
     }
 
     @SuppressWarnings("unchecked")
@@ -110,18 +111,21 @@ public abstract class GenericDaoTest<T extends BasicEntity<I>, I> extends BasicD
 
     @SuppressWarnings("unchecked")
     protected List<BasicEntity> findByAttribute(Class<? extends BasicEntity> entity, String attribute, String value) {
-        return em.createQuery(String.format("SELECT e FROM %s e WHERE e.%s=%s", getTableName(entity), attribute, value)).getResultList();
+        return em.createQuery(String.format("SELECT e FROM %s e WHERE e.%s=%s", getTableName(entity), attribute, value))
+                 .getResultList();
     }
 
     protected BasicEntity findOneByAttribute(Class<? extends BasicEntity> entity, String attribute, String value) {
         @SuppressWarnings("unchecked")
-        List<BasicEntity> res = em.createQuery("SELECT e FROM " + getTableName(entity) + " e WHERE e." + attribute + "=" + value).getResultList();
+        List<BasicEntity> res = em.createQuery("SELECT e FROM " + getTableName(entity) + " e WHERE e." + attribute + "=" + value)
+                                  .getResultList();
         return (res.isEmpty()) ? null : res.get(0);
     }
 
     protected BasicEntity findOne(Class<? extends BasicEntity> entity) {
         @SuppressWarnings("unchecked")
-        List<BasicEntity> res = em.createQuery(String.format("SELECT e FROM %s e", getTableName(entity))).getResultList();
+        List<BasicEntity> res = em.createQuery(String.format("SELECT e FROM %s e", getTableName(entity)))
+                                  .getResultList();
 
         return (res.isEmpty()) ? null : res.get(0);
     }
@@ -147,7 +151,9 @@ public abstract class GenericDaoTest<T extends BasicEntity<I>, I> extends BasicD
     @Test
     @SuppressWarnings("unchecked")
     public void testFindAll() {
-        assertThat(getDao().findAll()).containsExactlyElementsOf(findAll(entityClass).parallelStream().map(i -> (T) i).collect(Collectors.toList()));
+        assertThat(getDao().findAll()).containsExactlyElementsOf(findAll(entityClass).parallelStream()
+                                                                                     .map(i -> (T) i)
+                                                                                     .collect(Collectors.toList()));
     }
 
     @Test

@@ -97,15 +97,18 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
             requester = (RequestConstructor) cdiResolver.resolve(beacon.getRequester());
             chromosomeConverter = (ChromosomeConverter) cdiResolver.resolve(beacon.getChromosomeConverter());
             if (chromosomeConverter == null) {
-                chromosomeConverter = (ChromosomeConverter) cdiResolver.resolve(cdiResolver.getClassId(EmptyChromosomeConverter.class));
+                chromosomeConverter = (ChromosomeConverter) cdiResolver.resolve(cdiResolver.getClassId(
+                        EmptyChromosomeConverter.class));
             }
             referenceConverter = (ReferenceConverter) cdiResolver.resolve(beacon.getReferenceConverter());
             if (referenceConverter == null) {
-                referenceConverter = (ReferenceConverter) cdiResolver.resolve(cdiResolver.getClassId(EmptyReferenceConverter.class));
+                referenceConverter = (ReferenceConverter) cdiResolver.resolve(cdiResolver.getClassId(
+                        EmptyReferenceConverter.class));
             }
             positionConverter = (PositionConverter) cdiResolver.resolve(beacon.getPositionConverter());
             if (positionConverter == null) {
-                positionConverter = (PositionConverter) cdiResolver.resolve(cdiResolver.getClassId(EmptyPositionConverter.class));
+                positionConverter = (PositionConverter) cdiResolver.resolve(cdiResolver.getClassId(
+                        EmptyPositionConverter.class));
             }
             alleleConverter = (AlleleConverter) cdiResolver.resolve(beacon.getAlleleConverter());
             if (alleleConverter == null) {
@@ -123,14 +126,38 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
         if (query.getReference() == null) {
             // query all refs
             for (Reference ref : beacon.getSupportedReferences()) {
-                String url = requester.getUrl(beacon.getUrl(), beaconConverter.convert(beacon), referenceConverter.convert(ref), chromosomeConverter.convert(query.getChromosome()), positionConverter.convert(query.getPosition()), alleleConverter.convert(query.getAllele()), null);
-                Map<String, String> payload = requester.getPayload(beacon.getUrl(), beaconConverter.convert(beacon), referenceConverter.convert(ref), chromosomeConverter.convert(query.getChromosome()), positionConverter.convert(query.getPosition()), alleleConverter.convert(query.getAllele()), null);
+                String url = requester.getUrl(beacon.getUrl(),
+                                              beaconConverter.convert(beacon),
+                                              referenceConverter.convert(ref),
+                                              chromosomeConverter.convert(query.getChromosome()),
+                                              positionConverter.convert(query.getPosition()),
+                                              alleleConverter.convert(query.getAllele()),
+                                              null);
+                Map<String, String> payload = requester.getPayload(beacon.getUrl(),
+                                                                   beaconConverter.convert(beacon),
+                                                                   referenceConverter.convert(ref),
+                                                                   chromosomeConverter.convert(query.getChromosome()),
+                                                                   positionConverter.convert(query.getPosition()),
+                                                                   alleleConverter.convert(query.getAllele()),
+                                                                   null);
                 fs.add(fetcher.getQueryResponse(url, payload, ip));
             }
         } else if (beacon.getSupportedReferences().contains(query.getReference())) {
             // query only the specified ref
-            String url = requester.getUrl(beacon.getUrl(), beaconConverter.convert(beacon), referenceConverter.convert(query.getReference()), chromosomeConverter.convert(query.getChromosome()), positionConverter.convert(query.getPosition()), alleleConverter.convert(query.getAllele()), null);
-            Map<String, String> payload = requester.getPayload(beacon.getUrl(), beaconConverter.convert(beacon), referenceConverter.convert(query.getReference()), chromosomeConverter.convert(query.getChromosome()), positionConverter.convert(query.getPosition()), alleleConverter.convert(query.getAllele()), null);
+            String url = requester.getUrl(beacon.getUrl(),
+                                          beaconConverter.convert(beacon),
+                                          referenceConverter.convert(query.getReference()),
+                                          chromosomeConverter.convert(query.getChromosome()),
+                                          positionConverter.convert(query.getPosition()),
+                                          alleleConverter.convert(query.getAllele()),
+                                          null);
+            Map<String, String> payload = requester.getPayload(beacon.getUrl(),
+                                                               beaconConverter.convert(beacon),
+                                                               referenceConverter.convert(query.getReference()),
+                                                               chromosomeConverter.convert(query.getChromosome()),
+                                                               positionConverter.convert(query.getPosition()),
+                                                               alleleConverter.convert(query.getAllele()),
+                                                               null);
             fs.add(fetcher.getQueryResponse(url, payload, ip));
         }
 
@@ -146,7 +173,11 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
                     ExternalUrlParser eup = (ExternalUrlParser) ejbResolver.resolve(b.getExternalUrlParser());
                     MetadataParser mp = (MetadataParser) ejbResolver.resolve(b.getMetadataParser());
 
-                    FutureBeaconResponse fbr = FutureBeaconResponse.builder().response(rp == null ? null : rp.parse(b, f)).externalUrl(eup == null ? null : eup.parse(b, f)).info(mp == null ? null : mp.parse(b, f)).build();
+                    FutureBeaconResponse fbr = FutureBeaconResponse.builder()
+                                                                   .response(rp == null ? null : rp.parse(b, f))
+                                                                   .externalUrl(eup == null ? null : eup.parse(b, f))
+                                                                   .info(mp == null ? null : mp.parse(b, f))
+                                                                   .build();
                     bs.add(fbr);
                 } catch (Exception ex) {
                     log.severe(getErrorMessage(ex));

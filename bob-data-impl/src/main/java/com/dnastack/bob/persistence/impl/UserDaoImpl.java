@@ -48,7 +48,10 @@ public class UserDaoImpl extends AbstractGenericDaoImpl<User, Long> implements U
     public List<User> findByUserName(String userName) {
         List<User> us;
         try {
-            TypedQuery<User> q = userName == null ? em.createNamedQuery("findUserByUserNameNull", User.class) : em.createNamedQuery("findUserByUserName", User.class).setParameter("userName", userName);
+            TypedQuery<User> q = userName == null
+                                 ? em.createNamedQuery("findUserByUserNameNull", User.class)
+                                 : em.createNamedQuery("findUserByUserName", User.class)
+                                     .setParameter("userName", userName);
             us = q.getResultList();
         } catch (PersistenceException ex) {
             us = null;

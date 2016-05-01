@@ -96,7 +96,8 @@ public abstract class AbstractGenericDaoImpl<T extends BasicEntity<I>, I> implem
 
     @Override
     public long countAll() {
-        return em.createQuery(String.format("SELECT COUNT(e.id) FROM %s e", entityClass.getSimpleName()), Long.class).getSingleResult();
+        return em.createQuery(String.format("SELECT COUNT(e.id) FROM %s e", entityClass.getSimpleName()), Long.class)
+                 .getSingleResult();
     }
 
     @Override
@@ -117,7 +118,8 @@ public abstract class AbstractGenericDaoImpl<T extends BasicEntity<I>, I> implem
 
     @Override
     public List<T> findAll() {
-        return getResultList(em.createQuery(String.format("SELECT e FROM %s e", entityClass.getSimpleName()), entityClass));
+        return getResultList(em.createQuery(String.format("SELECT e FROM %s e", entityClass.getSimpleName()),
+                                            entityClass));
     }
 
     @Override

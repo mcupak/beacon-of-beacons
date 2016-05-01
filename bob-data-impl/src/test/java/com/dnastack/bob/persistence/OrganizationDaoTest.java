@@ -137,7 +137,9 @@ public class OrganizationDaoTest extends GenericDaoTest<Organization, String> {
     @Test
     @UsingDataSet({"organization_1.json", "organization_2.json"})
     public void testFindByIds() {
-        Set<Organization> all = findAll(Organization.class).stream().map((BasicEntity e) -> (Organization) e).collect(Collectors.toSet());
+        Set<Organization> all = findAll(Organization.class).stream()
+                                                           .map((BasicEntity e) -> (Organization) e)
+                                                           .collect(Collectors.toSet());
 
         List<Organization> found = dao.findByIds(ImmutableSet.of("test", "test2"));
 

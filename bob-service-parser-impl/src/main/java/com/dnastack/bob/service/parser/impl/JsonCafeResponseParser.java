@@ -72,7 +72,9 @@ public class JsonCafeResponseParser implements ResponseParser, Serializable {
     public Future<Boolean> parse(Beacon b, Future<String> response) {
         Boolean res = null;
         try {
-            res = parseBooleanFromJson(response.get(REQUEST_TIMEOUT, TimeUnit.SECONDS), RESPONSE_FIELD, getJsonFieldName(b));
+            res = parseBooleanFromJson(response.get(REQUEST_TIMEOUT, TimeUnit.SECONDS),
+                                       RESPONSE_FIELD,
+                                       getJsonFieldName(b));
         } catch (InterruptedException | ExecutionException | TimeoutException ex) {
             // ignore
         }
