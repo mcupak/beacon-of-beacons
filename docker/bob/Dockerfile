@@ -2,21 +2,20 @@ FROM jboss/wildfly:8.2.1.Final
 MAINTAINER Miro Cupak <mirocupak@gmail.com>
 
 # prepare wildfly
-ENV JBOSS_HOME /opt/jboss/wildfly
+ENV JBOSS_HOME=/opt/jboss/wildfly
 ADD data $JBOSS_HOME/customization/
 
-USER root
-
 # install necessary packages
-RUN yes | yum update
-RUN yes | yum install patch wget tree curl zip unzip
+USER root
+RUN yum -y update
+RUN yum -y install patch wget tree curl zip unzip
 
 # update nss and java to work around a bug with Diffie-Hellman key agreement of more than 1024 bits
-RUN yes | yum upgrade nss java
+RUN yum -y upgrade nss java
 
 # download mysql driver
 RUN cd /tmp
-RUN wget http://search.maven.org/remotecontent?filepath=mysql/mysql-connector-java/5.1.32/mysql-connector-java-5.1.32.jar
+RUN wget -q http://search.maven.org/remotecontent?filepath=mysql/mysql-connector-java/5.1.32/mysql-connector-java-5.1.32.jar
 RUN mv *.jar $JBOSS_HOME/customization/mysql-connector-java.jar
 
 # install certificates
