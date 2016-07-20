@@ -3357,6 +3357,141 @@
         "response": null
     },
     {
+        "beacon": "inmegen",
+        "chromosome": "1",
+        "position": 2915398,
+        "allele": "T",
+        "reference": null,
+        "description": "all references found",
+        "response": true
+    },
+    {
+        "beacon": "inmegen",
+        "chromosome": "1",
+        "position": 836726,
+        "allele": "G",
+        "reference": "hg19",
+        "description": "specific reference found",
+        "response": true
+    },
+    {
+        "beacon": "inmegen",
+        "chromosome": "17",
+        "position": 11256013,
+        "allele": "G",
+        "reference": "hg19",
+        "description": "specific reference not found",
+        "response": false
+    },
+    {
+        "beacon": "inmegen",
+        "chromosome": "1",
+        "position": 14463,
+        "allele": "G",
+        "reference": "hg100",
+        "description": "invalid reference",
+        "response": null
+    },
+    {
+        "beacon": "inmegen",
+        "chromosome": "1",
+        "position": 836726,
+        "allele": "G",
+        "reference": "grch37",
+        "description": "reference conversion",
+        "response": true
+    },
+    {
+        "beacon": "inmegen",
+        "chromosome": "1",
+        "position": 14463,
+        "allele": "TGC",
+        "reference": null,
+        "description": "string allele",
+        "response": false
+    },
+    {
+        "beacon": "inmegen",
+        "chromosome": "1",
+        "position": 65720707,
+        "allele": "D",
+        "reference": null,
+        "description": "del",
+        "response": false
+    },
+    {
+        "beacon": "inmegen",
+        "chromosome": "1",
+        "position": 65720707,
+        "allele": "I",
+        "reference": null,
+        "description": "ins",
+        "response": false
+    },
+    {
+        "beacon": "inmegen",
+        "chromosome": "13",
+        "position": 65720707,
+        "allele": "A",
+        "reference": null,
+        "description": "no reference found",
+        "response": false
+    },
+    {
+        "beacon": "inmegen",
+        "chromosome": "15",
+        "position": 65720707,
+        "allele": "DC",
+        "reference": null,
+        "description": "invalid allele",
+        "response": null
+    },
+    {
+        "beacon": "inmegen",
+        "chromosome": "1",
+        "position": 65720707,
+        "allele": "DEL",
+        "reference": null,
+        "description": "allele conversion",
+        "response": false
+    },
+    {
+        "beacon": "inmegen",
+        "chromosome": "chr12",
+        "position": 836726,
+        "allele": "G",
+        "reference": null,
+        "description": "chromosome conversion",
+        "response": true
+    },
+    {
+        "beacon": "inmegen",
+        "chromosome": "30",
+        "position": 65720707,
+        "allele": "A",
+        "reference": null,
+        "description": "invalid chromosome",
+        "response": null
+    },
+    {
+        "beacon": "inmegen",
+        "chromosome": "X",
+        "position": 65720707,
+        "allele": "C",
+        "reference": null,
+        "description": "x",
+        "response": false
+    },
+    {
+        "beacon": "inmegen",
+        "chromosome": "MT",
+        "position": 65720707,
+        "allele": "G",
+        "reference": null,
+        "description": "mt/not supported",
+        "response": null
+    },
+    {
         "beacon": "wellderly",
         "chromosome": "17",
         "position": 7563124,
