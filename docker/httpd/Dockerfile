@@ -1,4 +1,4 @@
-FROM httpd:2.4.18
+FROM httpd:2.4.23
 MAINTAINER Miro Cupak <mirocupak@gmail.com>
 
 # set up env vars
