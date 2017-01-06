@@ -41,10 +41,6 @@ public class ParseUtils {
 
     public static final int REQUEST_TIMEOUT = 30;
 
-    private ParseUtils() {
-        // prevent instantiation
-    }
-
     /**
      * Checks whether a given response contains the specified string (found/not found), case insensitive.
      *
@@ -278,7 +274,29 @@ public class ParseUtils {
                 Iterator keys = jo.keys();
                 while (keys.hasNext()) {
                     String key = keys.next().toString();
-                    res.put(key, jo.getString(key));
+                    String value = null;
+                    try {
+                        value = jo.getString(key);
+                    } catch (JSONException ex1) {
+                        try {
+                            Integer valueInt = jo.getInt(key);
+                            value = valueInt.toString();
+                        } catch (JSONException ex2) {
+                            try {
+                                Double valueDouble = jo.getDouble(key);
+                                value = valueDouble.toString();
+                            } catch (JSONException ex3) {
+                                try {
+                                    Boolean valueBool = jo.getBoolean(key);
+                                    value = valueBool.toString();
+                                } catch (JSONException ex4) {
+                                    JSONArray valueArray = jo.getJSONArray(key);
+                                    value = valueArray.toString();
+                                }
+                            }
+                        }
+                    }
+                    res.put(key, value);
                 }
             }
         } catch (JSONException ex) {
@@ -299,6 +317,10 @@ public class ParseUtils {
         String res = parseStringFromJson(response, path);
 
         return (res == null) ? null : parseStartsWithYesNoCaseInsensitive(res);
+    }
+
+    private ParseUtils() {
+        // prevent instantiation
     }
 
 }

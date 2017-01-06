@@ -52,10 +52,10 @@ import static com.dnastack.bob.service.parser.util.ParseUtils.parseStringMapFrom
 @Named
 @Dependent
 @Local(MetadataParser.class)
-public class StringKeyValueMetadataParser implements MetadataParser, Serializable {
+public class JsonKeyValueAlleleDatasetResponeMetadataParser implements MetadataParser, Serializable {
 
     public static final String METADATA_FIELD = "info";
-    public static final String RESPONSE_FIELD = "response";
+    public static final String RESPONSE_FIELD = "alleleDatasetRespone";
     private static final long serialVersionUID = 8452209038693882540L;
 
     @Asynchronous
