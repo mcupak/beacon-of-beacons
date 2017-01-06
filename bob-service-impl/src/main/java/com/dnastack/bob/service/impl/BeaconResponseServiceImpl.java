@@ -63,7 +63,6 @@ import java.util.regex.Pattern;
 
 import static com.dnastack.bob.service.converter.util.ConvertUtils.REFERENCE_MAPPING;
 
-
 /**
  * Implementation of a service for managing beacon responses.
  *
@@ -165,21 +164,23 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
     /**
      * Obtains a canonical query object without persisting.
      *
-     * @param chrom  chromosome
-     * @param pos    position
-     * @param allele allele
-     * @param ref    genome
+     * @param chrom           chromosome
+     * @param pos             position
+     * @param referenceAllele reference allele
+     * @param allele          allele
+     * @param ref             genome
      * @return normalized query
      */
-    private Query prepareQuery(String chrom, Long pos, String allele, String ref, User u, String ip) {
+    private Query prepareQuery(String chrom, Long pos, String referenceAllele, String allele, String ref, User u, String ip) {
         Chromosome c = normalizeChromosome(chrom);
         Reference r = normalizeReference(ref);
 
         return Query.builder()
-                    .chromosome(c == null ? null : c)
+                    .chromosome(c)
                     .position(pos)
+                    .referenceAllele(normalizeAllele(referenceAllele))
                     .allele(normalizeAllele(allele))
-                    .reference(r == null ? null : r)
+                    .reference(r)
                     .user(u)
                     .ip(ip)
                     .submitted(new Date())
@@ -207,12 +208,11 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
         return user;
     }
 
-    private Query setUpQuery(String chrom, Long pos, String allele, String ref, UserDto u, String ip) {
+    private Query setUpQuery(String chrom, Long pos, String referenceAllele, String allele, String ref, UserDto u, String ip) {
         LrgConvertor l = null;
         String c = chrom;
         Long p = pos;
         String r = ref;
-        String a = allele;
 
         if (ref != null && ref.equalsIgnoreCase(LrgReference.LRG.toString())) {
             if (chrom.equalsIgnoreCase(LrgLocus.LRG_292.toString())) {
@@ -228,7 +228,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
             }
         }
 
-        return prepareQuery(c, p, a, r, setUpUser(u), ip);
+        return prepareQuery(c, p, referenceAllele, allele, r, setUpUser(u), ip);
     }
 
     private Query saveQuery(Query q) {
@@ -391,8 +391,8 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
         return new AsyncResult<>(total);
     }
 
-    private Collection<BeaconResponse> queryMultipleBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref, UserDto u, String ip) throws ClassNotFoundException {
-        Query q = setUpQuery(chrom, pos, allele, ref, u, ip);
+    private Collection<BeaconResponse> queryMultipleBeacons(Collection<String> beaconIds, String chrom, Long pos, String referenceAllele, String allele, String ref, UserDto u, String ip) throws ClassNotFoundException {
+        Query q = setUpQuery(chrom, pos, referenceAllele, allele, ref, u, ip);
 
         // init to create a response for each beacon even if the query is invalid
         Map<Beacon, BeaconResponse> brs = setUpBeaconResponseMapForIds(beaconIds, q);
@@ -414,8 +414,8 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
     }
 
     @Override
-    public BeaconResponseDto queryBeacon(String beaconId, String chrom, Long pos, String allele, String ref, UserDto onBehalfOf, String ip) throws ClassNotFoundException {
-        Query q = setUpQuery(chrom, pos, allele, ref, onBehalfOf, ip);
+    public BeaconResponseDto queryBeacon(String beaconId, String chrom, Long pos, String referenceAllele, String allele, String ref, UserDto onBehalfOf, String ip) throws ClassNotFoundException {
+        Query q = setUpQuery(chrom, pos, referenceAllele, allele, ref, onBehalfOf, ip);
 
         Beacon b = beaconDao.findById(beaconId);
         if (b == null || !b.getVisible()) {
@@ -454,7 +454,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
     }
 
     @Override
-    public Collection<BeaconResponseDto> queryBeacons(Collection<String> beaconIds, String chrom, Long pos, String allele, String ref, UserDto onBehalfOf, String ip) throws ClassNotFoundException {
+    public Collection<BeaconResponseDto> queryBeacons(Collection<String> beaconIds, String chrom, Long pos, String referenceAllele, String allele, String ref, UserDto onBehalfOf, String ip) throws ClassNotFoundException {
         if (beaconIds == null) {
             return new HashSet<>();
         }
@@ -462,6 +462,7 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
         return beaconResponseMapper.mapEntitiesToDtos(queryMultipleBeacons(beaconIds,
                                                                            chrom,
                                                                            pos,
+                                                                           referenceAllele,
                                                                            allele,
                                                                            ref,
                                                                            onBehalfOf,
@@ -469,10 +470,11 @@ public class BeaconResponseServiceImpl implements BeaconResponseService, Seriali
     }
 
     @Override
-    public Collection<BeaconResponseDto> queryAll(String chrom, Long pos, String allele, String ref, UserDto onBehalfOf, String ip) throws ClassNotFoundException {
+    public Collection<BeaconResponseDto> queryAll(String chrom, Long pos, String referenceAllele, String allele, String ref, UserDto onBehalfOf, String ip) throws ClassNotFoundException {
         return beaconResponseMapper.mapEntitiesToDtos(queryMultipleBeacons(null,
                                                                            chrom,
                                                                            pos,
+                                                                           referenceAllele,
                                                                            allele,
                                                                            ref,
                                                                            onBehalfOf,

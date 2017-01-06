@@ -42,12 +42,12 @@ public class BeaconRefChromPosRequestConstructor implements RequestConstructor, 
     private static final long serialVersionUID = -3217571143261453662L;
 
     @Override
-    public String getUrl(String template, String beacon, String ref, String chrom, Long pos, String allele, String dataset) {
+    public String getUrl(String template, String beacon, String ref, String chrom, Long pos, String referenceAllele, String allele, String dataset) {
         return String.format(template, beacon, ref, chrom, pos);
     }
 
     @Override
-    public Map<String, String> getPayload(String template, String beacon, String ref, String chrom, Long pos, String allele, String dataset) {
+    public Map<String, String> getPayload(String template, String beacon, String ref, String chrom, Long pos, String referenceAllele, String allele, String dataset) {
         return null;
     }
 

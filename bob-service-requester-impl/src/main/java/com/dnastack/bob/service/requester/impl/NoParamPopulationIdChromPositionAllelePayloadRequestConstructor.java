@@ -43,12 +43,12 @@ public class NoParamPopulationIdChromPositionAllelePayloadRequestConstructor imp
     private static final long serialVersionUID = -2827360543362026908L;
 
     @Override
-    public String getUrl(String template, String beacon, String ref, String chrom, Long pos, String allele, String dataset) {
+    public String getUrl(String template, String beacon, String ref, String chrom, Long pos, String referenceAllele, String allele, String dataset) {
         return template;
     }
 
     @Override
-    public Map<String, String> getPayload(String template, String beacon, String ref, String chrom, Long pos, String allele, String dataset) {
+    public Map<String, String> getPayload(String template, String beacon, String ref, String chrom, Long pos, String referenceAllele, String allele, String dataset) {
         Map<String, String> res = new HashMap<>();
         res.put("populationId", beacon);
         res.put("chrom", chrom);

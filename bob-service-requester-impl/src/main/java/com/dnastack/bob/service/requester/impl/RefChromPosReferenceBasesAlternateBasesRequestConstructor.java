@@ -30,19 +30,19 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
- * Request constructor using URL with chrom, pos, allele params.
+ * Request constructor using URL with chrom, pos, reference bases, alternate bases and ref params.
  *
  * @author Miroslav Cupak (mirocupak@gmail.com)
  * @version 1.0
  */
 @Named
-public class ChromPosAlleleRequestConstructor implements RequestConstructor, Serializable {
+public class RefChromPosReferenceBasesAlternateBasesRequestConstructor implements RequestConstructor, Serializable {
 
     private static final long serialVersionUID = -4140519271564294181L;
 
     @Override
     public String getUrl(String template, String beacon, String ref, String chrom, Long pos, String referenceAllele, String allele, String dataset) {
-        return String.format(template, chrom, pos, allele);
+        return String.format(template, ref, chrom, pos, referenceAllele, allele);
     }
 
     @Override

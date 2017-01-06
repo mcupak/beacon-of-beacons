@@ -39,12 +39,13 @@ public interface BeaconResponseResource {
      * @param beaconIds beacon to query (optional)
      * @param chrom     chromosome
      * @param pos       position
+     * @param referenceAllele    reference allele
      * @param allele    allele
      * @param ref       reference genome (optional)
      * @return list of beacon responses
      * @throws java.lang.ClassNotFoundException
      */
-    Collection<BeaconResponseDto> query(String beaconIds, String chrom, Long pos, String allele, String ref) throws ClassNotFoundException;
+    Collection<BeaconResponseDto> query(String beaconIds, String chrom, Long pos, String referenceAllele, String allele, String ref) throws ClassNotFoundException;
 
     /**
      * Query a given beacon
@@ -52,11 +53,12 @@ public interface BeaconResponseResource {
      * @param beaconId beacon to query
      * @param chrom    chromosome
      * @param pos      position
+     * @param referenceAllele    reference allele
      * @param allele   allele
      * @param ref      reference genome (optional)
      * @return list of beacon responses
      * @throws java.lang.ClassNotFoundException
      */
-    BeaconResponseDto queryBeacon(String beaconId, String chrom, Long pos, String allele, String ref) throws ClassNotFoundException;
+    BeaconResponseDto queryBeacon(String beaconId, String chrom, Long pos, String referenceAllele, String allele, String ref) throws ClassNotFoundException;
 
 }

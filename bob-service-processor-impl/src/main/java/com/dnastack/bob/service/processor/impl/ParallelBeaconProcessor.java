@@ -82,6 +82,21 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
     @Inject
     private EjbResolver ejbResolver;
 
+    @ToString
+    @EqualsAndHashCode
+    @Builder
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @SuppressWarnings("deprecation")
+    private static class FutureBeaconResponse {
+
+        private Future<Boolean> response = null;
+        private Future<String> externalUrl = null;
+        private Future<Map<String, String>> info = null;
+    }
+
     private List<Future<String>> executeQueriesInParallel(Beacon beacon, Query query) {
         List<Future<String>> fs = new ArrayList<>();
 
@@ -131,6 +146,7 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
                                               referenceConverter.convert(ref),
                                               chromosomeConverter.convert(query.getChromosome()),
                                               positionConverter.convert(query.getPosition()),
+                                              alleleConverter.convert(query.getReferenceAllele()),
                                               alleleConverter.convert(query.getAllele()),
                                               null);
                 Map<String, String> payload = requester.getPayload(beacon.getUrl(),
@@ -138,6 +154,7 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
                                                                    referenceConverter.convert(ref),
                                                                    chromosomeConverter.convert(query.getChromosome()),
                                                                    positionConverter.convert(query.getPosition()),
+                                                                   alleleConverter.convert(query.getReferenceAllele()),
                                                                    alleleConverter.convert(query.getAllele()),
                                                                    null);
                 fs.add(fetcher.getQueryResponse(url, payload, ip));
@@ -149,6 +166,7 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
                                           referenceConverter.convert(query.getReference()),
                                           chromosomeConverter.convert(query.getChromosome()),
                                           positionConverter.convert(query.getPosition()),
+                                          alleleConverter.convert(query.getReferenceAllele()),
                                           alleleConverter.convert(query.getAllele()),
                                           null);
             Map<String, String> payload = requester.getPayload(beacon.getUrl(),
@@ -156,6 +174,7 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
                                                                referenceConverter.convert(query.getReference()),
                                                                chromosomeConverter.convert(query.getChromosome()),
                                                                positionConverter.convert(query.getPosition()),
+                                                               alleleConverter.convert(query.getReferenceAllele()),
                                                                alleleConverter.convert(query.getAllele()),
                                                                null);
             fs.add(fetcher.getQueryResponse(url, payload, ip));
@@ -229,20 +248,5 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
         }
 
         return new AsyncResult<>(res);
-    }
-
-    @ToString
-    @EqualsAndHashCode
-    @Builder
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @SuppressWarnings("deprecation")
-    private static class FutureBeaconResponse {
-
-        private Future<Boolean> response = null;
-        private Future<String> externalUrl = null;
-        private Future<Map<String, String>> info = null;
     }
 }

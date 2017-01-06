@@ -57,6 +57,8 @@ public class QueryDto implements Serializable {
     private ChromosomeDto chromosome;
     @ApiModelProperty(value = "Coordinate within a chromosome (0-based).")
     private Long position;
+    @ApiModelProperty(value = "String of nucleotides A,C,T,G.")
+    private String referenceAllele;
     @ApiModelProperty(value = "String of nucleotides A,C,T,G or D, I for deletion and insertion, respectively.")
     private String allele;
     @ApiModelProperty(value = "Genome/assembly ID (HG-based notation).")
