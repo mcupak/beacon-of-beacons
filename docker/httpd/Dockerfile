@@ -21,7 +21,7 @@ ENV SWAGGER_JSON_URL=http://$SERVER_NAME/docs/swagger.json
 # install packages
 USER root
 RUN yes | apt-get update
-RUN yes | apt-get install patch curl vim wget zip tree less
+RUN yes | apt-get install wget
 
 # copy data
 ADD data $HTTPD_HOME/data

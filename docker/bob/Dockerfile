@@ -7,7 +7,6 @@ ADD data $JBOSS_HOME/customization/
 
 # install necessary packages
 USER root
-RUN yum -y update
 RUN yum -y install wget
 
 # update nss and java to work around a bug with Diffie-Hellman key agreement of more than 1024 bits
