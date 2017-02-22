@@ -239,6 +239,58 @@ public class ParseUtils {
     }
 
     /**
+     * Parses integer value out of the given field in a JSON response.
+     *
+     * @param response response in JSON format
+     * @param path     list of JSON keys determining the path to the searched value
+     * @return integer found on path
+     */
+    public static Integer parseIntegerFromJson(String response, String... path) {
+        if (response == null) {
+            return null;
+        }
+
+        try {
+            JSONObject jo = null;
+            try {
+                jo = new JSONObject(response);
+            } catch (JSONException ex) {
+                JSONArray a = new JSONArray(response);
+                jo = a.getJSONObject(0);
+            }
+            JSONObject current;
+            for (String s : path) {
+                current = jo.optJSONObject(s);
+                if (current == null) {
+                    JSONArray a = jo.optJSONArray(s);
+                    if (a != null) {
+                        current = a.optJSONObject(0);
+                        if (current == null) {
+                            try {
+                                return a.getInt(0);
+                            } catch (JSONException jex) {
+                                return null;
+                            }
+                        }
+                    }
+                }
+                if (current == null) {
+                    try {
+                        return jo.getInt(s);
+                    } catch (JSONException jex) {
+                        return null;
+                    }
+                }
+                jo = current;
+            }
+        } catch (JSONException ex) {
+            return null;
+        }
+
+        return null;
+    }
+
+    /**
      * Parses string map out of the given field in a JSON response.
      *
      * @param response response in JSON format
