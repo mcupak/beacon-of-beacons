@@ -1,6 +1,6 @@
-#Beacon Network
+# Beacon Network
 
-##Contents
+## Contents
 
 * [What it is](#what-it-is)
 * [System requirements](#system-requirements)
@@ -11,10 +11,10 @@
 * [License and terms of use](#license-and-terms-of-use)
 * [Technologies](#technologies)
 
-##What it is
+## What it is
 Beacon Network (formerly known as the Beacon of Beacons, or BoB, for short) provides a unified REST API to publicly available GA4GH Beacons (see <http://ga4gh.org/#/beacon> for more details about the Beacon project itself). Beacon Network standardizes the way beacons are accessed and aggregates their results, thus addressing one of the missing parts of the Beacon project itself.
 
-##System requirements
+## System requirements
 Java 8, Maven 3.1 or newer, Java EE runtime (WildFly 8 recommended).
 
 ## How to set up the runtime
@@ -22,7 +22,7 @@ Beacon Network needs access to a database through a JTA datasource (`java:/jboss
 
 As Beacon Network can execute many queries in parallel, it's advisable to increase the pool sizes for EJB subsystem in Wildfly, particularly `slsb-strict-max-pool` (`bean-instance-pools`) and `default` (`thread-pools`).
 
-##How to run it
+## How to run it
 Start the server:
 
     For Unix:       JBOSS_HOME/bin/standalone.sh -c standalone-full.xml
@@ -43,7 +43,7 @@ To undeploy when you're done, run:
     mvn wildfly:undeploy
 
 
-##How to test it
+## How to test it
 
 To run tests for the persistence layer, execute the following in `bob-data-impl` module:
 
@@ -51,11 +51,8 @@ To run tests for the persistence layer, execute the following in `bob-data-impl`
 
 To test the supported beacons, execute the same command in `bob-rest` module. Note that the tests need access to a Wildfly instance, the path to which can be set in `$JBOSS_HOME` environment variable.
 
-##How to use it
+## How to use it
 Visit the project website for more information: <http://mcupak.github.io/beacon-of-beacons/>
 
-##License and terms of use
-The code in this repository is licensed under the [MIT license](http://opensource.org/licenses/MIT). An instance of the Beacon Network is a subject to [these terms of use](http://beacon-network.org/#/terms).
-
-##Technologies
+## Technologies
 Java EE. CDI, EJB, JAX-RS, JAXB, Bean Validation, JPA. Tested with Arquillian/ShrinkWrap/AssertJ.
