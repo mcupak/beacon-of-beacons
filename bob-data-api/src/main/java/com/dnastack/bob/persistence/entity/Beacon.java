@@ -60,8 +60,8 @@ public class Beacon implements BasicEntity<String> {
     @Temporal(TemporalType.DATE)
     private Date createdDate;
     private String url;
-    @Size(max = 1000)
-    @Column(length = 1000)
+    @Size(max = 1500)
+    @Column(length = 1500)
     private String description;
     private String api;
     private String homePage;
