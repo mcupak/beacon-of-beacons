@@ -4,6 +4,7 @@ MAINTAINER Miro Cupak <mirocupak@gmail.com>
 # prepare wildfly
 ENV JBOSS_HOME=/opt/jboss/wildfly
 ADD data $JBOSS_HOME/customization/
+ADD target/*.war $JBOSS_HOME/customization
 
 # install necessary packages
 USER root
@@ -16,9 +17,6 @@ RUN yum -y upgrade nss java
 RUN cd /tmp
 RUN wget -q http://search.maven.org/remotecontent?filepath=mysql/mysql-connector-java/5.1.32/mysql-connector-java-5.1.32.jar
 RUN mv *.jar $JBOSS_HOME/customization/mysql-connector-java.jar
-
-# install certificates
-RUN find $JBOSS_HOME/customization/crt/ -type f -exec keytool -import -trustcacerts -keystore $JAVA_HOME/jre/lib/security/cacerts -storepass changeit -noprompt -alias `basename {}` -file {} \;
 
 # customize wildfly
 USER $JBOSS_USER

@@ -26,8 +26,8 @@ mvn clean package
 mvn versions:revert
 
 # This script does all its staging in a directory called target for easy cleanup and effective .gitignore.
-mkdir -p ci/app/target
+mkdir -p docker/bob/target
 
-cp bob-rest-impl/target/bob-rest-impl.war ci/app/target/bob-rest-impl.jar
+cp bob-rest-impl/target/bob-rest-impl.war docker/bob/target/bob-rest-impl.war
 (cd docker/bob && docker build -t ${target_image_name} .)
 
