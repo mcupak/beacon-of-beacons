@@ -33,9 +33,11 @@ import javax.annotation.PreDestroy;
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * Util methods for querying over HTTP.
@@ -135,14 +137,14 @@ public class HttpUtils {
             HttpEntity entity = res.getEntity();
             response = (entity == null) ? null : EntityUtils.toString(entity);
         } catch (IOException ex) {
-            log.severe(Arrays.asList(ex.getStackTrace()).toString());
+            log.log(Level.SEVERE, "Error while processing request to " + request.getURI(), ex);
         } finally {
             try {
                 if (res != null) {
                     res.close();
                 }
             } catch (IOException ex) {
-                log.severe(Arrays.asList(ex.getStackTrace()).toString());
+                log.log(Level.SEVERE, "Couldn't close request after previous error.", ex);
             }
         }
         return response;
