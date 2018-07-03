@@ -29,5 +29,5 @@ mvn versions:revert
 mkdir -p ci/app/target
 
 cp bob-rest-impl/target/bob-rest-impl.war ci/app/target/bob-rest-impl.jar
-(cd docker && docker build -t ${target_image_name} .)
+(cd docker/bob && docker build -t ${target_image_name} .)
 
