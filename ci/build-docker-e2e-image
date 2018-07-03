@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+function validate_arg() {
+  local name=${1}
+  local value=${2}
+
+  if [ -z ${value} ]; then
+    echo "Must specify value for ${name}." >&2
+    exit 1
+  else
+    echo -n ${value}
+  fi
+}
+
+set -ex
+
+cd $(dirname $0)/..
+
+# This script is invoked during CI build with the following arguments:
+target_image_name=$(validate_arg "target image name" ${1})
+app_name=$(validate_arg "app name" ${2})
+app_version=$(validate_arg "app version" ${3})
+
+(cd ci/e2e-tests && docker build -t ${target_image_name} .)

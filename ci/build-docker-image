@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+function validate_arg() {
+  local name=${1}
+  local value=${2}
+
+  if [ -z ${value} ]; then
+    echo "Must specify value for ${name}." >&2
+    exit 1
+  else
+    echo -n ${value}
+  fi
+}
+
+set -ex
+
+cd $(dirname $0)/..
+
+# This script is invoked during CI build with the following arguments:
+target_image_name=$(validate_arg "target image name" ${1})
+app_name=$(validate_arg "app name" ${2})
+app_version=$(validate_arg "app version" ${3})
+
+mvn versions:set -DnewVersion=${app_version}
+mvn clean package
+mvn versions:revert
+
+# This script does all its staging in a directory called target for easy cleanup and effective .gitignore.
+mkdir -p ci/app/target
+
+cp bob-rest-impl/target/bob-rest-impl.war ci/app/target/bob-rest-impl.jar
+(cd docker && docker build -t ${target_image_name} .)
+
