@@ -25,4 +25,12 @@ USER $JBOSS_USER
 RUN /opt/jboss/wildfly/bin/add-user.sh admin admin --silent
 ENV JAVA_OPTS "-Xms256m -Xmx2048m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true"
 
+# default config values
+ENV MYSQL_USERNAME=bob
+ENV MYSQL_PASSWORD=bob
+ENV MYSQL_HOST=mysql
+ENV MYSQL_PORT=3306
+ENV MYSQL_DATABASE=bob
+ENV JBOSS_BIND_ADDRESS=0.0.0.0
+
 ENTRYPOINT ["/opt/jboss/wildfly/customization/execute.sh"]
