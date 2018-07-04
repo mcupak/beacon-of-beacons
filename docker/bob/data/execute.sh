@@ -36,6 +36,12 @@ else
   usermod -a -G ${GROUP} ${JBOSS_USER}
 fi
 
+echo "=> Adding missing certs"
+find ${JBOSS_HOME}/customization/crt/ -type f -exec \
+  keytool -import -trustcacerts \
+          -keystore ${JAVA_HOME}/jre/lib/security/cacerts \
+          -storepass changeit -noprompt -alias `basename {}` -file {} \;
+
 echo "=> Starting WildFly server"
 ${JBOSS_HOME}/bin/${JBOSS_MODE}.sh -b ${JBOSS_BIND_ADDRESS} -c ${JBOSS_CONFIG} &
 
