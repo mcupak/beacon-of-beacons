@@ -49,6 +49,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
 
 import static com.dnastack.bob.service.processor.util.ErrorUtils.getErrorMessage;
 
@@ -211,7 +212,7 @@ public class ParallelBeaconProcessor implements BeaconProcessor, Serializable {
                 url = fbr.getExternalUrl() == null ? null : fbr.getExternalUrl().get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
                 info = fbr.getInfo() == null ? null : fbr.getInfo().get(REQUEST_TIMEOUT, TimeUnit.SECONDS);
             } catch (InterruptedException | ExecutionException | TimeoutException ex) {
-                log.severe(getErrorMessage(ex));
+                log.log(Level.SEVERE, "An error occurred while collecting results for a FutureBeaconResponse", ex);
             }
             if (response != null) {
                 if (response) {
