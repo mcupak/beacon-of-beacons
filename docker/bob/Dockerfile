@@ -6,11 +6,12 @@ ENV JBOSS_HOME=/opt/jboss/wildfly
 ADD data $JBOSS_HOME/customization/
 ADD target/*.war $JBOSS_HOME/customization
 
+USER root
+
 # Add mount point for certificates
-RUN mkdir -p $JBOSS_HOME/customization/crt
+RUN mkdir -p $JBOSS_HOME/customization/crt && chmod +rx $JBOSS_HOME/customization/crt
 
 # install necessary packages
-USER root
 RUN yum -y install wget
 
 # update nss and java to work around a bug with Diffie-Hellman key agreement of more than 1024 bits
