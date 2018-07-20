@@ -51,6 +51,41 @@ To run tests for the persistence layer, execute the following in `bob-data-impl`
 
 To test the supported beacons, execute the same command in `bob-rest` module. Note that the tests need access to a Wildfly instance, the path to which can be set in `$JBOSS_HOME` environment variable.
 
+## How to Docker it
+
+The [ci](ci/) directory contains scripts for running the Beacon Network, and running end-to-end tests
+against a deployed endpoint.
+
+#### Building the App Image
+
+You can build the docker image with this command:
+```bash
+./ci/build-docker-image bob:$(git describe --tags) bob $(git describe --tags)
+```
+
+The arguments, respectively, are:
+1. The docker image tag including version.
+2. The name of the app (currently unused but part of the contract with the Jenkins build job).
+3. The version of the app, used to change the version of the maven artifacts installed via
+   the maven versions plugin.
+
+It's not necessary to use `git describe` for the version but it is recommended.
+
+#### Running the App Image
+When running the docker image you should expose port 8080 and pass in the following environment
+variables:
+
+* JAVA_OPTS
+  * Recommended settings: "-Xms2048m -Xmx9216m -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true"
+* MYSQL_HOST
+  * IP Address or domain name of MySQL server
+* MYSQL_PORT
+  * Port to use for MySQL server connection
+* MYSQL_USERNAME
+  * User name for MySQL authentication
+* MYSQL_PASSWORD
+  * Password for MySQL authentication
+
 ## How to use it
 Visit the project website for more information: <http://mcupak.github.io/beacon-of-beacons/>
 
